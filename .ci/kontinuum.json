@@ -1,0 +1,4 @@
+{
+"type":"library",
+"stages":["test","build"]
+}
