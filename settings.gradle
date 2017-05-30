@@ -1,1 +1,1 @@
-include ':kethereum'
+include ':model',':rpc'

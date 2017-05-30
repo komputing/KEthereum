@@ -1,13 +1,13 @@
 package org.kethereum.model
 
-import org.kethereum.constants.DEFAULT_GAS_LIMIT
-import org.kethereum.constants.DEFAULT_GAS_PRICE
+import org.kethereum.rpc.DEFAULT_GAS_LIMIT
+import org.kethereum.rpc.DEFAULT_GAS_PRICE
 import org.threeten.bp.LocalDateTime
 import java.math.BigInteger
 
 data class Transaction(val value: BigInteger,
                        val from: Address,
-                       val to: Address,
+                       val to: Address?,
 
                        val localTime: LocalDateTime = LocalDateTime.now(),
                        var nonce: Long? = null,

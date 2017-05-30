@@ -1,6 +1,7 @@
 buildscript {
     ext {
         kotlin_version = '1.1.2-4'
+        okhttp_version = '3.8.0'
     }
 
     repositories {
@@ -10,7 +11,7 @@ buildscript {
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath 'com.github.ben-manes:gradle-versions-plugin:0.14.0'
-        classpath files('kethereum/libs/gradle-witness.jar')
+        classpath files('libs/gradle-witness.jar')
     }
 }
 
