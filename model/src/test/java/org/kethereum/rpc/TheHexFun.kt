@@ -3,7 +3,7 @@ import org.junit.Test
 import org.kethereum.functions.fromHexToByteArray
 import org.kethereum.functions.toHexString
 
-class TheHexFunctions {
+class TheHexFun {
 
 
     @Test
