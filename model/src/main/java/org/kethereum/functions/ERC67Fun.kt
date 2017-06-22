@@ -1,4 +1,4 @@
-package org.walleth.iac
+package org.kethereum.functions
 
 import org.kethereum.model.Address
 import org.kethereum.rpc.ETH_IN_WEI
