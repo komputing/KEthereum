@@ -17,11 +17,11 @@ fun Byte.toHexString() = toInt().let {
 fun ByteArray.toHexString(prefix: String = "0x") = prefix + this.map { "" + it.toHexString() }.joinToString("")
 fun List<Byte>.toHexString(prefix: String = "0x") = toByteArray().toHexString(prefix)
 
-fun fromHexToByteArray(hex: String): ByteArray {
-    if (hex.length % 2 != 0)
+fun String.hexToByteArray(): ByteArray {
+    if (length % 2 != 0)
         throw IllegalArgumentException("hex-string must have an even number of digits (nibbles)")
 
-    val cleanInput = if (hex.startsWith("0x")) hex.substring(2) else hex
+    val cleanInput = if (startsWith("0x")) substring(2) else this
 
     return ByteArray(cleanInput.length / 2).apply {
         var i = 0

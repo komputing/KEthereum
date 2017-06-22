@@ -1,6 +1,6 @@
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
-import org.kethereum.functions.fromHexToByteArray
+import org.kethereum.functions.hexToByteArray
 import org.kethereum.functions.toHexString
 
 class TheHexFun {
@@ -22,31 +22,31 @@ class TheHexFun {
 
     @Test
     fun prefixIsIgnored() {
-        assertThat(fromHexToByteArray("0xab")).isEqualTo(fromHexToByteArray("ab"))
+        assertThat("0xab".hexToByteArray()).isEqualTo("ab".hexToByteArray())
     }
 
     @Test
     fun sizesAreOk() {
-        assertThat(fromHexToByteArray("ff").size).isEqualTo(1)
-        assertThat(fromHexToByteArray("ffaa").size).isEqualTo(2)
-        assertThat(fromHexToByteArray("ffaabb").size).isEqualTo(3)
-        assertThat(fromHexToByteArray("ffaabb44").size).isEqualTo(4)
-        assertThat(fromHexToByteArray("0xffaabb4455").size).isEqualTo(5)
-        assertThat(fromHexToByteArray("0xffaabb445566").size).isEqualTo(6)
-        assertThat(fromHexToByteArray("ffaabb44556677").size).isEqualTo(7)
+        assertThat("ff".hexToByteArray().size).isEqualTo(1)
+        assertThat("ffaa".hexToByteArray().size).isEqualTo(2)
+        assertThat("ffaabb".hexToByteArray().size).isEqualTo(3)
+        assertThat("ffaabb44".hexToByteArray().size).isEqualTo(4)
+        assertThat("0xffaabb4455".hexToByteArray().size).isEqualTo(5)
+        assertThat("0xffaabb445566".hexToByteArray().size).isEqualTo(6)
+        assertThat("ffaabb44556677".hexToByteArray().size).isEqualTo(7)
     }
 
     @Test(expected = IllegalArgumentException::class)
     fun exceptionOnOddInput() {
-        fromHexToByteArray("0xa")
+        "0xa".hexToByteArray()
     }
 
     @Test
     fun testRoundTrip() {
-        assertThat(fromHexToByteArray("00").toHexString()).isEqualTo("0x00")
-        assertThat(fromHexToByteArray("ff").toHexString()).isEqualTo("0xff")
-        assertThat(fromHexToByteArray("abcdef").toHexString()).isEqualTo("0xabcdef")
-        assertThat(fromHexToByteArray("0xaa12456789bb").toHexString()).isEqualTo("0xaa12456789bb")
+        assertThat("00".hexToByteArray().toHexString()).isEqualTo("0x00")
+        assertThat("ff".hexToByteArray().toHexString()).isEqualTo("0xff")
+        assertThat("abcdef".hexToByteArray().toHexString()).isEqualTo("0xabcdef")
+        assertThat("0xaa12456789bb".hexToByteArray().toHexString()).isEqualTo("0xaa12456789bb")
     }
 
 }
