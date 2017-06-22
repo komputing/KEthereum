@@ -15,5 +15,7 @@ data class Transaction(val value: BigInteger,
                        var error: String? = null,
                        var sigHash: String? = null,
                        var txHash: String? = null,
+                       var input: List<Byte> = emptyList(),
+                       var unSignedRLP: List<Byte>? = null,
                        var signedRLP: List<Byte>? = null,
                        var eventLog: String? = null)
