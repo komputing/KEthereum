@@ -5,6 +5,8 @@ package org.kethereum.functions
  */
 private val CHARS = "0123456789abcdef"
 
+val HEX_REGEX=Regex("0[xX][0-9a-fA-F]+")
+
 /**
  *  Returns 2 char hex string for Byte
  */
