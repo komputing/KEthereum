@@ -1,4 +1,4 @@
-package org.kethereum.rpc
+package org.kethereum.constants
 
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test

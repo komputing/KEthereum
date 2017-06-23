@@ -1,7 +1,7 @@
 package org.kethereum.functions
 
+import org.kethereum.constants.ETH_IN_WEI
 import org.kethereum.model.Address
-import org.kethereum.rpc.ETH_IN_WEI
 import java.math.BigDecimal
 import java.math.BigInteger
 

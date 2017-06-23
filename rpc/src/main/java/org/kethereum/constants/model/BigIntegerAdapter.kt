@@ -1,4 +1,4 @@
-package org.kethereum.rpc.model
+package org.kethereum.constants.model
 
 import com.squareup.moshi.FromJson
 import com.squareup.moshi.ToJson

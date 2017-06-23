@@ -1,4 +1,4 @@
-package org.kethereum.rpc.model
+package org.kethereum.constants.model
 
 data class TransactionRPC(val value: String,
                        val from: String,

@@ -1,0 +1,24 @@
+apply plugin: 'kotlin'
+apply plugin: 'maven'
+
+dependencies {
+    compile project(':model')
+
+    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+
+    testCompile 'org.assertj:assertj-core:3.6.2'
+    testCompile 'junit:junit:4.12'
+}
+
+if (hasProperty("isCI")) {
+
+    apply plugin: 'witness'
+
+    dependencyVerification {
+        verify = [
+                'org.jetbrains.kotlin:kotlin-stdlib:d205c5a05890d09bc46c33275fbfcff1922e14944e688a3356e02cb6b0f88cd0',
+        ]
+    }
+}
+
+apply plugin: 'com.github.ben-manes.versions'

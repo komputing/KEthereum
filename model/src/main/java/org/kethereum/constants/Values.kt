@@ -1,4 +1,4 @@
-package org.kethereum.rpc
+package org.kethereum.constants
 
 import java.math.BigInteger
 
