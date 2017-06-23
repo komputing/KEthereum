@@ -3,6 +3,7 @@ apply plugin: 'maven'
 
 dependencies {
     compile project(':model')
+    compile project(':functions')
 
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 
