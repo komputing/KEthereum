@@ -27,6 +27,7 @@ class TheHexFun {
 
     @Test
     fun sizesAreOk() {
+        assertThat("0x".hexToByteArray().size).isEqualTo(0)
         assertThat("ff".hexToByteArray().size).isEqualTo(1)
         assertThat("ffaa".hexToByteArray().size).isEqualTo(2)
         assertThat("ffaabb".hexToByteArray().size).isEqualTo(3)
