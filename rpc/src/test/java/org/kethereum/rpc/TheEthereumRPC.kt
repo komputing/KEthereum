@@ -8,7 +8,7 @@ import org.junit.Before
 import org.junit.Test
 import org.kethereum.rpc.model.BlockInformation
 
-class EthereumRPCTest {
+class TheEthereumRPC {
     val server = MockWebServer()
     val tested by lazy { EthereumRPC(baseURL = server.url("").toString()) }
 

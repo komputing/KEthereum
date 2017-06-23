@@ -7,13 +7,15 @@ import org.kethereum.rpc.model.TransactionRPC
 import java.math.BigInteger
 
 fun TransactionRPC.toKethereumTransaction() = Transaction(
-        value = BigInteger(value),
+        value = value.hexToBigInteger(),
         from = Address(from),
         to = to?.let { Address(it) },
 
-        nonce = nonce.toLongOrNull(),
-        gasPrice = BigInteger(gasPrice),
-        gasLimit = BigInteger(gas),
+        nonce = nonce.hexToBigInteger().toLong(),
+        gasPrice = gasPrice.hexToBigInteger(),
+        gasLimit = gas.hexToBigInteger(),
         txHash = hash,
         input = input.hexToByteArray().toList()
 )
+
+private fun String.hexToBigInteger() = BigInteger(replace("0x", ""), 16)
