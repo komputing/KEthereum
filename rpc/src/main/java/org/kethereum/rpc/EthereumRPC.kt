@@ -1,4 +1,4 @@
-package org.kethereum.constants
+package org.kethereum.rpc
 
 import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Moshi
@@ -6,9 +6,9 @@ import okhttp3.MediaType
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody
-import org.kethereum.constants.model.BigIntegerAdapter
-import org.kethereum.constants.model.BlockInformationResponse
-import org.kethereum.constants.model.BlockNumberResponse
+import org.kethereum.rpc.model.BigIntegerAdapter
+import org.kethereum.rpc.model.BlockInformationResponse
+import org.kethereum.rpc.model.BlockNumberResponse
 
 
 val JSONMediaType: MediaType = MediaType.parse("application/json")!!

@@ -1,4 +1,4 @@
-package org.kethereum.constants
+package org.kethereum.rpc
 
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
@@ -6,7 +6,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
-import org.kethereum.constants.model.BlockInformation
+import org.kethereum.rpc.model.BlockInformation
 
 class EthereumRPCTest {
     val server = MockWebServer()

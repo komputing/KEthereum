@@ -1,9 +1,9 @@
-package org.kethereum.constants
+package org.kethereum.rpc
 
 import org.kethereum.functions.hexToByteArray
 import org.kethereum.model.Address
 import org.kethereum.model.Transaction
-import org.kethereum.constants.model.TransactionRPC
+import org.kethereum.rpc.model.TransactionRPC
 import java.math.BigInteger
 
 fun TransactionRPC.toKethereumTransaction() = Transaction(

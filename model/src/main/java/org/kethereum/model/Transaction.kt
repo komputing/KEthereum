@@ -1,7 +1,7 @@
 package org.kethereum.model
 
-import org.kethereum.constants.DEFAULT_GAS_LIMIT
-import org.kethereum.constants.DEFAULT_GAS_PRICE
+import org.kethereum.rpc.DEFAULT_GAS_LIMIT
+import org.kethereum.rpc.DEFAULT_GAS_PRICE
 import java.math.BigInteger
 
 data class Transaction(val value: BigInteger,
