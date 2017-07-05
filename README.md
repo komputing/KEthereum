@@ -12,7 +12,7 @@ Links
 * [White paper](https://github.com/ethereum/wiki/wiki/White-Paper)
 * [Yellow paper](https://github.com/ethereum/yellowpaper)
 * [WALLETH](http://walleth.org)
-* [Why a Kotlin library and not use web3j][https://github.com/web3j/web3j/issues/124#issuecomment-313088274]
+* [Why a Kotlin library and not use web3j](https://github.com/web3j/web3j/issues/124#issuecomment-313088274)
 
 Get it
 ======
