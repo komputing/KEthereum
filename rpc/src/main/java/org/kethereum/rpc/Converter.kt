@@ -11,7 +11,7 @@ fun TransactionRPC.toKethereumTransaction() = Transaction(
         from = Address(from),
         to = to?.let { Address(it) },
 
-        nonce = nonce.hexToBigInteger().toLong(),
+        nonce = nonce.hexToBigInteger(),
         gasPrice = gasPrice.hexToBigInteger(),
         gasLimit = gas.hexToBigInteger(),
         txHash = hash,

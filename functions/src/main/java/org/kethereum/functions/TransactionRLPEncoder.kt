@@ -4,10 +4,9 @@ import org.kethereum.functions.rlp.RLPList
 import org.kethereum.functions.rlp.encode
 import org.kethereum.functions.rlp.toRLP
 import org.kethereum.model.Transaction
-import java.math.BigInteger
 
 fun Transaction.encodeRLP() = RLPList(listOf(
-        BigInteger.valueOf(nonce!!).toRLP(),
+        nonce!!.toRLP(),
         gasPrice.toRLP(),
         gasLimit.toRLP(),
         (to?.hex?.let { it } ?: "0x").hexToByteArray().toRLP(),

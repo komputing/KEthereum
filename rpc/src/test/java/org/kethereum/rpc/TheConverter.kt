@@ -25,7 +25,7 @@ class TheConverter {
         assertThat(tested.to).isEqualTo(Address("0xaca0cc3a6bf9552f2866ccc67801d4e6aa6a70f2"))
         assertThat(tested.gasLimit).isEqualTo(BigInteger("3d0900",16))
         assertThat(tested.gasPrice).isEqualTo(BigInteger("4a817c800",16))
-        assertThat(tested.nonce).isEqualTo(BigInteger("4327",16).toLong())
+        assertThat(tested.nonce).isEqualTo(BigInteger("4327",16))
         assertThat(tested.txHash).isEqualTo("0xc7af6af264b8dcc49c321af3dd38f99a8c4afd3b9bab50d24c6d5d1b6dcc160c")
     }
 

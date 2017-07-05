@@ -8,6 +8,7 @@ dependencies {
 
     testCompile 'org.assertj:assertj-core:3.6.2'
     testCompile 'junit:junit:4.12'
+    testCompile 'com.beust:klaxon:0.30'
 }
 
 if (hasProperty("isCI")) {
