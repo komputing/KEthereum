@@ -1,5 +1,7 @@
 package org.kethereum.functions.rlp
 
+import java.math.BigInteger
+
 /**
 RLP as of Appendix B. Recursive Length Prefix at https://github.com/ethereum/yellowpaper
  */
@@ -25,7 +27,12 @@ private fun ByteArray.encode(offset: Int) = when {
 
 fun String.toRLP() = RLPElement(toByteArray())
 fun Int.toRLP() = RLPElement(toMinimalByteArray())
+fun BigInteger.toRLP() = RLPElement(toByteArray().removeLeadingZero())
+fun ByteArray.toRLP() = RLPElement(this)
+fun Byte.toRLP() = RLPElement(kotlin.ByteArray(1, { this }))
 
 fun Int.toByteArray() = ByteArray(4, { i -> shr(8 * (3 - i)).toByte() })
 internal fun Int.toMinimalByteArray() = toByteArray().let { it.copyOfRange(it.minimalStart(), 4) }
+
 private fun ByteArray.minimalStart() = indexOfFirst { it != 0.toByte() }.let { if (it == -1) 4 else it }
+private fun ByteArray.removeLeadingZero() = if (first() == 0.toByte()) copyOfRange(1, size) else this

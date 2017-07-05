@@ -16,4 +16,5 @@ data class Transaction(val value: BigInteger,
                        var txHash: String? = null,
                        var input: List<Byte> = emptyList(),
                        var unSignedRLP: List<Byte>? = null,
-                       var signedRLP: List<Byte>? = null)
+                       var signedRLP: List<Byte>? = null,
+                       var signatureData: SignatureData? = null)
