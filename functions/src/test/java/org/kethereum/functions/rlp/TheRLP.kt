@@ -3,20 +3,9 @@ package org.kethereum.functions.rlp
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 import org.kethereum.functions.hexToByteArray
+import java.util.*
 
 class TheRLP {
-
-    @Test
-    fun elementEqualsWorks() {
-
-        assertThat(RLPElement(ByteArray(0))).isNotEqualTo(null)
-        assertThat(RLPElement("a".toByteArray())).isNotEqualTo("foo")
-        assertThat(RLPElement("a".toByteArray())).isNotEqualTo("b".toByteArray())
-
-        assertThat(RLPElement("a".toByteArray())).isEqualTo(RLPElement("a".toByteArray()))
-        assertThat(RLPElement("YoLo".toByteArray())).isEqualTo(RLPElement("YoLo".toByteArray()))
-
-    }
 
     // from https://github.com/ethereum/tests/blob/develop/RLPTests/rlptest.json
     @Test
@@ -43,10 +32,10 @@ class TheRLP {
         assertThat(RLPList(listOf("dog".toRLP(), "god".toRLP(), "cat".toRLP())).encode())
                 .isEqualTo("cc83646f6783676f6483636174".hexToByteArray())
 
-        assertThat(RLPList(listOf("zw".toRLP(),RLPList(listOf(4.toRLP())),1.toRLP())).encode())
+        assertThat(RLPList(listOf("zw".toRLP(), RLPList(listOf(4.toRLP())), 1.toRLP())).encode())
                 .isEqualTo("c6827a77c10401".hexToByteArray())
 
-        assertThat(RLPList(listOf(RLPList(listOf(RLPList(emptyList()),RLPList(emptyList()))),RLPList(emptyList()))).encode())
+        assertThat(RLPList(listOf(RLPList(listOf(RLPList(emptyList()), RLPList(emptyList()))), RLPList(emptyList()))).encode())
                 .isEqualTo("c4c2c0c0c0".hexToByteArray())
 
     }
@@ -55,6 +44,29 @@ class TheRLP {
     fun encodingFailsForInvalidInput() {
         class InvalidRLPType : RLPType
         InvalidRLPType().encode()
+    }
+
+    @Test
+    fun elementHashCodeIsHashOfArray() {
+        testByteArrayHashCode(ByteArray(0))
+        testByteArrayHashCode("foo".toByteArray())
+        testByteArrayHashCode("Yolo123".toByteArray())
+    }
+
+    private fun testByteArrayHashCode(arr: ByteArray) {
+        assertThat(arr.toRLP().hashCode()).isEqualTo(Arrays.hashCode(arr))
+    }
+
+    @Test
+    fun elementEqualsWorks() {
+
+        assertThat(RLPElement(ByteArray(0))).isNotEqualTo(null)
+        assertThat(RLPElement("a".toByteArray())).isNotEqualTo("foo")
+        assertThat(RLPElement("a".toByteArray())).isNotEqualTo("b".toByteArray())
+
+        assertThat(RLPElement("a".toByteArray())).isEqualTo(RLPElement("a".toByteArray()))
+        assertThat(RLPElement("YoLo".toByteArray())).isEqualTo(RLPElement("YoLo".toByteArray()))
+
     }
 
     @Test
