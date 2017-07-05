@@ -51,6 +51,12 @@ class TheRLP {
 
     }
 
+    @Test(expected = IllegalArgumentException::class)
+    fun encodingFailsForInvalidInput() {
+        class InvalidRLPType : RLPType
+        InvalidRLPType().encode()
+    }
+
     @Test
     fun toByteArrayWorks() {
         assertThat(0.toByteArray()).isEqualTo("00000000".hexToByteArray())
