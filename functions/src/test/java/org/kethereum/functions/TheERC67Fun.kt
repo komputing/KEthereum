@@ -1,9 +1,8 @@
+package org.kethereum.functions
 
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 import org.kethereum.model.Address
-import org.kethereum.functions.ERC67
-import org.kethereum.functions.toERC67String
 import java.math.BigDecimal
 import java.math.BigInteger
 

@@ -3,7 +3,7 @@ package org.kethereum.functions.rlp
 import java.util.*
 
 /**
-RLP as of Appendix B. Recursive https://github.com/ethereum/yellowpaper
+RLP as of Appendix B. Recursive Length Prefix at https://github.com/ethereum/yellowpaper
  */
 
 interface RLPType

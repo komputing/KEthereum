@@ -1,3 +1,5 @@
+package org.kethereum.functions
+
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 import org.kethereum.functions.hexToByteArray
