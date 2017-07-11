@@ -1,0 +1,10 @@
+apply plugin: 'kotlin'
+apply plugin: 'maven'
+
+dependencies {
+
+    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+
+    testCompile 'org.assertj:assertj-core:3.6.2'
+    testCompile 'junit:junit:4.12'
+}
