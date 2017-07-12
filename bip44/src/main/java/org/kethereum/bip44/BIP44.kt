@@ -5,7 +5,7 @@ BIP44 as in https://github.com/bitcoin/bips/blob/master/bip-0044.mediawiki
  */
 
 data class BIP44Element(val hardened: Boolean, val number: Int)
-class BIP44(val path: List<BIP44Element>) {
+data class BIP44(val path: List<BIP44Element>) {
     companion object {
 
         private val HARDENING_FLAG = 0x80000000.toInt()
@@ -26,6 +26,7 @@ class BIP44(val path: List<BIP44Element>) {
     }
 
     override fun equals(other: Any?) = path == path
+    override fun hashCode() = path.hashCode()
 
     fun toIntList() = path.map { if (it.hardened) it.number or HARDENING_FLAG else it.number }
     override fun toString() = "m/" + path.map {
