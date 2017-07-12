@@ -65,4 +65,10 @@ class TheBIP44 {
             assertThat(key).isEqualTo(BIP44(value).toString())
         }
     }
+
+    @Test
+    fun incrementWorks() {
+        assertThat(BIP44.fromPath("m/0/1/2").increment())
+                .isEqualTo(BIP44.fromPath("m/0/1/3"))
+    }
 }

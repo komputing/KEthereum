@@ -25,8 +25,14 @@ class BIP44(val path: List<BIP44Element>) {
 
     }
 
+    override fun equals(other: Any?) = path == path
+
     fun toIntList() = path.map { if (it.hardened) it.number or HARDENING_FLAG else it.number }
     override fun toString() = "m/" + path.map {
         if (it.hardened) "${it.number}'" else "${it.number}"
     }.joinToString("/")
+
+    fun increment()
+            = BIP44(path.subList(0, path.size - 1) +
+            path.last().let { BIP44Element(it.hardened, it.number + 1) })
 }
