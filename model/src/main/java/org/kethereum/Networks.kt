@@ -1,4 +1,4 @@
-package org.kethereum.rpc
+package org.kethereum
 
 val ETHEREUM_NETWORK_MAIN = "main"
 val ETHEREUM_NETWORK_RINKEBY = "rinkeby"
