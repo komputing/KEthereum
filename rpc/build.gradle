@@ -16,15 +16,4 @@ dependencies {
     testCompile 'org.threeten:threetenbp:1.3.4'
 }
 
-if (hasProperty("isCI")) {
-
-    apply plugin: 'witness'
-
-    dependencyVerification {
-        verify = [
-                'org.jetbrains.kotlin:kotlin-stdlib:d205c5a05890d09bc46c33275fbfcff1922e14944e688a3356e02cb6b0f88cd0',
-        ]
-    }
-}
-
 apply plugin: 'com.github.ben-manes.versions'
