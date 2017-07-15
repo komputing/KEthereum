@@ -2,8 +2,10 @@ package org.kethereum.model
 
 data class Address(private val input: String) {
 
-    val cleanHex by lazy { input.replace("0x", "") }
-    val hex by lazy { "0x" + cleanHex }
+    val cleanHex = input.replace("0x","")
+
+    @Transient
+    val hex = "0x$cleanHex"
 
     override fun toString() = "0x" + cleanHex
 
