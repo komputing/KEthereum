@@ -4,7 +4,7 @@ apply plugin: 'maven'
 dependencies {
     compile project(":model")
     compile project(":functions")
-    compile project(":keccak")
+    compile project(":keccak_shortcut")
 
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 
