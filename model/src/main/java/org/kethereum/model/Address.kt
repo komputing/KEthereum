@@ -1,9 +1,14 @@
 package org.kethereum.model
 
-data class Address(val hex: String) {
+data class Address(private val input: String) {
+
+    val cleanHex by lazy { input.replace("0x", "") }
+    val hex by lazy { "0x" + cleanHex }
+
+    override fun toString() = "0x" + cleanHex
 
     override fun equals(other: Any?)
-            = other is Address && other.hex.toUpperCase() == hex.toUpperCase()
+            = other is Address && other.cleanHex.toUpperCase() == cleanHex.toUpperCase()
 
-    override fun hashCode() = hex.toUpperCase().hashCode()
+    override fun hashCode() = input.toUpperCase().hashCode()
 }
