@@ -4,11 +4,11 @@ import com.beust.klaxon.JsonObject
 import com.beust.klaxon.Parser
 import org.junit.Test
 import org.kethereum.functions.encodeRLP
-import org.kethereum.functions.hexToByteArray
-import org.kethereum.functions.toHexString
 import org.kethereum.model.Address
 import org.kethereum.model.SignatureData
 import org.kethereum.model.Transaction
+import org.walleth.khex.hexToByteArray
+import org.walleth.khex.toHexString
 import transactionTestData
 import java.math.BigInteger
 

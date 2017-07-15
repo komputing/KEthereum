@@ -4,6 +4,7 @@ import org.kethereum.functions.rlp.RLPList
 import org.kethereum.functions.rlp.encode
 import org.kethereum.functions.rlp.toRLP
 import org.kethereum.model.Transaction
+import org.walleth.khex.hexToByteArray
 
 fun Transaction.encodeRLP() = RLPList(listOf(
         nonce!!.toRLP(),

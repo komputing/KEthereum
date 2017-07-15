@@ -3,10 +3,10 @@ package org.kethereum
 import com.squareup.moshi.Moshi
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
-import org.kethereum.functions.toHexString
 import org.kethereum.model.Address
 import org.kethereum.rpc.model.TransactionRPC
 import org.kethereum.rpc.toKethereumTransaction
+import org.walleth.khex.toHexString
 import java.math.BigInteger
 
 class TheConverter {

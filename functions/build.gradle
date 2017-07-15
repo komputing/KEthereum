@@ -4,6 +4,7 @@ apply plugin: 'maven'
 dependencies {
     compile project(':model')
     compile project(':rlp')
+    compile "com.github.walleth:khex:0.2"
 
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 

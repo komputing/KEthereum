@@ -2,6 +2,8 @@ package org.kethereum.functions
 
 import org.kethereum.model.Address
 import org.kethereum.model.Transaction
+import org.walleth.khex.hexToByteArray
+import org.walleth.khex.toHexString
 import java.math.BigInteger
 
 
