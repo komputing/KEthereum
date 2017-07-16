@@ -12,5 +12,5 @@ data class Address(private val input: String) {
     override fun equals(other: Any?)
             = other is Address && other.cleanHex.toUpperCase() == cleanHex.toUpperCase()
 
-    override fun hashCode() = input.toUpperCase().hashCode()
+    override fun hashCode() = cleanHex.toUpperCase().hashCode()
 }
