@@ -4,7 +4,6 @@ import org.kethereum.ETH_IN_WEI
 import org.kethereum.model.Address
 import java.math.BigDecimal
 import java.math.BigInteger
-
 // https://github.com/ethereum/EIPs/issues/67
 
 fun Address.toERC67String() = "ethereum:$hex"
@@ -13,25 +12,18 @@ fun Address.toERC67String(valueInEther: BigDecimal) = toERC67String((valueInEthe
 
 fun String.isERC67String() = startsWith("ethereum:")
 
-
 class ERC67(val url: String) {
 
-    private val colonPos = url.indexOfFirst { it == ':' }
+    val scheme = url.substringBefore(":")
+    private val payload = url.substringAfter(":")
 
-    val scheme = url.substring(0, colonPos)
-
-    val addressString = if (url.contains("?")) {
-        url.substring(colonPos + 1, url.indexOfFirst { it == '?' })
-    } else {
-        url.substring(colonPos + 1)
-    }
-
+    val addressString = payload.substringBefore("?")
+    val query = payload.substringAfter("?","")
+    val queryAsMap = query.split("&").map { it.split("=") }.map { it.first() to it.last() }.toMap()
     val address by lazy { Address(getHex()) }
-    fun isValid() = scheme == "ethereum"
+
+    fun isValid() = scheme == "ethereum" && url.contains(":")
     fun getHex() = addressString
-    fun getValue() = if (url.contains("value=")) {
-        url.split("value=")[1]
-    } else {
-        null
-    }
+
+    fun getValue() = queryAsMap.getValue("value")
 }
