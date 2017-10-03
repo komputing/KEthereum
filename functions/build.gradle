@@ -3,5 +3,5 @@ dependencies {
     compile project(':rlp')
     compile "com.github.walleth:khex:0.2"
 
-    testCompile 'com.beust:klaxon:0.30'
+    testCompile 'com.beust:klaxon:0.32'
 }
