@@ -3,10 +3,11 @@ package org.kethereum.functions
 import org.kethereum.functions.rlp.RLPList
 import org.kethereum.functions.rlp.encode
 import org.kethereum.functions.rlp.toRLP
+import org.kethereum.model.SignatureData
 import org.kethereum.model.Transaction
 import org.walleth.khex.hexToByteArray
 
-fun Transaction.encodeRLP() = RLPList(listOf(
+fun Transaction.encodeRLP(withSignature: SignatureData? = null) = RLPList(listOf(
         nonce!!.toRLP(),
         gasPrice.toRLP(),
         gasLimit.toRLP(),
@@ -14,14 +15,13 @@ fun Transaction.encodeRLP() = RLPList(listOf(
         value.toRLP(),
         input.toByteArray().toRLP()
 ).let {
-    val _signatureData = this.signatureData
-    if (_signatureData == null) {
+    if (withSignature == null) {
         it
     } else {
         it.plus(listOf(
-                _signatureData.v.toRLP(),
-                _signatureData.r.toRLP(),
-                _signatureData.s.toRLP()
+                withSignature.v.toRLP(),
+                withSignature.r.toRLP(),
+                withSignature.s.toRLP()
         ))
     }
 }).encode()

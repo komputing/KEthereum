@@ -1,12 +1,12 @@
 package org.kethereum.rpc
 
 import org.kethereum.model.Address
-import org.kethereum.model.Transaction
+import org.kethereum.model.createTransactionWithDefaults
 import org.kethereum.rpc.model.TransactionRPC
 import org.walleth.khex.hexToByteArray
 import java.math.BigInteger
 
-fun TransactionRPC.toKethereumTransaction() = Transaction(
+fun TransactionRPC.toKethereumTransaction() = createTransactionWithDefaults(
         value = value.hexToBigInteger(),
         from = Address(from),
         to = to?.let { Address(it) },

@@ -3,7 +3,7 @@ package org.kethereum.functions
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 import org.kethereum.model.Address
-import org.kethereum.model.Transaction
+import org.kethereum.model.createTransactionWithDefaults
 import java.math.BigInteger
 
 class TheTransactionFun {
@@ -19,13 +19,13 @@ class TheTransactionFun {
 
     @Test
     fun weCanParseTokenTransferValue() {
-        val createTokenTransferTransactionInput = Transaction(BigInteger.valueOf(103), someAddress, someAddress, input = createTokenTransferTransactionInput(someAddress, BigInteger("10")))
+        val createTokenTransferTransactionInput = createTransactionWithDefaults(BigInteger.valueOf(103), someAddress, someAddress, input = createTokenTransferTransactionInput(someAddress, BigInteger("10")))
         assertThat(createTokenTransferTransactionInput.getTokenTransferValue()).isEqualTo(BigInteger("10"))
     }
 
     @Test
     fun weCanParseTokenTransferTo() {
-        val createTokenTransferTransactionInput = Transaction(BigInteger.valueOf(103), someAddress, someAddress, input = createTokenTransferTransactionInput(anotherAddress, BigInteger("10")))
+        val createTokenTransferTransactionInput = createTransactionWithDefaults(BigInteger.valueOf(103), someAddress, someAddress, input = createTokenTransferTransactionInput(anotherAddress, BigInteger("10")))
         assertThat(createTokenTransferTransactionInput.getTokenTransferTo()).isEqualTo(anotherAddress)
     }
 }
