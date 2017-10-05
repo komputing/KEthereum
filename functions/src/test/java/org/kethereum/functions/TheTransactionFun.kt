@@ -19,13 +19,13 @@ class TheTransactionFun {
 
     @Test
     fun weCanParseTokenTransferValue() {
-        val createTokenTransferTransactionInput = createTransactionWithDefaults(BigInteger.valueOf(103), someAddress, someAddress, input = createTokenTransferTransactionInput(someAddress, BigInteger("10")))
+        val createTokenTransferTransactionInput = createTransactionWithDefaults(value = BigInteger.valueOf(103), from = someAddress, to = someAddress, input = createTokenTransferTransactionInput(someAddress, BigInteger("10")))
         assertThat(createTokenTransferTransactionInput.getTokenTransferValue()).isEqualTo(BigInteger("10"))
     }
 
     @Test
     fun weCanParseTokenTransferTo() {
-        val createTokenTransferTransactionInput = createTransactionWithDefaults(BigInteger.valueOf(103), someAddress, someAddress, input = createTokenTransferTransactionInput(anotherAddress, BigInteger("10")))
+        val createTokenTransferTransactionInput = createTransactionWithDefaults(value = BigInteger.valueOf(103), from = someAddress, to = someAddress, input = createTokenTransferTransactionInput(anotherAddress, BigInteger("10")))
         assertThat(createTokenTransferTransactionInput.getTokenTransferTo()).isEqualTo(anotherAddress)
     }
 }
