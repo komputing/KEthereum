@@ -1,6 +1,8 @@
 dependencies {
     compile project(':model')
     compile project(':rlp')
+    compile project(":keccak_shortcut")
+
     compile "com.github.walleth:khex:0.2"
 
     testCompile 'com.beust:klaxon:0.32'

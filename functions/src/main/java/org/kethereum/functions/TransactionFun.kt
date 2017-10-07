@@ -2,6 +2,7 @@ package org.kethereum.functions
 
 import org.kethereum.model.Address
 import org.kethereum.model.Transaction
+import org.walleth.keccak_shortcut.keccak
 import org.walleth.khex.hexToByteArray
 import org.walleth.khex.toHexString
 import java.math.BigInteger
@@ -16,3 +17,5 @@ val tokenTransferSignature = listOf(0xa9.toByte(), 0x05.toByte(), 0x9c.toByte(),
 fun createTokenTransferTransactionInput(address: Address, currentAmount: BigInteger?): List<Byte>
         = (tokenTransferSignature.toHexString() + "000000000000000000000000" + address.hex.replace("0x", "")
         + String.format("%064x", currentAmount)).hexToByteArray().toList()
+
+fun Transaction.calculateHash() = encodeRLP().keccak()
