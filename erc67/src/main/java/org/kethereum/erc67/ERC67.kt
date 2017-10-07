@@ -1,4 +1,4 @@
-package org.kethereum.functions
+package org.kethereum.erc67
 
 import org.kethereum.ETH_IN_WEI
 import org.kethereum.model.Address
@@ -25,5 +25,5 @@ class ERC67(val url: String) {
     fun isValid() = scheme == "ethereum" && url.contains(":")
     fun getHex() = addressString
 
-    fun getValue() = queryAsMap.getValue("value")
+    fun getValue() = queryAsMap["value"]
 }

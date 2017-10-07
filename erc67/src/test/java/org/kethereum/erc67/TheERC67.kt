@@ -1,4 +1,4 @@
-package org.kethereum.functions
+package org.kethereum.erc67
 
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
@@ -6,7 +6,7 @@ import org.kethereum.model.Address
 import java.math.BigDecimal
 import java.math.BigInteger
 
-class TheERC67Fun {
+class TheERC67 {
 
     @Test
     fun basicToERC67Works() {
@@ -14,7 +14,7 @@ class TheERC67Fun {
     }
 
     @Test
-    fun ERC67WithValueWorks() {
+    fun toERC67WithValueWorks() {
         assertThat(Address("0x00AB42").toERC67String(valueInWei = BigInteger("1"))).isEqualTo("ethereum:0x00AB42?value=1")
         assertThat(Address("0x00AB42").toERC67String(valueInWei = BigInteger("2"))).isEqualTo("ethereum:0x00AB42?value=2")
 
@@ -27,8 +27,9 @@ class TheERC67Fun {
     }
 
     @Test
-    fun ERC67ParsingWorks() {
+    fun parsingERC67Works() {
         assertThat(ERC67("ethereum:0x00AB42?value=1").getHex()).isEqualTo("0x00AB42")
+        assertThat(ERC67("ethereum:0x00AB42").getValue()).isNull()
 
         assertThat(ERC67("ethereum:0x00AB42?value=1").isValid()).isEqualTo(true)
         assertThat(ERC67("ethereum:0x00AB42?value=1").getValue()).isEqualTo("1")
