@@ -1,8 +1,8 @@
 package org.kethereum.functions
 
+import org.kethereum.keccakshortcut.keccak
 import org.kethereum.model.Address
 import org.kethereum.model.Transaction
-import org.walleth.keccak_shortcut.keccak
 import org.walleth.khex.hexToByteArray
 import org.walleth.khex.toHexString
 import java.math.BigInteger

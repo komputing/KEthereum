@@ -1,3 +1,4 @@
 dependencies {
-    compile "com.github.walleth:keccak:0.1"
+    compile "org.bouncycastle:bcprov-jdk15on:$bouncycastleVersion"
+    compile "com.github.walleth:khex:0.2"
 }
