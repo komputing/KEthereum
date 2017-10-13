@@ -1,0 +1,10 @@
+dependencies {
+    compile project(":model")
+    compile project(":functions")
+    compile project(":keccak_shortcut")
+    compile project(":extensions")
+
+    compile "org.bouncycastle:bcprov-jdk15on:$bouncycastleVersion"
+    compile "org.slf4j:slf4j-api:$slf4jVersion"
+
+}

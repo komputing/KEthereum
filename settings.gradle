@@ -1,1 +1,1 @@
-include ':model', ':rpc', ':functions', ':rlp', ':bip44', ':keccak_shortcut', ':erc55', ':erc67'
+include ':bip44', ':crypto', ':crypto', ':extensions', ':erc67', ':model', ':rpc', ':functions', ':rlp', ':keccak_shortcut'
