@@ -7,12 +7,12 @@ import org.junit.Assert.assertThat
 import org.junit.Test
 import org.kethereum.crypto.Keys.PUBLIC_KEY_LENGTH_IN_HEX
 import org.kethereum.crypto.Keys.PUBLIC_KEY_SIZE
-import org.kethereum.crypto.data.*
+import org.kethereum.crypto.data.ADDRESS_NO_PREFIX
+import org.kethereum.crypto.data.PUBLIC_KEY
+import org.kethereum.crypto.data.PUBLIC_KEY_STRING
 import org.kethereum.extensions.toBytesPadded
-import org.walleth.khex.hexToByteArray
 import org.walleth.khex.toHexString
 import java.math.BigInteger
-import java.util.*
 
 class KeysTest {
 
@@ -76,30 +76,4 @@ class KeysTest {
                 equalTo(expected))
     }
 
-    @Test
-    fun testSerializeECKey() {
-        assertThat(Keys.serialize(KEY_PAIR), `is`(ENCODED))
-    }
-
-    @Test
-    fun testDeserializeECKey() {
-        assertThat(Keys.deserialize(ENCODED), `is`(KEY_PAIR))
-    }
-
-    @Test(expected = RuntimeException::class)
-    fun testDeserializeInvalidKey() {
-        Keys.deserialize(ByteArray(0))
-    }
-
-    companion object {
-
-        private val ENCODED: ByteArray
-
-        init {
-            val privateKey = PRIVATE_KEY_STRING.hexToByteArray()
-            val publicKey = PUBLIC_KEY_STRING.hexToByteArray()
-            ENCODED = Arrays.copyOf(privateKey, privateKey.size + publicKey.size)
-            System.arraycopy(publicKey, 0, ENCODED, privateKey.size, publicKey.size)
-        }
-    }
 }
