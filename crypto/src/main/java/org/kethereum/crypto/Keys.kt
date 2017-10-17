@@ -3,8 +3,6 @@ package org.kethereum.crypto
 import org.bouncycastle.jce.provider.BouncyCastleProvider
 import org.kethereum.crypto.SecureRandomUtils.secureRandom
 import org.kethereum.extensions.clean0xPrefix
-import org.kethereum.extensions.toBigInteger
-import org.kethereum.extensions.toBytesPadded
 import org.kethereum.extensions.toHexStringZeroPadded
 import org.kethereum.keccakshortcut.keccak
 import org.walleth.khex.hexToByteArray
@@ -77,23 +75,4 @@ object Keys {
         return Arrays.copyOfRange(hash, hash.size - 20, hash.size)  // right most 160 bits
     }
 
-    fun serialize(ecKeyPair: ECKeyPair): ByteArray {
-        val privateKey = ecKeyPair.privateKey.toBytesPadded(PRIVATE_KEY_SIZE)
-        val publicKey = ecKeyPair.publicKey.toBytesPadded(PUBLIC_KEY_SIZE)
-
-        val result = Arrays.copyOf(privateKey, PRIVATE_KEY_SIZE + PUBLIC_KEY_SIZE)
-        System.arraycopy(publicKey, 0, result, PRIVATE_KEY_SIZE, PUBLIC_KEY_SIZE)
-        return result
-    }
-
-    fun deserialize(input: ByteArray): ECKeyPair {
-        if (input.size != PRIVATE_KEY_SIZE + PUBLIC_KEY_SIZE) {
-            throw RuntimeException("Invalid input key size")
-        }
-
-        val privateKey = input.toBigInteger(0, PRIVATE_KEY_SIZE)
-        val publicKey = input.toBigInteger(PRIVATE_KEY_SIZE, PUBLIC_KEY_SIZE)
-
-        return ECKeyPair(privateKey, publicKey)
-    }
 }
