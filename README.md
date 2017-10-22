@@ -1,5 +1,4 @@
-KEthereum
-=========
+![](assets/logo.png)
 
 This is a Kotlin library for [Ethereum](https://ethereum.org).
 Currently it is not a full featured Ethereum implementation - but a library to share common Ethereum code between different apps to prevent WET code and make things more DRY. Mainly in the context of the [WALLETH Project](http://walleth.org).
