@@ -2,9 +2,9 @@ package org.kethereum.crypto
 
 import org.bouncycastle.jce.provider.BouncyCastleProvider
 import org.kethereum.crypto.SecureRandomUtils.secureRandom
-import org.kethereum.extensions.clean0xPrefix
 import org.kethereum.extensions.toHexStringZeroPadded
 import org.kethereum.keccakshortcut.keccak
+import org.walleth.khex.clean0xPrefix
 import org.walleth.khex.hexToByteArray
 import org.walleth.khex.toHexString
 import java.math.BigInteger

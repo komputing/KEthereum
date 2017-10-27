@@ -5,6 +5,7 @@ buildscript {
 
         bouncycastleVersion = '1.54'
         slf4jVersion = '1.7.25'
+        khex_version = '0.5'
 
     }
 

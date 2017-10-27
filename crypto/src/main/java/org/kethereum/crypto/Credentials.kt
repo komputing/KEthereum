@@ -1,7 +1,7 @@
 package org.kethereum.crypto
 
 import org.kethereum.extensions.hexToBigInteger
-import org.kethereum.extensions.prepend0xPrefix
+import org.walleth.khex.prepend0xPrefix
 
 /**
  * org.kethereum.crypto.Credentials wrapper.

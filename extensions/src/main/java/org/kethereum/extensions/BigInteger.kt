@@ -1,5 +1,6 @@
 package org.kethereum.extensions
 
+import org.walleth.khex.clean0xPrefix
 import java.math.BigInteger
 import java.util.*
 

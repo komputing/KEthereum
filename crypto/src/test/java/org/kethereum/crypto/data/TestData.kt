@@ -2,8 +2,8 @@ package org.kethereum.crypto.data
 
 import org.kethereum.crypto.Credentials
 import org.kethereum.crypto.ECKeyPair
-import org.kethereum.extensions.clean0xPrefix
 import org.kethereum.extensions.hexToBigInteger
+import org.walleth.khex.clean0xPrefix
 
 /**
  * org.kethereum.crypto.Keys generated for unit testing purposes.

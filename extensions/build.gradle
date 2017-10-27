@@ -1,2 +1,5 @@
 dependencies {
+
+    implementation "com.github.walleth:khex:$khex_version"
+
 }

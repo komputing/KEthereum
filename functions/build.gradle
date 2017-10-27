@@ -3,7 +3,7 @@ dependencies {
     compile project(':rlp')
     compile project(":keccak_shortcut")
 
-    compile "com.github.walleth:khex:0.2"
+    compile "com.github.walleth:khex:$khex_version"
 
     testCompile 'com.beust:klaxon:0.32'
 }
