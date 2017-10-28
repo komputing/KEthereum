@@ -1,4 +1,4 @@
-package org.kethereum.erc55
+package org.kethereum.eip155
 
 import org.kethereum.model.SignatureData
 
