@@ -39,4 +39,11 @@ class TheERC67 {
             assertThat(probe.getValue()).isEqualTo(it.toString())
         }
     }
+
+
+    @Test
+    fun parsingERC67WithGasValueWorks() {
+        assertThat(ERC67("ethereum:0x00AB42?value=1&gas=2").getValue()).isEqualTo("1")
+        assertThat(ERC67("ethereum:0x00AB42?gas=2&value=1").getValue()).isEqualTo("1")
+    }
 }
