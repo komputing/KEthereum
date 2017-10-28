@@ -15,7 +15,7 @@ import org.kethereum.model.SignatureData
  * @return ChainID or null when not EIP155 signed
  *
  */
-fun SignatureData.extractChainID() = if (this.v < 37) { // not EIP 155 signed
+fun SignatureData.extractChainID() = if (v < 37) { // not EIP 155 signed
     null
 } else {
     (v - 35) / 2
