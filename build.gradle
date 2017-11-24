@@ -1,7 +1,7 @@
 buildscript {
     ext {
         kotlin_version = '1.1.60'
-        okhttp_version = '3.9.0'
+        okhttp_version = '3.9.1'
 
         bouncycastleVersion = '1.54'
         slf4jVersion = '1.7.25'
