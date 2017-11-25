@@ -68,14 +68,14 @@ class TheERC681Parsing {
     @Test
     fun parsingERC681Works() {
         Assertions.assertThat(parseERC681("ethereum:0x00AB42?value=1").query).isEqualTo("value=1")
-        Assertions.assertThat(parseERC681("ethereum:0x00AB42?value=1").addressString).isEqualTo("0x00AB42")
+        Assertions.assertThat(parseERC681("ethereum:0x00AB42?value=1").address).isEqualTo("0x00AB42")
         Assertions.assertThat(parseERC681("ethereum:0x00AB42").value).isNull()
 
         Assertions.assertThat(parseERC681("ethereum:0x00AB42?value=1").valid).isEqualTo(true)
         Assertions.assertThat(parseERC681("ethereum:0x00AB42?value=1").value).isEqualTo("1")
 
         (0..10).forEach {
-            val erC681 = ERC681(addressString = "0xAABB", value = BigInteger.valueOf(it.toLong()))
+            val erC681 = ERC681(address = "0xAABB", value = BigInteger.valueOf(it.toLong()))
             val probe = parseERC681(erC681.generateURL())
             Assertions.assertThat(probe.value).isEqualTo(it.toString())
         }

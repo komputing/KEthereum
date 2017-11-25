@@ -34,7 +34,7 @@ fun String.parseERC781() = ERC681().apply {
                 1
             }
             FUNCTION -> function = currentSegment
-            ADDRESS -> addressString = currentSegment
+            ADDRESS -> address = currentSegment
             QUERY -> query = currentSegment
         }
         currentState = newState

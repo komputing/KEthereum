@@ -6,8 +6,8 @@ fun ERC681.generateURL(): String {
         res += "$prefix-"
     }
 
-    if (addressString != null) {
-        res += addressString
+    if (address != null) {
+        res += address
     }
 
     if (chainId != 1L) {
