@@ -64,8 +64,8 @@ fun signMessage(message: ByteArray, keyPair: ECKeyPair): SignatureData {
 private fun sign(transactionHash: ByteArray, privateKey: BigInteger): ECDSASignature {
     val signer = ECDSASigner(HMacDSAKCalculator(SHA256Digest()))
 
-    val privKey = ECPrivateKeyParameters(privateKey, CURVE)
-    signer.init(true, privKey)
+    val ecPrivateKeyParameters = ECPrivateKeyParameters(privateKey, CURVE)
+    signer.init(true, ecPrivateKeyParameters)
     val components = signer.generateSignature(transactionHash)
 
     return ECDSASignature(components[0], components[1]).toCanonicalised()
@@ -122,10 +122,10 @@ private fun recoverFromSignature(recId: Int, sig: ECDSASignature, message: ByteA
     }
     // Compressed keys require you to know an extra bit of data about the y-coord as there are
     // two possibilities. So it's encoded in the recId.
-    val R = decompressKey(x, recId and 1 == 1)
+    val r = decompressKey(x, recId and 1 == 1)
     //   1.4. If nR != point at infinity, then do another iteration of Step 1 (callers
     //        responsibility).
-    if (!R.multiply(n).isInfinity) {
+    if (!r.multiply(n).isInfinity) {
         return null
     }
     //   1.5. Compute e from M using Steps 2 and 3 of ECDSA signature verification.
@@ -148,7 +148,7 @@ private fun recoverFromSignature(recId: Int, sig: ECDSASignature, message: ByteA
     val rInv = sig.r.modInverse(n)
     val srInv = rInv.multiply(sig.s).mod(n)
     val eInvrInv = rInv.multiply(eInv).mod(n)
-    val q = ECAlgorithms.sumOfTwoMultiplies(CURVE.g, eInvrInv, R, srInv)
+    val q = ECAlgorithms.sumOfTwoMultiplies(CURVE.g, eInvrInv, r, srInv)
 
     val qBytes = q.getEncoded(false)
     // We remove the prefix
@@ -194,11 +194,11 @@ fun signedMessageToKey(message: ByteArray, signatureData: SignatureData): BigInt
 /**
  * Returns public key from the given private key.
  *
- * @param privKey the private key to derive the public key from
+ * @param privateKey the private key to derive the public key from
  * @return BigInteger encoded public key
  */
-fun publicKeyFromPrivate(privKey: BigInteger): BigInteger {
-    val point = publicPointFromPrivate(privKey)
+fun publicKeyFromPrivate(privateKey: BigInteger): BigInteger {
+    val point = publicPointFromPrivate(privateKey)
 
     val encoded = point.getEncoded(false)
     return BigInteger(1, Arrays.copyOfRange(encoded, 1, encoded.size))  // remove prefix
@@ -207,16 +207,17 @@ fun publicKeyFromPrivate(privKey: BigInteger): BigInteger {
 /**
  * Returns public key point from the given private key.
  */
-private fun publicPointFromPrivate(privKey: BigInteger): ECPoint {
-    var privateKey = privKey
+private fun publicPointFromPrivate(privateKey: BigInteger): ECPoint {
     /*
      * TODO: FixedPointCombMultiplier currently doesn't support scalars longer than the group
      * order, but that could change in future versions.
      */
-    if (privateKey.bitLength() > CURVE.n.bitLength()) {
-        privateKey = privateKey.mod(CURVE.n)
+    val postProcessedPrivateKey = if (privateKey.bitLength() > CURVE.n.bitLength()) {
+        privateKey.mod(CURVE.n)
+    } else {
+        privateKey
     }
-    return FixedPointCombMultiplier().multiply(CURVE.g, privateKey)
+    return FixedPointCombMultiplier().multiply(CURVE.g, postProcessedPrivateKey)
 }
 
 private data class ECDSASignature internal constructor(val r: BigInteger, val s: BigInteger) {
@@ -227,8 +228,7 @@ private data class ECDSASignature internal constructor(val r: BigInteger, val s:
      * [
  * BIP62](https://github.com/bitcoin/bips/blob/master/bip-0062.mediawiki#Low_S_values_in_signatures).
      */
-    val isCanonical: Boolean
-        get() = s.compareTo(HALF_CURVE_ORDER) <= 0
+    fun isCanonical() = s <= HALF_CURVE_ORDER
 
     /**
      * Will automatically adjust the S component to be less than or equal to half the curve
@@ -239,7 +239,7 @@ private data class ECDSASignature internal constructor(val r: BigInteger, val s:
      * considered legal and the other will be banned.
      */
     fun toCanonicalised(): ECDSASignature {
-        return if (!isCanonical) {
+        return if (!isCanonical()) {
             // The order of the curve is the number of valid points that exist on that curve.
             // If S is in the upper half of the number of valid points, then bring it back to
             // the lower half. Otherwise, imagine that
