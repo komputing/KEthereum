@@ -4,7 +4,7 @@ dependencies {
     compile project(":keccak_shortcut")
     compile project(":extensions")
 
-    compile "org.bouncycastle:bcprov-jdk15on:$bouncycastleVersion"
+    compile "com.madgag.spongycastle:core:$spongycastleVersion"
     compile "org.slf4j:slf4j-api:$slf4jVersion"
 
 }

@@ -1,6 +1,6 @@
 package org.kethereum.keccakshortcut
 
-import org.bouncycastle.jcajce.provider.digest.Keccak
+import org.spongycastle.jcajce.provider.digest.Keccak
 import org.walleth.khex.hexToByteArray
 
 fun String.keccak() = hexToByteArray().keccak()

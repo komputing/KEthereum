@@ -1,6 +1,5 @@
 package org.kethereum.crypto
 
-import org.bouncycastle.jce.provider.BouncyCastleProvider
 import org.kethereum.crypto.SecureRandomUtils.secureRandom
 import org.kethereum.extensions.toHexStringZeroPadded
 import org.kethereum.keccakshortcut.keccak
@@ -11,6 +10,8 @@ import java.math.BigInteger
 import java.security.*
 import java.security.spec.ECGenParameterSpec
 import java.util.*
+
+
 
 
 /**
@@ -25,7 +26,7 @@ object Keys {
     val PUBLIC_KEY_LENGTH_IN_HEX = PUBLIC_KEY_SIZE shl 1
 
     init {
-        Security.addProvider(BouncyCastleProvider())
+        Security.insertProviderAt(org.spongycastle.jce.provider.BouncyCastleProvider(), 1)
     }
 
     /**
@@ -40,7 +41,7 @@ object Keys {
     @Throws(NoSuchProviderException::class, NoSuchAlgorithmException::class, InvalidAlgorithmParameterException::class)
     internal fun createSecp256k1KeyPair(): KeyPair {
 
-        val keyPairGenerator = KeyPairGenerator.getInstance("ECDSA", "BC")
+        val keyPairGenerator = KeyPairGenerator.getInstance("ECDSA")
         val ecGenParameterSpec = ECGenParameterSpec("secp256k1")
         keyPairGenerator.initialize(ecGenParameterSpec, secureRandom())
         return keyPairGenerator.generateKeyPair()

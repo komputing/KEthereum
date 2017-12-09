@@ -3,7 +3,7 @@ buildscript {
         kotlin_version = '1.2.10'
         okhttp_version = '3.9.1'
 
-        bouncycastleVersion = '1.54'
+        spongycastleVersion = '1.58.0.0'
         slf4jVersion = '1.7.25'
         khex_version = '0.5'
 
