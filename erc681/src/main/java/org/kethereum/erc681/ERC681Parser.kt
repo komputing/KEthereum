@@ -31,7 +31,7 @@ fun String.parseERC781() = ERC681().apply {
                 currentSegment.toLong()
             } catch (e: NumberFormatException) {
                 valid = false
-                1
+                null
             }
             FUNCTION -> function = currentSegment
             ADDRESS -> address = currentSegment

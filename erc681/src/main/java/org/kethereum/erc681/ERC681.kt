@@ -9,7 +9,7 @@ data class ERC681(
         var function: String? = null,
         var query: String = "",
         var scheme: String? = null,
-        var chainId: Long = 1,
+        var chainId: Long? = null,
 
         var value: BigInteger? = null,
         var gas: BigInteger? = null

@@ -33,8 +33,8 @@ class TheERC681Parsing {
     }
 
     @Test
-    fun defaultChainIdIs1() {
-        Assertions.assertThat(parseERC681("ethereum:0x00AB42?value=42").chainId).isEqualTo(1)
+    fun defaultChainIdIsNull() {
+        Assertions.assertThat(parseERC681("ethereum:0x00AB42?value=42").chainId).isEqualTo(null)
     }
 
     @Test
