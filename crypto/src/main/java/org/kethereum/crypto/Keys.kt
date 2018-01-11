@@ -1,8 +1,10 @@
 package org.kethereum.crypto
 
 import org.kethereum.crypto.SecureRandomUtils.secureRandom
+import org.kethereum.extensions.toBytesPadded
 import org.kethereum.extensions.toHexStringZeroPadded
 import org.kethereum.keccakshortcut.keccak
+import org.spongycastle.math.ec.ECPoint
 import org.walleth.khex.clean0xPrefix
 import org.walleth.khex.hexToByteArray
 import org.walleth.khex.toHexString
@@ -74,6 +76,22 @@ object Keys {
     fun getAddress(publicKey: ByteArray): ByteArray {
         val hash = publicKey.keccak()
         return Arrays.copyOfRange(hash, hash.size - 20, hash.size)  // right most 160 bits
+    }
+
+    fun getCompressedPublicKey(keypair: ECKeyPair) : ByteArray {
+        //add the uncompressed prefix
+        val ret = keypair.publicKey.toBytesPadded(PUBLIC_KEY_SIZE + 1)
+        ret[0] = 4
+        val point = CURVE.curve.decodePoint(ret)
+        return point.getEncoded(true)
+    }
+
+    /**
+     * Decodes an uncompressed public key (without 0x04 prefix) given an ECPoint
+     */
+    fun publicKeyFromPoint(point: ECPoint): BigInteger {
+        val encoded = point.getEncoded(false)
+        return BigInteger(1, Arrays.copyOfRange(encoded, 1, encoded.size))
     }
 
 }

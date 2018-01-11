@@ -1,0 +1,5 @@
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    compile project(path: ':crypto')
+    compile project(path: ':bip44')
+}

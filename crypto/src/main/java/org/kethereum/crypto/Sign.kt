@@ -28,7 +28,7 @@ import kotlin.experimental.and
  * BitcoinJ ECKey](https://github.com/bitcoinj/bitcoinj/blob/master/core/src/main/java/org/bitcoinj/core/ECKey.java) implementation.
  */
 private val CURVE_PARAMS = CustomNamedCurves.getByName("secp256k1")
-private val CURVE = ECDomainParameters(
+val CURVE = ECDomainParameters(
         CURVE_PARAMS.curve, CURVE_PARAMS.g, CURVE_PARAMS.n, CURVE_PARAMS.h)
 private val HALF_CURVE_ORDER = CURVE_PARAMS.n.shiftRight(1)
 
