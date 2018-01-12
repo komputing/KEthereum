@@ -4,11 +4,16 @@ import org.kethereum.crypto.CURVE
 import org.kethereum.crypto.ECKeyPair
 import org.kethereum.crypto.Keys
 import org.kethereum.crypto.Keys.PRIVATE_KEY_SIZE
+import org.kethereum.crypto.Keys.decompressKey
+import org.kethereum.crypto.Keys.getCompressedPublicKey
 import org.kethereum.crypto.Keys.publicKeyFromPoint
+import org.kethereum.encodings.decodeBase58WithChecksum
+import org.kethereum.encodings.encodeToBase58WithChecksum
 import org.kethereum.extensions.toBytesPadded
 import org.kethereum.hashes.ripemd160
 import org.kethereum.hashes.sha256
 import org.spongycastle.jce.provider.BouncyCastleProvider
+import java.io.IOException
 import java.math.BigInteger
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
@@ -115,10 +120,37 @@ data class ExtendedKey(private val keyPair: ECKeyPair,
         return result
     }
 
+    fun serialize(publicKeyOnly: Boolean = false): String {
+        val out = ByteBuffer.allocate(Companion.EXTENDED_KEY_SIZE)
+        try {
+            if (publicKeyOnly || keyPair.privateKey == BigInteger.ZERO) {
+                out.put(xpub)
+            } else {
+                out.put(xprv)
+            }
+            out.put(depth)
+            out.putInt(parentFingerprint)
+            out.putInt(sequence)
+            out.put(chainCode)
+            if (publicKeyOnly || keyPair.privateKey == BigInteger.ZERO) {
+                out.put(getCompressedPublicKey(keyPair))
+            } else {
+                out.put(0x00)
+                out.put(keyPair.privateKey.toBytesPadded(PRIVATE_KEY_SIZE))
+            }
+        } catch (e: IOException) {
+        }
+
+        return out.array().encodeToBase58WithChecksum()
+    }
+
     companion object {
 
         private val BITCOIN_SEED = "Bitcoin seed".toByteArray()
         private val CHAINCODE_SIZE = PRIVATE_KEY_SIZE
+        private val COMPRESSED_PUBLIC_KEY_SIZE = PRIVATE_KEY_SIZE + 1
+        internal val xprv = byteArrayOf(0x04, 0x88.toByte(), 0xAD.toByte(), 0xE4.toByte())
+        internal val xpub = byteArrayOf(0x04, 0x88.toByte(), 0xB2.toByte(), 0x1E.toByte())
 
         fun createFromSeed(seed: ByteArray, publicKeyOnly: Boolean = false): ExtendedKey {
             try {
@@ -169,6 +201,50 @@ data class ExtendedKey(private val keyPair: ECKeyPair,
             }
             return fingerprint
         }
+
+        fun parse(serialized: String): ExtendedKey {
+            val data = serialized.decodeBase58WithChecksum()
+            if (data.size != EXTENDED_KEY_SIZE) {
+                throw KeyException("invalid extended key")
+            }
+
+            val buff = ByteBuffer
+                    .wrap(data)
+                    .order(ByteOrder.BIG_ENDIAN)
+
+            val type = ByteArray(4)
+
+            buff.get(type)
+
+            val hasPrivate: Boolean
+            hasPrivate = when {
+                Arrays.equals(type, xprv) -> true
+                Arrays.equals(type, xpub) -> false
+                else -> throw KeyException("invalid magic number for an extended key")
+            }
+
+            val depth = buff.get()
+            val parent = buff.getInt()
+            val sequence = buff.getInt()
+
+            val chainCode = ByteArray(PRIVATE_KEY_SIZE)
+            buff.get(chainCode)
+
+            val keyPair = if (hasPrivate) {
+                buff.get() // ignore the leading 0
+                val privateBytes = ByteArray(PRIVATE_KEY_SIZE)
+                buff.get(privateBytes)
+                ECKeyPair.create(privateBytes)
+            } else {
+                val compressedPublicBytes = ByteArray(COMPRESSED_PUBLIC_KEY_SIZE)
+                buff.get(compressedPublicBytes)
+                val uncompressedPublicBytes = decompressKey(compressedPublicBytes)
+                ECKeyPair(BigInteger.ZERO, BigInteger(1, uncompressedPublicBytes))
+            }
+            return ExtendedKey(keyPair, chainCode, depth, parent, sequence)
+        }
+
+        private val EXTENDED_KEY_SIZE: Int = 78
 
     }
 }

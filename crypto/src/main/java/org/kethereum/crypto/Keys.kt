@@ -87,6 +87,16 @@ object Keys {
     }
 
     /**
+     * Takes a public key in compressed encoding (including prefix)
+     * and returns the key in uncompressed encoding (without prefix)
+     */
+    fun decompressKey(publicBytes: ByteArray): ByteArray {
+        val point = CURVE.curve.decodePoint(publicBytes)
+        val encoded = point.getEncoded(false)
+        return Arrays.copyOfRange(encoded, 1, encoded.size)
+    }
+
+    /**
      * Decodes an uncompressed public key (without 0x04 prefix) given an ECPoint
      */
     fun publicKeyFromPoint(point: ECPoint): BigInteger {
