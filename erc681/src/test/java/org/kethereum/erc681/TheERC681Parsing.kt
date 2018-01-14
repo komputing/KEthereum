@@ -18,6 +18,11 @@ class TheERC681Parsing {
     }
 
     @Test
+    fun weCanParseScientificNotationWithDecimalsForValue() {
+        Assertions.assertThat(parseERC681("ethereum:0x00AB42@23?value=42.123e18").value).isEqualTo(BigInteger("42123000000000000000"))
+    }
+
+    @Test
     fun weCanParseScientificNotationForGas() {
         Assertions.assertThat(parseERC681("ethereum:0x00AB42@23?gas=42e1").gas).isEqualTo(BigInteger("420"))
     }

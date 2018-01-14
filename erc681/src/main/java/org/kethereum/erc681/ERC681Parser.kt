@@ -1,9 +1,10 @@
 package org.kethereum.erc681
 
 import org.kethereum.erc681.ParseState.*
+import java.math.BigDecimal
 import java.math.BigInteger
 
-private val scientificNumberRegEx = Regex("^[0-9]+(e[0-9]+)?$")
+private val scientificNumberRegEx = Regex("^[0-9]+(\\.[0-9]+)?(e[0-9]+)?$")
 
 
 private var queryAsMap: Map<String, String> = emptyMap()
@@ -54,7 +55,7 @@ fun String.parseERC781() = ERC681().apply {
 
         return if (contains("e")) {
             val split = split("e")
-            BigInteger(split.first()).multiply(BigInteger.TEN.pow(split[1].toIntOrNull() ?: 1))
+            BigDecimal(split.first()).multiply(BigDecimal.TEN.pow(split[1].toIntOrNull() ?: 1)).toBigInteger()
         } else {
             BigInteger(this)
         }
