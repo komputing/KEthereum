@@ -1,5 +1,7 @@
 package org.kethereum.bip39
 
+import org.kethereum.bip32.BIP32
+import org.kethereum.bip32.ExtendedKey
 import org.kethereum.hashes.sha256
 import org.spongycastle.jce.provider.BouncyCastleProvider
 import java.security.Security
@@ -82,6 +84,11 @@ object Mnemonic {
                 throw RuntimeException("mnemonic checksum does not match")
 
         return entropy
+    }
+
+    fun mnemonicToKey(phrase : String, path : String, saltPhrase: String = "") : ExtendedKey {
+        val generatedSeed = Mnemonic.mnemonicToSeed(phrase, saltPhrase)
+        return BIP32.generateKey(generatedSeed, path)
     }
 
     private fun bytesToBits(data: ByteArray): BooleanArray {

@@ -11,7 +11,7 @@ import java.security.Security
 /**
  * Test batch for mnemonic phrases and the keys they generate.
  *
- * The test vectors used are the ones described in [bip39]()
+ * The test vectors used are the ones described in [bip39](https://github.com/bitcoin/bips/blob/master/bip-0039.mediawiki)
  */
 class MnemonicTest {
 
@@ -56,11 +56,8 @@ class MnemonicTest {
     @Test
     fun mnemonicToMasterKey() {
         testData.forEach {
-
-            val generatedSeed = Mnemonic.mnemonicToSeed(it.phrase, "TREZOR")
-
-            val generatedMaster = BIP32.generateKey(generatedSeed, "m")
-            assertEquals(it.masterKey, generatedMaster.serialize())
+            val gen = Mnemonic.mnemonicToKey(it.phrase, "m", "TREZOR")
+            assertEquals(it.masterKey, gen.serialize())
         }
 
     }
