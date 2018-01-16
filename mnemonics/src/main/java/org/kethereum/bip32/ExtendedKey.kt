@@ -96,6 +96,13 @@ data class ExtendedKey(private val keyPair: ECKeyPair,
 
     }
 
+    /**
+     * expose keypair
+     */
+    fun getKeyPair(): ECKeyPair {
+        return keyPair
+    }
+
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
