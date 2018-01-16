@@ -10,17 +10,19 @@ data class BIP44(val path: List<BIP44Element>) {
 
         private val HARDENING_FLAG = 0x80000000.toInt()
         fun fromPath(path: String): BIP44 {
-            if (!path.startsWith("m/")) {
+            if (!path.trim().startsWith("m/")) {
                 throw (IllegalArgumentException("Must start with m/"))
             }
             val cleanPath = path.replace("m/", "").replace(" ", "")
-            return BIP44(cleanPath.split("/").map {
-                BIP44Element(
-                        hardened = it.contains("'"),
-                        number = it.replace("'", "").toIntOrNull() ?:
-                                throw IllegalArgumentException("not a number " + it)
-                )
-            })
+            return BIP44(cleanPath.split("/")
+                    .filter { it.isNotEmpty() }
+                    .map {
+                        BIP44Element(
+                                hardened = it.contains("'"),
+                                number = it.replace("'", "").toIntOrNull() ?:
+                                        throw IllegalArgumentException("not a number " + it)
+                        )
+                    })
         }
 
     }
