@@ -3,7 +3,6 @@ package org.kethereum.bip39
 import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
-import org.kethereum.bip32.BIP32
 import org.spongycastle.jce.provider.BouncyCastleProvider
 import org.walleth.khex.hexToByteArray
 import java.security.Security
@@ -65,30 +64,17 @@ class MnemonicTest {
     @Test
     fun mnemonicVerify() {
         val phraseGood = "abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about"
-        //bad checksum
-        val phraseBad1 = "about about about about about about about about about about about about"
-        // missing from dictionary
-        val phraseBad2 = "hello world"
+        val badChecksum = "about about about about about about about about about about about about"
+        val missingWords = "hello world"
 
         assertTrue(Mnemonic.validateMnemonic(phraseGood))
-        assertFalse(Mnemonic.validateMnemonic(phraseBad1))
-        assertFalse(Mnemonic.validateMnemonic(phraseBad2))
-    }
-
-    @Test
-    fun batchTest() {
-        testData.forEach {
-            val entropy = it.entropy.hexToByteArray()
-            val expectedPhrase = it.phrase
-            val actualPhrase = Mnemonic.entropyToMnemonic(entropy)
-
-            assertEquals(expectedPhrase, actualPhrase)
-        }
+        assertFalse(Mnemonic.validateMnemonic(badChecksum))
+        assertFalse(Mnemonic.validateMnemonic(missingWords))
     }
 
     data class MnemonicTestData(val entropy: String, val phrase: String, val seed: String, val masterKey: String)
 
-    val testData = arrayOf(
+    private val testData = arrayOf(
             MnemonicTestData(
                     "00000000000000000000000000000000",
                     "abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about",
