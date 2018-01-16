@@ -1,24 +1,26 @@
 package org.kethereum.functions.rlp
 
+import org.kethereum.extensions.removeLeadingZero
+import org.kethereum.extensions.toMinimalByteArray
 import java.math.BigInteger
 
 /**
 RLP as of Appendix B. Recursive Length Prefix at https://github.com/ethereum/yellowpaper
  */
 
-val element_offset = 128
-val list_offset = 192
+const val ELEMENT_OFFSET = 128
+const val LIST_OFFSET = 192
 
 fun RLPType.encode(): ByteArray = when (this) {
-    is RLPElement -> bytes.encode(element_offset)
+    is RLPElement -> bytes.encode(ELEMENT_OFFSET)
     is RLPList -> element.map { it.encode() }
             .fold(ByteArray(0), { acc, bytes -> acc + bytes }) // this can be speed optimized when needed
-            .encode(list_offset)
+            .encode(LIST_OFFSET)
     else -> throw (IllegalArgumentException("RLPType must be RLPElement or RLPList"))
 }
 
 private fun ByteArray.encode(offset: Int) = when {
-    size == 1 && (first().toInt() and 0xff < 128) && offset == element_offset -> this
+    size == 1 && (first().toInt() and 0xff < 128) && offset == ELEMENT_OFFSET -> this
     size <= 55 -> ByteArray(1, { (size + offset).toByte() }).plus(this)
     else -> size.toMinimalByteArray().let { arr ->
         ByteArray(1, { (offset + 0x37 + arr.size).toByte() }) + arr + this
@@ -30,9 +32,3 @@ fun Int.toRLP() = RLPElement(toMinimalByteArray())
 fun BigInteger.toRLP() = RLPElement(toByteArray().removeLeadingZero())
 fun ByteArray.toRLP() = RLPElement(this)
 fun Byte.toRLP() = RLPElement(kotlin.ByteArray(1, { this }))
-
-fun Int.toByteArray() = ByteArray(4, { i -> shr(8 * (3 - i)).toByte() })
-internal fun Int.toMinimalByteArray() = toByteArray().let { it.copyOfRange(it.minimalStart(), 4) }
-
-private fun ByteArray.minimalStart() = indexOfFirst { it != 0.toByte() }.let { if (it == -1) 4 else it }
-private fun ByteArray.removeLeadingZero() = if (first() == 0.toByte()) copyOfRange(1, size) else this
