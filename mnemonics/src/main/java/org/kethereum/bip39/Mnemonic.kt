@@ -4,6 +4,7 @@ import org.kethereum.bip32.BIP32
 import org.kethereum.bip32.ExtendedKey
 import org.kethereum.hashes.sha256
 import org.spongycastle.jce.provider.BouncyCastleProvider
+import java.security.SecureRandom
 import java.security.Security
 import java.util.*
 import javax.crypto.SecretKeyFactory
@@ -144,6 +145,14 @@ object Mnemonic {
         }
 
         return words.joinToString(" ")
+    }
+
+    fun generateMnemonic(strength: Int = 128): String {
+
+        val entropyBuffer = ByteArray(strength / 8)
+        SecureRandom().nextBytes(entropyBuffer)
+
+        return Mnemonic.entropyToMnemonic(entropyBuffer)
     }
 
     /**
