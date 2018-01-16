@@ -56,7 +56,7 @@ class MnemonicTest {
     @Test
     fun mnemonicToMasterKey() {
         testData.forEach {
-            val gen = Mnemonic.mnemonicToKey(it.phrase, "m", "TREZOR")
+            val gen = Mnemonic.mnemonicToKey(it.phrase, "m/", "TREZOR")
             assertEquals(it.masterKey, gen.serialize())
         }
 

@@ -37,7 +37,7 @@ data class ExtendedKey(private val keyPair: ECKeyPair,
             if (isHardened(element) && keyPair.privateKey == BigInteger.ZERO) {
                 throw IllegalArgumentException("need private key for private generation using hardened paths")
             }
-            val mac = Mac.getInstance("HmacSHA512", "SC")
+            val mac = Mac.getInstance("HmacSHA512")
             val key = SecretKeySpec(chainCode, "HmacSHA512")
             mac.init(key)
 
@@ -154,7 +154,7 @@ data class ExtendedKey(private val keyPair: ECKeyPair,
 
         fun createFromSeed(seed: ByteArray, publicKeyOnly: Boolean = false): ExtendedKey {
             try {
-                val mac = Mac.getInstance("HmacSHA512", "SC")
+                val mac = Mac.getInstance("HmacSHA512")
                 val seedKey = SecretKeySpec(BITCOIN_SEED, "HmacSHA512")
                 mac.init(seedKey)
                 val lr = mac.doFinal(seed)

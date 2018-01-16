@@ -32,7 +32,7 @@ object Mnemonic {
         val pass = words.joinToString(" ")
         val salt = "mnemonic" + password
 
-        val keyFactory = SecretKeyFactory.getInstance("PBKDF2withHmacSHA512", "SC")
+        val keyFactory = SecretKeyFactory.getInstance("PBKDF2withHmacSHA512")
         val spec = PBEKeySpec(pass.toCharArray(), salt.toByteArray(), 2048, 512)
         val seed = keyFactory.generateSecret(spec).encoded
         return seed
