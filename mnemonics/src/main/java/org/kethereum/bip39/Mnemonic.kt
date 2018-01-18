@@ -2,8 +2,8 @@ package org.kethereum.bip39
 
 import org.kethereum.bip32.ExtendedKey
 import org.kethereum.bip32.generateKey
-import org.kethereum.extensions.toByteArray
 import org.kethereum.extensions.toBitArray
+import org.kethereum.extensions.toByteArray
 import org.kethereum.hashes.sha256
 import java.security.SecureRandom
 import java.util.*
@@ -154,9 +154,8 @@ object Mnemonic {
     /**
      * Checks if a mnemonic [phrase] is a valid encoding according to the BIP39 spec
      */
-    fun validateMnemonic(phrase: String): Boolean {
-        val words = phrase.split(" ").toTypedArray()
-        return validateMnemonic(words)
-    }
+    fun validateMnemonic(phrase: String)
+            =  validateMnemonic(phrase.split(" ").toTypedArray())
+
 
 }
