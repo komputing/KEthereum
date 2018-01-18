@@ -12,7 +12,7 @@ package org.kethereum.encodings
  */
 
 import org.kethereum.hashes.sha256
-import org.spongycastle.util.Arrays
+import java.util.Arrays
 
 private val INDICES = IntArray(128, { _ -> -1 })
 private val ALPHABET: CharArray = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz"
@@ -157,7 +157,7 @@ fun String.decodeBase58WithChecksum(): ByteArray {
     val hash = payload.sha256().sha256()
     val computedChecksum = Arrays.copyOfRange(hash, 0, CHECKSUM_SIZE)
 
-    if (Arrays.areEqual(checksum, computedChecksum)) {
+    if (Arrays.equals(checksum, computedChecksum)) {
         return payload
     } else {
         throw Exception("Checksum mismatch: $this ")

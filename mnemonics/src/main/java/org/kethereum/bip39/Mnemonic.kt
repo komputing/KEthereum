@@ -2,12 +2,13 @@ package org.kethereum.bip39
 
 import org.kethereum.bip32.ExtendedKey
 import org.kethereum.bip32.generateKey
+import org.kethereum.extensions.toByteArray
+import org.kethereum.extensions.toBitArray
 import org.kethereum.hashes.sha256
 import java.security.SecureRandom
 import java.util.*
 import javax.crypto.SecretKeyFactory
 import javax.crypto.spec.PBEKeySpec
-import kotlin.experimental.or
 
 object Mnemonic {
 
@@ -66,11 +67,11 @@ object Mnemonic {
         val numChecksumBits = numTotalBits / 33
         val numEntropyBits = numTotalBits - numChecksumBits
 
-        val entropy = bitsToBytes(bitArray, numEntropyBits / 8)
+        val entropy = bitArray.toByteArray()
 
         // Take the digest of the entropy.
         val hash = entropy.sha256()
-        val hashBits = bytesToBits(hash)
+        val hashBits = hash.toBitArray()
 
         // Check all the checksum bits.
         for (i in 0 until numChecksumBits)
@@ -85,25 +86,6 @@ object Mnemonic {
         return generateKey(generatedSeed, path)
     }
 
-    private fun bytesToBits(data: ByteArray): BooleanArray {
-        val bits = BooleanArray(data.size * 8)
-        for (byteIndex in data.indices)
-            for (bitIndex in 0..7) {
-                bits[byteIndex * 8 + bitIndex] = (1 shl (7 - bitIndex)) and data[byteIndex].toInt() != 0
-            }
-        return bits
-    }
-
-    private fun bitsToBytes(bits: BooleanArray, len: Int = bits.size / 8): ByteArray {
-        val result = ByteArray(len)
-        for (byteIndex in result.indices)
-            for (bitIndex in 0..7)
-                if (bits[byteIndex * 8 + bitIndex]) {
-                    result[byteIndex] = result[byteIndex] or (1 shl (7 - bitIndex)).toByte()
-                }
-        return result
-    }
-
     /**
      * Converts an entropy buffer to a list of words according to the BIP39 spec
      */
@@ -115,9 +97,9 @@ object Mnemonic {
             throw RuntimeException("Entropy is empty.")
 
         val hash = entropy.sha256()
-        val hashBits = bytesToBits(hash)
+        val hashBits = hash.toBitArray()
 
-        val entropyBits = bytesToBits(entropy)
+        val entropyBits = entropy.toBitArray()
         val checksumLengthBits = entropyBits.size / 32
 
         val concatBits = BooleanArray(entropyBits.size + checksumLengthBits)

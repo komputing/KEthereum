@@ -27,7 +27,7 @@ fun BigInteger.toBytesPadded(length: Int): ByteArray {
     return result
 }
 
-fun BigInteger.toHexStringNoPrefix() = toString(16)
+fun BigInteger.toHexStringNoPrefix(): String = toString(16)
 
 fun BigInteger.toHexStringZeroPadded(size: Int, withPrefix: Boolean = true): String {
     var result = toHexStringNoPrefix()
