@@ -11,8 +11,8 @@ fun ByteArray.toBitArray(): BooleanArray {
     return bits
 }
 
-fun BooleanArray.toByteArray(): ByteArray {
-    val result = ByteArray(this.size / 8)
+fun BooleanArray.toByteArray(len : Int = this.size / 8): ByteArray {
+    val result = ByteArray(len)
     for (byteIndex in result.indices)
         for (bitIndex in 0..7)
             if (this[byteIndex * 8 + bitIndex]) {

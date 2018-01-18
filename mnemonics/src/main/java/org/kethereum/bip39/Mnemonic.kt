@@ -67,7 +67,7 @@ object Mnemonic {
         val numChecksumBits = numTotalBits / 33
         val numEntropyBits = numTotalBits - numChecksumBits
 
-        val entropy = bitArray.toByteArray()
+        val entropy = bitArray.toByteArray(numEntropyBits / 8)
 
         // Take the digest of the entropy.
         val hash = entropy.sha256()
@@ -146,6 +146,7 @@ object Mnemonic {
             mnemonicToEntropy(words)
             true
         } catch (e: Exception) {
+            e.printStackTrace()
             false
         }
     }
