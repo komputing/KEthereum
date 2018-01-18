@@ -7,7 +7,7 @@ data class ERC681(
         var prefix: String? = null,
         var address: String? = null,
         var function: String? = null,
-        var query: String = "",
+        var functionParams: Map<String, String> = mapOf(),
         var scheme: String? = null,
         var chainId: Long? = null,
 
