@@ -1,11 +1,8 @@
 package org.kethereum.bip39
 
 import org.junit.Assert.*
-import org.junit.Before
 import org.junit.Test
-import org.spongycastle.jce.provider.BouncyCastleProvider
 import org.walleth.khex.hexToByteArray
-import java.security.Security
 
 /**
  * Test batch for mnemonic phrases and the keys they generate.
@@ -13,11 +10,6 @@ import java.security.Security
  * The test vectors used are the ones described in [bip39](https://github.com/bitcoin/bips/blob/master/bip-0039.mediawiki)
  */
 class MnemonicTest {
-
-    @Before
-    fun setUp() {
-        Security.addProvider(BouncyCastleProvider())
-    }
 
     @Test(expected = IllegalArgumentException::class)
     fun throwsOnWrongEntropySize() {
@@ -27,9 +19,16 @@ class MnemonicTest {
     @Test
     fun generatesValidPhrases() {
 
-        (1..16)
-                .map { Mnemonic.generateMnemonic(it * 32) }
-                .forEach { assertTrue(Mnemonic.validateMnemonic(it)) }
+        (1..100).forEach {
+            (1..16)
+                    .map { Mnemonic.generateMnemonic(it * 32) }
+                    .forEach {
+                        val isValid = Mnemonic.validateMnemonic(it)
+                        if (!isValid) {
+                            throw RuntimeException("failed to validate $it")
+                        }
+                    }
+        }
     }
 
     @Test(expected = IllegalArgumentException::class)
