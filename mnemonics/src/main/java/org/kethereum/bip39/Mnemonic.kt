@@ -1,7 +1,7 @@
 package org.kethereum.bip39
 
-import org.kethereum.bip32.BIP32
 import org.kethereum.bip32.ExtendedKey
+import org.kethereum.bip32.generateKey
 import org.kethereum.hashes.sha256
 import org.spongycastle.jce.provider.BouncyCastleProvider
 import java.security.SecureRandom
@@ -51,10 +51,10 @@ object Mnemonic {
      */
     fun mnemonicToEntropy(words: Array<String>): ByteArray {
         if (words.size % 3 > 0)
-            throw RuntimeException("Word list size must be multiple of three words.")
+            throw IllegalArgumentException("Word list size must be multiple of three words.")
 
         if (words.isEmpty())
-            throw RuntimeException("Word list is empty.")
+            throw IllegalArgumentException("Word list is empty.")
 
         val numTotalBits = words.size * 11
         val bitArray = BooleanArray(numTotalBits)
@@ -63,7 +63,7 @@ object Mnemonic {
 
             val dictIndex = Collections.binarySearch(ENGLISH, word)
             if (dictIndex < 0)
-                throw RuntimeException("word($word) not in known word list")
+                throw IllegalArgumentException("word($word) not in known word list")
 
             // Set the next 11 bits to the value of the index.
             for (bit in 0..10)
@@ -82,14 +82,14 @@ object Mnemonic {
         // Check all the checksum bits.
         for (i in 0 until numChecksumBits)
             if (bitArray[numEntropyBits + i] != hashBits[i])
-                throw RuntimeException("mnemonic checksum does not match")
+                throw IllegalArgumentException("mnemonic checksum does not match")
 
         return entropy
     }
 
     fun mnemonicToKey(phrase : String, path : String, saltPhrase: String = "") : ExtendedKey {
         val generatedSeed = Mnemonic.mnemonicToSeed(phrase, saltPhrase)
-        return BIP32.generateKey(generatedSeed, path)
+        return generateKey(generatedSeed, path)
     }
 
     private fun bytesToBits(data: ByteArray): BooleanArray {
@@ -147,7 +147,15 @@ object Mnemonic {
         return words.joinToString(" ")
     }
 
+    /**
+     * Generates a mnemonic phrase, given a desired [strength]
+     * The [strength] represents the number of entropy bits this phrase encodes and needs to be a multiple of 32
+     */
     fun generateMnemonic(strength: Int = 128): String {
+
+        if (strength % 32 != 0) {
+            throw IllegalArgumentException("The entropy strength needs to be a multiple of 32")
+        }
 
         val entropyBuffer = ByteArray(strength / 8)
         SecureRandom().nextBytes(entropyBuffer)
@@ -156,7 +164,7 @@ object Mnemonic {
     }
 
     /**
-     * Checks if a list of words is a valid encoding according to the BIP39 spec
+     * Checks if a list of [words] is a valid encoding according to the BIP39 spec
      */
     fun validateMnemonic(words: Array<String>): Boolean {
         return try {
@@ -167,6 +175,9 @@ object Mnemonic {
         }
     }
 
+    /**
+     * Checks if a mnemonic [phrase] is a valid encoding according to the BIP39 spec
+     */
     fun validateMnemonic(phrase: String): Boolean {
         val words = phrase.split(" ").toTypedArray()
         return validateMnemonic(words)

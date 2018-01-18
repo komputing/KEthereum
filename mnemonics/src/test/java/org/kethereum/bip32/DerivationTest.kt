@@ -15,7 +15,7 @@ class DerivationTest {
     @Test
     fun generateKeysFromSeed() {
         testData.forEach {
-            val derivedKey = BIP32.generateKey(it.seed.hexToByteArray(), it.path)
+            val derivedKey = generateKey(it.seed.hexToByteArray(), it.path)
             val obtainedPub = derivedKey.serialize(true)
             assertEquals(it.expectedPublicKey, obtainedPub)
 
