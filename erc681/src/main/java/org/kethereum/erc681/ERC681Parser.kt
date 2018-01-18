@@ -18,11 +18,13 @@ private enum class ParseState {
     QUERY
 }
 
-fun String.parseERC781() = ERC681().apply {
+fun String.toERC681() = ERC681().apply {
 
     var currentSegment = ""
 
     var currentState = SCHEMA
+
+    var query = ""
 
     fun stateTransition(newState: ParseState) {
         when (currentState) {
@@ -93,8 +95,9 @@ fun String.parseERC781() = ERC681().apply {
 
     gas = queryAsMap["gas"].toBigInteger()
     value = queryAsMap["value"].toBigInteger()
+    functionParams = queryAsMap.filter { it.key != "gas" && it.key != "value" }
 
     valid = valid && scheme == "ethereum"
 }
 
-fun parseERC681(url: String) = url.parseERC781()
+fun parseERC681(url: String) = url.toERC681()
