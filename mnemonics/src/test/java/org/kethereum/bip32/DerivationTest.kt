@@ -1,5 +1,6 @@
 package org.kethereum.bip32
 
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.Assert.assertEquals
 import org.junit.Test
 import org.walleth.khex.hexToByteArray
@@ -11,6 +12,12 @@ import org.walleth.khex.hexToByteArray
  * The test vectors used are the ones described in [bip32](https://github.com/bitcoin/bips/blob/master/bip-0032.mediawiki)
  */
 class DerivationTest {
+
+    @Test
+    fun createdKeyHasKeypair() {
+        val simpleKey = generateKey(ByteArray(0), "m/")
+        assertThat(simpleKey.getKeyPair()).isNotNull()
+    }
 
     @Test
     fun generateKeysFromSeed() {
@@ -34,7 +41,7 @@ class DerivationTest {
             val expectedPrivateKey: String
     )
 
-    val testData = arrayOf(
+    private val testData = arrayOf(
             DerivationVector(
                     "000102030405060708090a0b0c0d0e0f",
                     "m/",

@@ -1,5 +1,6 @@
 package org.kethereum.bip32
 
+import org.kethereum.bip44.BIP44.Companion.isHardened
 import org.kethereum.crypto.CURVE
 import org.kethereum.crypto.ECKeyPair
 import org.kethereum.crypto.Keys
@@ -12,12 +13,14 @@ import org.kethereum.encodings.encodeToBase58WithChecksum
 import org.kethereum.extensions.toBytesPadded
 import org.kethereum.hashes.ripemd160
 import org.kethereum.hashes.sha256
-import org.spongycastle.jce.provider.BouncyCastleProvider
 import java.io.IOException
 import java.math.BigInteger
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
-import java.security.*
+import java.security.InvalidKeyException
+import java.security.KeyException
+import java.security.NoSuchAlgorithmException
+import java.security.NoSuchProviderException
 import java.util.*
 import javax.crypto.Mac
 import javax.crypto.spec.SecretKeySpec
@@ -27,10 +30,6 @@ data class ExtendedKey(private val keyPair: ECKeyPair,
                        private val depth: Byte,
                        private val parentFingerprint: Int,
                        private val sequence: Int) {
-
-    init {
-        Security.addProvider(BouncyCastleProvider())
-    }
 
     fun generateChildKey(element: Int): ExtendedKey {
         try {
@@ -99,9 +98,7 @@ data class ExtendedKey(private val keyPair: ECKeyPair,
     /**
      * expose keypair
      */
-    fun getKeyPair(): ECKeyPair {
-        return keyPair
-    }
+    fun getKeyPair(): ECKeyPair = keyPair
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -154,8 +151,9 @@ data class ExtendedKey(private val keyPair: ECKeyPair,
     companion object {
 
         private val BITCOIN_SEED = "Bitcoin seed".toByteArray()
-        private val CHAINCODE_SIZE = PRIVATE_KEY_SIZE
-        private val COMPRESSED_PUBLIC_KEY_SIZE = PRIVATE_KEY_SIZE + 1
+        private const val CHAINCODE_SIZE = PRIVATE_KEY_SIZE
+        private const val COMPRESSED_PUBLIC_KEY_SIZE = PRIVATE_KEY_SIZE + 1
+        private const val EXTENDED_KEY_SIZE: Int = 78
         internal val xprv = byteArrayOf(0x04, 0x88.toByte(), 0xAD.toByte(), 0xE4.toByte())
         internal val xpub = byteArrayOf(0x04, 0x88.toByte(), 0xB2.toByte(), 0x1E.toByte())
 
@@ -186,11 +184,6 @@ data class ExtendedKey(private val keyPair: ECKeyPair,
                 throw KeyException(e)
             }
 
-        }
-
-        private val HARDENING_FLAG = 0x80000000.toInt()
-        private fun isHardened(element: Int): Boolean {
-            return element and HARDENING_FLAG != 0
         }
 
         /**
@@ -250,8 +243,6 @@ data class ExtendedKey(private val keyPair: ECKeyPair,
             }
             return ExtendedKey(keyPair, chainCode, depth, parent, sequence)
         }
-
-        private val EXTENDED_KEY_SIZE: Int = 78
 
     }
 }

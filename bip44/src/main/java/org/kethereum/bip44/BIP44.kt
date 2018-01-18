@@ -8,7 +8,9 @@ data class BIP44Element(val hardened: Boolean, val number: Int)
 data class BIP44(val path: List<BIP44Element>) {
     companion object {
 
-        private val HARDENING_FLAG = 0x80000000.toInt()
+        const val HARDENING_FLAG = 0x80000000.toInt()
+        fun isHardened(element: Int): Boolean  = (element and HARDENING_FLAG != 0)
+
         fun fromPath(path: String): BIP44 {
             if (!path.trim().startsWith("m/")) {
                 throw (IllegalArgumentException("Must start with m/"))

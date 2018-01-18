@@ -3,19 +3,13 @@ package org.kethereum.bip39
 import org.kethereum.bip32.ExtendedKey
 import org.kethereum.bip32.generateKey
 import org.kethereum.hashes.sha256
-import org.spongycastle.jce.provider.BouncyCastleProvider
 import java.security.SecureRandom
-import java.security.Security
 import java.util.*
 import javax.crypto.SecretKeyFactory
 import javax.crypto.spec.PBEKeySpec
 import kotlin.experimental.or
 
 object Mnemonic {
-
-    init {
-        Security.addProvider(BouncyCastleProvider())
-    }
 
     /**
      * Generates a seed buffer from a mnemonic phrase according to the BIP39 spec.
@@ -35,8 +29,7 @@ object Mnemonic {
 
         val keyFactory = SecretKeyFactory.getInstance("PBKDF2withHmacSHA512")
         val spec = PBEKeySpec(pass.toCharArray(), salt.toByteArray(), 2048, 512)
-        val seed = keyFactory.generateSecret(spec).encoded
-        return seed
+        return keyFactory.generateSecret(spec).encoded
     }
 
     /**
@@ -73,7 +66,7 @@ object Mnemonic {
         val numChecksumBits = numTotalBits / 33
         val numEntropyBits = numTotalBits - numChecksumBits
 
-        val entropy = bitsToBytes(bitArray, numEntropyBits / 8 )
+        val entropy = bitsToBytes(bitArray, numEntropyBits / 8)
 
         // Take the digest of the entropy.
         val hash = entropy.sha256()
@@ -87,7 +80,7 @@ object Mnemonic {
         return entropy
     }
 
-    fun mnemonicToKey(phrase : String, path : String, saltPhrase: String = "") : ExtendedKey {
+    fun mnemonicToKey(phrase: String, path: String, saltPhrase: String = ""): ExtendedKey {
         val generatedSeed = Mnemonic.mnemonicToSeed(phrase, saltPhrase)
         return generateKey(generatedSeed, path)
     }
