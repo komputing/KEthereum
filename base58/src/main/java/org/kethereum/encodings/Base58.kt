@@ -25,7 +25,7 @@ private val ALPHABET: CharArray = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkm
         .toCharArray()
 private val ENCODED_ZERO = ALPHABET[0]
 
-private val CHECKSUM_SIZE = 4
+private const val CHECKSUM_SIZE = 4
 
 /**
  * Encodes the bytes as a base58 string (no checksum is appended).
