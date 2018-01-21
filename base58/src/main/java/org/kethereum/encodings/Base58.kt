@@ -1,4 +1,5 @@
 @file:JvmName("Base58")
+
 package org.kethereum.encodings
 
 /**
@@ -14,18 +15,12 @@ package org.kethereum.encodings
 import org.kethereum.hashes.sha256
 import java.util.*
 
-private val INDICES = IntArray(128, { _ -> -1 })
-private val ALPHABET: CharArray = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz"
-        .toCharArray()
-        .mapIndexed { index, value ->
-            //side effect
-            INDICES[value.toInt()] = index
-            return@mapIndexed value
-        }
-        .toCharArray()
-private val ENCODED_ZERO = ALPHABET[0]
-
+private const val ENCODED_ZERO = '1'
 private const val CHECKSUM_SIZE = 4
+
+private val ALPHABET: CharArray = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz".toCharArray()
+
+private val INDICES = IntArray(128, { ALPHABET.indexOf(it.toChar()) })
 
 /**
  * Encodes the bytes as a base58 string (no checksum is appended).
