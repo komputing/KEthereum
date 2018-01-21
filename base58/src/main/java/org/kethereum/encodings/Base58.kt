@@ -18,9 +18,8 @@ import java.util.*
 private const val ENCODED_ZERO = '1'
 private const val CHECKSUM_SIZE = 4
 
-private val ALPHABET: CharArray = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz".toCharArray()
-
-private val INDICES = IntArray(128, { ALPHABET.indexOf(it.toChar()) })
+private val alphabet by lazy { "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz".toCharArray() }
+private val alphabetIndices by lazy { IntArray(128, { alphabet.indexOf(it.toChar()) }) }
 
 /**
  * Encodes the bytes as a base58 string (no checksum is appended).
@@ -43,7 +42,7 @@ fun ByteArray.encodeToBase58String(): String {
     var outputStart = encoded.size
     var inputStart = zeros
     while (inputStart < input.size) {
-        encoded[--outputStart] = ALPHABET[divmod(input, inputStart, 256, 58)]
+        encoded[--outputStart] = alphabet[divmod(input, inputStart, 256, 58)]
         if (input[inputStart].toInt() == 0) {
             ++inputStart // optimization - skip leading zeros
         }
@@ -74,7 +73,7 @@ fun String.decodeBase58(): ByteArray {
     val input58 = ByteArray(this.length)
     for (i in 0 until this.length) {
         val c = this[i]
-        val digit = if (c.toInt() < 128) INDICES[c.toInt()] else -1
+        val digit = if (c.toInt() < 128) alphabetIndices[c.toInt()] else -1
         if (digit < 0) {
             throw NumberFormatException("Illegal character $c at position $i")
         }
