@@ -12,7 +12,7 @@ package org.kethereum.encodings
  */
 
 import org.kethereum.hashes.sha256
-import java.util.Arrays
+import java.util.*
 
 private val INDICES = IntArray(128, { _ -> -1 })
 private val ALPHABET: CharArray = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz"
