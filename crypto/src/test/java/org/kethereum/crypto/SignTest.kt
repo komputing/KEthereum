@@ -1,13 +1,16 @@
 package org.kethereum.crypto
 
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.Assert.assertEquals
 import org.junit.Test
 import org.kethereum.crypto.data.KEY_PAIR
 import org.kethereum.crypto.data.PRIVATE_KEY
 import org.kethereum.crypto.data.PUBLIC_KEY
 import org.kethereum.crypto.data.TEST_MESSAGE
 import org.kethereum.extensions.hexToBigInteger
+import org.kethereum.hashes.sha256
 import org.kethereum.model.SignatureData
+import org.walleth.khex.hexToByteArray
 import java.security.SignatureException
 
 class SignTest {
@@ -23,6 +26,22 @@ class SignTest {
         )
 
         assertThat(signatureData).isEqualTo(expected)
+    }
+
+    @Test
+    fun testSignMessageHash() {
+        val keyPair = ECKeyPair.create("0x65fc670d9351cb87d1f56702fb56a7832ae2aab3427be944ab8c9f2a0ab87960".hexToByteArray())
+
+        val messageHash = "Hello, world!".toByteArray().sha256()
+        val signatureData = signMessageHash(messageHash, keyPair, false)
+
+        val expected = SignatureData(
+                "0x6bcd81446183af193ca4a172d5c5c26345903b24770d90b5d790f74a9dec1f68".hexToBigInteger(),
+                "0xe2b85b3c92c9b4f3cf58de46e7997d8efb6e14b2e532d13dfa22ee02f3a43d5d".hexToBigInteger(),
+                28.toByte()
+        )
+
+        assertEquals(expected, signatureData)
     }
 
     @Test
