@@ -24,22 +24,39 @@ import kotlin.experimental.and
  *
  *
  * Adapted from the
- * [
- * BitcoinJ ECKey](https://github.com/bitcoinj/bitcoinj/blob/master/core/src/main/java/org/bitcoinj/core/ECKey.java) implementation.
+ * [BitcoinJ ECKey](https://github.com/bitcoinj/bitcoinj/blob/master/core/src/main/java/org/bitcoinj/core/ECKey.java) implementation.
  */
 private val CURVE_PARAMS = CustomNamedCurves.getByName("secp256k1")
 val CURVE = ECDomainParameters(
         CURVE_PARAMS.curve, CURVE_PARAMS.g, CURVE_PARAMS.n, CURVE_PARAMS.h)
 private val HALF_CURVE_ORDER = CURVE_PARAMS.n.shiftRight(1)
 
+/**
+ * Signs the [keccak] hash of the [message] buffer with the private key in the given [keyPair].
+ * The signature is canonicalised ( @see [ECDSASignature.toCanonicalised] )
+ *
+ * @return [SignatureData] containing the (r,s,v) components
+ */
 fun signMessage(message: ByteArray, keyPair: ECKeyPair): SignatureData {
-    val privateKey = keyPair.privateKey
-    val publicKey = keyPair.publicKey
 
     val messageHash = message.keccak()
 
-    val sig = sign(messageHash, privateKey)
-    // Now we have to work backwards to figure out the recId needed to recover the signature.
+    return signMessageHash(messageHash, keyPair, true)
+}
+
+/**
+ * Signs the the [messageHash] buffer with the private key in the given [keyPair].
+ * If the [toCanonical] param is true, the signature is canonicalised ( @see [ECDSASignature.toCanonicalised] )
+ *
+ * This method is provided to allow for more flexible signature schemes using the same Ethereum keys.
+ *
+ * @return [SignatureData] containing the (r,s,v) components
+ */
+fun signMessageHash(messageHash: ByteArray, keyPair: ECKeyPair, toCanonical: Boolean = true): SignatureData {
+    val privateKey = keyPair.privateKey
+    val publicKey = keyPair.publicKey
+    val sig = sign(messageHash, privateKey, toCanonical)
+    // Now we have to work backwards to figure out the recId needed to recover the public key
     var recId = -1
     for (i in 0..3) {
         val k = recoverFromSignature(i, sig, messageHash)
@@ -55,20 +72,24 @@ fun signMessage(message: ByteArray, keyPair: ECKeyPair): SignatureData {
 
     val headerByte = recId + 27
 
-    // 1 header + 32 bytes for R + 32 bytes for S
     val v = headerByte.toByte()
 
     return SignatureData(sig.r, sig.s, v)
 }
 
-private fun sign(transactionHash: ByteArray, privateKey: BigInteger): ECDSASignature {
+private fun sign(transactionHash: ByteArray, privateKey: BigInteger, canonical : Boolean): ECDSASignature {
     val signer = ECDSASigner(HMacDSAKCalculator(SHA256Digest()))
 
     val ecPrivateKeyParameters = ECPrivateKeyParameters(privateKey, CURVE)
     signer.init(true, ecPrivateKeyParameters)
     val components = signer.generateSignature(transactionHash)
 
-    return ECDSASignature(components[0], components[1]).toCanonicalised()
+    val signature = ECDSASignature(components[0], components[1])
+    return if (canonical) {
+        signature.toCanonicalised()
+    } else {
+        signature
+    }
 }
 
 /**
@@ -224,9 +245,8 @@ private data class ECDSASignature internal constructor(val r: BigInteger, val s:
 
     /**
      * Returns true if the S component is "low", that means it is below
-     * [Sign.HALF_CURVE_ORDER]. See
-     * [
- * BIP62](https://github.com/bitcoin/bips/blob/master/bip-0062.mediawiki#Low_S_values_in_signatures).
+     * [HALF_CURVE_ORDER]. See
+     * [BIP62](https://github.com/bitcoin/bips/blob/master/bip-0062.mediawiki#Low_S_values_in_signatures).
      */
     fun isCanonical() = s <= HALF_CURVE_ORDER
 
