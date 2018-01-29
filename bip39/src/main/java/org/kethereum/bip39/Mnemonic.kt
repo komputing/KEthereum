@@ -5,12 +5,18 @@ import org.kethereum.bip32.generateKey
 import org.kethereum.extensions.toBitArray
 import org.kethereum.extensions.toByteArray
 import org.kethereum.hashes.sha256
+import org.spongycastle.jce.provider.BouncyCastleProvider
 import java.security.SecureRandom
+import java.security.Security
 import java.util.*
 import javax.crypto.SecretKeyFactory
 import javax.crypto.spec.PBEKeySpec
 
 object Mnemonic {
+
+    init {
+        Security.insertProviderAt(BouncyCastleProvider(), 1)
+    }
 
     /**
      * Generates a seed buffer from a mnemonic phrase according to the BIP39 spec.
