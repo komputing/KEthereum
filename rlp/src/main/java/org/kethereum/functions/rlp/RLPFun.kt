@@ -8,8 +8,8 @@ import java.math.BigInteger
 RLP as of Appendix B. Recursive Length Prefix at https://github.com/ethereum/yellowpaper
  */
 
-const val ELEMENT_OFFSET = 128
-const val LIST_OFFSET = 192
+private const val ELEMENT_OFFSET = 128
+private const val LIST_OFFSET = 192
 
 fun RLPType.encode(): ByteArray = when (this) {
     is RLPElement -> bytes.encode(ELEMENT_OFFSET)
