@@ -192,8 +192,8 @@ data class ExtendedKey(private val keyPair: ECKeyPair,
          */
         private fun computeFingerPrint(keyPair: ECKeyPair): Int {
             val pubKeyHash = Keys.getCompressedPublicKey(keyPair)
-                        .sha256()
-                        .ripemd160()
+                    .sha256()
+                    .ripemd160()
             var fingerprint = 0
             for (i in 0..3) {
                 fingerprint = fingerprint shl 8
@@ -216,8 +216,7 @@ data class ExtendedKey(private val keyPair: ECKeyPair,
 
             buff.get(type)
 
-            val hasPrivate: Boolean
-            hasPrivate = when {
+            val hasPrivate  = when {
                 Arrays.equals(type, xprv) -> true
                 Arrays.equals(type, xpub) -> false
                 else -> throw KeyException("invalid magic number for an extended key")
