@@ -43,13 +43,13 @@ data class ExtendedKey(private val keyPair: ECKeyPair,
             val extended: ByteArray
             val pub = Keys.getCompressedPublicKey(keyPair)
             if (isHardened(element)) {
-                val priv = keyPair.privateKey.toBytesPadded(PRIVATE_KEY_SIZE)
+                val privateKeyPaddedBytes = keyPair.privateKey.toBytesPadded(PRIVATE_KEY_SIZE)
 
                 extended = ByteBuffer
-                        .allocate(priv.size + 5)
+                        .allocate(privateKeyPaddedBytes.size + 5)
                         .order(ByteOrder.BIG_ENDIAN)
                         .put(0)
-                        .put(priv)
+                        .put(privateKeyPaddedBytes)
                         .putInt(element)
                         .array()
             } else {
