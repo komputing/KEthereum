@@ -1,8 +1,8 @@
 package org.kethereum
 
-val ETHEREUM_NETWORK_MAIN = "main"
-val ETHEREUM_NETWORK_RINKEBY = "rinkeby"
-val ETHEREUM_NETWORK_ROPSTEN = "ropsten"
+const val ETHEREUM_NETWORK_MAIN = "main"
+const val ETHEREUM_NETWORK_RINKEBY = "rinkeby"
+const val ETHEREUM_NETWORK_ROPSTEN = "ropsten"
 
 val ETHEREUM_NETWORKS = listOf(
         ETHEREUM_NETWORK_MAIN,
