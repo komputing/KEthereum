@@ -224,8 +224,8 @@ data class ExtendedKey(private val keyPair: ECKeyPair,
             }
 
             val depth = buff.get()
-            val parent = buff.getInt()
-            val sequence = buff.getInt()
+            val parent = buff.int
+            val sequence = buff.int
 
             val chainCode = ByteArray(PRIVATE_KEY_SIZE)
             buff.get(chainCode)
