@@ -20,10 +20,10 @@ fun Address.withERC55Checksum() = cleanHex.toLowerCase().toByteArray().keccak().
     }.joinToString(""))
 }
 
-private fun Address.hasValidEIP55ChecksumStrictAssumingValidAddress() = withERC55Checksum().hex == this.hex
+private fun Address.hasValidEIP55ChecksumStrictAssumingValidAddress() = withERC55Checksum().hex == hex
 
-fun Address.hasValidEIP55ChecksumStrict() = isValid() && hasValidEIP55ChecksumStrictAssumingValidAddress()
-fun Address.hasValidEIP55Checksum() = isValid() &&
+fun Address.hasValidEIP55Checksum() = isValid() && hasValidEIP55ChecksumStrictAssumingValidAddress()
+fun Address.hasValidEIP55ChecksumOrNoCecksum() = isValid() &&
         (hasValidEIP55ChecksumStrictAssumingValidAddress() ||
                 cleanHex.toLowerCase() == cleanHex ||
                 cleanHex.toUpperCase() == cleanHex)
