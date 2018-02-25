@@ -1,1 +1,1 @@
-include ':bip44', ':crypto', ':crypto', ':extensions', ':erc67', ':erc681', ':erc55', ':eip155', ':model', ':rpc', ':functions', ':rlp', ':keccak_shortcut', ':base58', ':bip32', 'bip39'
+include ':bip44', ':crypto', ':crypto', ':extensions', ':erc67', ':erc681', ':erc55', ':eip155', ':model', ':rpc', ':functions', ':rlp', ':keccak_shortcut', ':base58', ':bip32', 'bip39', ':method_signatures'
