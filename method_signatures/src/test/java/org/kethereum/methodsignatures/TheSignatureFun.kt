@@ -2,6 +2,7 @@ package org.kethereum.methodsignatures
 
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
+import org.kethereum.methodsignatures.model.TextMethodSignature
 
 class TheSignatureFun {
 

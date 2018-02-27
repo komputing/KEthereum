@@ -1,8 +1,12 @@
 package org.kethereum.methodsignatures
 
+import org.kethereum.methodsignatures.model.TextMethodSignature
 import java.io.File
 
-private fun semicolonSeparatedSet(file: File) = file.readText().split(";").toHashSet()
+private fun toStringSet(file: File) = semivolonSeparetedStringArray(file).toHashSet()
+private fun toTextSignatureSet(file: File) = semivolonSeparetedStringArray(file).map { TextMethodSignature(it) }.toHashSet()
+
+private fun semivolonSeparetedStringArray(file: File) = file.readText().split(";")
 
 class FileBackedMethodSignatureStore(private val storeDir: File) {
 
@@ -13,14 +17,14 @@ class FileBackedMethodSignatureStore(private val storeDir: File) {
             val res = if (isNewEntry) {
                 HashSet()
             } else {
-                semicolonSeparatedSet(file)
+                toStringSet(file)
             }
             res.add(signatureText)
             file.writeText(res.joinToString(";"))
         }
     }
 
-    fun get(signatureHash: String) = semicolonSeparatedSet(toFile(signatureHash))
+    fun get(signatureHash: String) = toTextSignatureSet(toFile(signatureHash))
     fun has(signatureHash: String) = toFile(signatureHash).exists()
     fun all() = storeDir.list().toList()
     private fun toFile(signatureHash: String) = File(storeDir, signatureHash)
