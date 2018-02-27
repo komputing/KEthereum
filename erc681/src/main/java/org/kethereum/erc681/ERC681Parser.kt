@@ -55,11 +55,16 @@ fun String.toERC681() = ERC681().apply {
             return null
         }
 
-        return if (contains("e")) {
-            val split = split("e")
-            BigDecimal(split.first()).multiply(BigDecimal.TEN.pow(split[1].toIntOrNull() ?: 1)).toBigInteger()
-        } else {
-            BigInteger(this)
+        return when {
+            contains("e") -> {
+                val split = split("e")
+                BigDecimal(split.first()).multiply(BigDecimal.TEN.pow(split[1].toIntOrNull() ?: 1)).toBigInteger()
+            }
+            contains(".") -> {
+                valid = false
+                null
+            }
+            else -> BigInteger(this)
         }
     }
 

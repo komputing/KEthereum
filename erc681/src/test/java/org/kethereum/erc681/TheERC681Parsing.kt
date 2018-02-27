@@ -107,4 +107,8 @@ class TheERC681Parsing {
         Assertions.assertThat(parseERC681("ethereum:key-0x00AB42@23?value=42&gas=3").gas).isEqualTo("3")
     }
 
+    @Test
+    fun weDoNotStumbleUponIllegal681() {
+        Assertions.assertThat(parseERC681("ethereum:key-0x00AB42@23?value=42.42").valid).isEqualTo(false)
+    }
 }
