@@ -7,7 +7,7 @@ import java.math.BigInteger
 private val scientificNumberRegEx = Regex("^[0-9]+(\\.[0-9]+)?(e[0-9]+)?$")
 
 
-private var queryAsMap: Map<String, String> = emptyMap()
+private var queryAsList: List<Pair<String, String>> = emptyList()
 
 private enum class ParseState {
     SCHEMA,
@@ -93,14 +93,17 @@ fun String.toERC681() = ERC681().apply {
         stateTransition(QUERY)
     }
 
-    queryAsMap = query.split("&")
+    queryAsList = query.split("&")
             .map { it.split("=", limit = 2) }
             .map { it.first() to it.getOrElse(1, { "true" }) }
-            .toMap()
+
+
+    val queryAsMap = queryAsList.toMap() // should be improved https://github.com/walleth/kethereum/issues/25
 
     gas = queryAsMap["gas"].toBigInteger()
     value = queryAsMap["value"].toBigInteger()
-    functionParams = queryAsMap.filter { it.key != "gas" && it.key != "value" }
+
+    functionParams = queryAsList.filter { it.first != "gas" && it.first != "value" }
 
     valid = valid && scheme == "ethereum"
 }

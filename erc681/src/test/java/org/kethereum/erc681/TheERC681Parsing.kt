@@ -9,12 +9,12 @@ class TheERC681Parsing {
 
     @Test
     fun weCanAccessFunctionParams() {
-        Assertions.assertThat(parseERC681("ethereum:key-0x00AB42@23?value=42&gas=3&yay").functionParams).isEqualTo(mapOf("yay" to "true"))
+        Assertions.assertThat(parseERC681("ethereum:key-0x00AB42@23?value=42&gas=3&yay").functionParams).isEqualTo(listOf("yay" to "true"))
     }
 
     @Test
     fun weCanAccessFunctionParamsWithFunction() {
-        Assertions.assertThat(parseERC681("ethereum:key-0x00AB42@23/funfun?value=42&gas=3&yay").functionParams).isEqualTo(mapOf<String, String>("yay" to "true"))
+        Assertions.assertThat(parseERC681("ethereum:key-0x00AB42@23/funfun?value=42&gas=3&yay").functionParams).isEqualTo(listOf("yay" to "true"))
     }
 
 
@@ -78,7 +78,7 @@ class TheERC681Parsing {
 
     @Test
     fun parsingERC681Works() {
-        Assertions.assertThat(parseERC681("ethereum:0x00AB42?value=1").functionParams).isEqualTo(mapOf<String, String>())
+        Assertions.assertThat(parseERC681("ethereum:0x00AB42?value=1").functionParams).isEqualTo(emptyList<String>())
         Assertions.assertThat(parseERC681("ethereum:0x00AB42?value=1").address).isEqualTo("0x00AB42")
         Assertions.assertThat(parseERC681("ethereum:0x00AB42").value).isNull()
 
