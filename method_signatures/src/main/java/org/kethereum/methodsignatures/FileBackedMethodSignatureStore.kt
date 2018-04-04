@@ -3,10 +3,10 @@ package org.kethereum.methodsignatures
 import org.kethereum.methodsignatures.model.TextMethodSignature
 import java.io.File
 
-private fun toStringSet(file: File) = semivolonSeparetedStringArray(file).toHashSet()
-private fun toTextSignatureSet(file: File) = semivolonSeparetedStringArray(file).map { TextMethodSignature(it) }.toHashSet()
+private fun toStringSet(file: File) = semicolonSeparatedStringArray(file).toHashSet()
+private fun toTextSignatureSet(file: File) = semicolonSeparatedStringArray(file).map { TextMethodSignature(it) }.toHashSet()
 
-private fun semivolonSeparetedStringArray(file: File) = file.readText().split(";")
+private fun semicolonSeparatedStringArray(file: File) = file.readText().split(";")
 
 class FileBackedMethodSignatureStore(private val storeDir: File) {
 
