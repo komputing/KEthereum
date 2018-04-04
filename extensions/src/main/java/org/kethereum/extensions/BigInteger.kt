@@ -19,7 +19,7 @@ fun BigInteger.toBytesPadded(length: Int): ByteArray {
     }
 
     if (bytesLength > length) {
-        throw RuntimeException("Input is too large to put in byte array of size " + length)
+        throw RuntimeException("Input is too large to put in byte array of size $length")
     }
 
     val destOffset = length - bytesLength
@@ -34,8 +34,7 @@ fun BigInteger.toHexStringZeroPadded(size: Int, withPrefix: Boolean = true): Str
 
     val length = result.length
     if (length > size) {
-        throw UnsupportedOperationException(
-                "Value " + result + "is larger then length " + size)
+        throw UnsupportedOperationException("Value $result is larger then length $size")
     } else if (signum() < 0) {
         throw UnsupportedOperationException("Value cannot be negative")
     }
@@ -45,7 +44,7 @@ fun BigInteger.toHexStringZeroPadded(size: Int, withPrefix: Boolean = true): Str
     }
 
     return if (withPrefix) {
-        "0x" + result
+        "0x$result"
     } else {
         result
     }
