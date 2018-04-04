@@ -5,7 +5,7 @@ buildscript {
 
         spongycastleVersion = '1.58.0.0'
         slf4jVersion = '1.7.25'
-        khex_version = '0.5'
+        khex_version = '0.6'
 
     }
 
@@ -37,6 +37,7 @@ allprojects {
 
         testCompile 'org.assertj:assertj-core:3.9.1'
         testCompile 'junit:junit:4.12'
+        testCompile "org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version"
     }
 
     task sourcesJar(type: Jar, dependsOn: classes) {

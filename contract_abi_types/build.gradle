@@ -1,0 +1,5 @@
+dependencies {
+    implementation project(":extensions")
+
+    implementation "com.github.walleth:khex:$khex_version"
+}
