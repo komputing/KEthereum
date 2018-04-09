@@ -20,8 +20,7 @@ buildscript {
     }
 }
 
-
-allprojects {
+subprojects {
     repositories {
         jcenter()
         maven { url 'https://jitpack.io' }
@@ -32,26 +31,29 @@ allprojects {
     apply plugin: "maven"
     apply plugin: "com.github.ben-manes.versions"
 
-    dependencies {
-        compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    afterEvaluate { project ->
 
-        testCompile 'org.assertj:assertj-core:3.9.1'
-        testCompile 'junit:junit:4.12'
-        testCompile "org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version"
-    }
+        dependencies {
+            compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 
-    task sourcesJar(type: Jar, dependsOn: classes) {
-        classifier = 'sources'
-        from sourceSets.main.allSource
-    }
+            testCompile 'org.assertj:assertj-core:3.9.1'
+            testCompile 'junit:junit:4.12'
+            testCompile "org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version"
+        }
 
-    task javadocJar(type: Jar, dependsOn: javadoc) {
-        classifier = 'javadoc'
-        from javadoc.destinationDir
-    }
+        task sourcesJar(type: Jar, dependsOn: classes) {
+            classifier = 'sources'
+            from sourceSets.main.allSource
+        }
 
-    artifacts {
-        archives sourcesJar
-        archives javadocJar
+        task javadocJar(type: Jar, dependsOn: javadoc) {
+            classifier = 'javadoc'
+            from javadoc.destinationDir
+        }
+
+        artifacts {
+            archives sourcesJar
+            archives javadocJar
+        }
     }
 }
