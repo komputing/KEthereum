@@ -29,7 +29,7 @@ fun ERC681.generateURL(): String {
         paramList.add("value" to value.toString())
     }
     if (paramList.isNotEmpty()) {
-        res += "?" + paramList.map { it.first + "=" + it.second }.joinToString("&")
+        res += "?" + paramList.joinToString("&") { it.first + "=" + it.second }
     }
 
     return res
