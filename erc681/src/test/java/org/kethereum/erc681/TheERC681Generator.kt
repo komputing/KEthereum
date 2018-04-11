@@ -29,6 +29,11 @@ class TheERC681Generator {
         assertThat(ERC681(address = "0x00AB42", function = "yolo").generateURL()).isEqualTo("ethereum:0x00AB42/yolo")
     }
 
+    @Test
+    fun toERC681WithFunctionThatHas2ParametersOfTheSameTypeWorks() {
+        assertThat(ERC681(address = "0x00AB42", function = "funFTW",functionParams = listOf(Pair("uint256","2"),Pair("uint256","1"))).generateURL())
+                .isEqualTo("ethereum:0x00AB42/funFTW?uint256=2&uint256=1")
+    }
 
     @Test
     fun toERC681WithPrefixWorks() {

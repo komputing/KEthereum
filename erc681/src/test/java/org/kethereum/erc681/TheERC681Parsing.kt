@@ -22,6 +22,12 @@ class TheERC681Parsing {
         Assertions.assertThat(parseERC681("ethereum:key-0x00AB42@23/funfun").functionParams).isEmpty()
     }
 
+
+    @Test
+    fun weCanHandleFunctionParamsWithSameType() {
+        Assertions.assertThat(parseERC681("ethereum:key-0x00AB42@23/yolo?uint256=123&uint256=2").functionParams.size).isEqualTo(2)
+    }
+
     @Test
     fun orderOfFunctionParamsIsPreserved() {
         Assertions.assertThat(parseERC681("ethereum:key-0x00AB42@23/funfun?value=42&gas=3&uint8=1&uint8=2").functionParams).isEqualTo(listOf("uint8" to "1","uint8" to "2"))

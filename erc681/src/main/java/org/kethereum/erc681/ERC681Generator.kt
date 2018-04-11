@@ -18,18 +18,18 @@ fun ERC681.generateURL(): String {
         res += "/$function"
     }
 
-    val paramList = mutableMapOf<String, String>()
+    val paramList = mutableListOf<Pair<String, String>>()
 
-    paramList.putAll(functionParams)
+    paramList.addAll(functionParams)
 
     if (gas != null) {
-        paramList.put("gas", gas.toString())
+        paramList.add("gas" to gas.toString())
     }
     if (value != null) {
-        paramList.put("value", value.toString())
+        paramList.add("value" to value.toString())
     }
     if (paramList.isNotEmpty()) {
-        res += "?" + paramList.map { it.key + "=" + it.value }.joinToString("&")
+        res += "?" + paramList.map { it.first + "=" + it.second }.joinToString("&")
     }
 
     return res
