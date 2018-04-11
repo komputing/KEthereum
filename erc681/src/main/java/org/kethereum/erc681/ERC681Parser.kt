@@ -94,9 +94,9 @@ fun String.toERC681() = ERC681().apply {
     }
 
     queryAsList = query.split("&")
+            .filter { it.isNotBlank() }
             .map { it.split("=", limit = 2) }
             .map { it.first() to it.getOrElse(1, { "true" }) }
-
 
     val queryAsMap = queryAsList.toMap() // should be improved https://github.com/walleth/kethereum/issues/25
 
