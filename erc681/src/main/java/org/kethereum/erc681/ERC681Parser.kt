@@ -71,7 +71,7 @@ fun String.toERC681() = ERC681().apply {
     forEach { char ->
         when {
             char == ':' && currentState == SCHEMA
-            -> stateTransition(if (contains('-')) PREFIX else ADDRESS)
+            -> stateTransition(if (hasPrefix()) PREFIX else ADDRESS)
 
             char == '-' && currentState == PREFIX
             -> stateTransition(ADDRESS)
@@ -107,5 +107,7 @@ fun String.toERC681() = ERC681().apply {
 
     valid = valid && scheme == "ethereum"
 }
+
+private fun String.hasPrefix() = contains('-') && indexOf('-') < indexOf('?')
 
 fun parseERC681(url: String) = url.toERC681()
