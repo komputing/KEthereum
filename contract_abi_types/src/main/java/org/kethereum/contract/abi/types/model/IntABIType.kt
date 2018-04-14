@@ -13,7 +13,7 @@ open class IntABIType(val bits: Int, val signed: Boolean) : ContractABIType {
         value = BigInteger(string)
 
         if (!signed && value < BigInteger.ZERO) {
-            throw IllegalArgumentException("value cannot be less than 0 for unsigned uint")
+            throw IllegalArgumentException("value cannot be less than 0 for unsigned int")
         }
     }
 
