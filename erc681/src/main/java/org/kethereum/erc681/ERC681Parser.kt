@@ -1,17 +1,15 @@
 package org.kethereum.erc681
 
 import org.kethereum.erc681.ParseState.*
+import org.kethereum.erc831.toERC831
 import java.math.BigDecimal
 import java.math.BigInteger
 
 private val scientificNumberRegEx = Regex("^[0-9]+(\\.[0-9]+)?(e[0-9]+)?$")
 
-
 private var queryAsList: List<Pair<String, String>> = emptyList()
 
 private enum class ParseState {
-    SCHEMA,
-    PREFIX,
     ADDRESS,
     CHAIN,
     FUNCTION,
@@ -20,16 +18,18 @@ private enum class ParseState {
 
 fun String.toERC681() = ERC681().apply {
 
+    val erc831 = toERC831()
+    scheme = erc831.scheme
+    prefix = erc831.prefix
+
     var currentSegment = ""
 
-    var currentState = SCHEMA
+    var currentState = ADDRESS
 
     var query = ""
 
     fun stateTransition(newState: ParseState) {
         when (currentState) {
-            SCHEMA -> scheme = currentSegment
-            PREFIX -> prefix = currentSegment
             CHAIN -> chainId = try {
                 currentSegment.toLong()
             } catch (e: NumberFormatException) {
@@ -68,14 +68,8 @@ fun String.toERC681() = ERC681().apply {
         }
     }
 
-    forEach { char ->
+    erc831.payload?.forEach { char ->
         when {
-            char == ':' && currentState == SCHEMA
-            -> stateTransition(if (hasPrefix()) PREFIX else ADDRESS)
-
-            char == '-' && currentState == PREFIX
-            -> stateTransition(ADDRESS)
-
             char == '/' && (currentState == ADDRESS || currentState == CHAIN)
             -> stateTransition(FUNCTION)
 
@@ -107,7 +101,5 @@ fun String.toERC681() = ERC681().apply {
 
     valid = valid && scheme == "ethereum"
 }
-
-private fun String.hasPrefix() = contains('-') && indexOf('-') < indexOf('?')
 
 fun parseERC681(url: String) = url.toERC681()
