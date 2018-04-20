@@ -1,4 +1,4 @@
 dependencies {
     implementation project(":model")
-    implementation project(":erc831")
+    implementation project(":uri_common")
 }

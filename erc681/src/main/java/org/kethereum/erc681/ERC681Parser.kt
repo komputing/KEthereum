@@ -1,49 +1,21 @@
 package org.kethereum.erc681
 
-import org.kethereum.erc681.ParseState.*
-import org.kethereum.erc831.toERC831
+import org.kethereum.uri.common.EthereumURI
+import org.kethereum.uri.common.parseCommonURI
 import java.math.BigDecimal
 import java.math.BigInteger
 
 private val scientificNumberRegEx = Regex("^[0-9]+(\\.[0-9]+)?(e[0-9]+)?$")
 
-private var queryAsList: List<Pair<String, String>> = emptyList()
+fun EthereumURI.toERC681() = ERC681().apply {
 
-private enum class ParseState {
-    ADDRESS,
-    CHAIN,
-    FUNCTION,
-    QUERY
-}
-
-fun String.toERC681() = ERC681().apply {
-
-    val erc831 = toERC831()
-    scheme = erc831.scheme
-    prefix = erc831.prefix
-
-    var currentSegment = ""
-
-    var currentState = ADDRESS
-
-    var query = ""
-
-    fun stateTransition(newState: ParseState) {
-        when (currentState) {
-            CHAIN -> chainId = try {
-                currentSegment.toLong()
-            } catch (e: NumberFormatException) {
-                valid = false
-                null
-            }
-            FUNCTION -> function = currentSegment
-            ADDRESS -> address = currentSegment
-            QUERY -> query = currentSegment
-        }
-        currentState = newState
-        currentSegment = ""
-    }
-
+    val commonURI = parseCommonURI(uri)
+    scheme = commonURI.scheme
+    prefix = commonURI.prefix
+    chainId = commonURI.chainId
+    function = commonURI.function
+    address = commonURI.address
+    valid = commonURI.valid
 
     fun String?.toBigInteger(): BigInteger? {
         if (this == null) {
@@ -68,38 +40,12 @@ fun String.toERC681() = ERC681().apply {
         }
     }
 
-    erc831.payload?.forEach { char ->
-        when {
-            char == '/' && (currentState == ADDRESS || currentState == CHAIN)
-            -> stateTransition(FUNCTION)
-
-            char == '?' && (currentState == ADDRESS || currentState == FUNCTION || currentState == CHAIN)
-            -> stateTransition(QUERY)
-
-            char == '@'
-            -> stateTransition(CHAIN)
-
-            else -> currentSegment += char
-        }
-    }
-
-    if (!currentSegment.isBlank()) {
-        stateTransition(QUERY)
-    }
-
-    queryAsList = query.split("&")
-            .filter { it.isNotBlank() }
-            .map { it.split("=", limit = 2) }
-            .map { it.first() to it.getOrElse(1, { "true" }) }
-
-    val queryAsMap = queryAsList.toMap() // should be improved https://github.com/walleth/kethereum/issues/25
+    val queryAsMap = commonURI.query.toMap() // should be improved https://github.com/walleth/kethereum/issues/25
 
     gas = queryAsMap["gas"].toBigInteger()
     value = queryAsMap["value"].toBigInteger()
 
-    functionParams = queryAsList.filter { it.first != "gas" && it.first != "value" }
-
-    valid = valid && scheme == "ethereum"
+    functionParams = commonURI.query.filter { it.first != "gas" && it.first != "value" }
 }
 
-fun parseERC681(url: String) = url.toERC681()
+fun parseERC681(url: String) = EthereumURI(url).toERC681()

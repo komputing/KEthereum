@@ -1,6 +1,7 @@
 package org.kethereum.erc831
 
 import org.kethereum.erc831.ParseState.*
+import org.kethereum.uri.common.EthereumURI
 
 // as defined in http://eips.ethereum.org/EIPS/eip-831
 
@@ -10,7 +11,7 @@ private enum class ParseState {
     PAYLOAD
 }
 
-fun String.toERC831() = ERC831().apply {
+fun EthereumURI.toERC831() = ERC831().apply {
 
     var currentSegment = ""
 
@@ -26,10 +27,10 @@ fun String.toERC831() = ERC831().apply {
         currentSegment = ""
     }
 
-    forEach { char ->
+    uri.forEach { char ->
         when {
             char == ':' && currentState == SCHEMA
-            -> stateTransition(if (hasPrefix()) PREFIX else PAYLOAD)
+            -> stateTransition(if (uri.hasPrefix()) PREFIX else PAYLOAD)
 
             char == '-' && currentState == PREFIX
             -> stateTransition(PAYLOAD)
@@ -46,4 +47,4 @@ fun String.toERC831() = ERC831().apply {
 
 private fun String.hasPrefix() = contains('-') && (!contains("0x") || indexOf('-') < indexOf("0x"))
 
-fun parseERC681(url: String) = url.toERC831()
+fun parseERC681(url: String) = EthereumURI(url).toERC831()
