@@ -7,7 +7,6 @@ Later I could imagine that this extends to a full implementation of Ethereum in 
 Projects that use kethereum
 ===========================
 
-
  * [WALLETH](http://walleth.org)
  * [walleth-push](http://github.com/walleth/walleth-push)
  * [issuETH](https://github.com/issuETH/issuETH)
@@ -15,6 +14,7 @@ Projects that use kethereum
  * [kmnid](https://github.com/uport-project/kmnid)
  * [solidity tictactoe android](https://github.com/rmeissner/solidity-tictactoe-android)
  * [uport android signer](https://github.com/uport-project/uport-android-signer)
+ * [multiple scripts in ethereum-lists](https://github.com/ethereum-lists)
  * Please let me know if you know more
 
 Links
