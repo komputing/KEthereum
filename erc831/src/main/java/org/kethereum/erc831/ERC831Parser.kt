@@ -1,7 +1,7 @@
 package org.kethereum.erc831
 
 import org.kethereum.erc831.ParseState.*
-import org.kethereum.uri.common.EthereumURI
+import org.kethereum.model.EthereumURI
 
 // as defined in http://eips.ethereum.org/EIPS/eip-831
 

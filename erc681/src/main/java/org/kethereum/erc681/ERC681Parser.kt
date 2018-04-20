@@ -1,6 +1,6 @@
 package org.kethereum.erc681
 
-import org.kethereum.uri.common.EthereumURI
+import org.kethereum.model.EthereumURI
 import org.kethereum.uri.common.parseCommonURI
 import java.math.BigDecimal
 import java.math.BigInteger

@@ -1,7 +1,5 @@
 package org.kethereum.uri.common
 
-data class EthereumURI(val uri: String)
-
 data class CommonEthereumURIData(
         var valid: Boolean = true,
         var scheme: String? = null,
