@@ -23,11 +23,10 @@ object WalletUtils {
             destinationDirectory: File,
             useFullScrypt: Boolean = false
     ): String {
-        val walletFile: WalletFile
-        if (useFullScrypt) {
-            walletFile = Wallet.createStandard(password, ecKeyPair)
+        val walletFile = if (useFullScrypt) {
+            ecKeyPair.createStandard(password)
         } else {
-            walletFile = Wallet.createLight(password, ecKeyPair)
+            ecKeyPair.createLight(password)
         }
 
         val fileName = getWalletFileName(walletFile)
@@ -43,7 +42,7 @@ object WalletUtils {
     fun loadKeysFromWalletFile(password: String, source: File): ECKeyPair {
         FileReader(source).use({ reader ->
             val walletFile = gson.fromJson<WalletFile>(reader, WalletFile::class.java)
-            return Wallet.decrypt(password, walletFile)
+            return walletFile.decrypt(password)
         })
     }
 
