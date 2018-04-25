@@ -9,7 +9,7 @@ import java.security.SecureRandom
  * This is to address issues with SecureRandom on Android. For more information, refer to the
  * following [issue](https://github.com/web3j/web3j/issues/146).
  */
-internal object SecureRandomUtils {
+object SecureRandomUtils {
 
     private val SECURE_RANDOM: SecureRandom
 
