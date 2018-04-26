@@ -22,7 +22,7 @@ fun Address.withERC55Checksum() = cleanHex.toLowerCase().toByteArray().keccak().
 private fun Address.hasValidEIP55ChecksumStrictAssumingValidAddress() = withERC55Checksum().hex == hex
 
 fun Address.hasValidEIP55Checksum() = isValid() && hasValidEIP55ChecksumStrictAssumingValidAddress()
-fun Address.hasValidEIP55ChecksumOrNoCecksum() = isValid() &&
+fun Address.hasValidEIP55ChecksumOrNoChecksum() = isValid() &&
         (hasValidEIP55ChecksumStrictAssumingValidAddress() ||
                 cleanHex.toLowerCase() == cleanHex ||
                 cleanHex.toUpperCase() == cleanHex)
