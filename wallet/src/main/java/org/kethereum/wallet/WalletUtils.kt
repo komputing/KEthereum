@@ -13,7 +13,7 @@ import java.util.*
 object WalletUtils {
 
     private val gson = GsonBuilder()
-            .registerTypeAdapter(WalletFile.Crypto::class.java, WalletFile.CryptoTypeAdapter.INSTANCE)
+            .registerTypeAdapter(WalletFileCrypto::class.java, CryptoTypeAdapter.INSTANCE)
             .create()
 
     @Throws(CipherException::class, IOException::class)

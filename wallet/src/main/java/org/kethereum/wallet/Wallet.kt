@@ -65,17 +65,17 @@ private fun createWalletFile(
     val walletFile = WalletFile()
     walletFile.address = Keys.getAddress(ecKeyPair)
 
-    val crypto = WalletFile.Crypto()
+    val crypto = WalletFileCrypto()
     crypto.cipher = CIPHER
     crypto.ciphertext = cipherText.toNoPrefixHexString()
     walletFile.crypto = crypto
 
-    val cipherParams = WalletFile.CipherParams()
+    val cipherParams = CipherParams()
     cipherParams.iv = iv.toNoPrefixHexString()
     crypto.cipherparams = cipherParams
 
-    crypto.kdf = WalletFile.SCRYPT
-    val kdfParams = WalletFile.ScryptKdfParams()
+    crypto.kdf = SCRYPT
+    val kdfParams = ScryptKdfParams()
     kdfParams.dklen = DKLEN
     kdfParams.n = n
     kdfParams.p = p
@@ -137,7 +137,7 @@ fun WalletFile.decrypt(password: String): ECKeyPair {
 
     validate()
 
-    val crypto = crypto!!
+    val crypto = getCrypto()!!
 
     val mac = crypto.mac!!.hexToByteArray()
     val iv = crypto.cipherparams!!.iv!!.hexToByteArray()
@@ -147,7 +147,7 @@ fun WalletFile.decrypt(password: String): ECKeyPair {
 
     val kdfParams = crypto.kdfparams!!
     when (kdfParams) {
-        is WalletFile.ScryptKdfParams -> {
+        is ScryptKdfParams -> {
             val dklen = kdfParams.dklen
             val n = kdfParams.n
             val p = kdfParams.p
@@ -155,14 +155,13 @@ fun WalletFile.decrypt(password: String): ECKeyPair {
             val salt = kdfParams.salt!!.hexToByteArray()
             derivedKey = generateDerivedScryptKey(password.toByteArray(UTF_8), salt, n, r, p, dklen)
         }
-        is WalletFile.Aes128CtrKdfParams -> {
+        is Aes128CtrKdfParams -> {
             val c = kdfParams.c
             val prf = kdfParams.prf!!
             val salt = kdfParams.salt!!.hexToByteArray()
 
             derivedKey = generateAes128CtrDerivedKey(password.toByteArray(UTF_8), salt, c, prf)
         }
-        else -> throw CipherException("Unable to deserialize params: " + crypto.kdf)
     }
 
     val derivedMac = generateMac(derivedKey, cipherText)
@@ -182,10 +181,10 @@ fun WalletFile.validate() {
         version != CURRENT_VERSION
         -> throw CipherException("Wallet version is not supported")
 
-        !crypto!!.cipher.equals(CIPHER)
+        !getCrypto()!!.cipher.equals(CIPHER)
         -> throw CipherException("Wallet cipher is not supported")
 
-        !crypto!!.kdf.equals(WalletFile.AES_128_CTR) && !crypto!!.kdf.equals(WalletFile.SCRYPT)
+        !getCrypto()!!.kdf.equals(AES_128_CTR) && !getCrypto()!!.kdf.equals(SCRYPT)
         -> throw CipherException("KDF type is not supported")
     }
 }

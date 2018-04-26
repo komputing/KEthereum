@@ -30,14 +30,14 @@ class WalletTest {
 
     @Test
     fun testDecryptAes128Ctr() {
-        val walletFile = load(AES_128_CTR)
+        val walletFile = load(AES_128_CTR_TEST_JSON)
         val (privateKey) = walletFile.decrypt(PASSWORD)
         assertThat(privateKey.toHexStringNoPrefix()).isEqualTo(PRIVATE_KEY_STRING)
     }
 
     @Test
     fun testDecryptScrypt() {
-        val walletFile = load(SCRYPT)
+        val walletFile = load(SCRYPT_TEST_JSON)
         val (privateKey) = walletFile.decrypt(PASSWORD)
         assertThat(privateKey.toHexStringNoPrefix()).isEqualTo(PRIVATE_KEY_STRING)
     }
@@ -49,7 +49,7 @@ class WalletTest {
     }
 
     private fun load(source: String) = GsonBuilder()
-            .registerTypeAdapter(WalletFile.Crypto::class.java, WalletFile.CryptoTypeAdapter.INSTANCE)
+            .registerTypeAdapter(WalletFileCrypto::class.java, CryptoTypeAdapter.INSTANCE)
             .create()
             .fromJson(source, WalletFile::class.java)
 }

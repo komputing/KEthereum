@@ -15,7 +15,7 @@ internal val PUBLIC_KEY = PUBLIC_KEY_STRING.hexToBigInteger()
 
 internal val KEY_PAIR = ECKeyPair(PRIVATE_KEY, PUBLIC_KEY)
 
-internal const val AES_128_CTR = """{
+internal const val AES_128_CTR_TEST_JSON = """{
     "crypto" : {
         "cipher" : "aes-128-ctr",
         "cipherparams" : {
@@ -35,7 +35,7 @@ internal const val AES_128_CTR = """{
     "version" : 3
 }"""
 
-internal const val SCRYPT = """{
+internal const val SCRYPT_TEST_JSON = """{
     "crypto" : {
         "cipher" : "aes-128-ctr",
         "cipherparams" : {
