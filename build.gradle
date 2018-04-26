@@ -7,6 +7,7 @@ buildscript {
         slf4jVersion = '1.7.25'
         khex_version = '0.6'
 
+        gson_version = '2.8.2'
     }
 
     repositories {

@@ -1,0 +1,4 @@
+dependencies {
+    compile project(":crypto")
+    compile "com.google.code.gson:gson:$gson_version"
+}
