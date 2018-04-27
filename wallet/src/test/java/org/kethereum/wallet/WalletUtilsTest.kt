@@ -24,18 +24,18 @@ class WalletUtilsTest {
 
     @Test
     fun testGenerateFullWalletFile() {
-        val fileName = WalletUtils.generateWalletFile(PASSWORD, KEY_PAIR, tempDir, true)
+        val fileName = KEY_PAIR.generateWalletFile(PASSWORD, tempDir, true)
         testGenerateWalletFile(fileName)
     }
 
     @Test
     fun testGenerateLightWalletFile() {
-        val fileName = WalletUtils.generateWalletFile(PASSWORD, KEY_PAIR, tempDir, false)
+        val fileName = KEY_PAIR.generateWalletFile(PASSWORD, tempDir, false)
         testGenerateWalletFile(fileName)
     }
 
-    private fun testGenerateWalletFile(fileName: String) {
-        val keyPair = WalletUtils.loadKeysFromWalletFile(PASSWORD, File(tempDir, fileName))
+    private fun testGenerateWalletFile(file: File) {
+        val keyPair = file.loadKeysFromWalletFile(PASSWORD)
 
         assertThat(keyPair, equalTo(KEY_PAIR))
     }
@@ -43,7 +43,7 @@ class WalletUtilsTest {
     @Test
     fun testLoadCredentialsFromFile() {
         val file = loadFile("UTC--2016-11-03T05-55-06.340672473Z--ef678007d18427e6022059dbc264f27507cd1ffc")
-        val keyPair = WalletUtils.loadKeysFromWalletFile(PASSWORD, file)
+        val keyPair = file.loadKeysFromWalletFile(PASSWORD)
 
         assertThat(keyPair, equalTo(KEY_PAIR))
     }
@@ -51,7 +51,7 @@ class WalletUtilsTest {
     @Test
     fun testLoadCredentialsMyEtherWallet() {
         val file = loadFile("UTC--2016-11-03T07-47-45.988Z--4f9c1a1efaa7d81ba1cabf07f2c3a5ac5cf4f818")
-        val keyPair = WalletUtils.loadKeysFromWalletFile(PASSWORD, file)
+        val keyPair = file.loadKeysFromWalletFile(PASSWORD)
 
         assertThat(keyPair, equalTo(ECKeyPair.create("6ca4203d715e693279d6cd9742ad2fb7a3f6f4abe27a64da92e0a70ae5d859c9".hexToBigInteger())))
     }
