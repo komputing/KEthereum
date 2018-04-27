@@ -34,22 +34,23 @@ private const val CIPHER = "aes-128-ctr"
 
 fun ECKeyPair.createWalletFile(password: String, n: Int, p: Int): WalletFile {
 
-    val salt = generateRandomBytes(32)
+    val mySalt = generateRandomBytes(32)
 
-    val derivedKey = generateDerivedScryptKey(
-            password.toByteArray(UTF_8), salt, n, R, p, DKLEN)
+    val derivedKey = generateDerivedScryptKey(password.toByteArray(UTF_8), ScryptKdfParams(n = n, r = R, p = p).apply {
+        dklen = DKLEN
+        salt = mySalt.toNoPrefixHexString()
+    })
 
     val encryptKey = Arrays.copyOfRange(derivedKey, 0, 16)
     val iv = generateRandomBytes(16)
 
     val privateKeyBytes = privateKey.toBytesPadded(Keys.PRIVATE_KEY_SIZE)
 
-    val cipherText = performCipherOperation(
-            Cipher.ENCRYPT_MODE, iv, encryptKey, privateKeyBytes)
+    val cipherText = performCipherOperation(Cipher.ENCRYPT_MODE, iv, encryptKey, privateKeyBytes)
 
     val mac = generateMac(derivedKey, cipherText)
 
-    return createWalletFile(this, cipherText, iv, salt, mac, n, p)
+    return createWalletFile(this, cipherText, iv, mySalt, mac, n, p)
 }
 
 @Throws(CipherException::class)
@@ -60,51 +61,37 @@ fun ECKeyPair.createLight(password: String) = createWalletFile(password, N_LIGHT
 
 private fun createWalletFile(
         ecKeyPair: ECKeyPair, cipherText: ByteArray, iv: ByteArray, salt: ByteArray, mac: ByteArray,
-        n: Int, p: Int): WalletFile {
+        n: Int, p: Int) = WalletFile(
+        address = Keys.getAddress(ecKeyPair),
 
-    val walletFile = WalletFile()
-    walletFile.address = Keys.getAddress(ecKeyPair)
+        crypto = WalletFileCrypto(
+                cipher = CIPHER,
+                ciphertext = cipherText.toNoPrefixHexString(),
+                kdf = SCRYPT,
+                kdfparams = mapOf("n" to "$n", "p" to "$p", "r" to "$R",
+                        "salt" to salt.toNoPrefixHexString(), "dklen" to "$DKLEN"),
+                cipherparams = CipherParams(iv.toNoPrefixHexString()),
 
-    val crypto = WalletFileCrypto()
-    crypto.cipher = CIPHER
-    crypto.ciphertext = cipherText.toNoPrefixHexString()
-    walletFile.crypto = crypto
+                mac = mac.toNoPrefixHexString()
+        ),
+        id = UUID.randomUUID().toString(),
+        version = CURRENT_VERSION
+)
 
-    val cipherParams = CipherParams()
-    cipherParams.iv = iv.toNoPrefixHexString()
-    crypto.cipherparams = cipherParams
-
-    crypto.kdf = SCRYPT
-    val kdfParams = ScryptKdfParams()
-    kdfParams.dklen = DKLEN
-    kdfParams.n = n
-    kdfParams.p = p
-    kdfParams.r = R
-    kdfParams.salt = salt.toNoPrefixHexString()
-    crypto.kdfparams = kdfParams
-
-    crypto.mac = mac.toNoPrefixHexString()
-    walletFile.crypto = crypto
-    walletFile.id = UUID.randomUUID().toString()
-    walletFile.version = CURRENT_VERSION
-
-    return walletFile
-}
-
-private fun generateDerivedScryptKey(password: ByteArray, salt: ByteArray, n: Int, r: Int, p: Int, dkLen: Int) = SCrypt.generate(password, salt, n, r, p, dkLen)
+private fun generateDerivedScryptKey(password: ByteArray, kdfParams: ScryptKdfParams) = SCrypt.generate(password, kdfParams.salt?.hexToByteArray(), kdfParams.n, kdfParams.r, kdfParams.p, kdfParams.dklen)
 
 @Throws(CipherException::class)
-private fun generateAes128CtrDerivedKey(password: ByteArray, salt: ByteArray, c: Int, prf: String): ByteArray {
+private fun generateAes128CtrDerivedKey(password: ByteArray,kdfParams: Aes128CtrKdfParams): ByteArray {
 
-    if (prf != "hmac-sha256") {
-        throw CipherException("Unsupported prf:$prf")
+    if (kdfParams.prf != "hmac-sha256") {
+        throw CipherException("Unsupported prf:${kdfParams.prf}")
     }
 
     // Java 8 supports this, but you have to convert the password to a character array, see
     // http://stackoverflow.com/a/27928435/3211687
 
     val gen = PKCS5S2ParametersGenerator(SHA256Digest())
-    gen.init(password, salt, c)
+    gen.init(password, kdfParams.salt?.hexToByteArray(), kdfParams.c)
     return (gen.generateDerivedParameters(256) as KeyParameter).key
 }
 
@@ -139,29 +126,14 @@ fun WalletFile.decrypt(password: String): ECKeyPair {
 
     val crypto = getCrypto()!!
 
-    val mac = crypto.mac!!.hexToByteArray()
-    val iv = crypto.cipherparams!!.iv!!.hexToByteArray()
-    val cipherText = crypto.ciphertext!!.hexToByteArray()
+    val mac = crypto.mac.hexToByteArray()
+    val iv = crypto.cipherparams.iv.hexToByteArray()
+    val cipherText = crypto.ciphertext.hexToByteArray()
 
-    val derivedKey: ByteArray
-
-    val kdfParams = crypto.kdfparams!!
-    when (kdfParams) {
-        is ScryptKdfParams -> {
-            val dklen = kdfParams.dklen
-            val n = kdfParams.n
-            val p = kdfParams.p
-            val r = kdfParams.r
-            val salt = kdfParams.salt!!.hexToByteArray()
-            derivedKey = generateDerivedScryptKey(password.toByteArray(UTF_8), salt, n, r, p, dklen)
-        }
-        is Aes128CtrKdfParams -> {
-            val c = kdfParams.c
-            val prf = kdfParams.prf!!
-            val salt = kdfParams.salt!!.hexToByteArray()
-
-            derivedKey = generateAes128CtrDerivedKey(password.toByteArray(UTF_8), salt, c, prf)
-        }
+    val kdfParams: KdfParams = crypto.toKdfParams()
+    val derivedKey = when (kdfParams) {
+        is ScryptKdfParams -> generateDerivedScryptKey(password.toByteArray(UTF_8), kdfParams)
+        is Aes128CtrKdfParams ->  generateAes128CtrDerivedKey(password.toByteArray(UTF_8), kdfParams)
     }
 
     val derivedMac = generateMac(derivedKey, cipherText)
@@ -181,10 +153,10 @@ fun WalletFile.validate() {
         version != CURRENT_VERSION
         -> throw CipherException("Wallet version is not supported")
 
-        !getCrypto()!!.cipher.equals(CIPHER)
+        getCrypto()?.cipher != CIPHER
         -> throw CipherException("Wallet cipher is not supported")
 
-        !getCrypto()!!.kdf.equals(AES_128_CTR) && !getCrypto()!!.kdf.equals(SCRYPT)
+        getCrypto()?.kdf != AES_128_CTR && getCrypto()?.kdf != SCRYPT
         -> throw CipherException("KDF type is not supported")
     }
 }

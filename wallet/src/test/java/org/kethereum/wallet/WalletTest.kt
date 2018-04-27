@@ -1,6 +1,6 @@
 package org.kethereum.wallet
 
-import com.google.gson.GsonBuilder
+import kotlinx.serialization.json.JSON
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 import org.kethereum.extensions.toHexStringNoPrefix
@@ -48,8 +48,5 @@ class WalletTest {
         assertThat(generateRandomBytes(10).size).isEqualTo(10)
     }
 
-    private fun load(source: String) = GsonBuilder()
-            .registerTypeAdapter(WalletFileCrypto::class.java, CryptoTypeAdapter.INSTANCE)
-            .create()
-            .fromJson(source, WalletFile::class.java)
+    private fun load(source: String) : WalletFile = JSON.parse(source)
 }

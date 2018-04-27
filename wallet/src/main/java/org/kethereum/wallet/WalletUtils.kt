@@ -1,10 +1,8 @@
 package org.kethereum.wallet
 
-import com.google.gson.GsonBuilder
+import kotlinx.serialization.json.JSON
 import org.kethereum.crypto.ECKeyPair
 import java.io.File
-import java.io.FileReader
-import java.io.FileWriter
 import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
@@ -12,9 +10,6 @@ import java.util.*
 
 object WalletUtils {
 
-    private val gson = GsonBuilder()
-            .registerTypeAdapter(WalletFileCrypto::class.java, CryptoTypeAdapter.INSTANCE)
-            .create()
 
     @Throws(CipherException::class, IOException::class)
     fun generateWalletFile(
@@ -31,20 +26,14 @@ object WalletUtils {
 
         val fileName = getWalletFileName(walletFile)
         val destination = File(destinationDirectory, fileName)
-
-        FileWriter(destination).use({ writer ->
-            gson.toJson(walletFile, writer)
-            return fileName
-        })
+        destination.writeText(JSON.stringify(walletFile))
+        return fileName
     }
 
     @Throws(IOException::class, CipherException::class)
-    fun loadKeysFromWalletFile(password: String, source: File): ECKeyPair {
-        FileReader(source).use({ reader ->
-            val walletFile = gson.fromJson<WalletFile>(reader, WalletFile::class.java)
-            return walletFile.decrypt(password)
-        })
-    }
+    fun loadKeysFromWalletFile(password: String, source: File) = JSON
+            .parse<WalletFile>(source.readText())
+            .decrypt(password)
 
     private fun getWalletFileName(walletFile: WalletFile): String {
         val dateFormat = SimpleDateFormat("'UTC--'yyyy-MM-dd'T'HH-mm-ss.SSS'--'", Locale.ENGLISH)

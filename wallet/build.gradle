@@ -1,4 +1,18 @@
+buildscript {
+    ext.serialization_version = '0.5.0'
+    repositories {
+        jcenter()
+        maven { url "https://kotlin.bintray.com/kotlinx" }
+    }
+
+    dependencies {
+        classpath "org.jetbrains.kotlinx:kotlinx-gradle-serialization-plugin:$serialization_version"
+    }
+}
+
+apply plugin: 'kotlinx-serialization'
+
 dependencies {
     compile project(":crypto")
-    compile "com.google.code.gson:gson:$gson_version"
+    compile "org.jetbrains.kotlinx:kotlinx-serialization-runtime:0.5.0"
 }
