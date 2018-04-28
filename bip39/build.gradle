@@ -1,3 +1,9 @@
 dependencies {
-    compile project(path: ':bip32')
+    implementation project(path: ':bip32')
+    implementation project(path: ':extensions')
+    implementation project(path: ':keccak_shortcut')
+
+    implementation "com.madgag.spongycastle:prov:$spongycastleVersion"
+
+    implementation "com.github.walleth:khex:$khex_version"
 }

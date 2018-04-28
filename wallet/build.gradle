@@ -13,6 +13,14 @@ buildscript {
 apply plugin: 'kotlinx-serialization'
 
 dependencies {
-    compile project(":crypto")
-    compile "org.jetbrains.kotlinx:kotlinx-serialization-runtime:0.5.0"
+    implementation project(":crypto")
+    implementation project(":keccak_shortcut")
+    implementation project(":extensions")
+
+    implementation "com.github.walleth:khex:$khex_version"
+
+    implementation "org.jetbrains.kotlinx:kotlinx-serialization-runtime:0.5.0"
+
+    implementation "com.madgag.spongycastle:core:$spongycastleVersion"
+    implementation "com.madgag.spongycastle:prov:$spongycastleVersion"
 }

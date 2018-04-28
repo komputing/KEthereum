@@ -1,10 +1,13 @@
 dependencies {
-    compile project(":model")
-    compile project(":functions")
-    compile project(":keccak_shortcut")
-    compile project(":extensions")
+    implementation project(":model")
+    implementation project(":functions")
+    implementation project(":keccak_shortcut")
+    implementation project(":extensions")
 
-    compile "com.madgag.spongycastle:core:$spongycastleVersion"
-    compile "org.slf4j:slf4j-api:$slf4jVersion"
+    implementation "com.github.walleth:khex:$khex_version"
+
+    implementation "com.madgag.spongycastle:core:$spongycastleVersion"
+    implementation "com.madgag.spongycastle:prov:$spongycastleVersion"
+    implementation "org.slf4j:slf4j-api:$slf4jVersion"
 
 }
