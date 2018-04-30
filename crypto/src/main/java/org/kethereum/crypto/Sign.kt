@@ -31,18 +31,19 @@ val CURVE = ECDomainParameters(
         CURVE_PARAMS.curve, CURVE_PARAMS.g, CURVE_PARAMS.n, CURVE_PARAMS.h)
 private val HALF_CURVE_ORDER = CURVE_PARAMS.n.shiftRight(1)
 
+@Deprecated("Please use extension function signMessage on ECKeyPair")
+fun signMessage(message: ByteArray, keyPair: ECKeyPair) = keyPair.signMessage(message)
+
 /**
- * Signs the [keccak] hash of the [message] buffer with the private key in the given [keyPair].
+ * Signs the [keccak] hash of the [message] buffer.
  * The signature is canonicalised ( @see [ECDSASignature.toCanonicalised] )
  *
  * @return [SignatureData] containing the (r,s,v) components
  */
-fun signMessage(message: ByteArray, keyPair: ECKeyPair): SignatureData {
 
-    val messageHash = message.keccak()
+fun ECKeyPair.signMessage(message: ByteArray) =
+        signMessageHash(message.keccak(), this, true)
 
-    return signMessageHash(messageHash, keyPair, true)
-}
 
 /**
  * Signs the the [messageHash] buffer with the private key in the given [keyPair].
@@ -77,7 +78,7 @@ fun signMessageHash(messageHash: ByteArray, keyPair: ECKeyPair, toCanonical: Boo
     return SignatureData(sig.r, sig.s, v)
 }
 
-private fun sign(transactionHash: ByteArray, privateKey: BigInteger, canonical : Boolean): ECDSASignature {
+private fun sign(transactionHash: ByteArray, privateKey: BigInteger, canonical: Boolean): ECDSASignature {
     val signer = ECDSASigner(HMacDSAKCalculator(SHA256Digest()))
 
     val ecPrivateKeyParameters = ECPrivateKeyParameters(privateKey, CURVE)
