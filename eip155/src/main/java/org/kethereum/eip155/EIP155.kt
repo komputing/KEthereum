@@ -14,7 +14,7 @@ import org.kethereum.model.Transaction
 */
 
 /**
- * extracts the ChainID from SignatureData v
+ * Signs a transaction via EIP155 using the chainID from ChainDefinition given
  *
  * @return SignatureData - the signature of the transaction signed with the key
  *
