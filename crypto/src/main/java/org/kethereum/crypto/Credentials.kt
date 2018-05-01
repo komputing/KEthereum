@@ -11,7 +11,7 @@ data class Credentials(val ecKeyPair: ECKeyPair?, val address: String?) {
     companion object {
 
         fun create(ecKeyPair: ECKeyPair): Credentials {
-            val address = Keys.getAddress(ecKeyPair).prepend0xPrefix()
+            val address = ecKeyPair.getAddress().prepend0xPrefix()
             return Credentials(ecKeyPair, address)
         }
 

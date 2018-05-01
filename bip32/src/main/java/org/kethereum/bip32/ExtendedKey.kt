@@ -1,13 +1,7 @@
 package org.kethereum.bip32
 
 import org.kethereum.bip44.BIP44.Companion.isHardened
-import org.kethereum.crypto.CURVE
-import org.kethereum.crypto.ECKeyPair
-import org.kethereum.crypto.Keys
-import org.kethereum.crypto.Keys.PRIVATE_KEY_SIZE
-import org.kethereum.crypto.Keys.decompressKey
-import org.kethereum.crypto.Keys.getCompressedPublicKey
-import org.kethereum.crypto.Keys.publicKeyFromPoint
+import org.kethereum.crypto.*
 import org.kethereum.encodings.decodeBase58WithChecksum
 import org.kethereum.encodings.encodeToBase58WithChecksum
 import org.kethereum.extensions.toBytesPadded
@@ -25,7 +19,7 @@ import java.util.*
 import javax.crypto.Mac
 import javax.crypto.spec.SecretKeySpec
 
-data class ExtendedKey(private val keyPair: ECKeyPair,
+data class ExtendedKey(val keyPair: ECKeyPair,
                        private val chainCode: ByteArray,
                        private val depth: Byte,
                        private val parentFingerprint: Int,
@@ -41,7 +35,7 @@ data class ExtendedKey(private val keyPair: ECKeyPair,
             mac.init(key)
 
             val extended: ByteArray
-            val pub = Keys.getCompressedPublicKey(keyPair)
+            val pub = keyPair.getCompressedPublicKey()
             if (isHardened(element)) {
                 val privateKeyPaddedBytes = keyPair.privateKey.toBytesPadded(PRIVATE_KEY_SIZE)
 
@@ -83,7 +77,7 @@ data class ExtendedKey(private val keyPair: ECKeyPair,
                 }
                 val point = CURVE.curve.createPoint(q.xCoord.toBigInteger(), q.yCoord.toBigInteger())
 
-                ExtendedKey(ECKeyPair(BigInteger.ZERO, publicKeyFromPoint(point)), r, (depth + 1).toByte(), computeFingerPrint(keyPair), element)
+                ExtendedKey(ECKeyPair(BigInteger.ZERO, point.toPublicKey()), r, (depth + 1).toByte(), computeFingerPrint(keyPair), element)
             }
         } catch (e: NoSuchAlgorithmException) {
             throw KeyException(e)
@@ -95,10 +89,6 @@ data class ExtendedKey(private val keyPair: ECKeyPair,
 
     }
 
-    /**
-     * expose keypair
-     */
-    fun getKeyPair(): ECKeyPair = keyPair
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -137,7 +127,7 @@ data class ExtendedKey(private val keyPair: ECKeyPair,
             out.putInt(sequence)
             out.put(chainCode)
             if (publicKeyOnly || keyPair.privateKey == BigInteger.ZERO) {
-                out.put(getCompressedPublicKey(keyPair))
+                out.put(keyPair.getCompressedPublicKey())
             } else {
                 out.put(0x00)
                 out.put(keyPair.privateKey.toBytesPadded(PRIVATE_KEY_SIZE))
@@ -191,7 +181,7 @@ data class ExtendedKey(private val keyPair: ECKeyPair,
          * @return an Int built from the first 4 bytes of the result of hash160 over the compressed public key
          */
         private fun computeFingerPrint(keyPair: ECKeyPair): Int {
-            val pubKeyHash = Keys.getCompressedPublicKey(keyPair)
+            val pubKeyHash = keyPair.getCompressedPublicKey()
                     .sha256()
                     .ripemd160()
             var fingerprint = 0

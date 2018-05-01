@@ -1,4 +1,4 @@
-package org.kethereum.wallet
+package org.kethereum.wallet.model
 
 class CipherException : Exception {
 

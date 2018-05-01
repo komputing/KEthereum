@@ -16,7 +16,7 @@ class DerivationTest {
     @Test
     fun createdKeyHasKeypair() {
         val simpleKey = generateKey(ByteArray(0), "m/")
-        assertThat(simpleKey.getKeyPair()).isNotNull()
+        assertThat(simpleKey.keyPair).isNotNull
     }
 
     @Test
