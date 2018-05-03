@@ -23,14 +23,21 @@ class WalletUtilsTest {
 
     @Test
     fun testGenerateFullWalletFile() {
-        assertThat(KEY_PAIR.generateWalletFile(PASSWORD, tempDir, STANDARD_SCRYPT_CONFIG).decrypt(PASSWORD))
-                .isEqualTo(KEY_PAIR)
+        val tested = KEY_PAIR.generateWalletFile(PASSWORD, tempDir, STANDARD_SCRYPT_CONFIG)
+
+        assertThat(tested.file.loadKeysFromWalletFile(PASSWORD)).isEqualTo(KEY_PAIR)
+
+        assertThat(tested.wallet.decrypt(PASSWORD)).isEqualTo(KEY_PAIR)
     }
 
     @Test
     fun testGenerateLightWalletFile() {
-        assertThat(KEY_PAIR.generateWalletFile(PASSWORD, tempDir, LIGHT_SCRYPT_CONFIG).decrypt(PASSWORD))
-                .isEqualTo(KEY_PAIR)
+
+        val tested = KEY_PAIR.generateWalletFile(PASSWORD, tempDir, LIGHT_SCRYPT_CONFIG)
+
+        assertThat(tested.file.loadKeysFromWalletFile(PASSWORD)).isEqualTo(KEY_PAIR)
+
+        assertThat(tested.wallet.decrypt(PASSWORD)).isEqualTo(KEY_PAIR)
     }
 
 

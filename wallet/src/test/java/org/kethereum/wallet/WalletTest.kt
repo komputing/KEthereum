@@ -11,22 +11,22 @@ class WalletTest {
 
     @Test
     fun testCreateStandard() {
-        assertThat(KEY_PAIR.createWalletFile(PASSWORD, STANDARD_SCRYPT_CONFIG).address).isEqualTo(ADDRESS_NO_PREFIX)
+        assertThat(KEY_PAIR.createWallet(PASSWORD, STANDARD_SCRYPT_CONFIG).address).isEqualTo(ADDRESS_NO_PREFIX)
     }
 
     @Test
     fun testCreateLight() {
-        assertThat(KEY_PAIR.createWalletFile(PASSWORD, LIGHT_SCRYPT_CONFIG).address).isEqualTo(ADDRESS_NO_PREFIX)
+        assertThat(KEY_PAIR.createWallet(PASSWORD, LIGHT_SCRYPT_CONFIG).address).isEqualTo(ADDRESS_NO_PREFIX)
     }
 
     @Test
     fun testEncryptDecryptStandard() {
-        assertThat(KEY_PAIR.createWalletFile(PASSWORD, STANDARD_SCRYPT_CONFIG).decrypt(PASSWORD)).isEqualTo(KEY_PAIR)
+        assertThat(KEY_PAIR.createWallet(PASSWORD, STANDARD_SCRYPT_CONFIG).decrypt(PASSWORD)).isEqualTo(KEY_PAIR)
     }
 
     @Test
     fun testEncryptDecryptLight() {
-        assertThat(KEY_PAIR.createWalletFile(PASSWORD, LIGHT_SCRYPT_CONFIG).decrypt(PASSWORD)).isEqualTo(KEY_PAIR)
+        assertThat(KEY_PAIR.createWallet(PASSWORD, LIGHT_SCRYPT_CONFIG).decrypt(PASSWORD)).isEqualTo(KEY_PAIR)
     }
 
     @Test

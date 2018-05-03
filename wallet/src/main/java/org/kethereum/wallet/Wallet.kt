@@ -33,7 +33,7 @@ class ScryptConfig(val n: Int, val p: Int)
 val LIGHT_SCRYPT_CONFIG = ScryptConfig(1 shl 12, 6)
 val STANDARD_SCRYPT_CONFIG = ScryptConfig(1 shl 18, 1)
 
-fun ECKeyPair.createWalletFile(password: String, config: ScryptConfig): Wallet {
+fun ECKeyPair.createWallet(password: String, config: ScryptConfig): Wallet {
 
     val mySalt = generateRandomBytes(32)
 
@@ -51,16 +51,16 @@ fun ECKeyPair.createWalletFile(password: String, config: ScryptConfig): Wallet {
 
     val mac = generateMac(derivedKey, cipherText)
 
-    return createWalletFile(this, cipherText, iv, mac, ScryptKdfParams(n = config.n,
+    return createWallet(this, cipherText, iv, mac, ScryptKdfParams(n = config.n,
             p = config.p,
             r = R,
             dklen = DKLEN,
             salt = mySalt.toNoPrefixHexString()))
 }
 
-private fun createWalletFile(ecKeyPair: ECKeyPair,
-                             cipherText: ByteArray,
-                             iv: ByteArray, mac: ByteArray, scryptKdfParams: ScryptKdfParams) = Wallet(
+private fun createWallet(ecKeyPair: ECKeyPair,
+                         cipherText: ByteArray,
+                         iv: ByteArray, mac: ByteArray, scryptKdfParams: ScryptKdfParams) = Wallet(
         address = ecKeyPair.getAddress(),
 
         crypto = WalletCrypto(
