@@ -1,9 +1,6 @@
 package org.kethereum.wallet.model
 
-import kotlinx.serialization.KOutput
-import kotlinx.serialization.KSerializer
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.Serializer
 
 sealed class KdfParams {
     abstract var dklen: Int
@@ -23,14 +20,6 @@ data class ScryptKdfParams(var n: Int = 0,
 
                            override var dklen: Int = 0,
                            override var salt: String? = null) : KdfParams()
-
-@Serializer(forClass = KdfParams::class)
-object KdfSerializer : KSerializer<KdfParams> {
-    override fun save(output: KOutput, obj: KdfParams) = when (obj) {
-        is ScryptKdfParams -> output.write(obj)
-        is Aes128CtrKdfParams -> output.write(obj)
-    }
-}
 
 fun WalletCryptoForImport.getTypedKdfParams() = if (kdf == SCRYPT) {
     ScryptKdfParams().apply {

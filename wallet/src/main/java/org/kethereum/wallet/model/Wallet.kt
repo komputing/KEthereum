@@ -1,8 +1,7 @@
 package org.kethereum.wallet.model
 
-import kotlinx.serialization.Optional
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
+import kotlinx.serialization.*
+import kotlinx.serialization.internal.SerialClassDescImpl
 
 
 const val AES_128_CTR = "pbkdf2"
@@ -19,8 +18,19 @@ data class WalletCrypto(
         var kdf: String,
         @Serializable(with = KdfSerializer::class)
         var kdfparams: KdfParams,
-        var mac: String
-)
+        var mac: String) {
+
+        object KdfSerializer : KSerializer<KdfParams> {
+            override val serialClassDesc = SerialClassDescImpl("KDFSerializer")
+
+            override fun load(input: KInput) = throw NotImplementedError("loading WalletCrypto is not implemented - use WalletCryptoForImport instead")
+
+            override fun save(output: KOutput, obj: KdfParams) = when (obj) {
+                        is ScryptKdfParams -> output.write(obj)
+                        is Aes128CtrKdfParams -> output.write(obj)
+                }
+        }
+}
 
 @Serializable
 data class WalletCryptoForImport(
