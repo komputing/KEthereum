@@ -11,7 +11,7 @@ class TheDataFun {
                 .isTrue()
         assertThat(listOf(0.toByte(),1.toByte()).startsWith(listOf(0.toByte(),1.toByte())))
                 .isTrue()
-        assertThat(listOf<Byte>().startsWith(listOf<Byte>()))
+        assertThat(listOf<Byte>().startsWith(listOf()))
                 .isTrue()
 
         assertThat(listOf(0.toByte(),1.toByte()).startsWith(listOf(2.toByte(),1.toByte())))

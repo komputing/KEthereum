@@ -22,11 +22,11 @@ val rlpTestData = mapOf(
 
         RLPList(listOf(0.toRLP())) to "c100",
         RLPList(listOf(1.toRLP())) to "c101",
+        RLPList(listOf(1.toRLP(),2.toRLP())) to "c20102",
         RLPList(emptyList()) to "c0",
         RLPList(listOf("dog".toRLP(), "god".toRLP(), "cat".toRLP())) to "cc83646f6783676f6483636174",
 
         RLPList(listOf()) to "c0",
         RLPList(listOf(RLPList(listOf(RLPList(emptyList()), RLPList(emptyList()))), RLPList(emptyList()))) to "c4c2c0c0c0",
-
         RLPList(listOf("zw".toRLP(), RLPList(listOf(4.toRLP())), 1.toRLP())) to "c6827a77c10401"
 )
