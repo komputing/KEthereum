@@ -1,6 +1,7 @@
 package org.kethereum.extensions
 
 import org.walleth.khex.clean0xPrefix
+import org.walleth.khex.has0xPrefix
 import java.math.BigInteger
 import java.util.*
 
@@ -51,6 +52,12 @@ fun BigInteger.toHexStringZeroPadded(size: Int, withPrefix: Boolean = true): Str
 }
 
 fun String.hexToBigInteger() = BigInteger(clean0xPrefix(), 16)
+
+fun String.maybeHexToBigInteger() = if (has0xPrefix()) {
+    BigInteger(clean0xPrefix(), 16)
+} else {
+    BigInteger(this)
+}
 
 fun ByteArray.toBigInteger(offset: Int, length: Int) = BigInteger(1, Arrays.copyOfRange(this, offset, offset + length))
 fun ByteArray.toBigInteger() = BigInteger(1, this)
