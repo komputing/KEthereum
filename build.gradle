@@ -36,11 +36,11 @@ subprojects {
     afterEvaluate { project ->
 
         dependencies {
-            compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+            implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 
-            testCompile 'org.assertj:assertj-core:3.9.1'
-            testCompile 'junit:junit:4.12'
-            testCompile "org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version"
+            testImplementation 'org.assertj:assertj-core:3.9.1'
+            testImplementation 'junit:junit:4.12'
+            testImplementation "org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version"
         }
 
         task sourcesJar(type: Jar, dependsOn: classes) {
