@@ -22,9 +22,9 @@ object Mnemonic {
      * Generates a seed buffer from a mnemonic phrase according to the BIP39 spec.
      * The mnemonic phrase is given as a list of words and the seed can be salted using a password
      */
-    fun mnemonicToSeed(phrase: String, password: String = ""): ByteArray {
-        return mnemonicToSeed(phrase.split(" ").toTypedArray(), password)
-    }
+    fun mnemonicToSeed(phrase: String, password: String = "") =
+            mnemonicToSeed(phrase.split(" ").toTypedArray(), password)
+
 
     /**
      * Generates a seed buffer from a mnemonic phrase according to the BIP39 spec.
@@ -32,7 +32,7 @@ object Mnemonic {
      */
     fun mnemonicToSeed(words: Array<String>, password: String = ""): ByteArray {
         val pass = words.joinToString(" ")
-        val salt = "mnemonic" + password
+        val salt = "mnemonic$password"
 
         val keyFactory = SecretKeyFactory.getInstance("PBKDF2withHmacSHA512")
         val spec = PBEKeySpec(pass.toCharArray(), salt.toByteArray(), 2048, 512)
@@ -147,21 +147,18 @@ object Mnemonic {
     /**
      * Checks if a list of [words] is a valid encoding according to the BIP39 spec
      */
-    fun validateMnemonic(words: Array<String>): Boolean {
-        return try {
-            mnemonicToEntropy(words)
-            true
-        } catch (e: Exception) {
-            e.printStackTrace()
-            false
-        }
+    fun validateMnemonic(words: Array<String>) = try {
+        mnemonicToEntropy(words)
+        true
+    } catch (e: Exception) {
+        e.printStackTrace()
+        false
     }
 
     /**
      * Checks if a mnemonic [phrase] is a valid encoding according to the BIP39 spec
      */
-    fun validateMnemonic(phrase: String)
-            =  validateMnemonic(phrase.split(" ").toTypedArray())
+    fun validateMnemonic(phrase: String) = validateMnemonic(phrase.split(" ").toTypedArray())
 
 
 }
