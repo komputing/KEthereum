@@ -17,7 +17,6 @@ buildscript {
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath 'com.github.ben-manes:gradle-versions-plugin:0.17.0'
-        classpath files('libs/gradle-witness.jar')
     }
 }
 
