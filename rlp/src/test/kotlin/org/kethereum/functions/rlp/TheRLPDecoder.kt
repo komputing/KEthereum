@@ -3,6 +3,7 @@ package org.kethereum.functions.rlp
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 import org.walleth.khex.hexToByteArray
+import kotlin.test.assertFailsWith
 
 class TheRLPDecoder {
     @Test
@@ -12,6 +13,17 @@ class TheRLPDecoder {
             assertThat(hex.hexToByteArray().decodeRLP()).isEqualTo(rlp)
         }
     }
+
+    @Test
+    fun testRLPException() {
+
+        val hex = "f912345678"
+
+        assertFailsWith<IllegalRLPException> {
+            hex.hexToByteArray().decodeRLP()
+        }
+    }
+
 
     @Test
     fun testSizeOverflow() {

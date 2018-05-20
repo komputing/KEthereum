@@ -21,3 +21,5 @@ data class RLPElement(val bytes: ByteArray) : RLPType() {
 }
 
 data class RLPList(val element: List<RLPType>) : RLPType()
+
+class IllegalRLPException(msg:String) : IllegalArgumentException(msg)
