@@ -3,7 +3,7 @@ dependencies {
     implementation project(':functions')
 
     implementation "com.squareup.okhttp3:okhttp:${okhttp_version}"
-    implementation 'com.squareup.moshi:moshi:1.5.0'
+    implementation 'com.squareup.moshi:moshi:1.6.0'
 
     implementation "com.github.walleth:khex:$khex_version"
 
