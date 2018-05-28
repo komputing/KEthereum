@@ -2,6 +2,7 @@ dependencies {
     implementation project(":model")
     implementation project(":crypto")
     implementation project(":functions")
+    implementation project(":rlp")
 
     testImplementation "com.github.walleth:khex:$khex_version"
 }
