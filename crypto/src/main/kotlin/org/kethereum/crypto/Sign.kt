@@ -203,7 +203,7 @@ fun signedMessageToKey(message: ByteArray, signatureData: SignatureData): BigInt
     // The header byte: 0x1B = first key with even y, 0x1C = first key with odd y,
     //                  0x1D = second key with even y, 0x1E = second key with odd y
     if (header < 27 || header > 34) {
-        throw SignatureException("Header byte out of range: " + header)
+        throw SignatureException("Header byte out of range: $header")
     }
 
     val sig = ECDSASignature(signatureData.r, signatureData.s)
