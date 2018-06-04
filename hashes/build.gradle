@@ -1,9 +1,4 @@
 dependencies {
-    implementation project(path: ':bip32')
-    implementation project(path: ':extensions')
-    implementation project(path: ':hashes')
-
     implementation "com.madgag.spongycastle:prov:$spongycastleVersion"
-
     implementation "com.github.walleth:khex:$khex_version"
 }

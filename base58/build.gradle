@@ -1,5 +1,5 @@
 dependencies {
-    implementation project(path: ':keccak_shortcut')
+    implementation project(path: ':hashes')
     testImplementation "com.github.walleth:khex:$khex_version"
 
 }

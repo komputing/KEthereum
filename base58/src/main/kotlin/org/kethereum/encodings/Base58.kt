@@ -132,7 +132,7 @@ private fun divmod(number: ByteArray, firstDigit: Int, base: Int, divisor: Int):
  * @return the base58-encoded string
  */
 fun ByteArray.encodeToBase58WithChecksum(): String {
-    val checksum = this.sha256().sha256()
+    val checksum = sha256().sha256()
     val extended = ByteArray(this.size + CHECKSUM_SIZE)
     System.arraycopy(this, 0, extended, 0, this.size)
     System.arraycopy(checksum, 0, extended, this.size, CHECKSUM_SIZE)
