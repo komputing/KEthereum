@@ -20,3 +20,5 @@ include ':rlp'
 include ':rpc'
 include ':uri_common'
 include ':wallet'
+include ':ripemd160'
+
