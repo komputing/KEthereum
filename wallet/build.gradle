@@ -1,5 +1,5 @@
 buildscript {
-    ext.serialization_version = '0.5.0'
+    ext.serialization_version = '0.5.1'
     repositories {
         jcenter()
         maven { url "https://kotlin.bintray.com/kotlinx" }
