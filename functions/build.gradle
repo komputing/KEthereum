@@ -5,5 +5,5 @@ dependencies {
 
     implementation "com.github.walleth:khex:$khex_version"
 
-    testImplementation 'com.beust:klaxon:3.0.4'
+    testImplementation 'com.beust:klaxon:3.0.6'
 }
