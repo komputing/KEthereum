@@ -1,5 +1,4 @@
 buildscript {
-    ext.serialization_version = '0.5.1'
     repositories {
         jcenter()
         maven { url "https://kotlin.bintray.com/kotlinx" }
@@ -19,7 +18,7 @@ dependencies {
 
     implementation "com.github.walleth:khex:$khex_version"
 
-    implementation "org.jetbrains.kotlinx:kotlinx-serialization-runtime:0.5.0"
+    implementation "org.jetbrains.kotlinx:kotlinx-serialization-runtime:$serialization_version"
 
     implementation "com.madgag.spongycastle:core:$spongycastleVersion"
     implementation "com.madgag.spongycastle:prov:$spongycastleVersion"
