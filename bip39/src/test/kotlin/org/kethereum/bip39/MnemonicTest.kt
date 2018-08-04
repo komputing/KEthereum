@@ -13,17 +13,16 @@ class MnemonicTest {
 
     @Test(expected = IllegalArgumentException::class)
     fun throwsOnWrongEntropySize() {
-        Mnemonic.generateMnemonic(123)
+        generateMnemonic(123)
     }
 
     @Test
     fun generatesValidPhrases() {
 
         (1..100).forEach {
-            (1..16)
-                    .map { Mnemonic.generateMnemonic(it * 32) }
+            (1..16).map { generateMnemonic(it * 32) }
                     .forEach {
-                        val isValid = Mnemonic.validateMnemonic(it)
+                        val isValid = validateMnemonic(it)
                         if (!isValid) {
                             throw RuntimeException("failed to validate $it")
                         }
@@ -33,17 +32,17 @@ class MnemonicTest {
 
     @Test(expected = IllegalArgumentException::class)
     fun throwsOnWrongNumberOfWords() {
-        Mnemonic.mnemonicToEntropy("legal winner thank year")
+        mnemonicToEntropy("legal winner thank year")
     }
 
     @Test(expected = IllegalArgumentException::class)
     fun throwsOnEmptyString() {
-        Mnemonic.mnemonicToEntropy("")
+        mnemonicToEntropy("")
     }
 
     @Test(expected = IllegalArgumentException::class)
     fun throwsOnWrongChecksum() {
-        Mnemonic.mnemonicToEntropy("legal winner thank year wave sausage worth useful legal winner thank thank")
+        mnemonicToEntropy("legal winner thank year wave sausage worth useful legal winner thank thank")
     }
 
     @Test
@@ -51,7 +50,7 @@ class MnemonicTest {
         testData.forEach {
 
             val expectedSeed = it.seed.hexToByteArray()
-            val actualSeed = Mnemonic.mnemonicToSeed(it.phrase, "TREZOR")
+            val actualSeed = mnemonicToSeed(it.phrase, "TREZOR")
 
             assertArrayEquals(expectedSeed, actualSeed)
         }
@@ -63,7 +62,7 @@ class MnemonicTest {
         testData.forEach {
 
             val expectedEntropy = it.entropy.hexToByteArray()
-            val actualEntropy = Mnemonic.mnemonicToEntropy(it.phrase)
+            val actualEntropy = mnemonicToEntropy(it.phrase)
 
             assertArrayEquals(expectedEntropy, actualEntropy)
         }
@@ -73,7 +72,7 @@ class MnemonicTest {
     fun entropyToMnemonic() {
         testData.forEach {
             val entropy = it.entropy.hexToByteArray()
-            val actualPhrase = Mnemonic.entropyToMnemonic(entropy)
+            val actualPhrase = entropyToMnemonic(entropy)
 
             assertEquals(it.phrase, actualPhrase)
         }
@@ -82,7 +81,7 @@ class MnemonicTest {
     @Test
     fun mnemonicToMasterKey() {
         testData.forEach {
-            val gen = Mnemonic.mnemonicToKey(it.phrase, "m/", "TREZOR")
+            val gen = mnemonicToKey(it.phrase, "m/", "TREZOR")
             assertEquals(it.masterKey, gen.serialize())
         }
 
@@ -94,9 +93,9 @@ class MnemonicTest {
         val badChecksum = "about about about about about about about about about about about about"
         val missingWords = "hello world"
 
-        assertTrue(Mnemonic.validateMnemonic(phraseGood))
-        assertFalse(Mnemonic.validateMnemonic(badChecksum))
-        assertFalse(Mnemonic.validateMnemonic(missingWords))
+        assertTrue(validateMnemonic(phraseGood))
+        assertFalse(validateMnemonic(badChecksum))
+        assertFalse(validateMnemonic(missingWords))
     }
 
     data class MnemonicTestData(val entropy: String, val phrase: String, val seed: String, val masterKey: String)
