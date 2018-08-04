@@ -35,14 +35,14 @@ fun mnemonicToSeed(words: Array<String>, password: String = ""): ByteArray {
 /**
  * Converts a phrase (list of words) into a [ByteArray] entropy buffer according to the BIP39 spec
  */
-fun mnemonicToEntropy(phrase: String): ByteArray {
-    return mnemonicToEntropy(phrase.split(" ").toTypedArray())
+fun mnemonicToEntropy(phrase: String, wordList: List<String>): ByteArray {
+    return mnemonicToEntropy(phrase.split(" ").toTypedArray(), wordList)
 }
 
 /**
  * Converts a list of words into a [ByteArray] entropy buffer according to the BIP39 spec
  */
-fun mnemonicToEntropy(words: Array<String>): ByteArray {
+fun mnemonicToEntropy(words: Array<String>, wordList: List<String>): ByteArray {
     if (words.size % 3 > 0)
         throw IllegalArgumentException("Word list size must be multiple of three words.")
 
@@ -54,7 +54,7 @@ fun mnemonicToEntropy(words: Array<String>): ByteArray {
 
     for ((phraseIndex, word) in words.withIndex()) {
 
-        val dictIndex = Collections.binarySearch(ENGLISH, word)
+        val dictIndex = Collections.binarySearch(wordList, word)
         if (dictIndex < 0)
             throw IllegalArgumentException("word($word) not in known word list")
 
@@ -88,7 +88,7 @@ fun mnemonicToKey(phrase: String, path: String, saltPhrase: String = ""): Extend
 /**
  * Converts an entropy buffer to a list of words according to the BIP39 spec
  */
-fun entropyToMnemonic(entropy: ByteArray): String {
+fun entropyToMnemonic(entropy: ByteArray, wordList: List<String>): String {
     if (entropy.size % 4 > 0)
         throw RuntimeException("Entropy not multiple of 32 bits.")
 
@@ -115,7 +115,7 @@ fun entropyToMnemonic(entropy: ByteArray): String {
             if (concatBits[i * 11 + j])
                 index = index or 0x01
         }
-        words.add(ENGLISH[index])
+        words.add(wordList[index])
     }
 
     return words.joinToString(" ")
@@ -125,7 +125,7 @@ fun entropyToMnemonic(entropy: ByteArray): String {
  * Generates a mnemonic phrase, given a desired [strength]
  * The [strength] represents the number of entropy bits this phrase encodes and needs to be a multiple of 32
  */
-fun generateMnemonic(strength: Int = 128): String {
+fun generateMnemonic(strength: Int = 128, wordList: List<String>): String {
 
     if (strength % 32 != 0) {
         throw IllegalArgumentException("The entropy strength needs to be a multiple of 32")
@@ -134,14 +134,14 @@ fun generateMnemonic(strength: Int = 128): String {
     val entropyBuffer = ByteArray(strength / 8)
     SecureRandom().nextBytes(entropyBuffer)
 
-    return entropyToMnemonic(entropyBuffer)
+    return entropyToMnemonic(entropyBuffer, wordList)
 }
 
 /**
  * Checks if a list of [words] is a valid encoding according to the BIP39 spec
  */
-fun validateMnemonic(words: Array<String>) = try {
-    mnemonicToEntropy(words)
+fun validateMnemonic(words: Array<String>, wordList: List<String>) = try {
+    mnemonicToEntropy(words, wordList)
     true
 } catch (e: Exception) {
     e.printStackTrace()
@@ -151,4 +151,4 @@ fun validateMnemonic(words: Array<String>) = try {
 /**
  * Checks if a mnemonic [phrase] is a valid encoding according to the BIP39 spec
  */
-fun validateMnemonic(phrase: String) = validateMnemonic(phrase.split(" ").toTypedArray())
+fun validateMnemonic(phrase: String,wordList: List<String>) = validateMnemonic(phrase.split(" ").toTypedArray(), wordList)
