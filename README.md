@@ -10,7 +10,7 @@ Projects that use kethereum
  * [WallETH](https://walleth.org)
  * [walleth-push](https://github.com/walleth/walleth-push)
  * [issuETH](https://github.com/issuETH/issuETH)
- * [heimdall-android](https://github.com/gnosis/heimdall-android)
+ * [Gnosis Safe Android App](https://github.com/gnosis/safe-android)
  * [kmnid](https://github.com/uport-project/kmnid)
  * [solidity tictactoe android](https://github.com/rmeissner/solidity-tictactoe-android)
  * [uport android signer](https://github.com/uport-project/uport-android-signer)
