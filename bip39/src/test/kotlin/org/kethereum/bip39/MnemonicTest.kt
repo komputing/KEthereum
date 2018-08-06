@@ -23,7 +23,7 @@ class MnemonicTest {
         (1..100).forEach {
             (1..16).map { generateMnemonic(it * 32, ENGLISH) }
                     .forEach {
-                        val isValid = validateMnemonic(it, ENGLISH)
+                        val isValid = MnemonicWords(it).validate(ENGLISH)
                         if (!isValid) {
                             throw RuntimeException("failed to validate $it")
                         }
@@ -51,7 +51,7 @@ class MnemonicTest {
         testData.forEach {
 
             val expectedSeed = it.seed.hexToByteArray()
-            val actualSeed = mnemonicToSeed(it.phrase, "TREZOR")
+            val actualSeed = MnemonicWords(it.phrase).toSeed("TREZOR")
 
             assertArrayEquals(expectedSeed, actualSeed)
         }
@@ -82,7 +82,7 @@ class MnemonicTest {
     @Test
     fun mnemonicToMasterKey() {
         testData.forEach {
-            val gen = mnemonicToKey(it.phrase, "m/", "TREZOR")
+            val gen = MnemonicWords(it.phrase).toKey("m/", "TREZOR")
             assertEquals(it.masterKey, gen.serialize())
         }
 
@@ -94,9 +94,9 @@ class MnemonicTest {
         val badChecksum = "about about about about about about about about about about about about"
         val missingWords = "hello world"
 
-        assertTrue(validateMnemonic(phraseGood, ENGLISH))
-        assertFalse(validateMnemonic(badChecksum, ENGLISH))
-        assertFalse(validateMnemonic(missingWords, ENGLISH))
+        assertTrue(MnemonicWords(phraseGood).validate(ENGLISH))
+        assertFalse(MnemonicWords(badChecksum).validate( ENGLISH))
+        assertFalse(MnemonicWords(missingWords).validate( ENGLISH))
     }
 
     data class MnemonicTestData(val entropy: String, val phrase: String, val seed: String, val masterKey: String)

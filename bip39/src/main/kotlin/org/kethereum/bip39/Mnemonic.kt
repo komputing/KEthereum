@@ -1,6 +1,5 @@
 package org.kethereum.bip39
 
-import org.kethereum.bip32.ExtendedKey
 import org.kethereum.bip32.generateKey
 import org.kethereum.extensions.toBitArray
 import org.kethereum.extensions.toByteArray
@@ -10,20 +9,16 @@ import java.util.*
 import javax.crypto.SecretKeyFactory
 import javax.crypto.spec.PBEKeySpec
 
+// TODO inline class once Kotlin 1.3 is out
+class MnemonicWords(val words: Array<String>) {
+    constructor(phrase: String) : this(phrase.split(" ").toTypedArray())
+}
 
 /**
  * Generates a seed buffer from a mnemonic phrase according to the BIP39 spec.
  * The mnemonic phrase is given as a list of words and the seed can be salted using a password
  */
-fun mnemonicToSeed(phrase: String, password: String = "") =
-        mnemonicToSeed(phrase.split(" ").toTypedArray(), password)
-
-
-/**
- * Generates a seed buffer from a mnemonic phrase according to the BIP39 spec.
- * The mnemonic phrase is given as a list of words and the seed can be salted using a password
- */
-fun mnemonicToSeed(words: Array<String>, password: String = ""): ByteArray {
+fun MnemonicWords.toSeed(password: String = ""): ByteArray {
     val pass = words.joinToString(" ")
     val salt = "mnemonic$password"
 
@@ -35,9 +30,9 @@ fun mnemonicToSeed(words: Array<String>, password: String = ""): ByteArray {
 /**
  * Converts a phrase (list of words) into a [ByteArray] entropy buffer according to the BIP39 spec
  */
-fun mnemonicToEntropy(phrase: String, wordList: List<String>): ByteArray {
-    return mnemonicToEntropy(phrase.split(" ").toTypedArray(), wordList)
-}
+fun mnemonicToEntropy(phrase: String, wordList: List<String>) =
+        mnemonicToEntropy(phrase.split(" ").toTypedArray(), wordList)
+
 
 /**
  * Converts a list of words into a [ByteArray] entropy buffer according to the BIP39 spec
@@ -80,10 +75,8 @@ fun mnemonicToEntropy(words: Array<String>, wordList: List<String>): ByteArray {
     return entropy
 }
 
-fun mnemonicToKey(phrase: String, path: String, saltPhrase: String = ""): ExtendedKey {
-    val generatedSeed = mnemonicToSeed(phrase, saltPhrase)
-    return generateKey(generatedSeed, path)
-}
+fun MnemonicWords.toKey(path: String, saltPhrase: String = "") =
+        generateKey(toSeed(saltPhrase), path)
 
 /**
  * Converts an entropy buffer to a list of words according to the BIP39 spec
@@ -138,9 +131,9 @@ fun generateMnemonic(strength: Int = 128, wordList: List<String>): String {
 }
 
 /**
- * Checks if a list of [words] is a valid encoding according to the BIP39 spec
+ * Checks if MnemonicWords is a valid encoding according to the BIP39 spec
  */
-fun validateMnemonic(words: Array<String>, wordList: List<String>) = try {
+fun MnemonicWords.validate(wordList: List<String>) = try {
     mnemonicToEntropy(words, wordList)
     true
 } catch (e: Exception) {
@@ -148,7 +141,3 @@ fun validateMnemonic(words: Array<String>, wordList: List<String>) = try {
     false
 }
 
-/**
- * Checks if a mnemonic [phrase] is a valid encoding according to the BIP39 spec
- */
-fun validateMnemonic(phrase: String,wordList: List<String>) = validateMnemonic(phrase.split(" ").toTypedArray(), wordList)
