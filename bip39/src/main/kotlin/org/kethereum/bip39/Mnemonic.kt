@@ -11,8 +11,17 @@ import javax.crypto.spec.PBEKeySpec
 
 // TODO inline class once Kotlin 1.3 is out
 class MnemonicWords(val words: Array<String>) {
-    constructor(phrase: String) : this(phrase.split(" ").toTypedArray())
+    constructor(phrase: String) : this(phrase.split(" "))
+    constructor(phrase: List<String>) : this(phrase.toTypedArray())
+
+    override fun toString() = words.joinToString(" ")
+    override fun equals(other: Any?) = toString() == other?.toString()
 }
+
+fun dirtyPhraseToMnemonicWords(string: String) =  MnemonicWords(string.trim().toLowerCase()
+            .split(" ")
+            .map { it.trim() }
+            .filter { it.isNotEmpty() })
 
 /**
  * Generates a seed buffer from a mnemonic phrase according to the BIP39 spec.
@@ -31,13 +40,13 @@ fun MnemonicWords.toSeed(password: String = ""): ByteArray {
  * Converts a phrase (list of words) into a [ByteArray] entropy buffer according to the BIP39 spec
  */
 fun mnemonicToEntropy(phrase: String, wordList: List<String>) =
-        mnemonicToEntropy(phrase.split(" ").toTypedArray(), wordList)
+        MnemonicWords(phrase).mnemonicToEntropy(wordList)
 
 
 /**
  * Converts a list of words into a [ByteArray] entropy buffer according to the BIP39 spec
  */
-fun mnemonicToEntropy(words: Array<String>, wordList: List<String>): ByteArray {
+fun MnemonicWords.mnemonicToEntropy(wordList: List<String>): ByteArray {
     if (words.size % 3 > 0)
         throw IllegalArgumentException("Word list size must be multiple of three words.")
 
@@ -134,7 +143,7 @@ fun generateMnemonic(strength: Int = 128, wordList: List<String>): String {
  * Checks if MnemonicWords is a valid encoding according to the BIP39 spec
  */
 fun MnemonicWords.validate(wordList: List<String>) = try {
-    mnemonicToEntropy(words, wordList)
+    mnemonicToEntropy(wordList)
     true
 } catch (e: Exception) {
     e.printStackTrace()
