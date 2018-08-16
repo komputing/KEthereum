@@ -7,18 +7,18 @@ class TheBIP44 {
 
     @Test(expected = IllegalArgumentException::class)
     fun parsingFailsForBadInput() {
-        BIP44.fromPath("abc")
+        BIP44("abc")
     }
 
     @Test(expected = IllegalArgumentException::class)
     fun parsingFailsForEmptyInput() {
-        BIP44.fromPath("")
+        BIP44("")
     }
 
 
     @Test(expected = IllegalArgumentException::class)
     fun parsingFailsForPseudoCorrect() {
-        BIP44.fromPath("m")
+        BIP44("m")
     }
 
     val stringProbes = mapOf(
@@ -47,14 +47,14 @@ class TheBIP44 {
     @Test
     fun fromPathWork() {
         for ((key, value) in (stringProbes + dirtyStringProbes)) {
-            assertThat(BIP44.fromPath(key).path).isEqualTo(value)
+            assertThat(BIP44(key).path).isEqualTo(value)
         }
     }
 
     @Test
     fun toStringFromIntoWorks() {
         for ((path, ints) in (intProbes)) {
-            assertThat(BIP44.fromPath(path).toIntList()).isEqualTo(ints)
+            assertThat(BIP44(path).path.map { it.numberWithHardeningFlag }).isEqualTo(ints)
         }
     }
 
@@ -68,7 +68,7 @@ class TheBIP44 {
 
     @Test
     fun incrementWorks() {
-        assertThat(BIP44.fromPath("m/0/1/2").increment())
-                .isEqualTo(BIP44.fromPath("m/0/1/3"))
+        assertThat(BIP44("m/0/1/2").increment())
+                .isEqualTo(BIP44("m/0/1/3"))
     }
 }

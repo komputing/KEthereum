@@ -1,6 +1,6 @@
 package org.kethereum.bip32
 
-import org.kethereum.bip44.BIP44.Companion.isHardened
+import org.kethereum.bip44.BIP44Element
 import org.kethereum.crypto.*
 import org.kethereum.encodings.decodeBase58WithChecksum
 import org.kethereum.encodings.encodeToBase58WithChecksum
@@ -25,9 +25,9 @@ data class ExtendedKey(val keyPair: ECKeyPair,
                        private val parentFingerprint: Int,
                        private val sequence: Int) {
 
-    fun generateChildKey(element: Int): ExtendedKey {
+    fun generateChildKey(element: BIP44Element): ExtendedKey {
         try {
-            if (isHardened(element) && keyPair.privateKey == BigInteger.ZERO) {
+            if (element.hardened && keyPair.privateKey == BigInteger.ZERO) {
                 throw IllegalArgumentException("need private key for private generation using hardened paths")
             }
             val mac = Mac.getInstance("HmacSHA512")
@@ -36,7 +36,7 @@ data class ExtendedKey(val keyPair: ECKeyPair,
 
             val extended: ByteArray
             val pub = keyPair.getCompressedPublicKey()
-            if (isHardened(element)) {
+            if (element.hardened) {
                 val privateKeyPaddedBytes = keyPair.privateKey.toBytesPadded(PRIVATE_KEY_SIZE)
 
                 extended = ByteBuffer
@@ -44,7 +44,7 @@ data class ExtendedKey(val keyPair: ECKeyPair,
                         .order(ByteOrder.BIG_ENDIAN)
                         .put(0)
                         .put(privateKeyPaddedBytes)
-                        .putInt(element)
+                        .putInt(element.numberWithHardeningFlag)
                         .array()
             } else {
                 //non-hardened
@@ -52,7 +52,7 @@ data class ExtendedKey(val keyPair: ECKeyPair,
                         .allocate(pub.size + 4)
                         .order(ByteOrder.BIG_ENDIAN)
                         .put(pub)
-                        .putInt(element)
+                        .putInt(element.numberWithHardeningFlag)
                         .array()
             }
             val lr = mac.doFinal(extended)
@@ -69,7 +69,7 @@ data class ExtendedKey(val keyPair: ECKeyPair,
                 if (k == BigInteger.ZERO) {
                     throw KeyException("Child key derivation resulted in zeros. Suggest deriving the next increment.")
                 }
-                ExtendedKey(ECKeyPair.create(k), r, (depth + 1).toByte(), computeFingerPrint(keyPair), element)
+                ExtendedKey(ECKeyPair.create(k), r, (depth + 1).toByte(), computeFingerPrint(keyPair), element.numberWithHardeningFlag)
             } else {
                 val q = CURVE.g.multiply(m).add(CURVE.curve.decodePoint(pub)).normalize()
                 if (q.isInfinity) {
@@ -77,7 +77,7 @@ data class ExtendedKey(val keyPair: ECKeyPair,
                 }
                 val point = CURVE.curve.createPoint(q.xCoord.toBigInteger(), q.yCoord.toBigInteger())
 
-                ExtendedKey(ECKeyPair(BigInteger.ZERO, point.toPublicKey()), r, (depth + 1).toByte(), computeFingerPrint(keyPair), element)
+                ExtendedKey(ECKeyPair(BigInteger.ZERO, point.toPublicKey()), r, (depth + 1).toByte(), computeFingerPrint(keyPair), element.numberWithHardeningFlag)
             }
         } catch (e: NoSuchAlgorithmException) {
             throw KeyException(e)
@@ -115,7 +115,7 @@ data class ExtendedKey(val keyPair: ECKeyPair,
     }
 
     fun serialize(publicKeyOnly: Boolean = false): String {
-        val out = ByteBuffer.allocate(Companion.EXTENDED_KEY_SIZE)
+        val out = ByteBuffer.allocate(EXTENDED_KEY_SIZE)
         try {
             if (publicKeyOnly || keyPair.privateKey == BigInteger.ZERO) {
                 out.put(xpub)
