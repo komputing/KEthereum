@@ -7,7 +7,7 @@ class MnemonicTest {
 
     @Test
     fun throwsOnWrongEntropySize() {
-        assertEquals(ENGLISH.size, 2048)
+        assertEquals(WORDLIST_ENGLISH.size, 2048)
     }
 
 }
