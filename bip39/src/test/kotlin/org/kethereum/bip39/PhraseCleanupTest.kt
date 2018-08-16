@@ -2,6 +2,7 @@ package org.kethereum.bip39
 
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
+import org.kethereum.bip39.model.MnemonicWords
 
 class PhraseCleanupTest {
 

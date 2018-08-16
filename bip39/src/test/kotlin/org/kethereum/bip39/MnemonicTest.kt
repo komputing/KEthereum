@@ -2,6 +2,7 @@ package org.kethereum.bip39
 
 import org.junit.Assert.*
 import org.junit.Test
+import org.kethereum.bip39.model.MnemonicWords
 import org.kethereum.bip39.wordlists.WORDLIST_ENGLISH
 import org.walleth.khex.hexToByteArray
 

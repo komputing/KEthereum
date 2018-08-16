@@ -1,6 +1,7 @@
 package org.kethereum.bip39
 
 import org.kethereum.bip32.generateKey
+import org.kethereum.bip39.model.MnemonicWords
 import org.kethereum.extensions.toBitArray
 import org.kethereum.extensions.toByteArray
 import org.kethereum.hashes.sha256
@@ -8,16 +9,6 @@ import java.security.SecureRandom
 import java.util.*
 import javax.crypto.SecretKeyFactory
 import javax.crypto.spec.PBEKeySpec
-
-// TODO inline class once Kotlin 1.3 is out
-data class MnemonicWords(val words: Array<String>) {
-    constructor(phrase: String) : this(phrase.split(" "))
-    constructor(phrase: List<String>) : this(phrase.toTypedArray())
-
-    override fun toString() = words.joinToString(" ")
-    override fun equals(other: Any?) = toString() == other?.toString()
-    override fun hashCode() = Arrays.hashCode(words)
-}
 
 fun dirtyPhraseToMnemonicWords(string: String) =  MnemonicWords(string.trim().toLowerCase()
             .split(" ")
