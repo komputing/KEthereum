@@ -19,7 +19,9 @@ private const val ENCODED_ZERO = '1'
 private const val CHECKSUM_SIZE = 4
 
 private val alphabet by lazy { "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz".toCharArray() }
-private val alphabetIndices by lazy { IntArray(128, { alphabet.indexOf(it.toChar()) }) }
+private val alphabetIndices by lazy {
+    IntArray(128) { alphabet.indexOf(it.toChar()) }
+}
 
 /**
  * Encodes the bytes as a base58 string (no checksum is appended).
