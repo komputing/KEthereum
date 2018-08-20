@@ -7,7 +7,7 @@ import org.walleth.data.networks.all.NetworkDefinition42
 
 val ALL_NETWORKS = listOf(
         NetworkDefinition1(),
-        NetworkDefinition4(),
         NetworkDefinition3(),
+        NetworkDefinition4(),
         NetworkDefinition42()
 )
