@@ -12,6 +12,6 @@ class NetworkDefinition3 : NetworkDefinition {
     override val infoUrl = "https://github.com/ethereum/ropsten"
 
     override val faucets = listOf(
-            "https://faucet.ropsten.be/%address%"
+            "https://faucet.ropsten.be?%address%"
     )
 }
