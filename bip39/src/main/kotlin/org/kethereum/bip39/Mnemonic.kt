@@ -5,10 +5,12 @@ import org.kethereum.bip39.model.MnemonicWords
 import org.kethereum.extensions.toBitArray
 import org.kethereum.extensions.toByteArray
 import org.kethereum.hashes.sha256
+import org.spongycastle.crypto.PBEParametersGenerator
+import org.spongycastle.crypto.digests.SHA512Digest
+import org.spongycastle.crypto.generators.PKCS5S2ParametersGenerator
+import org.spongycastle.crypto.params.KeyParameter
 import java.security.SecureRandom
 import java.util.*
-import javax.crypto.SecretKeyFactory
-import javax.crypto.spec.PBEKeySpec
 
 fun dirtyPhraseToMnemonicWords(string: String) =  MnemonicWords(string.trim().toLowerCase()
             .split(" ")
@@ -23,9 +25,9 @@ fun MnemonicWords.toSeed(password: String = ""): ByteArray {
     val pass = words.joinToString(" ")
     val salt = "mnemonic$password"
 
-    val keyFactory = SecretKeyFactory.getInstance("PBKDF2withHmacSHA512")
-    val spec = PBEKeySpec(pass.toCharArray(), salt.toByteArray(), 2048, 512)
-    return keyFactory.generateSecret(spec).encoded
+    val gen = PKCS5S2ParametersGenerator(SHA512Digest())
+    gen.init(PBEParametersGenerator.PKCS5PasswordToUTF8Bytes(pass.toCharArray()), salt.toByteArray(), 2048)
+    return (gen.generateDerivedParameters(512) as KeyParameter).key
 }
 
 /**
