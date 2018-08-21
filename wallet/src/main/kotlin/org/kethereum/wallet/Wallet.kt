@@ -156,7 +156,7 @@ fun Wallet.validate() {
 }
 
 
-fun generateRandomBytes(size: Int) = ByteArray(size).apply {
+internal fun generateRandomBytes(size: Int) = ByteArray(size).apply {
     secureRandom().nextBytes(this)
 }
 
