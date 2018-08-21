@@ -17,7 +17,7 @@ class SignTest {
 
     @Test
     fun testSignMessage() {
-        val signatureData = signMessage(TEST_MESSAGE, KEY_PAIR)
+        val signatureData = KEY_PAIR.signMessage(TEST_MESSAGE)
 
         val expected = SignatureData(
                 "0x9631f6d21dec448a213585a4a41a28ef3d4337548aa34734478b563036163786".hexToBigInteger(),
@@ -47,7 +47,7 @@ class SignTest {
     @Test
     @Throws(SignatureException::class)
     fun testSignedMessageToKey() {
-        val signatureData = signMessage(TEST_MESSAGE, KEY_PAIR)
+        val signatureData = KEY_PAIR.signMessage(TEST_MESSAGE)
         val key = signedMessageToKey(TEST_MESSAGE, signatureData)
         assertThat(key).isEqualTo(PUBLIC_KEY)
     }
