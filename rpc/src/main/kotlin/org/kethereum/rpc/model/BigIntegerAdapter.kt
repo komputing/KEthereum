@@ -5,9 +5,12 @@ import com.squareup.moshi.ToJson
 import java.math.BigInteger
 
 
-class BigIntegerAdapter {
-    @ToJson fun toJson(card: BigInteger)= card.toString()
+internal class BigIntegerAdapter {
 
-    @FromJson fun fromJson(card: String)=BigInteger(card)
+    @ToJson
+    fun toJson(card: BigInteger) = card.toString()
+
+    @FromJson
+    fun fromJson(card: String) = BigInteger(card)
 
 }

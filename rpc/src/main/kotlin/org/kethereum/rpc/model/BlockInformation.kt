@@ -1,3 +1,5 @@
 package org.kethereum.rpc.model
 
-data class BlockInformation(val transactions: List<TransactionRPC>)
+import org.kethereum.model.SignedTransaction
+
+data class BlockInformation(val transactions: List<SignedTransaction>)
