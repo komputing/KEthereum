@@ -1,6 +1,5 @@
 package org.kethereum.wallet
 
-import kotlinx.serialization.json.JSON
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 import org.kethereum.extensions.toHexStringNoPrefix
@@ -49,5 +48,5 @@ class WalletTest {
         assertThat(generateRandomBytes(10).size).isEqualTo(10)
     }
 
-    private fun load(source: String): WalletForImport = JSON.parse(source)
+    private fun load(source: String): WalletForImport = moshi.adapter(WalletForImport::class.java).fromJson(source)!!
 }

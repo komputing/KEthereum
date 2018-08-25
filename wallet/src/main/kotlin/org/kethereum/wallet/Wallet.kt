@@ -160,19 +160,10 @@ internal fun generateRandomBytes(size: Int) = ByteArray(size).apply {
     secureRandom().nextBytes(this)
 }
 
+internal fun WalletForImport.getCrypto() = crypto ?: cryptoFromMEW
 
-fun WalletCryptoForImport.toTypedKdfParamsWalletCrypto() = WalletCrypto(cipher = cipher,
-        ciphertext = ciphertext,
-        cipherparams = cipherparams,
-        kdf = kdf,
-        kdfparams = getTypedKdfParams(),
-        mac = mac)
-
-
-fun WalletForImport.getCrypto() = crypto ?: cryptoFromMEW
-
-fun WalletForImport.toTypedWallet() = Wallet(
+internal fun WalletForImport.toTypedWallet() = Wallet(
         address = address,
-        crypto = getCrypto()?.toTypedKdfParamsWalletCrypto()!!,
+        crypto = getCrypto()!!,
         id = id!!,
         version = version)
