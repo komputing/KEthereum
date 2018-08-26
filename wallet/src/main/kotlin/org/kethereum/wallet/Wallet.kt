@@ -28,8 +28,6 @@ private const val CURRENT_VERSION = 3
 
 private const val CIPHER = "aes-128-ctr"
 
-class ScryptConfig(val n: Int, val p: Int)
-
 val LIGHT_SCRYPT_CONFIG = ScryptConfig(1 shl 12, 6)
 val STANDARD_SCRYPT_CONFIG = ScryptConfig(1 shl 18, 1)
 

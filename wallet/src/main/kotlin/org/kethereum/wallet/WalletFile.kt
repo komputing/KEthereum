@@ -11,8 +11,6 @@ import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
 
-data class FiledWallet(val wallet: Wallet, val file: File)
-
 class KDFJsonAdapter {
     @FromJson
     fun fromJson(map: Map<String, String>) = (when {
@@ -42,12 +40,10 @@ class KDFJsonAdapter {
 
 }
 
-val moshi by lazy {
+internal val moshi by lazy {
     Moshi.Builder()
             .add(KDFJsonAdapter())
             .build()
-
-
 }
 
 @Throws(CipherException::class, IOException::class)
