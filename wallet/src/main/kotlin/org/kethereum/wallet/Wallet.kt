@@ -150,6 +150,10 @@ fun Wallet.validate() {
 
         crypto.kdf != AES_128_CTR && crypto.kdf != SCRYPT
         -> throw CipherException("KDF type is not supported")
+
+        (crypto.kdf == AES_128_CTR && crypto.kdfparams !is Aes128CtrKdfParams)
+                || (crypto.kdf == SCRYPT && crypto.kdfparams !is ScryptKdfParams)
+        -> throw CipherException("KDFParams invalid")
     }
 }
 
