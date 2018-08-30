@@ -1,6 +1,7 @@
 package org.kethereum.hashes
 
 import org.junit.Assert
+import org.junit.Assert.assertArrayEquals
 import org.junit.Test
 
 class ArrayExtensionsTests {
@@ -50,4 +51,25 @@ class ArrayExtensionsTests {
         Assert.assertArrayEquals(expected, input.toByteArray())
     }
 
+    // ARRAY COPY
+
+    @Test fun testIntArrayCopy() {
+        val input = intArrayOf(1, 2, 3, 4, 5)
+        val destination = IntArray(2)
+        input.arrayCopy(1, destination, 0, 2)
+        assertArrayEquals(intArrayOf(2, 3), destination)
+    }
+
+    // ByteArray.putLong()
+
+    @Test fun testByteArrayPutLong() {
+        val value = 0xaa_bb_cc_dd_ee_ff_99
+        val byteArray = ByteArray(8)
+        byteArray.putLong(0, value)
+        assertArrayEquals(byteArrayOf(0, -43, -60, -77, -94, -111, -128, -26), byteArray)
+
+        val value2 = -1L
+        byteArray.putLong(0, value2)
+        assertArrayEquals(byteArrayOf(-128, -128, -128, -128, -128, -128, -128, -128), byteArray)
+    }
 }

@@ -1,7 +1,5 @@
 package org.kethereum.hashes
 
-import java.nio.ByteBuffer
-
 // INT ARRAY
 
 /**
@@ -21,9 +19,14 @@ fun IntArray.toByteArray(): ByteArray {
     return array
 }
 
-// TODO: Make this pure Kotlin
+/**
+ * Copies [length] elements present inside [this] starting from [srcPos] into [dest] starting from [destPos].
+ * Thanks to manu4606
+ */
 fun IntArray.arrayCopy(srcPos: Int, dest: IntArray, destPos: Int, length: Int) {
-    System.arraycopy(this, srcPos, dest, destPos, length)
+    // Make a deep copy avoiding errors when this == dest
+    val temp = this.copyOf()
+    (0 until length).forEach { dest[destPos + it] = temp[srcPos + it] }
 }
 
 // BYTE ARRAY
@@ -38,36 +41,60 @@ fun ByteArray.toIntArray(): IntArray {
         throw IllegalArgumentException("byte array length")
     }
 
-    // TODO: Once the following code works, replace it with the one below
-//        val array = IntArray(this.size / 4)
-//        for (i in array.indices) {
-//            val integer = arrayOf(this[i*4], this[i*4+1], this[i*4+2], this[i*4+3])
-//            array[i] = integer.toInt()
-//        }
-//        return array
-
-    val buf = ByteBuffer.wrap(this)
-    val result = IntArray(this.size / Integer.BYTES)
-    for (i in result.indices) {
-        result[i] = buf.int
+    val array = IntArray(this.size / 4)
+    for (i in array.indices) {
+        val integer = arrayOf(this[i*4], this[i*4+1], this[i*4+2], this[i*4+3])
+        array[i] = integer.toInt()
     }
-    return result
+    return array
 }
 
-// TODO: Make this pure Kotlin
+/**
+ * Copies [length] elements present inside [this] starting from [srcPos] into [dest] starting from [destPos].
+ * Thanks to manu4606
+ */
 fun ByteArray.arrayCopy(srcPos: Int, dest: ByteArray, destPos: Int, length: Int) {
-    System.arraycopy(this, srcPos, dest, destPos, length)
+    // Make a deep copy avoiding errors when this == dest
+    val temp = this.copyOf()
+    (0 until length).forEach { dest[destPos + it] = temp[srcPos + it] }
 }
 
 /**
  * Converts 4 bytes into their integer representation following the big-endian conversion.
  */
 fun Array<Byte>.toInt(): Int {
-    return (this[0].toInt() shl 24) +
-            (this[1].toInt() shl 16) +
-            (this[2].toInt() shl 8) +
-            (this[3].toInt() shl 0)
+    return (this[0].toUInt() shl 24) + (this[1].toUInt() shl 16) + (this[2].toUInt() shl 8) + (this[3].toUInt() shl 0)
 }
 
+/**
+ * Convert a Byte into an unsigned Int.
+ * Source: https://stackoverflow.com/questions/38651192/how-to-correctly-handle-byte-values-greater-than-127-in-kotlin
+ */
+fun Byte.toUInt() = when {
+    (toInt() < 0) -> 255 + toInt() + 1
+    else -> toInt()
+}
+
+/**
+ * Writes a long split into 8 bytes.
+ * @param [offset] start index
+ * @param [value] the value to insert
+ * Thanks to manu4606
+ */
+fun ByteArray.putLong(offset: Int, value: Long) {
+    for(i in 7 downTo 0) {
+        val temp =  ((value ushr (i *  8)) and 0xff).toInt()
+        this[offset + 7 - i] = temp.toUByte()
+    }
+}
+
+/**
+ * Converts an [Int] to an unsigned [Byte].
+ * Thanks to manu4606
+ */
+fun Int.toUByte(): Byte  = when {
+    (this < 128) -> toByte()
+    else -> (-this + 127).toByte()
+}
 
 
