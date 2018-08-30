@@ -21,7 +21,7 @@ fun IntArray.toByteArray(): ByteArray {
 
 /**
  * Copies [length] elements present inside [this] starting from [srcPos] into [dest] starting from [destPos].
- * Thanks to manu4606
+ * Thanks to manu0466
  */
 fun IntArray.arrayCopy(srcPos: Int, dest: IntArray, destPos: Int, length: Int) {
     // Make a deep copy avoiding errors when this == dest
@@ -37,13 +37,13 @@ fun IntArray.arrayCopy(srcPos: Int, dest: IntArray, destPos: Int, length: Int) {
  * @return The converted array.
  */
 fun ByteArray.toIntArray(): IntArray {
-    if (this.size % Integer.BYTES != 0) {
-        throw IllegalArgumentException("byte array length")
+    if (this.size % INT_BYTES != 0) {
+        throw IllegalArgumentException("Byte array length must be a multiple of $INT_BYTES")
     }
 
-    val array = IntArray(this.size / 4)
+    val array = IntArray(this.size / INT_BYTES)
     for (i in array.indices) {
-        val integer = arrayOf(this[i*4], this[i*4+1], this[i*4+2], this[i*4+3])
+        val integer = arrayOf(this[i*INT_BYTES], this[i*INT_BYTES+1], this[i*INT_BYTES+2], this[i*INT_BYTES+3])
         array[i] = integer.toInt()
     }
     return array
@@ -51,7 +51,7 @@ fun ByteArray.toIntArray(): IntArray {
 
 /**
  * Copies [length] elements present inside [this] starting from [srcPos] into [dest] starting from [destPos].
- * Thanks to manu4606
+ * Thanks to manu0466
  */
 fun ByteArray.arrayCopy(srcPos: Int, dest: ByteArray, destPos: Int, length: Int) {
     // Make a deep copy avoiding errors when this == dest
@@ -79,7 +79,7 @@ fun Byte.toUInt() = when {
  * Writes a long split into 8 bytes.
  * @param [offset] start index
  * @param [value] the value to insert
- * Thanks to manu4606
+ * Thanks to manu0466
  */
 fun ByteArray.putLong(offset: Int, value: Long) {
     for(i in 7 downTo 0) {
@@ -90,11 +90,11 @@ fun ByteArray.putLong(offset: Int, value: Long) {
 
 /**
  * Converts an [Int] to an unsigned [Byte].
- * Thanks to manu4606
+ * Thanks to manu0466
  */
 fun Int.toUByte(): Byte  = when {
-    (this < 128) -> toByte()
-    else -> (-this + 127).toByte()
+    this < 128 -> toByte()
+    else -> (-256 + this).toByte()
 }
 
 

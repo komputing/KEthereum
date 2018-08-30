@@ -96,6 +96,7 @@ object Sha256 {
         // write 8-byte integer describing the original message length
         val lenPos = message.size + 1 + padBytes
 
+//        ByteBuffer.wrap(paddedMessage, lenPos, 8).putLong(message.size * 8.toLong())
         paddedMessage.putLong(lenPos, message.size * 8.toLong())
 
         return paddedMessage

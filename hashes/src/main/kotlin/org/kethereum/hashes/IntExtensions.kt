@@ -1,5 +1,7 @@
 package org.kethereum.hashes
 
+val INT_BYTES = 4
+
 fun Int.rotateRight(distance: Int): Int {
     return this.ushr(distance) or (this shl -distance)
 }

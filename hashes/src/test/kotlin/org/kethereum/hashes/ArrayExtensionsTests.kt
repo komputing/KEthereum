@@ -60,16 +60,16 @@ class ArrayExtensionsTests {
         assertArrayEquals(intArrayOf(2, 3), destination)
     }
 
-    // ByteArray.putLong()
+    // PUT LONG
 
     @Test fun testByteArrayPutLong() {
         val value = 0xaa_bb_cc_dd_ee_ff_99
         val byteArray = ByteArray(8)
         byteArray.putLong(0, value)
-        assertArrayEquals(byteArrayOf(0, -43, -60, -77, -94, -111, -128, -26), byteArray)
+        assertArrayEquals(byteArrayOf(0, -86, -69, -52, -35, -18, -1, -103), byteArray)
 
         val value2 = -1L
         byteArray.putLong(0, value2)
-        assertArrayEquals(byteArrayOf(-128, -128, -128, -128, -128, -128, -128, -128), byteArray)
+        assertArrayEquals(byteArrayOf(-1, -1, -1, -1, -1, -1, -1, -1), byteArray)
     }
 }

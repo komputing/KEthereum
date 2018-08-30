@@ -96,8 +96,8 @@ class MnemonicTest {
         val missingWords = "hello world"
 
         assertTrue(MnemonicWords(phraseGood).validate(WORDLIST_ENGLISH))
-        assertFalse(MnemonicWords(badChecksum).validate( WORDLIST_ENGLISH))
-        assertFalse(MnemonicWords(missingWords).validate( WORDLIST_ENGLISH))
+        assertFalse(MnemonicWords(badChecksum).validate(WORDLIST_ENGLISH))
+        assertFalse(MnemonicWords(missingWords).validate(WORDLIST_ENGLISH))
     }
 
     data class MnemonicTestData(val entropy: String, val phrase: String, val seed: String, val masterKey: String)
