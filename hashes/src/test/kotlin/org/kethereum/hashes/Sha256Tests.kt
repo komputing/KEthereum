@@ -21,31 +21,38 @@ class Sha256Tests {
     private fun testHash(input: String, expected: String) {
         val inputArray = input.toByteArray()
         val expectedOutput = DatatypeConverter.parseHexBinary(expected)
-        assertArrayEquals(expectedOutput, Sha256.Digest().digest(inputArray))
+        assertArrayEquals(expectedOutput, Sha256.digest(inputArray))
+    }
+
+    @Test fun testHashRawBytes() {
+        val b = ByteArray(256)
+        for (i in b.indices) {
+            b[i] = i.toByte()
+        }
+
+        val expected = DatatypeConverter.parseHexBinary("40aff2e9d2d8922e47afd4648e6967497158785fbd1da870e7110266bf944880")
+        assertArrayEquals(expected, Sha256.digest(b))
     }
 
 
     // PADDING
 
-    @Test
-    fun testPaddedLengthDivisibleBy512() {
+    @Test fun testPaddedLengthDivisibleBy512() {
         val b = byteArrayOf(0, 1, 2, 3, 0)
-        val padded = Sha256.Digest().padMessage(b)
+        val padded = Sha256.padMessage(b)
         val paddedLengthBits = padded.size * 8
         assertTrue(paddedLengthBits % 512 == 0)
     }
 
-    @Test
-    fun testPaddedMessageHas1Bit() {
+    @Test fun testPaddedMessageHas1Bit() {
         val b = ByteArray(64)
-        val padded = Sha256.Digest().padMessage(b)
+        val padded = Sha256.padMessage(b)
         assertEquals(128.toByte(), padded[b.size])
     }
 
-    @Test
-    fun testPaddingAllZero() {
+    @Test fun testPaddingAllZero() {
         val b = byteArrayOf(1, 1, 1, 1, 1, 1, 1)
-        val padded = Sha256.Digest().padMessage(b)
+        val padded = Sha256.padMessage(b)
         for (i in b.size + 1 until padded.size - 8) {
             assertEquals("byte $i not 0", 0, padded[i].toInt())
         }

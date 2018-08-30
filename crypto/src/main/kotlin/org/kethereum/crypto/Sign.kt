@@ -32,7 +32,7 @@ val CURVE = ECDomainParameters(
 private val HALF_CURVE_ORDER = CURVE_PARAMS.n.shiftRight(1)
 
 /**
- * Signs the [keccak] hash of the [message] buffer.
+ * Signs the [keccak] digest of the [message] buffer.
  * The signature is canonicalised ( @see [ECDSASignature.toCanonicalised] )
  *
  * @return [SignatureData] containing the (r,s,v) components

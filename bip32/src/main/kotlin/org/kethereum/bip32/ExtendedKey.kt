@@ -177,7 +177,7 @@ data class ExtendedKey(val keyPair: ECKeyPair,
         }
 
         /**
-         * Gets an [Int] representation of public key hash
+         * Gets an [Int] representation of public key digest
          * @return an Int built from the first 4 bytes of the result of hash160 over the compressed public key
          */
         private fun computeFingerPrint(keyPair: ECKeyPair): Int {
