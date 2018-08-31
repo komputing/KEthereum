@@ -1,13 +1,13 @@
 package org.kethereum.hashes
 
-// INT ARRAY
+// IntArray
 
 /**
  * Converts the given int array into a byte array via big-endian conversion
  * (1 int becomes 4 bytes).
  * @return The converted array.
  */
-fun IntArray.toByteArray(): ByteArray {
+internal fun IntArray.toByteArray(): ByteArray {
     val array = ByteArray(this.size * 4)
     for (i in this.indices) {
         val bytes = this[i].toBytes()
@@ -23,20 +23,21 @@ fun IntArray.toByteArray(): ByteArray {
  * Copies [length] elements present inside [this] starting from [srcPos] into [dest] starting from [destPos].
  * Thanks to manu0466
  */
-fun IntArray.arrayCopy(srcPos: Int, dest: IntArray, destPos: Int, length: Int) {
+internal fun IntArray.arrayCopy(srcPos: Int, dest: IntArray, destPos: Int, length: Int) {
     // Make a deep copy avoiding errors when this == dest
     val temp = this.copyOf()
     (0 until length).forEach { dest[destPos + it] = temp[srcPos + it] }
 }
 
-// BYTE ARRAY
+
+// ByteArray
 
 /**
  * Converts the given byte array into an int array via big-endian conversion
  * (4 bytes become 1 int).
  * @return The converted array.
  */
-fun ByteArray.toIntArray(): IntArray {
+internal fun ByteArray.toIntArray(): IntArray {
     if (this.size % INT_BYTES != 0) {
         throw IllegalArgumentException("Byte array length must be a multiple of $INT_BYTES")
     }
@@ -53,26 +54,10 @@ fun ByteArray.toIntArray(): IntArray {
  * Copies [length] elements present inside [this] starting from [srcPos] into [dest] starting from [destPos].
  * Thanks to manu0466
  */
-fun ByteArray.arrayCopy(srcPos: Int, dest: ByteArray, destPos: Int, length: Int) {
+internal fun ByteArray.arrayCopy(srcPos: Int, dest: ByteArray, destPos: Int, length: Int) {
     // Make a deep copy avoiding errors when this == dest
     val temp = this.copyOf()
     (0 until length).forEach { dest[destPos + it] = temp[srcPos + it] }
-}
-
-/**
- * Converts 4 bytes into their integer representation following the big-endian conversion.
- */
-fun Array<Byte>.toInt(): Int {
-    return (this[0].toUInt() shl 24) + (this[1].toUInt() shl 16) + (this[2].toUInt() shl 8) + (this[3].toUInt() shl 0)
-}
-
-/**
- * Convert a Byte into an unsigned Int.
- * Source: https://stackoverflow.com/questions/38651192/how-to-correctly-handle-byte-values-greater-than-127-in-kotlin
- */
-fun Byte.toUInt() = when {
-    (toInt() < 0) -> 255 + toInt() + 1
-    else -> toInt()
 }
 
 /**
@@ -81,20 +66,20 @@ fun Byte.toUInt() = when {
  * @param [value] the value to insert
  * Thanks to manu0466
  */
-fun ByteArray.putLong(offset: Int, value: Long) {
+internal fun ByteArray.putLong(offset: Int, value: Long) {
     for(i in 7 downTo 0) {
         val temp =  ((value ushr (i *  8)) and 0xff).toInt()
         this[offset + 7 - i] = temp.toUByte()
     }
 }
 
-/**
- * Converts an [Int] to an unsigned [Byte].
- * Thanks to manu0466
- */
-fun Int.toUByte(): Byte  = when {
-    this < 128 -> toByte()
-    else -> (-256 + this).toByte()
-}
 
+// Array<Byte>
+
+/**
+ * Converts 4 bytes into their integer representation following the big-endian conversion.
+ */
+internal fun Array<Byte>.toInt(): Int {
+    return (this[0].toUInt() shl 24) + (this[1].toUInt() shl 16) + (this[2].toUInt() shl 8) + (this[3].toUInt() shl 0)
+}
 

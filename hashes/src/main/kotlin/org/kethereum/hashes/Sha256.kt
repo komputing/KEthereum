@@ -1,7 +1,5 @@
 package org.kethereum.hashes
 
-import java.nio.ByteBuffer
-
 /**
  * Digest Class for SHA-256.
  * Original Java version at https://github.com/meyfa/java-sha256/blob/master/src/main/java/net/meyfa/sha256/Sha256.java
@@ -96,7 +94,6 @@ object Sha256 {
         // write 8-byte integer describing the original message length
         val lenPos = message.size + 1 + padBytes
 
-//        ByteBuffer.wrap(paddedMessage, lenPos, 8).putLong(message.size * 8.toLong())
         paddedMessage.putLong(lenPos, message.size * 8.toLong())
 
         return paddedMessage
