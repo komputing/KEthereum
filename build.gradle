@@ -37,7 +37,7 @@ subprojects {
         dependencies {
             implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 
-            testImplementation 'org.assertj:assertj-core:3.10.0'
+            testImplementation 'org.assertj:assertj-core:3.11.1'
             testImplementation 'junit:junit:4.12'
             testImplementation "org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version"
         }
