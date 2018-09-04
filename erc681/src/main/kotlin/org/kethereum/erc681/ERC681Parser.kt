@@ -9,7 +9,7 @@ private val scientificNumberRegEx = Regex("^[0-9]+(\\.[0-9]+)?(e[0-9]+)?$")
 
 fun EthereumURI.toERC681() = ERC681().apply {
 
-    val commonURI = parseCommonURI(uri)
+    val commonURI = parseCommonURI()
     scheme = commonURI.scheme
     prefix = commonURI.prefix
     chainId = commonURI.chainId
