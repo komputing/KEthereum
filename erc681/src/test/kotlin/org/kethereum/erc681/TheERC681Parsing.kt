@@ -9,39 +9,39 @@ class TheERC681Parsing {
 
     @Test
     fun weCanAccessFunctionParams() {
-        Assertions.assertThat(parseERC681("ethereum:key-0x00AB42@23?value=42&gas=3&yay").functionParams).isEqualTo(listOf("yay" to "true"))
+        Assertions.assertThat(parseERC681("ethereum:pay-0x00AB42@23?value=42&gas=3&yay").functionParams).isEqualTo(listOf("yay" to "true"))
     }
 
     @Test
     fun weCanAccessFunctionParamsWithFunction() {
-        Assertions.assertThat(parseERC681("ethereum:key-0x00AB42@23/funfun?value=42&gas=3&yay").functionParams).isEqualTo(listOf("yay" to "true"))
+        Assertions.assertThat(parseERC681("ethereum:pay-0x00AB42@23/funfun?value=42&gas=3&yay").functionParams).isEqualTo(listOf("yay" to "true"))
     }
 
     @Test
     fun weCanHandleEmptyFunctionParams() {
-        Assertions.assertThat(parseERC681("ethereum:key-0x00AB42@23/funfun").functionParams).isEmpty()
+        Assertions.assertThat(parseERC681("ethereum:pay-0x00AB42@23/funfun").functionParams).isEmpty()
     }
 
     @Test
     fun weCanHandleFunctionParamsWithSameType() {
-        Assertions.assertThat(parseERC681("ethereum:key-0x00AB42@23/yolo?uint256=123&uint256=2").functionParams.size).isEqualTo(2)
+        Assertions.assertThat(parseERC681("ethereum:pay-0x00AB42@23/yolo?uint256=123&uint256=2").functionParams.size).isEqualTo(2)
     }
 
     @Test
     fun orderOfFunctionParamsIsPreserved() {
-        Assertions.assertThat(parseERC681("ethereum:key-0x00AB42@23/funfun?value=42&gas=3&uint8=1&uint8=2").functionParams).isEqualTo(listOf("uint8" to "1","uint8" to "2"))
+        Assertions.assertThat(parseERC681("ethereum:pay-0x00AB42@23/funfun?value=42&gas=3&uint8=1&uint8=2").functionParams).isEqualTo(listOf("uint8" to "1","uint8" to "2"))
     }
 
 
     @Test
     fun canHandleNegativeFunctionParameterWithPrefix() {
-        Assertions.assertThat(parseERC681("ethereum:foo-0x00AB42/funfun?value=42&gas=3&int8=-42").functionParams).isEqualTo(listOf("int8" to "-42"))
+        Assertions.assertThat(parseERC681("ethereum:pay-0x00AB42/funfun?value=42&gas=3&int8=-42").functionParams).isEqualTo(listOf("int8" to "-42"))
     }
 
 
     @Test
     fun canHandleNegativeFunctionParameterWithChain() {
-        Assertions.assertThat(parseERC681("ethereum:foo-0x00AB42@4/funfun?value=42&gas=3&int8=-42").functionParams).isEqualTo(listOf("int8" to "-42"))
+        Assertions.assertThat(parseERC681("ethereum:pay-0x00AB42@4/funfun?value=42&gas=3&int8=-42").functionParams).isEqualTo(listOf("int8" to "-42"))
     }
 
 
@@ -96,11 +96,6 @@ class TheERC681Parsing {
     }
 
     @Test
-    fun canParsePrefix() {
-        Assertions.assertThat(parseERC681("ethereum:rlp-0x00AB42?value=42").prefix).isEqualTo("rlp")
-    }
-
-    @Test
     fun invalidERC681IsDetected() {
         Assertions.assertThat(parseERC681("etherUUm:0x00AB42?value=1").valid).isEqualTo(false)
         Assertions.assertThat(parseERC681("ethereum:0x00AB42?value=1a&gas=2").valid).isEqualTo(false)
@@ -134,13 +129,13 @@ class TheERC681Parsing {
 
     @Test
     fun canParseFullyFeaturedERC681URL() {
-        Assertions.assertThat(parseERC681("ethereum:key-0x00AB42@23?value=42&gas=3").prefix).isEqualTo("key")
-        Assertions.assertThat(parseERC681("ethereum:key-0x00AB42@23?value=42&gas=3").value).isEqualTo("42")
-        Assertions.assertThat(parseERC681("ethereum:key-0x00AB42@23?value=42&gas=3").gas).isEqualTo("3")
+        Assertions.assertThat(parseERC681("ethereum:pay-0x00AB42@23?value=42&gas=3").prefix).isEqualTo("pay")
+        Assertions.assertThat(parseERC681("ethereum:pay-0x00AB42@23?value=42&gas=3").value).isEqualTo("42")
+        Assertions.assertThat(parseERC681("ethereum:pay-0x00AB42@23?value=42&gas=3").gas).isEqualTo("3")
     }
 
     @Test
     fun weDoNotStumbleUponIllegal681() {
-        Assertions.assertThat(parseERC681("ethereum:key-0x00AB42@23?value=42.42").valid).isEqualTo(false)
+        Assertions.assertThat(parseERC681("ethereum:pay-0x00AB42@23?value=42.42").valid).isEqualTo(false)
     }
 }
