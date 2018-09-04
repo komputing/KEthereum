@@ -1,9 +1,9 @@
-package org.kethereum.erc681
+package org.kethereum.erc831
 
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 
-class TheERC681ExtensionFun {
+class TheERC831ExtensionFun {
 
     @Test
     fun canDetectEthereumURL() {
