@@ -47,4 +47,4 @@ fun EthereumURI.toERC831() = ERC831().apply {
 
 private fun String.hasPrefix() = contains('-') && (!contains("0x") || indexOf('-') < indexOf("0x"))
 
-fun parseERC681(url: String) = EthereumURI(url).toERC831()
+fun parseERC831(url: String) = EthereumURI(url).toERC831()
