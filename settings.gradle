@@ -1,3 +1,4 @@
+include ':abi'
 include ':base58'
 include ':bip32'
 include ':bip39'
