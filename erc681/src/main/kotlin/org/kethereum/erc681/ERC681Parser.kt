@@ -1,5 +1,6 @@
 package org.kethereum.erc681
 
+import org.kethereum.erc831.ERC831
 import org.kethereum.model.EthereumURI
 import org.kethereum.uri.common.CommonEthereumURIData
 import org.kethereum.uri.common.parseCommonURI
@@ -10,10 +11,12 @@ private val scientificNumberRegEx = Regex("^[0-9]+(\\.[0-9]+)?(e[0-9]+)?$")
 
 fun EthereumURI.toERC681() = parseCommonURI().toERC681()
 
+fun ERC831.toERC681() = parseCommonURI().toERC681()
+
 fun CommonEthereumURIData.toERC681() = let { commonURI ->
     ERC681().apply {
 
-        scheme = scheme
+        scheme = commonURI.scheme
         prefix = commonURI.prefix
         chainId = commonURI.chainId
         function = commonURI.function
