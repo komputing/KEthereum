@@ -62,9 +62,11 @@ fun ERC831.parseCommonURI() = let { erc831 ->
         }
 
         query = queryString.split("&")
+                .asSequence()
                 .filter { it.isNotBlank() }
                 .map { it.split("=", limit = 2) }
                 .map { it.first() to it.getOrElse(1) { "true" } }
+                .toList()
 
         valid = valid && scheme == "ethereum"
     }
