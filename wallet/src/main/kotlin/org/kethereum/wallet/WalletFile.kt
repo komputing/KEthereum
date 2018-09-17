@@ -11,7 +11,7 @@ import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
 
-class KDFJsonAdapter {
+internal class KDFJsonAdapter {
     @FromJson
     fun fromJson(map: Map<String, String>) = (when {
         map["prf"] != null -> Aes128CtrKdfParams(
@@ -53,6 +53,12 @@ fun ECKeyPair.generateWalletFile(password: String,
     FiledWallet(wallet, File(destinationDirectory, wallet.getWalletFileName()).apply {
         writeText(moshi.adapter(Wallet::class.java).toJson(wallet))
     })
+}
+
+@Throws(CipherException::class, IOException::class)
+fun ECKeyPair.generateWalletJSON(password: String,
+                                 config: ScryptConfig) = createWallet(password, config).let { wallet ->
+    moshi.adapter(Wallet::class.java).toJson(wallet)
 }
 
 @Throws(IOException::class, CipherException::class)
