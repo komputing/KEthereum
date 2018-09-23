@@ -61,10 +61,8 @@ class LinuxSecureRandom : SecureRandomSpi() {
 
     }
 
-    override fun engineGenerateSeed(i: Int): ByteArray {
-        val bits = ByteArray(i)
-        engineNextBytes(bits)
-        return bits
+    override fun engineGenerateSeed(i: Int)= ByteArray(i).apply {
+        engineNextBytes(this)
     }
 
     companion object {

@@ -45,10 +45,7 @@ internal fun createSecp256k1KeyPair(): KeyPair {
 }
 
 @Throws(InvalidAlgorithmParameterException::class, NoSuchAlgorithmException::class, NoSuchProviderException::class)
-fun createEcKeyPair(): ECKeyPair {
-    val keyPair = createSecp256k1KeyPair()
-    return ECKeyPair.create(keyPair)
-}
+fun createEcKeyPair() = ECKeyPair.create(createSecp256k1KeyPair())
 
 fun getAddress(publicKey: BigInteger) = getAddress(publicKey.toHexStringZeroPadded(PUBLIC_KEY_LENGTH_IN_HEX))
 
