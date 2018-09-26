@@ -1,7 +1,7 @@
 package org.kethereum.crypto.data
 
-import org.kethereum.crypto.Credentials
 import org.kethereum.crypto.ECKeyPair
+import org.kethereum.crypto.toCredentials
 import org.kethereum.extensions.hexToBigInteger
 import org.walleth.khex.clean0xPrefix
 
@@ -19,5 +19,5 @@ val PUBLIC_KEY = PUBLIC_KEY_STRING.hexToBigInteger()
 
 val KEY_PAIR = ECKeyPair(PRIVATE_KEY, PUBLIC_KEY)
 
-val CREDENTIALS = Credentials.create(KEY_PAIR)
+val CREDENTIALS = KEY_PAIR.toCredentials()
 val TEST_MESSAGE = "A test message".toByteArray()
