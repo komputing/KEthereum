@@ -12,6 +12,7 @@ internal const val LIST_OFFSET = 192
 sealed class RLPType
 
 data class RLPElement(val bytes: ByteArray) : RLPType() {
+
     override fun equals(other: Any?) = when (other) {
         is RLPElement -> Arrays.equals(bytes, other.bytes)
         else -> false
@@ -22,4 +23,4 @@ data class RLPElement(val bytes: ByteArray) : RLPType() {
 
 data class RLPList(val element: List<RLPType>) : RLPType()
 
-class IllegalRLPException(msg:String) : IllegalArgumentException(msg)
+class IllegalRLPException(msg: String) : IllegalArgumentException(msg)
