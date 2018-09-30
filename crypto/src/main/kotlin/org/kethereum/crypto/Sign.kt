@@ -256,17 +256,15 @@ private data class ECDSASignature internal constructor(val r: BigInteger, val s:
      * violates various assumed invariants. Thus in future only one of those forms will be
      * considered legal and the other will be banned.
      */
-    fun toCanonicalised(): ECDSASignature {
-        return if (!isCanonical()) {
-            // The order of the curve is the number of valid points that exist on that curve.
-            // If S is in the upper half of the number of valid points, then bring it back to
-            // the lower half. Otherwise, imagine that
-            //    N = 10
-            //    s = 8, so (-8 % 10 == 2) thus both (r, 8) and (r, 2) are valid solutions.
-            //    10 - 8 == 2, giving us always the latter solution, which is canonical.
-            ECDSASignature(r, CURVE.n.subtract(s))
-        } else {
-            this
-        }
+    fun toCanonicalised() = if (isCanonical()) {
+        this
+    } else {
+        // The order of the curve is the number of valid points that exist on that curve.
+        // If S is in the upper half of the number of valid points, then bring it back to
+        // the lower half. Otherwise, imagine that
+        //    N = 10
+        //    s = 8, so (-8 % 10 == 2) thus both (r, 8) and (r, 2) are valid solutions.
+        //    10 - 8 == 2, giving us always the latter solution, which is canonical.
+        ECDSASignature(r, CURVE.n.subtract(s))
     }
 }
