@@ -1,6 +1,8 @@
 package org.kethereum.wallet.data
 
 import org.kethereum.crypto.ECKeyPair
+import org.kethereum.crypto.PrivateKey
+import org.kethereum.crypto.PublicKey
 import org.kethereum.extensions.hexToBigInteger
 import org.walleth.khex.clean0xPrefix
 
@@ -10,8 +12,8 @@ internal const val PUBLIC_KEY_STRING = "0x506bc1dc099358e5137292f4efdd57e400f29b
 internal const val ADDRESS = "0xef678007d18427e6022059dbc264f27507cd1ffc"
 internal val ADDRESS_NO_PREFIX = ADDRESS.clean0xPrefix()
 
-internal val PRIVATE_KEY = PRIVATE_KEY_STRING.hexToBigInteger()
-internal val PUBLIC_KEY = PUBLIC_KEY_STRING.hexToBigInteger()
+internal val PRIVATE_KEY = PrivateKey(PRIVATE_KEY_STRING.hexToBigInteger())
+internal val PUBLIC_KEY = PublicKey(PUBLIC_KEY_STRING.hexToBigInteger())
 
 internal val KEY_PAIR = ECKeyPair(PRIVATE_KEY, PUBLIC_KEY)
 

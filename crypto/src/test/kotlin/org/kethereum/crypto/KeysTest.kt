@@ -36,8 +36,8 @@ class KeysTest {
     @Test
     fun testCreateEcKeyPair() {
         val (privateKey, publicKey) = createEthereumKeyPair()
-        assertThat(publicKey.signum(), `is`(1))
-        assertThat(privateKey.signum(), `is`(1))
+        assertThat(publicKey.key.signum(), `is`(1))
+        assertThat(privateKey.key.signum(), `is`(1))
     }
 
     @Test

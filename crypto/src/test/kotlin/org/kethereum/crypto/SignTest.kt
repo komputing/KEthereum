@@ -30,7 +30,8 @@ class SignTest {
 
     @Test
     fun testSignMessageHash() {
-        val keyPair = ECKeyPair.create("0x65fc670d9351cb87d1f56702fb56a7832ae2aab3427be944ab8c9f2a0ab87960".hexToByteArray())
+        val privateKey = PrivateKey("0x65fc670d9351cb87d1f56702fb56a7832ae2aab3427be944ab8c9f2a0ab87960".hexToByteArray())
+        val keyPair = privateKey.toECKeyPair()
 
         val messageHash = "Hello, world!".toByteArray().sha256()
         val signatureData = signMessageHash(messageHash, keyPair, false)

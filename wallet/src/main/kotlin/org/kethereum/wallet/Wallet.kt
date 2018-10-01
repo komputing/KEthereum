@@ -1,9 +1,7 @@
 package org.kethereum.wallet
 
-import org.kethereum.crypto.ECKeyPair
-import org.kethereum.crypto.PRIVATE_KEY_SIZE
+import org.kethereum.crypto.*
 import org.kethereum.crypto.SecureRandomUtils.secureRandom
-import org.kethereum.crypto.getAddress
 import org.kethereum.extensions.toBytesPadded
 import org.kethereum.keccakshortcut.keccak
 import org.kethereum.wallet.model.*
@@ -43,7 +41,7 @@ fun ECKeyPair.createWallet(password: String, config: ScryptConfig): Wallet {
     val encryptKey = Arrays.copyOfRange(derivedKey, 0, 16)
     val iv = generateRandomBytes(16)
 
-    val privateKeyBytes = privateKey.toBytesPadded(PRIVATE_KEY_SIZE)
+    val privateKeyBytes = privateKey.key.toBytesPadded(PRIVATE_KEY_SIZE)
 
     val cipherText = performCipherOperation(Cipher.ENCRYPT_MODE, iv, encryptKey, privateKeyBytes)
 
@@ -135,8 +133,8 @@ fun Wallet.decrypt(password: String): ECKeyPair {
     }
 
     val encryptKey = Arrays.copyOfRange(derivedKey, 0, 16)
-    val privateKey = performCipherOperation(Cipher.DECRYPT_MODE, iv, encryptKey, cipherText)
-    return ECKeyPair.create(privateKey)
+    val privateKey = PrivateKey(performCipherOperation(Cipher.DECRYPT_MODE, iv, encryptKey, cipherText))
+    return privateKey.toECKeyPair()
 }
 
 @Throws(CipherException::class)

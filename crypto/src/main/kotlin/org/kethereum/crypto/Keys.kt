@@ -35,7 +35,9 @@ fun initializeCrypto() {
  *
  * Private keys are encoded using X.509
  */
-@Throws(NoSuchProviderException::class, NoSuchAlgorithmException::class, InvalidAlgorithmParameterException::class)
+@Throws(NoSuchProviderException::class,
+        NoSuchAlgorithmException::class,
+        InvalidAlgorithmParameterException::class)
 internal fun createSecp256k1KeyPair(): KeyPair {
 
     val keyPairGenerator = KeyPairGenerator.getInstance("ECDSA")
@@ -44,10 +46,12 @@ internal fun createSecp256k1KeyPair(): KeyPair {
     return keyPairGenerator.generateKeyPair()
 }
 
-@Throws(InvalidAlgorithmParameterException::class, NoSuchAlgorithmException::class, NoSuchProviderException::class)
-fun createEthereumKeyPair() = ECKeyPair.create(createSecp256k1KeyPair())
+@Throws(InvalidAlgorithmParameterException::class,
+        NoSuchAlgorithmException::class,
+        NoSuchProviderException::class)
+fun createEthereumKeyPair() = createSecp256k1KeyPair().toECKeyPair()
 
-fun getAddress(publicKey: BigInteger) = getAddress(publicKey.toHexStringZeroPadded(PUBLIC_KEY_LENGTH_IN_HEX))
+fun getAddress(publicKey: PublicKey) = getAddress(publicKey.key.toHexStringZeroPadded(PUBLIC_KEY_LENGTH_IN_HEX))
 
 fun getAddress(publicKey: String): String {
     var publicKeyNoPrefix = publicKey.clean0xPrefix()
@@ -68,7 +72,7 @@ fun getAddress(publicKey: ByteArray): ByteArray {
 
 fun ECKeyPair.getCompressedPublicKey(): ByteArray {
     //add the uncompressed prefix
-    val ret = publicKey.toBytesPadded(PUBLIC_KEY_SIZE + 1)
+    val ret = publicKey.key.toBytesPadded(PUBLIC_KEY_SIZE + 1)
     ret[0] = 4
     val point = CURVE.curve.decodePoint(ret)
     return point.getEncoded(true)
@@ -87,7 +91,7 @@ fun decompressKey(publicBytes: ByteArray): ByteArray {
 /**
  * Decodes an uncompressed public key (without 0x04 prefix) given an ECPoint
  */
-fun ECPoint.toPublicKey(): BigInteger {
+fun ECPoint.toPublicKey(): PublicKey {
     val encoded = getEncoded(false)
-    return BigInteger(1, Arrays.copyOfRange(encoded, 1, encoded.size))
+    return PublicKey(BigInteger(1, Arrays.copyOfRange(encoded, 1, encoded.size)))
 }

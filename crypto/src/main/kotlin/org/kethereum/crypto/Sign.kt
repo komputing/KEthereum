@@ -58,7 +58,7 @@ fun signMessageHash(messageHash: ByteArray, keyPair: ECKeyPair, toCanonical: Boo
     var recId = -1
     for (i in 0..3) {
         val k = recoverFromSignature(i, sig, messageHash)
-        if (k != null && k == publicKey) {
+        if (k != null && k == publicKey.key) {
             recId = i
             break
         }
@@ -75,10 +75,10 @@ fun signMessageHash(messageHash: ByteArray, keyPair: ECKeyPair, toCanonical: Boo
     return SignatureData(sig.r, sig.s, v)
 }
 
-private fun sign(transactionHash: ByteArray, privateKey: BigInteger, canonical: Boolean): ECDSASignature {
+private fun sign(transactionHash: ByteArray, privateKey: PrivateKey, canonical: Boolean): ECDSASignature {
     val signer = ECDSASigner(HMacDSAKCalculator(SHA256Digest()))
 
-    val ecPrivateKeyParameters = ECPrivateKeyParameters(privateKey, CURVE)
+    val ecPrivateKeyParameters = ECPrivateKeyParameters(privateKey.key, CURVE)
     signer.init(true, ecPrivateKeyParameters)
     val components = signer.generateSignature(transactionHash)
 
@@ -194,7 +194,7 @@ private fun decompressKey(xBN: BigInteger, yBit: Boolean): ECPoint {
  * signature format error.
  */
 @Throws(SignatureException::class)
-fun signedMessageToKey(message: ByteArray, signatureData: SignatureData): BigInteger {
+fun signedMessageToKey(message: ByteArray, signatureData: SignatureData): PublicKey {
 
     val header = signatureData.v and 0xFF.toByte()
     // The header byte: 0x1B = first key with even y, 0x1C = first key with odd y,
@@ -207,7 +207,7 @@ fun signedMessageToKey(message: ByteArray, signatureData: SignatureData): BigInt
 
     val messageHash = message.keccak()
     val recId = header - 27
-    return recoverFromSignature(recId, sig, messageHash) ?: throw SignatureException("Could not recover public key from signature")
+    return PublicKey(recoverFromSignature(recId, sig, messageHash) ?: throw SignatureException("Could not recover public key from signature"))
 }
 
 /**
@@ -216,25 +216,25 @@ fun signedMessageToKey(message: ByteArray, signatureData: SignatureData): BigInt
  * @param privateKey the private key to derive the public key from
  * @return BigInteger encoded public key
  */
-fun publicKeyFromPrivate(privateKey: BigInteger): BigInteger {
+fun publicKeyFromPrivate(privateKey: PrivateKey): PublicKey {
     val point = publicPointFromPrivate(privateKey)
 
     val encoded = point.getEncoded(false)
-    return BigInteger(1, Arrays.copyOfRange(encoded, 1, encoded.size))  // remove prefix
+    return PublicKey(BigInteger(1, Arrays.copyOfRange(encoded, 1, encoded.size)))  // remove prefix
 }
 
 /**
  * Returns public key point from the given private key.
  */
-private fun publicPointFromPrivate(privateKey: BigInteger): ECPoint {
+private fun publicPointFromPrivate(privateKey: PrivateKey): ECPoint {
     /*
      * TODO: FixedPointCombMultiplier currently doesn't support scalars longer than the group
      * order, but that could change in future versions.
      */
-    val postProcessedPrivateKey = if (privateKey.bitLength() > CURVE.n.bitLength()) {
-        privateKey.mod(CURVE.n)
+    val postProcessedPrivateKey = if (privateKey.key.bitLength() > CURVE.n.bitLength()) {
+        privateKey.key.mod(CURVE.n)
     } else {
-        privateKey
+        privateKey.key
     }
     return FixedPointCombMultiplier().multiply(CURVE.g, postProcessedPrivateKey)
 }

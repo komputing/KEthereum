@@ -32,14 +32,14 @@ class WalletTest {
     fun testDecryptAes128Ctr() {
         val walletFile = load(AES_128_CTR_TEST_JSON)
         val (privateKey) = walletFile.toTypedWallet().decrypt(PASSWORD)
-        assertThat(privateKey.toHexStringNoPrefix()).isEqualTo(PRIVATE_KEY_STRING)
+        assertThat(privateKey.key.toHexStringNoPrefix()).isEqualTo(PRIVATE_KEY_STRING)
     }
 
     @Test
     fun testDecryptScrypt() {
         val walletFile = load(SCRYPT_TEST_JSON)
         val (privateKey) = walletFile.toTypedWallet().decrypt(PASSWORD)
-        assertThat(privateKey.toHexStringNoPrefix()).isEqualTo(PRIVATE_KEY_STRING)
+        assertThat(privateKey.key.toHexStringNoPrefix()).isEqualTo(PRIVATE_KEY_STRING)
     }
 
     @Test

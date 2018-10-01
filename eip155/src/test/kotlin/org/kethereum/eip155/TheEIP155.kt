@@ -2,7 +2,8 @@ package org.kethereum.eip155
 
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
-import org.kethereum.crypto.ECKeyPair
+import org.kethereum.crypto.PrivateKey
+import org.kethereum.crypto.toECKeyPair
 import org.kethereum.functions.encodeRLP
 import org.kethereum.functions.rlp.RLPList
 import org.kethereum.functions.rlp.decodeRLP
@@ -17,7 +18,8 @@ import org.walleth.khex.toHexString
 import java.math.BigInteger
 
 
-val KEY_PAIR = ECKeyPair.create("4646464646464646464646464646464646464646464646464646464646464646".hexToByteArray())
+val privateKey = PrivateKey("4646464646464646464646464646464646464646464646464646464646464646".hexToByteArray())
+val KEY_PAIR = privateKey.toECKeyPair()
 
 class TheEIP155 {
 

@@ -27,7 +27,7 @@ data class ExtendedKey(val keyPair: ECKeyPair,
 
     fun generateChildKey(element: BIP44Element): ExtendedKey {
         try {
-            if (element.hardened && keyPair.privateKey == BigInteger.ZERO) {
+            if (element.hardened && keyPair.privateKey.key == BigInteger.ZERO) {
                 throw IllegalArgumentException("need private key for private generation using hardened paths")
             }
             val mac = Mac.getInstance("HmacSHA512")
@@ -37,7 +37,7 @@ data class ExtendedKey(val keyPair: ECKeyPair,
             val extended: ByteArray
             val pub = keyPair.getCompressedPublicKey()
             if (element.hardened) {
-                val privateKeyPaddedBytes = keyPair.privateKey.toBytesPadded(PRIVATE_KEY_SIZE)
+                val privateKeyPaddedBytes = keyPair.privateKey.key.toBytesPadded(PRIVATE_KEY_SIZE)
 
                 extended = ByteBuffer
                         .allocate(privateKeyPaddedBytes.size + 5)
@@ -64,12 +64,12 @@ data class ExtendedKey(val keyPair: ECKeyPair,
                 throw KeyException("Child key derivation resulted in a key with higher modulus. Suggest deriving the next increment.")
             }
 
-            return if (keyPair.privateKey != BigInteger.ZERO) {
-                val k = m.add(keyPair.privateKey).mod(CURVE.n)
+            return if (keyPair.privateKey.key != BigInteger.ZERO) {
+                val k = m.add(keyPair.privateKey.key).mod(CURVE.n)
                 if (k == BigInteger.ZERO) {
                     throw KeyException("Child key derivation resulted in zeros. Suggest deriving the next increment.")
                 }
-                ExtendedKey(ECKeyPair.create(k), r, (depth + 1).toByte(), computeFingerPrint(keyPair), element.numberWithHardeningFlag)
+                ExtendedKey(PrivateKey(k).toECKeyPair(), r, (depth + 1).toByte(), computeFingerPrint(keyPair), element.numberWithHardeningFlag)
             } else {
                 val q = CURVE.g.multiply(m).add(CURVE.curve.decodePoint(pub)).normalize()
                 if (q.isInfinity) {
@@ -77,7 +77,7 @@ data class ExtendedKey(val keyPair: ECKeyPair,
                 }
                 val point = CURVE.curve.createPoint(q.xCoord.toBigInteger(), q.yCoord.toBigInteger())
 
-                ExtendedKey(ECKeyPair(BigInteger.ZERO, point.toPublicKey()), r, (depth + 1).toByte(), computeFingerPrint(keyPair), element.numberWithHardeningFlag)
+                ExtendedKey(ECKeyPair(PrivateKey(BigInteger.ZERO), point.toPublicKey()), r, (depth + 1).toByte(), computeFingerPrint(keyPair), element.numberWithHardeningFlag)
             }
         } catch (e: NoSuchAlgorithmException) {
             throw KeyException(e)
@@ -117,7 +117,7 @@ data class ExtendedKey(val keyPair: ECKeyPair,
     fun serialize(publicKeyOnly: Boolean = false): String {
         val out = ByteBuffer.allocate(EXTENDED_KEY_SIZE)
         try {
-            if (publicKeyOnly || keyPair.privateKey == BigInteger.ZERO) {
+            if (publicKeyOnly || keyPair.privateKey.key == BigInteger.ZERO) {
                 out.put(xpub)
             } else {
                 out.put(xprv)
@@ -126,11 +126,11 @@ data class ExtendedKey(val keyPair: ECKeyPair,
             out.putInt(parentFingerprint)
             out.putInt(sequence)
             out.put(chainCode)
-            if (publicKeyOnly || keyPair.privateKey == BigInteger.ZERO) {
+            if (publicKeyOnly || keyPair.privateKey.key == BigInteger.ZERO) {
                 out.put(keyPair.getCompressedPublicKey())
             } else {
                 out.put(0x00)
-                out.put(keyPair.privateKey.toBytesPadded(PRIVATE_KEY_SIZE))
+                out.put(keyPair.privateKey.key.toBytesPadded(PRIVATE_KEY_SIZE))
             }
         } catch (e: IOException) {
         }
@@ -159,9 +159,9 @@ data class ExtendedKey(val keyPair: ECKeyPair,
                 if (m >= CURVE.n) {
                     throw KeyException("Master key creation resulted in a key with higher modulus. Suggest deriving the next increment.")
                 }
-                val keyPair = ECKeyPair.create(l)
+                val keyPair = PrivateKey(l).toECKeyPair()
                 return if (publicKeyOnly) {
-                    val pubKeyPair = ECKeyPair(BigInteger.ZERO, keyPair.publicKey)
+                    val pubKeyPair = ECKeyPair(PrivateKey(BigInteger.ZERO), keyPair.publicKey)
                     ExtendedKey(pubKeyPair, r, 0, 0, 0)
                 } else {
                     ExtendedKey(keyPair, r, 0, 0, 0)
@@ -206,7 +206,7 @@ data class ExtendedKey(val keyPair: ECKeyPair,
 
             buff.get(type)
 
-            val hasPrivate  = when {
+            val hasPrivate = when {
                 Arrays.equals(type, xprv) -> true
                 Arrays.equals(type, xpub) -> false
                 else -> throw KeyException("invalid magic number for an extended key")
@@ -223,12 +223,12 @@ data class ExtendedKey(val keyPair: ECKeyPair,
                 buff.get() // ignore the leading 0
                 val privateBytes = ByteArray(PRIVATE_KEY_SIZE)
                 buff.get(privateBytes)
-                ECKeyPair.create(privateBytes)
+                PrivateKey(privateBytes).toECKeyPair()
             } else {
                 val compressedPublicBytes = ByteArray(COMPRESSED_PUBLIC_KEY_SIZE)
                 buff.get(compressedPublicBytes)
                 val uncompressedPublicBytes = decompressKey(compressedPublicBytes)
-                ECKeyPair(BigInteger.ZERO, BigInteger(1, uncompressedPublicBytes))
+                ECKeyPair(PrivateKey(BigInteger.ZERO), PublicKey(BigInteger(1, uncompressedPublicBytes)))
             }
             return ExtendedKey(keyPair, chainCode, depth, parent, sequence)
         }
