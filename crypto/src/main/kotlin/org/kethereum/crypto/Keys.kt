@@ -9,7 +9,9 @@ import org.walleth.khex.clean0xPrefix
 import org.walleth.khex.hexToByteArray
 import org.walleth.khex.toHexString
 import java.math.BigInteger
-import java.security.*
+import java.security.KeyPair
+import java.security.KeyPairGenerator
+import java.security.Security
 import java.security.spec.ECGenParameterSpec
 import java.util.*
 
@@ -35,9 +37,6 @@ fun initializeCrypto() {
  *
  * Private keys are encoded using X.509
  */
-@Throws(NoSuchProviderException::class,
-        NoSuchAlgorithmException::class,
-        InvalidAlgorithmParameterException::class)
 internal fun createSecp256k1KeyPair(): KeyPair {
 
     val keyPairGenerator = KeyPairGenerator.getInstance("ECDSA")
@@ -46,9 +45,6 @@ internal fun createSecp256k1KeyPair(): KeyPair {
     return keyPairGenerator.generateKeyPair()
 }
 
-@Throws(InvalidAlgorithmParameterException::class,
-        NoSuchAlgorithmException::class,
-        NoSuchProviderException::class)
 fun createEthereumKeyPair() = createSecp256k1KeyPair().toECKeyPair()
 
 fun getAddress(publicKey: PublicKey) = getAddress(publicKey.key.toHexStringZeroPadded(PUBLIC_KEY_LENGTH_IN_HEX))
