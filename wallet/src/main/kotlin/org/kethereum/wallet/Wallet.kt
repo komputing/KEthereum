@@ -1,7 +1,11 @@
 package org.kethereum.wallet
 
-import org.kethereum.crypto.*
+import org.kethereum.crypto.model.PRIVATE_KEY_SIZE
 import org.kethereum.crypto.SecureRandomUtils.secureRandom
+import org.kethereum.crypto.model.ECKeyPair
+import org.kethereum.crypto.model.PrivateKey
+import org.kethereum.crypto.toAddress
+import org.kethereum.crypto.toECKeyPair
 import org.kethereum.extensions.toBytesPadded
 import org.kethereum.keccakshortcut.keccak
 import org.kethereum.wallet.model.*
@@ -57,7 +61,7 @@ fun ECKeyPair.createWallet(password: String, config: ScryptConfig): Wallet {
 private fun createWallet(ecKeyPair: ECKeyPair,
                          cipherText: ByteArray,
                          iv: ByteArray, mac: ByteArray, scryptKdfParams: ScryptKdfParams) = Wallet(
-        address = ecKeyPair.getAddress(),
+        address = ecKeyPair.toAddress(),
 
         crypto = WalletCrypto(
                 cipher = CIPHER,

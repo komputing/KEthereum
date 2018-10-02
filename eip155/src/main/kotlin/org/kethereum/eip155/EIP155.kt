@@ -1,9 +1,9 @@
 package org.kethereum.eip155
 
-import org.kethereum.crypto.ECKeyPair
-import org.kethereum.crypto.getAddress
+import org.kethereum.crypto.model.ECKeyPair
 import org.kethereum.crypto.signMessage
 import org.kethereum.crypto.signedMessageToKey
+import org.kethereum.crypto.toAddress
 import org.kethereum.functions.encodeRLP
 import org.kethereum.model.ChainDefinition
 import org.kethereum.model.SignatureData
@@ -41,4 +41,4 @@ fun SignatureData.extractChainID() = if (v < 37) { // not EIP 155 signed
 }
 
 fun Transaction.extractFrom(eip155signatureData: SignatureData, chainId: Int) =
-        getAddress(signedMessageToKey(encodeRLP(SignatureData(ZERO, ZERO, chainId.toByte())), eip155signatureData.copy(v = (eip155signatureData.v - 8 - (chainId * 2)).toByte())))
+        signedMessageToKey(encodeRLP(SignatureData(ZERO, ZERO, chainId.toByte())), eip155signatureData.copy(v = (eip155signatureData.v - 8 - (chainId * 2)).toByte())).toAddress()

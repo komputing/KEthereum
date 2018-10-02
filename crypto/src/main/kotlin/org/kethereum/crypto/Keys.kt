@@ -1,29 +1,14 @@
 package org.kethereum.crypto
 
 import org.kethereum.crypto.SecureRandomUtils.secureRandom
+import org.kethereum.crypto.model.ECKeyPair
+import org.kethereum.crypto.model.PUBLIC_KEY_SIZE
 import org.kethereum.extensions.toBytesPadded
-import org.kethereum.extensions.toHexStringZeroPadded
-import org.kethereum.keccakshortcut.keccak
-import org.spongycastle.math.ec.ECPoint
-import org.walleth.khex.clean0xPrefix
-import org.walleth.khex.hexToByteArray
-import org.walleth.khex.toHexString
-import java.math.BigInteger
 import java.security.KeyPair
 import java.security.KeyPairGenerator
 import java.security.Security
 import java.security.spec.ECGenParameterSpec
 import java.util.*
-
-
-fun ECKeyPair.getAddress() = getAddress(publicKey)
-
-
-const val PRIVATE_KEY_SIZE = 32
-const val PUBLIC_KEY_SIZE = 64
-
-const val ADDRESS_LENGTH_IN_HEX = 40
-const val PUBLIC_KEY_LENGTH_IN_HEX = PUBLIC_KEY_SIZE shl 1
 
 fun initializeCrypto() {
     Security.insertProviderAt(org.spongycastle.jce.provider.BouncyCastleProvider(), 1)
@@ -47,25 +32,6 @@ internal fun createSecp256k1KeyPair(): KeyPair {
 
 fun createEthereumKeyPair() = createSecp256k1KeyPair().toECKeyPair()
 
-fun getAddress(publicKey: PublicKey) = getAddress(publicKey.key.toHexStringZeroPadded(PUBLIC_KEY_LENGTH_IN_HEX))
-
-fun getAddress(publicKey: String): String {
-    var publicKeyNoPrefix = publicKey.clean0xPrefix()
-
-    if (publicKeyNoPrefix.length < PUBLIC_KEY_LENGTH_IN_HEX) {
-        publicKeyNoPrefix = "0".repeat(PUBLIC_KEY_LENGTH_IN_HEX - publicKeyNoPrefix.length) + publicKeyNoPrefix
-    }
-    val hexToByteArray = publicKeyNoPrefix.hexToByteArray()
-    val hash = hexToByteArray.keccak().toHexString()
-
-    return hash.substring(hash.length - ADDRESS_LENGTH_IN_HEX)  // right most 160 bits
-}
-
-fun getAddress(publicKey: ByteArray): ByteArray {
-    val hash = publicKey.keccak()
-    return Arrays.copyOfRange(hash, hash.size - 20, hash.size)  // right most 160 bits
-}
-
 fun ECKeyPair.getCompressedPublicKey(): ByteArray {
     //add the uncompressed prefix
     val ret = publicKey.key.toBytesPadded(PUBLIC_KEY_SIZE + 1)
@@ -82,12 +48,4 @@ fun decompressKey(publicBytes: ByteArray): ByteArray {
     val point = CURVE.curve.decodePoint(publicBytes)
     val encoded = point.getEncoded(false)
     return Arrays.copyOfRange(encoded, 1, encoded.size)
-}
-
-/**
- * Decodes an uncompressed public key (without 0x04 prefix) given an ECPoint
- */
-fun ECPoint.toPublicKey(): PublicKey {
-    val encoded = getEncoded(false)
-    return PublicKey(BigInteger(1, Arrays.copyOfRange(encoded, 1, encoded.size)))
 }

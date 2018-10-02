@@ -2,6 +2,10 @@ package org.kethereum.bip32
 
 import org.kethereum.bip44.BIP44Element
 import org.kethereum.crypto.*
+import org.kethereum.crypto.model.ECKeyPair
+import org.kethereum.crypto.model.PRIVATE_KEY_SIZE
+import org.kethereum.crypto.model.PrivateKey
+import org.kethereum.crypto.model.PublicKey
 import org.kethereum.encodings.decodeBase58WithChecksum
 import org.kethereum.encodings.encodeToBase58WithChecksum
 import org.kethereum.extensions.toBytesPadded

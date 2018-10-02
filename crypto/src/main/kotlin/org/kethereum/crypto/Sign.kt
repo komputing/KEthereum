@@ -1,5 +1,8 @@
 package org.kethereum.crypto
 
+import org.kethereum.crypto.model.ECKeyPair
+import org.kethereum.crypto.model.PrivateKey
+import org.kethereum.crypto.model.PublicKey
 import org.kethereum.keccakshortcut.keccak
 import org.kethereum.model.SignatureData
 import org.spongycastle.asn1.x9.X9IntegerConverter

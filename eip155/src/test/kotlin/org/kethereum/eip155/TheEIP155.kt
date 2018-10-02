@@ -2,7 +2,7 @@ package org.kethereum.eip155
 
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
-import org.kethereum.crypto.PrivateKey
+import org.kethereum.crypto.model.PrivateKey
 import org.kethereum.crypto.toECKeyPair
 import org.kethereum.functions.encodeRLP
 import org.kethereum.functions.rlp.RLPList
