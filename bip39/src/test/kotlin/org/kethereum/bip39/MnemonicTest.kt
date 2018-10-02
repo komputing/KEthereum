@@ -2,6 +2,7 @@ package org.kethereum.bip39
 
 import org.junit.Assert.*
 import org.junit.Test
+import org.kethereum.bip32.model.Seed
 import org.kethereum.bip39.model.MnemonicWords
 import org.kethereum.bip39.wordlists.WORDLIST_ENGLISH
 import org.walleth.khex.hexToByteArray
@@ -51,10 +52,10 @@ class MnemonicTest {
     fun mnemonicToSeed() {
         testData.forEach {
 
-            val expectedSeed = it.seed.hexToByteArray()
+            val expectedSeed = Seed(it.seed.hexToByteArray())
             val actualSeed = MnemonicWords(it.phrase).toSeed("TREZOR")
 
-            assertArrayEquals(expectedSeed, actualSeed)
+            assertArrayEquals(expectedSeed.seed, actualSeed.seed)
         }
 
     }

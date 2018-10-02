@@ -3,6 +3,8 @@ package org.kethereum.bip32
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Assert.assertEquals
 import org.junit.Test
+import org.kethereum.bip32.model.Seed
+import org.kethereum.bip32.model.XPriv
 import org.walleth.khex.hexToByteArray
 
 
@@ -15,21 +17,21 @@ class DerivationTest {
 
     @Test
     fun createdKeyHasKeypair() {
-        val simpleKey = generateKey(ByteArray(0), "m/")
+        val simpleKey = Seed(ByteArray(0)).toKey("m/")
         assertThat(simpleKey.keyPair).isNotNull
     }
 
     @Test
     fun generateKeysFromSeed() {
         testData.forEach {
-            val derivedKey = generateKey(it.seed.hexToByteArray(), it.path)
+            val derivedKey = Seed(it.seed.hexToByteArray()).toKey(it.path)
             val obtainedPub = derivedKey.serialize(true)
             assertEquals(it.expectedPublicKey, obtainedPub)
 
             val obtainedPrv = derivedKey.serialize()
             assertEquals(it.expectedPrivateKey, obtainedPrv)
 
-            val parsedPrv = ExtendedKey.parse(it.expectedPrivateKey)
+            val parsedPrv = XPriv(it.expectedPrivateKey).toExtendedKey()
             assertEquals(derivedKey, parsedPrv)
         }
     }

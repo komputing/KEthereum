@@ -1,6 +1,7 @@
 package org.kethereum.bip39
 
-import org.kethereum.bip32.generateKey
+import org.kethereum.bip32.model.Seed
+import org.kethereum.bip32.toKey
 import org.kethereum.bip39.model.MnemonicWords
 import org.kethereum.extensions.toBitArray
 import org.kethereum.extensions.toByteArray
@@ -24,13 +25,13 @@ fun dirtyPhraseToMnemonicWords(string: String) = MnemonicWords(
  * Generates a seed buffer from a mnemonic phrase according to the BIP39 spec.
  * The mnemonic phrase is given as a list of words and the seed can be salted using a password
  */
-fun MnemonicWords.toSeed(password: String = ""): ByteArray {
+fun MnemonicWords.toSeed(password: String = ""): Seed {
     val pass = words.joinToString(" ")
     val salt = "mnemonic$password"
 
     val gen = PKCS5S2ParametersGenerator(SHA512Digest())
     gen.init(PBEParametersGenerator.PKCS5PasswordToUTF8Bytes(pass.toCharArray()), salt.toByteArray(), 2048)
-    return (gen.generateDerivedParameters(512) as KeyParameter).key
+    return Seed((gen.generateDerivedParameters(512) as KeyParameter).key)
 }
 
 /**
@@ -82,7 +83,7 @@ fun MnemonicWords.mnemonicToEntropy(wordList: List<String>): ByteArray {
 }
 
 fun MnemonicWords.toKey(path: String, saltPhrase: String = "") =
-        generateKey(toSeed(saltPhrase), path)
+        toSeed(saltPhrase).toKey(path)
 
 /**
  * Converts an entropy buffer to a list of words according to the BIP39 spec
