@@ -12,10 +12,13 @@ import org.spongycastle.crypto.params.KeyParameter
 import java.security.SecureRandom
 import java.util.*
 
-fun dirtyPhraseToMnemonicWords(string: String) =  MnemonicWords(string.trim().toLowerCase()
-            .split(" ")
-            .map { it.trim() }
-            .filter { it.isNotEmpty() })
+fun dirtyPhraseToMnemonicWords(string: String) = MnemonicWords(
+        string.trim().toLowerCase().split(" ")
+                .asSequence()
+                .map { it.trim() }
+                .filter { it.isNotEmpty() }
+                .toList()
+)
 
 /**
  * Generates a seed buffer from a mnemonic phrase according to the BIP39 spec.
