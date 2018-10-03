@@ -1,3 +1,5 @@
 package org.kethereum.crypto.model
 
-data class Credentials(val ecKeyPair: ECKeyPair?, val address: String?)
+import org.kethereum.model.Address
+
+data class Credentials(val ecKeyPair: ECKeyPair?, val address: Address)

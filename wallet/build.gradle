@@ -10,6 +10,7 @@ dependencies {
     implementation project(":crypto")
     implementation project(":keccak_shortcut")
     implementation project(":extensions")
+    implementation project(":model")
 
     implementation "com.github.walleth:khex:$khex_version"
 

@@ -3,23 +3,23 @@ package org.kethereum.crypto
 import org.kethereum.crypto.model.*
 import org.kethereum.extensions.toHexStringZeroPadded
 import org.kethereum.keccakshortcut.keccak
+import org.kethereum.model.Address
 import org.spongycastle.jcajce.provider.asymmetric.ec.BCECPrivateKey
 import org.spongycastle.jcajce.provider.asymmetric.ec.BCECPublicKey
 import org.spongycastle.math.ec.ECPoint
 import org.walleth.khex.hexToByteArray
-import org.walleth.khex.prepend0xPrefix
 import org.walleth.khex.toHexString
 import java.math.BigInteger
 import java.security.KeyPair
 import java.util.*
 
 
-fun PublicKey.toAddress() : String {
+fun PublicKey.toAddress() : Address {
     val publicKeyHexString = key.toHexStringZeroPadded(PUBLIC_KEY_LENGTH_IN_HEX, false)
     val hexToByteArray = publicKeyHexString.hexToByteArray()
     val hash = hexToByteArray.keccak().toHexString()
 
-    return hash.substring(hash.length - ADDRESS_LENGTH_IN_HEX)  // right most 160 bits
+    return Address(hash.substring(hash.length - ADDRESS_LENGTH_IN_HEX))  // right most 160 bits
 }
 
 fun ECKeyPair.toAddress() = publicKey.toAddress()
@@ -40,11 +40,7 @@ fun KeyPair.toECKeyPair(): ECKeyPair {
 }
 
 
-fun ECKeyPair.toCredentials(): Credentials {
-    val address = toAddress().prepend0xPrefix()
-    return Credentials(this, address)
-}
-
+fun ECKeyPair.toCredentials() = Credentials(this, toAddress())
 
 fun PrivateKey.toECKeyPair() = ECKeyPair(this, publicKeyFromPrivate(this))
 

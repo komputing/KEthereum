@@ -58,7 +58,7 @@ class TheEIP155 {
         val tx = (hex.hexToByteArray().decodeRLP() as RLPList).toTransaction()!!
         val sig = (hex.hexToByteArray().decodeRLP() as RLPList).toTransactionSignatureData()
 
-        assertThat(tx.extractFrom(sig,4)).isEqualTo("8a681d2b7400d67966eef4f585b31a7458f96dba")
+        assertThat(tx.extractFrom(sig,4)).isEqualTo(Address("8a681d2b7400d67966eef4f585b31a7458f96dba"))
 
 
     }
