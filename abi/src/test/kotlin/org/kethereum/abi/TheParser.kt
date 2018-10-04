@@ -1,8 +1,7 @@
-package org.kethereum
+package org.kethereum.abi
 
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
-import org.kethereum.rpc.EthereumABI
 
 class TheParser {
 

@@ -1,9 +1,9 @@
-package org.kethereum.rpc
+package org.kethereum.abi
 
 import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.Types
-import org.kethereum.rpc.model.EthereumFunction
+import org.kethereum.abi.model.EthereumFunction
 
 
 private fun createMoshi() = Moshi.Builder().build().newBuilder().build()

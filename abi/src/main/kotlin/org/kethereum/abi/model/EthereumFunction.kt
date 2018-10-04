@@ -1,4 +1,4 @@
-package org.kethereum.rpc.model
+package org.kethereum.abi.model
 
 data class EthereumFunctionParameter(
         val name: String,
