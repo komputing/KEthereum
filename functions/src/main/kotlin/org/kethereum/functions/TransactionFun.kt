@@ -15,7 +15,7 @@ fun Transaction.getTokenTransferTo() = Address(input.subList(input.size - 32 - 2
 val tokenTransferSignature = listOf(0xa9.toByte(), 0x05.toByte(), 0x9c.toByte(), 0xbb.toByte())
 
 fun createTokenTransferTransactionInput(address: Address, currentAmount: BigInteger?): List<Byte>
-        = (tokenTransferSignature.toHexString() + "000000000000000000000000" + address.hex.replace("0x", "")
+        = (tokenTransferSignature.toHexString() + "0".repeat(24) + address.cleanHex
         + String.format("%064x", currentAmount)).hexToByteArray().toList()
 
 fun Transaction.calculateHash() = encodeRLP().keccak()
