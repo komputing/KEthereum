@@ -19,6 +19,7 @@ data class BIP44Element(val hardened: Boolean, val number: Int) {
 
 data class BIP44(val path: List<BIP44Element>) {
     constructor(path: String) : this(getEnsuredCleanPath(path).split("/")
+            .asSequence()
             .filter { it.isNotEmpty() }
             .map {
                 BIP44Element(
@@ -26,7 +27,8 @@ data class BIP44(val path: List<BIP44Element>) {
                         number = it.replace("'", "").toIntOrNull()
                                 ?: throw IllegalArgumentException("not a number $it")
                 )
-            })
+            }
+            .toList())
 
     override fun equals(other: Any?) = (other as? BIP44)?.path == path
     override fun hashCode() = path.hashCode()
