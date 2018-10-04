@@ -28,10 +28,9 @@ import java.util.*
 import javax.crypto.Mac
 import javax.crypto.spec.SecretKeySpec
 
-fun Seed.toKey(pathString: String) = BIP44(pathString)
-        .path
-        .fold(toExtendedKey()) { current, biP44Element ->
-            current.generateChildKey(biP44Element)
+fun Seed.toKey(pathString: String) = BIP44(pathString).path
+        .fold(toExtendedKey()) { current, bip44Element ->
+            current.generateChildKey(bip44Element)
         }
 
 
