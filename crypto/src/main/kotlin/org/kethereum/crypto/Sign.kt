@@ -56,26 +56,26 @@ fun ECKeyPair.signMessage(message: ByteArray) =
 fun signMessageHash(messageHash: ByteArray, keyPair: ECKeyPair, toCanonical: Boolean = true): SignatureData {
     val privateKey = keyPair.privateKey
     val publicKey = keyPair.publicKey
-    val sig = sign(messageHash, privateKey, toCanonical)
+    val signature = sign(messageHash, privateKey, toCanonical)
+
     // Now we have to work backwards to figure out the recId needed to recover the public key
-    var recId = -1
-    for (i in 0..3) {
-        val k = recoverFromSignature(i, sig, messageHash)
-        if (k != null && k == publicKey.key) {
-            recId = i
-            break
-        }
-    }
-    if (recId == -1) {
-        throw RuntimeException(
-                "Could not construct a recoverable key. This should never happen.")
-    }
+    val recId = signature.determineRecId(messageHash, publicKey)
 
     val headerByte = recId + 27
 
     val v = headerByte.toByte()
 
-    return SignatureData(sig.r, sig.s, v)
+    return SignatureData(signature.r, signature.s, v)
+}
+
+fun ECDSASignature.determineRecId(messageHash: ByteArray, publicKey: PublicKey): Int {
+    for (i in 0..3) {
+        val k = recoverFromSignature(i, this, messageHash)
+        if (k != null && k == publicKey.key) {
+            return i
+        }
+    }
+    throw RuntimeException("Could not construct a recoverable key. This should never happen.")
 }
 
 private fun sign(transactionHash: ByteArray, privateKey: PrivateKey, canonical: Boolean): ECDSASignature {
@@ -242,14 +242,14 @@ private fun publicPointFromPrivate(privateKey: PrivateKey): ECPoint {
     return FixedPointCombMultiplier().multiply(CURVE.g, postProcessedPrivateKey)
 }
 
-private data class ECDSASignature internal constructor(val r: BigInteger, val s: BigInteger) {
+data class ECDSASignature internal constructor(val r: BigInteger, val s: BigInteger) {
 
     /**
      * Returns true if the S component is "low", that means it is below
      * [HALF_CURVE_ORDER]. See
      * [BIP62](https://github.com/bitcoin/bips/blob/master/bip-0062.mediawiki#Low_S_values_in_signatures).
      */
-    fun isCanonical() = s <= HALF_CURVE_ORDER
+    private fun isCanonical() = s <= HALF_CURVE_ORDER
 
     /**
      * Will automatically adjust the S component to be less than or equal to half the curve
