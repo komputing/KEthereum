@@ -4,6 +4,7 @@ import org.kethereum.functions.rlp.RLPList
 import org.kethereum.functions.rlp.encode
 import org.kethereum.functions.rlp.toRLP
 import org.kethereum.model.SignatureData
+import org.kethereum.model.SignedTransaction
 import org.kethereum.model.Transaction
 import org.walleth.khex.hexToByteArray
 
@@ -28,3 +29,4 @@ fun Transaction.toRLPList(signature: SignatureData?) = RLPList(listOf(
 })
 
 fun Transaction.encodeRLP(signature: SignatureData? = null) = toRLPList(signature).encode()
+fun SignedTransaction.encodeRLP() = transaction.toRLPList(signatureData).encode()
