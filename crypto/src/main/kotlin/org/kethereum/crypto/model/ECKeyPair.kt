@@ -18,8 +18,8 @@ class PrivateKey(val key: BigInteger) {
 
 class PublicKey(val key: BigInteger) {
 
-    constructor(privateKey: ByteArray) : this(privateKey.toBigInteger())
-    constructor(privateKey: String) : this(privateKey.hexToBigInteger())
+    constructor(publicKey: ByteArray) : this(publicKey.toBigInteger())
+    constructor(publicKey: String) : this(publicKey.hexToBigInteger())
 
     override fun equals(other: Any?) = when (other) {
         is PublicKey -> other.key == key
