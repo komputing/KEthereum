@@ -242,7 +242,7 @@ private fun publicPointFromPrivate(privateKey: PrivateKey): ECPoint {
     return FixedPointCombMultiplier().multiply(CURVE.g, postProcessedPrivateKey)
 }
 
-data class ECDSASignature internal constructor(val r: BigInteger, val s: BigInteger) {
+data class ECDSASignature(val r: BigInteger, val s: BigInteger) {
 
     /**
      * Returns true if the S component is "low", that means it is below
