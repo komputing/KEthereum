@@ -1,0 +1,3 @@
+dependencies {
+    implementation "com.madgag.spongycastle:prov:$spongycastleVersion"
+}

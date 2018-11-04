@@ -1,5 +1,6 @@
 package org.kethereum.crypto
 
+import org.kethereum.crypto.ec.CurvePoint
 import org.kethereum.crypto.model.*
 import org.kethereum.extensions.toHexStringZeroPadded
 import org.kethereum.keccakshortcut.keccak
@@ -48,6 +49,6 @@ fun PrivateKey.toECKeyPair() = ECKeyPair(this, publicKeyFromPrivate(this))
 /**
  * Decodes an uncompressed public key (without 0x04 prefix) given an ECPoint
  */
-fun ECPoint.toPublicKey() = getEncoded(false).let { encoded ->
+fun CurvePoint.toPublicKey() = encoded().let { encoded ->
     PublicKey(BigInteger(1, Arrays.copyOfRange(encoded, 1, encoded.size)))
 }

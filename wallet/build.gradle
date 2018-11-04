@@ -16,7 +16,4 @@ dependencies {
 
     implementation "com.squareup.moshi:moshi:$moshi_version"
     implementation "com.squareup.moshi:moshi-adapters:$moshi_version"
-
-    implementation "com.madgag.spongycastle:core:$spongycastleVersion"
-    implementation "com.madgag.spongycastle:prov:$spongycastleVersion"
 }

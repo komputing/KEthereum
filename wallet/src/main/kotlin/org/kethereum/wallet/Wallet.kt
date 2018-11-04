@@ -1,6 +1,9 @@
 package org.kethereum.wallet
 
 import org.kethereum.crypto.SecureRandomUtils.secureRandom
+import org.kethereum.crypto.kdf.PBKDF2
+import org.kethereum.crypto.kdf.SpongyPBKDF2
+import org.kethereum.crypto.kdf.SpongySCrypt
 import org.kethereum.crypto.model.ECKeyPair
 import org.kethereum.crypto.model.PRIVATE_KEY_SIZE
 import org.kethereum.crypto.model.PrivateKey
@@ -9,10 +12,6 @@ import org.kethereum.crypto.toECKeyPair
 import org.kethereum.extensions.toBytesPadded
 import org.kethereum.keccakshortcut.keccak
 import org.kethereum.wallet.model.*
-import org.spongycastle.crypto.digests.SHA256Digest
-import org.spongycastle.crypto.generators.PKCS5S2ParametersGenerator
-import org.spongycastle.crypto.generators.SCrypt
-import org.spongycastle.crypto.params.KeyParameter
 import org.walleth.khex.hexToByteArray
 import org.walleth.khex.toNoPrefixHexString
 import java.nio.charset.Charset
@@ -76,7 +75,8 @@ private fun createWallet(ecKeyPair: ECKeyPair,
         version = CURRENT_VERSION
 )
 
-private fun generateDerivedScryptKey(password: ByteArray, kdfParams: ScryptKdfParams) = SCrypt.generate(password, kdfParams.salt?.hexToByteArray(), kdfParams.n, kdfParams.r, kdfParams.p, kdfParams.dklen)
+private fun generateDerivedScryptKey(password: ByteArray, kdfParams: ScryptKdfParams) =
+    SpongySCrypt().derive(password, kdfParams.salt?.hexToByteArray(), kdfParams.n, kdfParams.r, kdfParams.p, kdfParams.dklen)
 
 @Throws(CipherException::class)
 private fun generateAes128CtrDerivedKey(password: ByteArray, kdfParams: Aes128CtrKdfParams): ByteArray {
@@ -88,9 +88,7 @@ private fun generateAes128CtrDerivedKey(password: ByteArray, kdfParams: Aes128Ct
     // Java 8 supports this, but you have to convert the password to a character array, see
     // http://stackoverflow.com/a/27928435/3211687
 
-    val gen = PKCS5S2ParametersGenerator(SHA256Digest())
-    gen.init(password, kdfParams.salt?.hexToByteArray(), kdfParams.c)
-    return (gen.generateDerivedParameters(256) as KeyParameter).key
+    return SpongyPBKDF2().derive(password, kdfParams.salt?.hexToByteArray(), kdfParams.c, PBKDF2.DigestParams.Sha256)
 }
 
 @Throws(CipherException::class)

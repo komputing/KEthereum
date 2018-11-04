@@ -5,8 +5,5 @@ dependencies {
     implementation project(path: ':hashes')
     implementation project(path: ':extensions')
 
-    implementation "com.madgag.spongycastle:core:$spongycastleVersion"
-    implementation "com.madgag.spongycastle:prov:$spongycastleVersion"
-
     testImplementation "com.github.walleth:khex:$khex_version"
 }

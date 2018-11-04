@@ -1,5 +1,7 @@
 package org.kethereum.crypto
 
+import org.kethereum.crypto.ec.Curve
+import org.kethereum.crypto.ec.SpongyEllipticCurve
 import org.kethereum.crypto.model.ECKeyPair
 import org.kethereum.crypto.model.PrivateKey
 import org.kethereum.crypto.model.PublicKey
@@ -7,11 +9,12 @@ import org.kethereum.keccakshortcut.keccak
 import org.kethereum.model.SignatureData
 import org.spongycastle.asn1.x9.X9IntegerConverter
 import org.spongycastle.crypto.digests.SHA256Digest
-import org.spongycastle.crypto.ec.CustomNamedCurves
 import org.spongycastle.crypto.params.ECDomainParameters
 import org.spongycastle.crypto.params.ECPrivateKeyParameters
 import org.spongycastle.crypto.signers.ECDSASigner
 import org.spongycastle.crypto.signers.HMacDSAKCalculator
+import org.spongycastle.jcajce.provider.digest.RIPEMD128
+import org.spongycastle.jcajce.provider.digest.RIPEMD160
 import org.spongycastle.math.ec.ECAlgorithms
 import org.spongycastle.math.ec.ECPoint
 import org.spongycastle.math.ec.FixedPointCombMultiplier
@@ -29,10 +32,10 @@ import kotlin.experimental.and
  * Adapted from the
  * [BitcoinJ ECKey](https://github.com/bitcoinj/bitcoinj/blob/master/core/src/main/java/org/bitcoinj/core/ECKey.java) implementation.
  */
-private val CURVE_PARAMS = CustomNamedCurves.getByName("secp256k1")
-val CURVE = ECDomainParameters(
-        CURVE_PARAMS.curve, CURVE_PARAMS.g, CURVE_PARAMS.n, CURVE_PARAMS.h)
-private val HALF_CURVE_ORDER = CURVE_PARAMS.n.shiftRight(1)
+private val SPONGY_CURVE = SpongyEllipticCurve()
+private val CURVE_DOMAIN_PARAMS = SPONGY_CURVE.curveParams.run { ECDomainParameters(curve, g, n, h) }
+val CURVE: Curve = SPONGY_CURVE
+private val HALF_CURVE_ORDER = CURVE.n.shiftRight(1)
 
 /**
  * Signs the [keccak] hash of the [message] buffer.
@@ -81,7 +84,7 @@ fun ECDSASignature.determineRecId(messageHash: ByteArray, publicKey: PublicKey):
 private fun sign(transactionHash: ByteArray, privateKey: PrivateKey, canonical: Boolean): ECDSASignature {
     val signer = ECDSASigner(HMacDSAKCalculator(SHA256Digest()))
 
-    val ecPrivateKeyParameters = ECPrivateKeyParameters(privateKey.key, CURVE)
+    val ecPrivateKeyParameters = ECPrivateKeyParameters(privateKey.key, CURVE_DOMAIN_PARAMS)
     signer.init(true, ecPrivateKeyParameters)
     val components = signer.generateSignature(transactionHash)
 
@@ -120,6 +123,9 @@ private fun sign(transactionHash: ByteArray, privateKey: PrivateKey, canonical: 
  * @return An ECKey containing only the public part, or null if recovery wasn't possible.
  */
 private fun recoverFromSignature(recId: Int, sig: ECDSASignature, message: ByteArray?): BigInteger? {
+    RIPEMD160.Digest().apply {
+        digest()
+    }
     require(recId >= 0) { "recId must be positive" }
     require(sig.r.signum() >= 0) { "r must be positive" }
     require(sig.s.signum() >= 0) { "s must be positive" }
@@ -170,7 +176,7 @@ private fun recoverFromSignature(recId: Int, sig: ECDSASignature, message: ByteA
     val rInv = sig.r.modInverse(n)
     val srInv = rInv.multiply(sig.s).mod(n)
     val eInvrInv = rInv.multiply(eInv).mod(n)
-    val q = ECAlgorithms.sumOfTwoMultiplies(CURVE.g, eInvrInv, r, srInv)
+    val q = ECAlgorithms.sumOfTwoMultiplies(CURVE_DOMAIN_PARAMS.g, eInvrInv, r, srInv)
 
     val qBytes = q.getEncoded(false)
     // We remove the prefix
@@ -180,9 +186,9 @@ private fun recoverFromSignature(recId: Int, sig: ECDSASignature, message: ByteA
 /** Decompress a compressed public key (x co-ord and low-bit of y-coord).  */
 private fun decompressKey(xBN: BigInteger, yBit: Boolean): ECPoint {
     val x9 = X9IntegerConverter()
-    val compEnc = x9.integerToBytes(xBN, 1 + x9.getByteLength(CURVE.curve))
+    val compEnc = x9.integerToBytes(xBN, 1 + x9.getByteLength(CURVE_DOMAIN_PARAMS.curve))
     compEnc[0] = (if (yBit) 0x03 else 0x02).toByte()
-    return CURVE.curve.decodePoint(compEnc)
+    return CURVE_DOMAIN_PARAMS.curve.decodePoint(compEnc)
 }
 
 /**
@@ -239,7 +245,7 @@ private fun publicPointFromPrivate(privateKey: PrivateKey): ECPoint {
     } else {
         privateKey.key
     }
-    return FixedPointCombMultiplier().multiply(CURVE.g, postProcessedPrivateKey)
+    return FixedPointCombMultiplier().multiply(CURVE_DOMAIN_PARAMS.g, postProcessedPrivateKey)
 }
 
 data class ECDSASignature(val r: BigInteger, val s: BigInteger) {

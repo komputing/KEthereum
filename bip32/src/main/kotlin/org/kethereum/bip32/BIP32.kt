@@ -96,11 +96,11 @@ fun ExtendedKey.generateChildKey(element: BIP44Element): ExtendedKey {
             }
             ExtendedKey(PrivateKey(k).toECKeyPair(), r, (depth + 1).toByte(), keyPair.computeFingerPrint(), element.numberWithHardeningFlag)
         } else {
-            val q = CURVE.g.multiply(m).add(CURVE.curve.decodePoint(pub)).normalize()
-            if (q.isInfinity) {
+            val q = CURVE.g.mul(m).add(CURVE.decodePoint(pub)).normalize()
+            if (q.isInfinity()) {
                 throw KeyException("Child key derivation resulted in zeros. Suggest deriving the next increment.")
             }
-            val point = CURVE.curve.createPoint(q.xCoord.toBigInteger(), q.yCoord.toBigInteger())
+            val point = CURVE.createPoint(q.x, q.y)
 
             ExtendedKey(ECKeyPair(PrivateKey(BigInteger.ZERO), point.toPublicKey()), r, (depth + 1).toByte(), keyPair.computeFingerPrint(), element.numberWithHardeningFlag)
         }

@@ -36,8 +36,8 @@ fun ECKeyPair.getCompressedPublicKey(): ByteArray {
     //add the uncompressed prefix
     val ret = publicKey.key.toBytesPadded(PUBLIC_KEY_SIZE + 1)
     ret[0] = 4
-    val point = CURVE.curve.decodePoint(ret)
-    return point.getEncoded(true)
+    val point = CURVE.decodePoint(ret)
+    return point.encoded(true)
 }
 
 /**
@@ -45,7 +45,7 @@ fun ECKeyPair.getCompressedPublicKey(): ByteArray {
  * and returns the key in uncompressed encoding (without prefix)
  */
 fun decompressKey(publicBytes: ByteArray): ByteArray {
-    val point = CURVE.curve.decodePoint(publicBytes)
-    val encoded = point.getEncoded(false)
+    val point = CURVE.decodePoint(publicBytes)
+    val encoded = point.encoded()
     return Arrays.copyOfRange(encoded, 1, encoded.size)
 }

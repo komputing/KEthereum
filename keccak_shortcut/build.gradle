@@ -1,4 +1,4 @@
 dependencies {
-    implementation "com.madgag.spongycastle:prov:$spongycastleVersion"
     implementation "com.github.walleth:khex:$khex_version"
+    compile project(path: ':keccak_spongycastle')
 }
