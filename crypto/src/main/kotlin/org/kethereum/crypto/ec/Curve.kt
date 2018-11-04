@@ -11,7 +11,7 @@ interface Curve {
     fun createPoint(x: BigInteger, y: BigInteger): CurvePoint
 }
 
-class SpongyEllipticCurve: Curve {
+object SpongyEllipticCurve: Curve {
     val curveParams = CustomNamedCurves.getByName("secp256k1")!!
 
     override val n: BigInteger

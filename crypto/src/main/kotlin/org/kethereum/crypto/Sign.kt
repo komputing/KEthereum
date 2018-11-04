@@ -32,8 +32,8 @@ import kotlin.experimental.and
  * Adapted from the
  * [BitcoinJ ECKey](https://github.com/bitcoinj/bitcoinj/blob/master/core/src/main/java/org/bitcoinj/core/ECKey.java) implementation.
  */
-private val SPONGY_CURVE = SpongyEllipticCurve()
-private val CURVE_DOMAIN_PARAMS = SPONGY_CURVE.curveParams.run { ECDomainParameters(curve, g, n, h) }
+private val SPONGY_CURVE = SpongyEllipticCurve
+internal val CURVE_DOMAIN_PARAMS = SPONGY_CURVE.curveParams.run { ECDomainParameters(curve, g, n, h) }
 val CURVE: Curve = SPONGY_CURVE
 private val HALF_CURVE_ORDER = CURVE.n.shiftRight(1)
 

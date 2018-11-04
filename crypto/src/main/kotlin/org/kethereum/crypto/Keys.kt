@@ -3,16 +3,16 @@ package org.kethereum.crypto
 import org.kethereum.crypto.SecureRandomUtils.secureRandom
 import org.kethereum.crypto.model.ECKeyPair
 import org.kethereum.crypto.model.PUBLIC_KEY_SIZE
+import org.kethereum.crypto.model.PrivateKey
+import org.kethereum.crypto.model.PublicKey
 import org.kethereum.extensions.toBytesPadded
-import java.security.KeyPair
-import java.security.KeyPairGenerator
-import java.security.Security
-import java.security.spec.ECGenParameterSpec
+import org.spongycastle.crypto.generators.ECKeyPairGenerator
+import org.spongycastle.crypto.params.ECKeyGenerationParameters
+import org.spongycastle.crypto.params.ECPrivateKeyParameters
+import org.spongycastle.crypto.params.ECPublicKeyParameters
+import java.math.BigInteger
 import java.util.*
 
-fun initializeCrypto() {
-    Security.insertProviderAt(org.spongycastle.jce.provider.BouncyCastleProvider(), 1)
-}
 /**
  * Create a keypair using SECP-256k1 curve.
  *
@@ -22,15 +22,16 @@ fun initializeCrypto() {
  *
  * Private keys are encoded using X.509
  */
-internal fun createSecp256k1KeyPair(): KeyPair {
-
-    val keyPairGenerator = KeyPairGenerator.getInstance("ECDSA")
-    val ecGenParameterSpec = ECGenParameterSpec("secp256k1")
-    keyPairGenerator.initialize(ecGenParameterSpec, secureRandom())
-    return keyPairGenerator.generateKeyPair()
-}
-
-fun createEthereumKeyPair() = createSecp256k1KeyPair().toECKeyPair()
+fun createEthereumKeyPair() =
+    ECKeyPairGenerator().run {
+        init(ECKeyGenerationParameters(CURVE_DOMAIN_PARAMS, secureRandom()))
+        generateKeyPair().run {
+            val privateKeyValue = (private as ECPrivateKeyParameters).d
+            val publicKeyBytes = (public as ECPublicKeyParameters).q.getEncoded(false)
+            val publicKeyValue = BigInteger(1, Arrays.copyOfRange(publicKeyBytes, 1, publicKeyBytes.size))
+            ECKeyPair(PrivateKey(privateKeyValue), PublicKey(publicKeyValue))
+        }
+    }
 
 fun ECKeyPair.getCompressedPublicKey(): ByteArray {
     //add the uncompressed prefix

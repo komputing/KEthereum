@@ -12,24 +12,6 @@ import org.kethereum.model.Address
 
 class KeysTest {
 
-    @Before
-    fun init() {
-        initializeCrypto()
-    }
-
-    @Test
-    fun testCreateSecp256k1KeyPair() {
-        val keyPair = createSecp256k1KeyPair()
-        val privateKey = keyPair.private
-        val publicKey = keyPair.public
-
-        assertNotNull(privateKey)
-        assertNotNull(publicKey)
-
-        assertThat(privateKey.encoded.size).isEqualTo(144)
-        assertThat(publicKey.encoded.size).isEqualTo(88)
-    }
-
     @Test
     fun testCreateEcKeyPair() {
         val (privateKey, publicKey) = createEthereumKeyPair()
