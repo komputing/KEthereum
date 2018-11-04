@@ -1,22 +1,9 @@
-package org.kethereum.crypto.ec
+package org.kethereum.cryptoapi.ec
 
 import org.spongycastle.math.ec.ECPoint
-import java.lang.UnsupportedOperationException
 import java.math.BigInteger
 
-interface CurvePoint {
-    val x: BigInteger
-    val y: BigInteger
-
-    fun mul(n: BigInteger): CurvePoint
-    fun add(p: CurvePoint): CurvePoint
-    fun normalize(): CurvePoint
-    fun isInfinity(): Boolean
-    fun encoded(compressed: Boolean = false): ByteArray
-}
-
-
-class SpongyCurvePoint(private val ecPoint: ECPoint) : CurvePoint {
+class EllipticCurvePoint(private val ecPoint: ECPoint) : CurvePoint {
     override val x: BigInteger
         get() = ecPoint.xCoord.toBigInteger()
     override val y: BigInteger
@@ -26,7 +13,7 @@ class SpongyCurvePoint(private val ecPoint: ECPoint) : CurvePoint {
         ecPoint.multiply(n).toCurvePoint()
 
     override fun add(p: CurvePoint): CurvePoint =
-        (p as? SpongyCurvePoint)?.let {
+        (p as? EllipticCurvePoint)?.let {
             ecPoint.add(p.ecPoint).toCurvePoint()
         } ?: throw UnsupportedOperationException("Only SpongyCurvePoint multiplication available")
 
@@ -41,4 +28,4 @@ class SpongyCurvePoint(private val ecPoint: ECPoint) : CurvePoint {
 
 }
 
-internal fun ECPoint.toCurvePoint(): CurvePoint = SpongyCurvePoint(this)
+internal fun ECPoint.toCurvePoint(): CurvePoint = EllipticCurvePoint(this)

@@ -1,14 +1,14 @@
 package org.kethereum.wallet
 
 import org.kethereum.crypto.SecureRandomUtils.secureRandom
-import org.kethereum.crypto.kdf.PBKDF2
-import org.kethereum.crypto.kdf.SpongyPBKDF2
-import org.kethereum.crypto.kdf.SpongySCrypt
+import org.kethereum.cryptoapi.kdf.PBKDF2
 import org.kethereum.crypto.model.ECKeyPair
 import org.kethereum.crypto.model.PRIVATE_KEY_SIZE
 import org.kethereum.crypto.model.PrivateKey
 import org.kethereum.crypto.toAddress
 import org.kethereum.crypto.toECKeyPair
+import org.kethereum.cryptoapi.kdf.pkbkdf2
+import org.kethereum.cryptoapi.kdf.scrypt
 import org.kethereum.extensions.toBytesPadded
 import org.kethereum.keccakshortcut.keccak
 import org.kethereum.wallet.model.*
@@ -76,7 +76,7 @@ private fun createWallet(ecKeyPair: ECKeyPair,
 )
 
 private fun generateDerivedScryptKey(password: ByteArray, kdfParams: ScryptKdfParams) =
-    SpongySCrypt().derive(password, kdfParams.salt?.hexToByteArray(), kdfParams.n, kdfParams.r, kdfParams.p, kdfParams.dklen)
+    scrypt().derive(password, kdfParams.salt?.hexToByteArray(), kdfParams.n, kdfParams.r, kdfParams.p, kdfParams.dklen)
 
 @Throws(CipherException::class)
 private fun generateAes128CtrDerivedKey(password: ByteArray, kdfParams: Aes128CtrKdfParams): ByteArray {
@@ -88,7 +88,7 @@ private fun generateAes128CtrDerivedKey(password: ByteArray, kdfParams: Aes128Ct
     // Java 8 supports this, but you have to convert the password to a character array, see
     // http://stackoverflow.com/a/27928435/3211687
 
-    return SpongyPBKDF2().derive(password, kdfParams.salt?.hexToByteArray(), kdfParams.c, PBKDF2.DigestParams.Sha256)
+    return pkbkdf2().derive(password, kdfParams.salt?.hexToByteArray(), kdfParams.c, PBKDF2.DigestParams.Sha256)
 }
 
 @Throws(CipherException::class)

@@ -1,4 +1,4 @@
-package org.kethereum.crypto.kdf
+package org.kethereum.cryptoapi.kdf
 
 import org.spongycastle.crypto.Digest
 import org.spongycastle.crypto.PBEParametersGenerator.PKCS5PasswordToUTF8Bytes
@@ -7,18 +7,7 @@ import org.spongycastle.crypto.digests.SHA512Digest
 import org.spongycastle.crypto.generators.PKCS5S2ParametersGenerator
 import org.spongycastle.crypto.params.KeyParameter
 
-interface PBKDF2 {
-    fun derive(pass: ByteArray, salt: ByteArray?, iterations: Int = 2048, digestParams: DigestParams = DigestParams.Sha512): ByteArray
-
-    fun derive(pass: CharArray, salt: ByteArray?, iterations: Int = 2048, digestParams: DigestParams = DigestParams.Sha512): ByteArray
-
-    sealed class DigestParams(val keySize: Int) {
-        object Sha256 : DigestParams(256)
-        object Sha512 : DigestParams(512)
-    }
-}
-
-class SpongyPBKDF2 : PBKDF2 {
+object PBKDF2Impl : PBKDF2 {
 
     override fun derive(pass: ByteArray, salt: ByteArray?, iterations: Int, digestParams: PBKDF2.DigestParams): ByteArray {
         val gen = PKCS5S2ParametersGenerator(digestParams.toDigest())

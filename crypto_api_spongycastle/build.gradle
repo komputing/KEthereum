@@ -1,3 +1,4 @@
 dependencies {
     implementation "com.madgag.spongycastle:prov:$spongycastleVersion"
+    implementation project(":crypto_api")
 }

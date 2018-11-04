@@ -1,16 +1,11 @@
 package org.kethereum.crypto
 
-import org.kethereum.crypto.SecureRandomUtils.secureRandom
 import org.kethereum.crypto.model.ECKeyPair
 import org.kethereum.crypto.model.PUBLIC_KEY_SIZE
 import org.kethereum.crypto.model.PrivateKey
 import org.kethereum.crypto.model.PublicKey
+import org.kethereum.cryptoapi.ec.keyPairGenerator
 import org.kethereum.extensions.toBytesPadded
-import org.spongycastle.crypto.generators.ECKeyPairGenerator
-import org.spongycastle.crypto.params.ECKeyGenerationParameters
-import org.spongycastle.crypto.params.ECPrivateKeyParameters
-import org.spongycastle.crypto.params.ECPublicKeyParameters
-import java.math.BigInteger
 import java.util.*
 
 /**
@@ -22,16 +17,9 @@ import java.util.*
  *
  * Private keys are encoded using X.509
  */
-fun createEthereumKeyPair() =
-    ECKeyPairGenerator().run {
-        init(ECKeyGenerationParameters(CURVE_DOMAIN_PARAMS, secureRandom()))
-        generateKeyPair().run {
-            val privateKeyValue = (private as ECPrivateKeyParameters).d
-            val publicKeyBytes = (public as ECPublicKeyParameters).q.getEncoded(false)
-            val publicKeyValue = BigInteger(1, Arrays.copyOfRange(publicKeyBytes, 1, publicKeyBytes.size))
-            ECKeyPair(PrivateKey(privateKeyValue), PublicKey(publicKeyValue))
-        }
-    }
+fun createEthereumKeyPair(): ECKeyPair =
+    keyPairGenerator().generate()
+        .let { (privateKeyValue, publicKeyValue) -> ECKeyPair(PrivateKey(privateKeyValue), PublicKey(publicKeyValue)) }
 
 fun ECKeyPair.getCompressedPublicKey(): ByteArray {
     //add the uncompressed prefix
