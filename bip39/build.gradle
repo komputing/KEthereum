@@ -3,6 +3,8 @@ dependencies {
     implementation project(path: ':extensions')
     implementation project(path: ':hashes')
     implementation project(path: ':crypto')
+    implementation project(path: ':crypto_api')
+    implementation project(path: ':crypto_api_wrapper')
 
     implementation "com.github.walleth:khex:$khex_version"
 

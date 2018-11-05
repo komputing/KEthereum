@@ -7,7 +7,7 @@ import org.kethereum.crypto.model.PRIVATE_KEY_SIZE
 import org.kethereum.crypto.model.PrivateKey
 import org.kethereum.crypto.toAddress
 import org.kethereum.crypto.toECKeyPair
-import org.kethereum.cryptoapi.kdf.pkbkdf2
+import org.kethereum.cryptoapi.kdf.pbkdf2
 import org.kethereum.cryptoapi.kdf.scrypt
 import org.kethereum.extensions.toBytesPadded
 import org.kethereum.keccakshortcut.keccak
@@ -88,7 +88,7 @@ private fun generateAes128CtrDerivedKey(password: ByteArray, kdfParams: Aes128Ct
     // Java 8 supports this, but you have to convert the password to a character array, see
     // http://stackoverflow.com/a/27928435/3211687
 
-    return pkbkdf2().derive(password, kdfParams.salt?.hexToByteArray(), kdfParams.c, PBKDF2.DigestParams.Sha256)
+    return pbkdf2().derive(password, kdfParams.salt?.hexToByteArray(), kdfParams.c, PBKDF2.DigestParams.Sha256)
 }
 
 @Throws(CipherException::class)
