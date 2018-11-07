@@ -1,6 +1,6 @@
 package org.kethereum.crypto
 
-import org.kethereum.cryptoapi.ec.CurvePoint
+import org.kethereum.crypto.api.ec.CurvePoint
 import org.kethereum.crypto.model.*
 import org.kethereum.extensions.toHexStringZeroPadded
 import org.kethereum.keccakshortcut.keccak

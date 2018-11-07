@@ -1,14 +1,14 @@
 package org.kethereum.wallet
 
 import org.kethereum.crypto.SecureRandomUtils.secureRandom
-import org.kethereum.cryptoapi.kdf.PBKDF2
+import org.kethereum.crypto.api.kdf.PBKDF2
 import org.kethereum.crypto.model.ECKeyPair
 import org.kethereum.crypto.model.PRIVATE_KEY_SIZE
 import org.kethereum.crypto.model.PrivateKey
 import org.kethereum.crypto.toAddress
 import org.kethereum.crypto.toECKeyPair
-import org.kethereum.cryptoapi.kdf.pbkdf2
-import org.kethereum.cryptoapi.kdf.scrypt
+import org.kethereum.crypto.api.kdf.pbkdf2
+import org.kethereum.crypto.api.kdf.scrypt
 import org.kethereum.extensions.toBytesPadded
 import org.kethereum.keccakshortcut.keccak
 import org.kethereum.wallet.model.*

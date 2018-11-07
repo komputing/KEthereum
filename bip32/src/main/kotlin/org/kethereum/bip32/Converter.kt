@@ -86,7 +86,10 @@ fun XPriv.toExtendedKey(): ExtendedKey {
         val compressedPublicBytes = ByteArray(COMPRESSED_PUBLIC_KEY_SIZE)
         buff.get(compressedPublicBytes)
         val uncompressedPublicBytes = decompressKey(compressedPublicBytes)
-        ECKeyPair(PrivateKey(BigInteger.ZERO), PublicKey(BigInteger(1, uncompressedPublicBytes)))
+        ECKeyPair(
+            PrivateKey(BigInteger.ZERO),
+            PublicKey(BigInteger(1, uncompressedPublicBytes))
+        )
     }
     return ExtendedKey(keyPair, chainCode, depth, parent, sequence)
 }

@@ -1,9 +1,9 @@
 package org.kethereum.crypto
 
+import org.kethereum.crypto.api.ec.*
 import org.kethereum.crypto.model.ECKeyPair
 import org.kethereum.crypto.model.PrivateKey
 import org.kethereum.crypto.model.PublicKey
-import org.kethereum.cryptoapi.ec.*
 import org.kethereum.keccakshortcut.keccak
 import org.kethereum.model.SignatureData
 import java.security.SignatureException
@@ -98,7 +98,9 @@ fun signedMessageToKey(message: ByteArray, signatureData: SignatureData): Public
 
     val messageHash = message.keccak()
     val recId = header - 27
-    return PublicKey(signer().recover(recId, sig, messageHash) ?: throw SignatureException("Could not recover public key from signature"))
+    return PublicKey(
+        signer().recover(recId, sig, messageHash) ?: throw SignatureException("Could not recover public key from signature")
+    )
 }
 
 /**

@@ -4,7 +4,7 @@ import org.kethereum.crypto.model.ECKeyPair
 import org.kethereum.crypto.model.PUBLIC_KEY_SIZE
 import org.kethereum.crypto.model.PrivateKey
 import org.kethereum.crypto.model.PublicKey
-import org.kethereum.cryptoapi.ec.keyPairGenerator
+import org.kethereum.crypto.api.ec.keyPairGenerator
 import org.kethereum.extensions.toBytesPadded
 import java.util.*
 
@@ -19,7 +19,12 @@ import java.util.*
  */
 fun createEthereumKeyPair(): ECKeyPair =
     keyPairGenerator().generate()
-        .let { (privateKeyValue, publicKeyValue) -> ECKeyPair(PrivateKey(privateKeyValue), PublicKey(publicKeyValue)) }
+        .let { (privateKeyValue, publicKeyValue) ->
+            ECKeyPair(
+                PrivateKey(privateKeyValue),
+                PublicKey(publicKeyValue)
+            )
+        }
 
 fun ECKeyPair.getCompressedPublicKey(): ByteArray {
     //add the uncompressed prefix

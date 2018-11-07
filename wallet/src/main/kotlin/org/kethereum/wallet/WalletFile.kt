@@ -48,8 +48,8 @@ internal val moshi by lazy {
 
 @Throws(CipherException::class, IOException::class)
 fun ECKeyPair.generateWalletFile(password: String,
-                                 destinationDirectory: File,
-                                 config: ScryptConfig) = createWallet(password, config).let { wallet ->
+                                                            destinationDirectory: File,
+                                                            config: ScryptConfig) = createWallet(password, config).let { wallet ->
     FiledWallet(wallet, File(destinationDirectory, wallet.getWalletFileName()).apply {
         writeText(moshi.adapter(Wallet::class.java).toJson(wallet))
     })
@@ -57,7 +57,7 @@ fun ECKeyPair.generateWalletFile(password: String,
 
 @Throws(CipherException::class, IOException::class)
 fun ECKeyPair.generateWalletJSON(password: String,
-                                 config: ScryptConfig) = createWallet(password, config).let { wallet ->
+                                                            config: ScryptConfig) = createWallet(password, config).let { wallet ->
     moshi.adapter(Wallet::class.java).toJson(wallet)
 }
 
