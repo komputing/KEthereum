@@ -1,7 +1,9 @@
 package org.kethereum.wallet
 
 import org.kethereum.crypto.SecureRandomUtils.secureRandom
-import org.kethereum.crypto.api.kdf.PBKDF2
+import org.kethereum.crypto.api.cipher.AESCipher
+import org.kethereum.crypto.api.cipher.aesCipher
+import org.kethereum.crypto.api.hashing.DigestParams
 import org.kethereum.crypto.model.ECKeyPair
 import org.kethereum.crypto.model.PRIVATE_KEY_SIZE
 import org.kethereum.crypto.model.PrivateKey
@@ -16,9 +18,6 @@ import org.walleth.khex.hexToByteArray
 import org.walleth.khex.toNoPrefixHexString
 import java.nio.charset.Charset
 import java.util.*
-import javax.crypto.Cipher
-import javax.crypto.spec.IvParameterSpec
-import javax.crypto.spec.SecretKeySpec
 
 private val UTF_8 = Charset.forName("UTF-8")
 
@@ -46,7 +45,7 @@ fun ECKeyPair.createWallet(password: String, config: ScryptConfig): Wallet {
 
     val privateKeyBytes = privateKey.key.toBytesPadded(PRIVATE_KEY_SIZE)
 
-    val cipherText = performCipherOperation(Cipher.ENCRYPT_MODE, iv, encryptKey, privateKeyBytes)
+    val cipherText = performCipherOperation(AESCipher.Operation.ENCRYPTION, iv, encryptKey, privateKeyBytes)
 
     val mac = generateMac(derivedKey, cipherText)
 
@@ -88,17 +87,12 @@ private fun generateAes128CtrDerivedKey(password: ByteArray, kdfParams: Aes128Ct
     // Java 8 supports this, but you have to convert the password to a character array, see
     // http://stackoverflow.com/a/27928435/3211687
 
-    return pbkdf2().derive(password, kdfParams.salt?.hexToByteArray(), kdfParams.c, PBKDF2.DigestParams.Sha256)
+    return pbkdf2().derive(password, kdfParams.salt?.hexToByteArray(), kdfParams.c, DigestParams.Sha256)
 }
 
 @Throws(CipherException::class)
-private fun performCipherOperation(mode: Int, iv: ByteArray, encryptKey: ByteArray, text: ByteArray) = try {
-    val ivParameterSpec = IvParameterSpec(iv)
-    val cipher = Cipher.getInstance("AES/CTR/NoPadding")
-
-    val secretKeySpec = SecretKeySpec(encryptKey, "AES")
-    cipher.init(mode, secretKeySpec, ivParameterSpec)
-    cipher.doFinal(text)
+private fun performCipherOperation(operation: AESCipher.Operation, iv: ByteArray, encryptKey: ByteArray, text: ByteArray) = try {
+    aesCipher().init(AESCipher.Mode.CTR, AESCipher.Padding.NO, operation, encryptKey, iv).performOperation(text)
 } catch (e: Exception) {
     throw CipherException("Error performing cipher operation", e)
 }
@@ -135,7 +129,7 @@ fun Wallet.decrypt(password: String): ECKeyPair {
     }
 
     val encryptKey = Arrays.copyOfRange(derivedKey, 0, 16)
-    val privateKey = PrivateKey(performCipherOperation(Cipher.DECRYPT_MODE, iv, encryptKey, cipherText))
+    val privateKey = PrivateKey(performCipherOperation(AESCipher.Operation.DESCRYPTION, iv, encryptKey, cipherText))
     return privateKey.toECKeyPair()
 }
 

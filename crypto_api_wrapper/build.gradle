@@ -1,4 +1,5 @@
 dependencies {
     implementation project(":crypto_api")
     implementation project(":crypto_api_spongycastle")
+    implementation project(":crypto_api_java_provider")
 }
