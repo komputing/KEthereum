@@ -1,0 +1,4 @@
+dependencies {
+    implementation project(":extensions")
+    implementation project(":model")
+}

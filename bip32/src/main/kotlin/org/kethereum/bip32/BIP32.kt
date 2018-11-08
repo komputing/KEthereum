@@ -8,6 +8,7 @@ import org.kethereum.bip32.model.Seed
 import org.kethereum.bip44.BIP44
 import org.kethereum.bip44.BIP44Element
 import org.kethereum.crypto.CURVE
+import org.kethereum.crypto.api.mac.hmac
 import org.kethereum.crypto.getCompressedPublicKey
 import org.kethereum.crypto.model.ECKeyPair
 import org.kethereum.crypto.model.PRIVATE_KEY_SIZE
@@ -25,8 +26,6 @@ import java.security.KeyException
 import java.security.NoSuchAlgorithmException
 import java.security.NoSuchProviderException
 import java.util.*
-import javax.crypto.Mac
-import javax.crypto.spec.SecretKeySpec
 
 fun Seed.toKey(pathString: String) = BIP44(pathString).path
         .fold(toExtendedKey()) { current, bip44Element ->
@@ -55,9 +54,7 @@ fun ExtendedKey.generateChildKey(element: BIP44Element): ExtendedKey {
         if (element.hardened && keyPair.privateKey.key == BigInteger.ZERO) {
             throw IllegalArgumentException("need private key for private generation using hardened paths")
         }
-        val mac = Mac.getInstance("HmacSHA512")
-        val key = SecretKeySpec(chainCode, "HmacSHA512")
-        mac.init(key)
+        val mac = hmac().init(chainCode)
 
         val extended: ByteArray
         val pub = keyPair.getCompressedPublicKey()
@@ -80,7 +77,7 @@ fun ExtendedKey.generateChildKey(element: BIP44Element): ExtendedKey {
                     .putInt(element.numberWithHardeningFlag)
                     .array()
         }
-        val lr = mac.doFinal(extended)
+        val lr = mac.generate(extended)
         val l = Arrays.copyOfRange(lr, 0, PRIVATE_KEY_SIZE)
         val r = Arrays.copyOfRange(lr, PRIVATE_KEY_SIZE, PRIVATE_KEY_SIZE + CHAINCODE_SIZE)
 
@@ -96,11 +93,11 @@ fun ExtendedKey.generateChildKey(element: BIP44Element): ExtendedKey {
             }
             ExtendedKey(PrivateKey(k).toECKeyPair(), r, (depth + 1).toByte(), keyPair.computeFingerPrint(), element.numberWithHardeningFlag)
         } else {
-            val q = CURVE.g.multiply(m).add(CURVE.curve.decodePoint(pub)).normalize()
-            if (q.isInfinity) {
+            val q = CURVE.g.mul(m).add(CURVE.decodePoint(pub)).normalize()
+            if (q.isInfinity()) {
                 throw KeyException("Child key derivation resulted in zeros. Suggest deriving the next increment.")
             }
-            val point = CURVE.curve.createPoint(q.xCoord.toBigInteger(), q.yCoord.toBigInteger())
+            val point = CURVE.createPoint(q.x, q.y)
 
             ExtendedKey(ECKeyPair(PrivateKey(BigInteger.ZERO), point.toPublicKey()), r, (depth + 1).toByte(), keyPair.computeFingerPrint(), element.numberWithHardeningFlag)
         }

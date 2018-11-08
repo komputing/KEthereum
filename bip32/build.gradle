@@ -2,11 +2,10 @@ dependencies {
     implementation project(path: ':bip44')
     implementation project(path: ':base58')
     implementation project(path: ':crypto')
+    implementation project(path: ':crypto_api')
+    implementation project(path: ':crypto_api_wrapper')
     implementation project(path: ':hashes')
     implementation project(path: ':extensions')
-
-    implementation "com.madgag.spongycastle:core:$spongycastleVersion"
-    implementation "com.madgag.spongycastle:prov:$spongycastleVersion"
 
     testImplementation "com.github.walleth:khex:$khex_version"
 }

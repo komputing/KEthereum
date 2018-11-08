@@ -2,6 +2,7 @@ package org.kethereum.bip32
 
 import org.kethereum.bip32.model.*
 import org.kethereum.crypto.CURVE
+import org.kethereum.crypto.api.mac.hmac
 import org.kethereum.crypto.decompressKey
 import org.kethereum.crypto.model.ECKeyPair
 import org.kethereum.crypto.model.PRIVATE_KEY_SIZE
@@ -17,15 +18,10 @@ import java.security.KeyException
 import java.security.NoSuchAlgorithmException
 import java.security.NoSuchProviderException
 import java.util.*
-import javax.crypto.Mac
-import javax.crypto.spec.SecretKeySpec
 
 fun Seed.toExtendedKey(publicKeyOnly: Boolean = false): ExtendedKey {
     try {
-        val mac = Mac.getInstance("HmacSHA512")
-        val seedKey = SecretKeySpec(BITCOIN_SEED, "HmacSHA512")
-        mac.init(seedKey)
-        val lr = mac.doFinal(seed)
+        val lr = hmac().init(BITCOIN_SEED).generate(seed)
         val l = Arrays.copyOfRange(lr, 0, PRIVATE_KEY_SIZE)
         val r = Arrays.copyOfRange(lr, PRIVATE_KEY_SIZE, PRIVATE_KEY_SIZE + CHAINCODE_SIZE)
         val m = BigInteger(1, l)
@@ -86,7 +82,10 @@ fun XPriv.toExtendedKey(): ExtendedKey {
         val compressedPublicBytes = ByteArray(COMPRESSED_PUBLIC_KEY_SIZE)
         buff.get(compressedPublicBytes)
         val uncompressedPublicBytes = decompressKey(compressedPublicBytes)
-        ECKeyPair(PrivateKey(BigInteger.ZERO), PublicKey(BigInteger(1, uncompressedPublicBytes)))
+        ECKeyPair(
+            PrivateKey(BigInteger.ZERO),
+            PublicKey(BigInteger(1, uncompressedPublicBytes))
+        )
     }
     return ExtendedKey(keyPair, chainCode, depth, parent, sequence)
 }

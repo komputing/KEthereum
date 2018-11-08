@@ -3,13 +3,10 @@ package org.kethereum.bip39
 import org.kethereum.bip32.model.Seed
 import org.kethereum.bip32.toKey
 import org.kethereum.bip39.model.MnemonicWords
+import org.kethereum.crypto.api.kdf.pbkdf2
 import org.kethereum.extensions.toBitArray
 import org.kethereum.extensions.toByteArray
 import org.kethereum.hashes.sha256
-import org.spongycastle.crypto.PBEParametersGenerator.PKCS5PasswordToUTF8Bytes
-import org.spongycastle.crypto.digests.SHA512Digest
-import org.spongycastle.crypto.generators.PKCS5S2ParametersGenerator
-import org.spongycastle.crypto.params.KeyParameter
 import java.security.SecureRandom
 import java.util.*
 
@@ -29,10 +26,7 @@ fun MnemonicWords.toSeed(password: String = ""): Seed {
     val pass = words.joinToString(" ")
     val salt = "mnemonic$password"
 
-    val gen = PKCS5S2ParametersGenerator(SHA512Digest())
-    val passwordUTF8Bytes = PKCS5PasswordToUTF8Bytes(pass.toCharArray())
-    gen.init(passwordUTF8Bytes, salt.toByteArray(), 2048)
-    return Seed((gen.generateDerivedParameters(512) as KeyParameter).key)
+    return Seed(pbkdf2().derive(pass.toCharArray(), salt.toByteArray()))
 }
 
 /**
