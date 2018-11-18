@@ -1,7 +1,8 @@
 package org.kethereum.bip39
 
 import org.junit.Assert.*
-import org.junit.Test
+import org.junit.jupiter.api.Assertions.assertThrows
+import org.junit.jupiter.api.Test
 import org.kethereum.bip32.model.Seed
 import org.kethereum.bip39.model.MnemonicWords
 import org.kethereum.bip39.wordlists.WORDLIST_ENGLISH
@@ -14,9 +15,11 @@ import org.walleth.khex.hexToByteArray
  */
 class MnemonicTest {
 
-    @Test(expected = IllegalArgumentException::class)
+    @Test
     fun throwsOnWrongEntropySize() {
-        generateMnemonic(123, WORDLIST_ENGLISH)
+        assertThrows(IllegalArgumentException::class.java) {
+            generateMnemonic(123, WORDLIST_ENGLISH)
+        }
     }
 
     @Test
@@ -33,19 +36,25 @@ class MnemonicTest {
         }
     }
 
-    @Test(expected = IllegalArgumentException::class)
+    @Test
     fun throwsOnWrongNumberOfWords() {
-        mnemonicToEntropy("legal winner thank year", WORDLIST_ENGLISH)
+        assertThrows(IllegalArgumentException::class.java) {
+            mnemonicToEntropy("legal winner thank year", WORDLIST_ENGLISH)
+        }
     }
 
-    @Test(expected = IllegalArgumentException::class)
+    @Test
     fun throwsOnEmptyString() {
-        mnemonicToEntropy("", WORDLIST_ENGLISH)
+        assertThrows(IllegalArgumentException::class.java) {
+            mnemonicToEntropy("", WORDLIST_ENGLISH)
+        }
     }
 
-    @Test(expected = IllegalArgumentException::class)
+    @Test
     fun throwsOnWrongChecksum() {
-        mnemonicToEntropy("legal winner thank year wave sausage worth useful legal winner thank thank", WORDLIST_ENGLISH)
+        assertThrows(IllegalArgumentException::class.java) {
+            mnemonicToEntropy("legal winner thank year wave sausage worth useful legal winner thank thank", WORDLIST_ENGLISH)
+        }
     }
 
     @Test

@@ -1,7 +1,7 @@
 package org.kethereum.hashes
 
-import org.junit.Assert.*
-import org.junit.Test
+import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Test
 import javax.xml.bind.DatatypeConverter
 
 
@@ -54,7 +54,7 @@ class Sha256Tests {
         val b = byteArrayOf(1, 1, 1, 1, 1, 1, 1)
         val padded = Sha256.padMessage(b)
         for (i in b.size + 1 until padded.size - 8) {
-            assertEquals("byte $i not 0", 0, padded[i].toInt())
+            assertEquals(0, padded[i].toInt(), "byte $i not 0")
         }
     }
 

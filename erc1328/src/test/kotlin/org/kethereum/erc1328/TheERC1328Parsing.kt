@@ -1,7 +1,7 @@
 package org.kethereum.erc1328
 
 import org.assertj.core.api.Assertions
-import org.junit.Test
+import org.junit.jupiter.api.Test
 
 class TheERC1328Parsing {
 

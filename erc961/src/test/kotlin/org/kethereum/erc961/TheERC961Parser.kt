@@ -1,7 +1,8 @@
 package org.kethereum.erc961
 
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.Test
+import org.junit.jupiter.api.Assertions.assertThrows
+import org.junit.jupiter.api.Test
 import org.kethereum.model.Address
 import org.kethereum.model.ChainDefinition
 
@@ -61,9 +62,11 @@ class TheERC961Parser {
     }
 
 
-    @Test(expected = InvalidTokenURIException::class)
+    @Test
     fun failsForInvalidScheme() {
-        parseTokenFromEthereumURI("ethereUUm:token_info")
+        assertThrows(InvalidTokenURIException::class.java) {
+            parseTokenFromEthereumURI("ethereUUm:token_info")
+        }
     }
 
 }

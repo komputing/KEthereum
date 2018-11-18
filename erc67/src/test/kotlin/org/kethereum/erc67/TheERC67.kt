@@ -1,7 +1,7 @@
 package org.kethereum.erc67
 
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.Test
+import org.junit.jupiter.api.Test
 import org.kethereum.model.Address
 import java.math.BigDecimal
 import java.math.BigInteger

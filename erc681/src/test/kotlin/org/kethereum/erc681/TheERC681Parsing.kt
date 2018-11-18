@@ -2,7 +2,7 @@ package org.kethereum.erc681
 
 import org.assertj.core.api.Assertions
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.Test
+import org.junit.jupiter.api.Test
 import java.math.BigInteger
 
 class TheERC681Parsing {

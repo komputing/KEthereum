@@ -1,7 +1,7 @@
 package org.kethereum.functions.rlp
 
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.Test
+import org.junit.jupiter.api.Test
 import org.kethereum.extensions.toByteArray
 import org.kethereum.extensions.toMinimalByteArray
 import org.walleth.khex.hexToByteArray

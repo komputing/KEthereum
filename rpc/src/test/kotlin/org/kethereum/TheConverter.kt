@@ -2,7 +2,7 @@ package org.kethereum
 
 import com.squareup.moshi.Moshi
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.Test
+import org.junit.jupiter.api.Test
 import org.kethereum.model.Address
 import org.kethereum.rpc.model.rpc.TransactionRPC
 import org.kethereum.rpc.toKethereumTransaction

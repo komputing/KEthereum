@@ -1,10 +1,10 @@
 package org.kethereum.extensions
 
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.Test
+import org.junit.jupiter.api.Assertions.assertThrows
+import org.junit.jupiter.api.Test
 import java.math.BigInteger
 import java.math.BigInteger.*
-import kotlin.test.assertFailsWith
 
 class TheBigIntegerExtensions {
 
@@ -23,13 +23,13 @@ class TheBigIntegerExtensions {
         assertThat("1".maybeHexToBigInteger()).isEqualTo(ONE)
         assertThat("1001".maybeHexToBigInteger()).isEqualTo(1001)
 
-        assertFailsWith<NumberFormatException> {
+        assertThrows(NumberFormatException::class.java) {
             "a".maybeHexToBigInteger()
         }
-        assertFailsWith<NumberFormatException> {
+        assertThrows(NumberFormatException::class.java) {
             "0x?".maybeHexToBigInteger()
         }
-        assertFailsWith<NumberFormatException> {
+        assertThrows(NumberFormatException::class.java) {
             "yolo".maybeHexToBigInteger()
         }
     }

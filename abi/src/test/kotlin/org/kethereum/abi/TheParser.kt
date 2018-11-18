@@ -2,7 +2,7 @@ package org.kethereum.abi
 
 import com.squareup.moshi.Moshi
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.Test
+import org.junit.jupiter.api.Test
 
 class TheParser {
 
