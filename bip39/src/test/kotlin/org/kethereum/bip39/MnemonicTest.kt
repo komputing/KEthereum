@@ -1,6 +1,6 @@
 package org.kethereum.bip39
 
-import org.junit.Assert.*
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Assertions.assertThrows
 import org.junit.jupiter.api.Test
 import org.kethereum.bip32.model.Seed
@@ -64,7 +64,7 @@ class MnemonicTest {
             val expectedSeed = Seed(it.seed.hexToByteArray())
             val actualSeed = MnemonicWords(it.phrase).toSeed("TREZOR")
 
-            assertArrayEquals(expectedSeed.seed, actualSeed.seed)
+            assertThat(expectedSeed.seed).isEqualTo(actualSeed.seed)
         }
 
     }
@@ -76,7 +76,7 @@ class MnemonicTest {
             val expectedEntropy = it.entropy.hexToByteArray()
             val actualEntropy = mnemonicToEntropy(it.phrase, WORDLIST_ENGLISH)
 
-            assertArrayEquals(expectedEntropy, actualEntropy)
+            assertThat(expectedEntropy).isEqualTo(actualEntropy)
         }
     }
 
@@ -86,7 +86,7 @@ class MnemonicTest {
             val entropy = it.entropy.hexToByteArray()
             val actualPhrase = entropyToMnemonic(entropy, WORDLIST_ENGLISH)
 
-            assertEquals(it.phrase, actualPhrase)
+            assertThat(it.phrase).isEqualTo(actualPhrase)
         }
     }
 
@@ -94,7 +94,7 @@ class MnemonicTest {
     fun mnemonicToMasterKey() {
         testData.forEach {
             val gen = MnemonicWords(it.phrase).toKey("m/", "TREZOR")
-            assertEquals(it.masterKey, gen.serialize())
+            assertThat(it.masterKey).isEqualTo(gen.serialize())
         }
 
     }
@@ -105,9 +105,9 @@ class MnemonicTest {
         val badChecksum = "about about about about about about about about about about about about"
         val missingWords = "hello world"
 
-        assertTrue(MnemonicWords(phraseGood).validate(WORDLIST_ENGLISH))
-        assertFalse(MnemonicWords(badChecksum).validate(WORDLIST_ENGLISH))
-        assertFalse(MnemonicWords(missingWords).validate(WORDLIST_ENGLISH))
+        assertThat(MnemonicWords(phraseGood).validate(WORDLIST_ENGLISH)).isTrue()
+        assertThat(MnemonicWords(badChecksum).validate(WORDLIST_ENGLISH)).isFalse()
+        assertThat(MnemonicWords(missingWords).validate(WORDLIST_ENGLISH)).isFalse()
     }
 
     data class MnemonicTestData(val entropy: String, val phrase: String, val seed: String, val masterKey: String)

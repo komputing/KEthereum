@@ -1,7 +1,7 @@
 package org.kethereum.wallet
 
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.After
+import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.Test
 import org.kethereum.crypto.model.PrivateKey
 import org.kethereum.crypto.toECKeyPair
@@ -15,11 +15,15 @@ private fun loadFile(name: String) = File(WalletUtilsTest::class.java.getResourc
 
 class WalletUtilsTest {
 
-    private val tempDir by lazy { Files.createTempDirectory(WalletUtilsTest::class.java.simpleName + "-testkeys").toFile() }
+    companion object {
 
-    @After
-    fun tearDown() {
-        tempDir.deleteRecursively()
+        private val tempDir by lazy { Files.createTempDirectory(WalletUtilsTest::class.java.simpleName + "-testkeys").toFile() }
+
+        @AfterAll
+        @JvmStatic
+        internal fun afterAll() {
+            tempDir.deleteRecursively()
+        }
     }
 
     @Test

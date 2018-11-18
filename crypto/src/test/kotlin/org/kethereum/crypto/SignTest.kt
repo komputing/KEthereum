@@ -1,7 +1,6 @@
 package org.kethereum.crypto
 
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.Assert.assertEquals
 import org.junit.jupiter.api.Test
 import org.kethereum.crypto.data.KEY_PAIR
 import org.kethereum.crypto.data.PRIVATE_KEY
@@ -43,7 +42,7 @@ class SignTest {
                 28.toByte()
         )
 
-        assertEquals(expected, signatureData)
+        assertThat(expected).isEqualTo(signatureData)
     }
 
     @Test

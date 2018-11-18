@@ -1,7 +1,6 @@
 package org.kethereum.bip32
 
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.Assert.assertEquals
 import org.junit.jupiter.api.Test
 import org.kethereum.bip32.model.Seed
 import org.kethereum.bip32.model.XPriv
@@ -26,13 +25,13 @@ class DerivationTest {
         testData.forEach {
             val derivedKey = Seed(it.seed.hexToByteArray()).toKey(it.path)
             val obtainedPub = derivedKey.serialize(true)
-            assertEquals(it.expectedPublicKey, obtainedPub)
+            assertThat(it.expectedPublicKey).isEqualTo(obtainedPub)
 
             val obtainedPrv = derivedKey.serialize()
-            assertEquals(it.expectedPrivateKey, obtainedPrv)
+            assertThat(it.expectedPrivateKey).isEqualTo( obtainedPrv)
 
             val parsedPrv = XPriv(it.expectedPrivateKey).toExtendedKey()
-            assertEquals(derivedKey, parsedPrv)
+            assertThat(derivedKey).isEqualTo( parsedPrv)
         }
     }
 
