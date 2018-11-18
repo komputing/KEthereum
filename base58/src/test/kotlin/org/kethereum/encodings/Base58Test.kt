@@ -1,7 +1,7 @@
 package org.kethereum.encodings
 
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.Test
+import org.junit.jupiter.api.Test
 import org.walleth.khex.hexToByteArray
 
 class Base58Test {

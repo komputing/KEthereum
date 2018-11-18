@@ -1,7 +1,7 @@
 package org.kethereum.networks
 
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.Test
+import org.junit.jupiter.api.Test
 import org.walleth.data.networks.ALL_NETWORKS
 
 class TheNetworks {

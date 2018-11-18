@@ -1,10 +1,10 @@
 package org.kethereum.contract.abi.types
 
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.Test
+import org.junit.jupiter.api.Assertions.assertThrows
+import org.junit.jupiter.api.Test
 import org.kethereum.contract.abi.types.model.*
 import org.walleth.khex.hexToByteArray
-import kotlin.test.assertFailsWith
 
 class TheContractABITypes {
 
@@ -19,7 +19,7 @@ class TheContractABITypes {
     @Test
     fun rejectsInvalidTypes() {
         listOf("bool123", "uint257", "uint-1", "bytes-1", "yolo").forEach {
-            assertFailsWith<IllegalArgumentException> {
+            assertThrows(IllegalArgumentException::class.java) {
                 convertStringToABIType(it)
             }
         }
@@ -48,7 +48,7 @@ class TheContractABITypes {
 
     @Test
     fun unsignedIntABITypeWillNotAcceptNegativeNumber() {
-        assertFailsWith<IllegalArgumentException> {
+        assertThrows(IllegalArgumentException::class.java) {
             IntABIType(8, false).parseValueFromString("-1")
         }
     }
@@ -72,30 +72,30 @@ class TheContractABITypes {
 
     @Test
     fun rejectsInvalidAddress() {
-        assertFailsWith<IllegalArgumentException> {
+        assertThrows(IllegalArgumentException::class.java) {
             AddressABIType().parseValueFromString("0x123")
         }
 
-        assertFailsWith<IllegalArgumentException> {
+        assertThrows(IllegalArgumentException::class.java) {
             AddressABIType().parseValueFromString("0xbE27686a93c54Af2f55f16e8dE9E6Dc5dccE915e123")
         }
 
-        assertFailsWith<IllegalArgumentException> {
+        assertThrows(IllegalArgumentException::class.java) {
             AddressABIType().parseValueFromString("0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx")
         }
     }
 
     @Test
     fun rejectsInvalidBools() {
-        assertFailsWith<IllegalArgumentException> {
+        assertThrows(IllegalArgumentException::class.java) {
             BoolABIType().parseValueFromString("0x123")
         }
 
-        assertFailsWith<IllegalArgumentException> {
+        assertThrows(IllegalArgumentException::class.java) {
             BoolABIType().parseValueFromString("yolo")
         }
 
-        assertFailsWith<IllegalArgumentException> {
+        assertThrows(IllegalArgumentException::class.java) {
             BoolABIType().parseValueFromString("truewithdirt")
         }
     }

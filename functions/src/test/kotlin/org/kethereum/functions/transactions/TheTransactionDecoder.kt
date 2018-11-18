@@ -3,7 +3,7 @@ package org.kethereum.functions.transactions
 import com.beust.klaxon.JsonObject
 import com.beust.klaxon.Parser
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.Test
+import org.junit.jupiter.api.Test
 import org.kethereum.functions.rlp.RLPList
 import org.kethereum.functions.rlp.decodeRLP
 import org.kethereum.functions.toTransaction

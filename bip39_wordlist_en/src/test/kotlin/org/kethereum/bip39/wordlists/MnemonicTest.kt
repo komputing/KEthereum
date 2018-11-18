@@ -1,7 +1,7 @@
 package org.kethereum.bip39.wordlists
 
-import org.junit.Assert.assertEquals
-import org.junit.Test
+import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Test
 
 class MnemonicTest {
 

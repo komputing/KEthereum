@@ -1,9 +1,9 @@
 package org.kethereum.functions.rlp
 
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.Test
+import org.junit.jupiter.api.Assertions.assertThrows
+import org.junit.jupiter.api.Test
 import org.walleth.khex.hexToByteArray
-import kotlin.test.assertFailsWith
 
 class TheRLPDecoder {
     @Test
@@ -19,7 +19,7 @@ class TheRLPDecoder {
 
         val hex = "f912345678"
 
-        assertFailsWith<IllegalRLPException> {
+        assertThrows(IllegalRLPException::class.java) {
             hex.hexToByteArray().decodeRLP()
         }
     }

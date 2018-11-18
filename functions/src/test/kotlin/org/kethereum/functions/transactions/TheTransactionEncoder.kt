@@ -2,7 +2,7 @@ package org.kethereum.functions.transactions
 
 import com.beust.klaxon.JsonObject
 import com.beust.klaxon.Parser
-import org.junit.Test
+import org.junit.jupiter.api.Test
 import org.kethereum.functions.encodeRLP
 import org.kethereum.model.Address
 import org.kethereum.model.SignatureData

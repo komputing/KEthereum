@@ -1,7 +1,7 @@
 package org.kethereum.crypto
 
 import org.junit.Assert.assertFalse
-import org.junit.Test
+import org.junit.jupiter.api.Test
 import org.kethereum.crypto.SecureRandomUtils.secureRandom
 
 class SecureRandomUtilsTest {

@@ -1,7 +1,7 @@
 package org.walleth.kethereum.etherscan
 
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.Test
+import org.junit.jupiter.api.Test
 import org.kethereum.model.Address
 import org.kethereum.model.ChainDefinition
 

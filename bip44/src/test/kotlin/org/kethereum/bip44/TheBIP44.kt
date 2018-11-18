@@ -1,24 +1,31 @@
 package org.kethereum.bip44
 
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.Test
+import org.junit.jupiter.api.Assertions.assertThrows
+import org.junit.jupiter.api.Test
 
 class TheBIP44 {
 
-    @Test(expected = IllegalArgumentException::class)
+    @Test
     fun parsingFailsForBadInput() {
-        BIP44("abc")
+        assertThrows(IllegalArgumentException::class.java){
+            BIP44("abc")
+        }
     }
 
-    @Test(expected = IllegalArgumentException::class)
+    @Test
     fun parsingFailsForEmptyInput() {
-        BIP44("")
+        assertThrows(IllegalArgumentException::class.java){
+            BIP44("")
+        }
     }
 
 
-    @Test(expected = IllegalArgumentException::class)
+    @Test
     fun parsingFailsForPseudoCorrect() {
-        BIP44("m")
+        assertThrows(IllegalArgumentException::class.java){
+            BIP44("m")
+        }
     }
 
     val stringProbes = mapOf(

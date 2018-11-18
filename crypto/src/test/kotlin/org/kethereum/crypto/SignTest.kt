@@ -2,7 +2,7 @@ package org.kethereum.crypto
 
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Assert.assertEquals
-import org.junit.Test
+import org.junit.jupiter.api.Test
 import org.kethereum.crypto.data.KEY_PAIR
 import org.kethereum.crypto.data.PRIVATE_KEY
 import org.kethereum.crypto.data.PUBLIC_KEY
