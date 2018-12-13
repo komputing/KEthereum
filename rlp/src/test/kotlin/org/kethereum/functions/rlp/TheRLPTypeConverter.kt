@@ -9,10 +9,10 @@ class TheRLPTypeConverter {
 
     @Test
     fun convertingWorks() {
-        assertThat(0.toRLP().toIntFromRLP()).isEqualTo(0)
-        assertThat(5.toRLP().toIntFromRLP()).isEqualTo(5)
-        assertThat(555555.toRLP().toIntFromRLP()).isEqualTo(555555)
-        assertThat(200000.toRLP().toIntFromRLP()).isEqualTo(200000)
+
+        arrayOf(0, 5, 555555, 200_000, 1_838_383_984).forEach {
+            assertThat(it.toRLP().toIntFromRLP()).isEqualTo(it)
+        }
 
         assertThat(ZERO.toRLP().toBigIntegerFromRLP()).isEqualTo(ZERO)
         assertThat(ONE.toRLP().toBigIntegerFromRLP()).isEqualTo(ONE)

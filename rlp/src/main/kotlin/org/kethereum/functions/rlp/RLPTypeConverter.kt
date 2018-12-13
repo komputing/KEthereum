@@ -21,7 +21,7 @@ fun Byte.toRLP() = RLPElement(kotlin.ByteArray(1) { this })
 // from RLP
 
 fun RLPElement.toIntFromRLP() = bytes
-        .mapIndexed { index, byte -> byte.toInt().shl((bytes.size - 1 - index) * 8) }
+        .mapIndexed { index, byte -> (byte.toInt() and 0xff).shl((bytes.size - 1 - index) * 8) }
         .reduce { acc, i -> acc + i }
 
 fun RLPElement.toBigIntegerFromRLP(): BigInteger = if (bytes.isEmpty()) ZERO else BigInteger(bytes)
