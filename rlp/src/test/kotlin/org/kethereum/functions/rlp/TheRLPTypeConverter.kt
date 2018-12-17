@@ -10,7 +10,7 @@ class TheRLPTypeConverter {
     @Test
     fun convertingWorks() {
 
-        arrayOf(0, 5, 555555, 200_000, 1_838_383_984).forEach {
+        arrayOf(0, 5, 555_555, 200_000, 1_838_383_984).forEach {
             assertThat(it.toRLP().toIntFromRLP()).isEqualTo(it)
         }
 
