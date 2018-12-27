@@ -5,20 +5,36 @@ import org.junit.jupiter.api.Test
 import java.math.BigInteger
 import java.math.BigInteger.*
 
+val bigIntegerTestVectors = arrayOf(
+        ZERO,
+        ONE,
+        TEN,
+        BigInteger.valueOf(70_000),
+        BigInteger.valueOf(Long.MAX_VALUE),
+        BigInteger.valueOf(54408193066555392L)
+)
+
+val integerTestVectors = arrayOf(
+        0,
+        5,
+        555_555,
+        200_000,
+        1_838_383_984,
+        -1_838_383_984
+)
+
 class TheRLPTypeConverter {
 
     @Test
     fun convertingWorks() {
 
-        arrayOf(0, 5, 555_555, 200_000, 1_838_383_984).forEach {
-            assertThat(it.toRLP().toIntFromRLP()).isEqualTo(it)
+        bigIntegerTestVectors.forEach {
+            assertThat(it.toRLP().toUnsignedBigIntegerFromRLP()).isEqualTo(it)
         }
 
-        assertThat(ZERO.toRLP().toBigIntegerFromRLP()).isEqualTo(ZERO)
-        assertThat(ONE.toRLP().toBigIntegerFromRLP()).isEqualTo(ONE)
-        assertThat(TEN.toRLP().toBigIntegerFromRLP()).isEqualTo(TEN)
-        assertThat(BigInteger.valueOf(Long.MAX_VALUE).toRLP().toBigIntegerFromRLP())
-                .isEqualTo(BigInteger.valueOf(Long.MAX_VALUE))
+        integerTestVectors.forEach {
+            assertThat(it.toRLP().toIntFromRLP()).isEqualTo(it)
+        }
 
         assertThat("foo".toRLP().toStringFromRLP()).isEqualTo("foo")
 

@@ -24,7 +24,6 @@ fun RLPElement.toIntFromRLP() = bytes
         .mapIndexed { index, byte -> (byte.toInt() and 0xff).shl((bytes.size - 1 - index) * 8) }
         .reduce { acc, i -> acc + i }
 
-fun RLPElement.toBigIntegerFromRLP(): BigInteger = if (bytes.isEmpty()) ZERO else BigInteger(bytes)
 fun RLPElement.toUnsignedBigIntegerFromRLP(): BigInteger = if (bytes.isEmpty()) ZERO else BigInteger(1, bytes)
 fun RLPElement.toByteFromRLP(): Byte {
     if (bytes.size != 1) {
