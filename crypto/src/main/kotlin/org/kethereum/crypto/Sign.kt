@@ -26,8 +26,7 @@ val CURVE: Curve = curve()
  * @return [SignatureData] containing the (r,s,v) components
  */
 
-fun ECKeyPair.signMessage(message: ByteArray) =
-    signMessageHash(message.keccak(), this, true)
+fun ECKeyPair.signMessage(message: ByteArray) = signMessageHash(message.keccak(), this, true)
 
 
 /**
@@ -65,13 +64,13 @@ fun ECDSASignature.determineRecId(messageHash: ByteArray, publicKey: PublicKey):
 }
 
 private fun sign(transactionHash: ByteArray, privateKey: PrivateKey, canonical: Boolean): ECDSASignature =
-    signer().sign(transactionHash, privateKey.key).let {
-        if (canonical) {
-            it.toCanonicalised()
-        } else {
-            it
+        signer().sign(transactionHash, privateKey.key).let {
+            if (canonical) {
+                it.toCanonicalised()
+            } else {
+                it
+            }
         }
-    }
 
 /**
  * Given an arbitrary piece of text and an Ethereum message signature encoded in bytes,
@@ -99,7 +98,7 @@ fun signedMessageToKey(message: ByteArray, signatureData: SignatureData): Public
     val messageHash = message.keccak()
     val recId = header - 27
     return PublicKey(
-        signer().recover(recId, sig, messageHash) ?: throw SignatureException("Could not recover public key from signature")
+            signer().recover(recId, sig, messageHash) ?: throw SignatureException("Could not recover public key from signature")
     )
 }
 

@@ -1,9 +1,7 @@
 package org.kethereum.crypto.api.ec
 
-import java.math.BigInteger
-
-typealias PrivateAndPublicKey = Pair<BigInteger, BigInteger>
+import org.kethereum.crypto.model.ECKeyPair
 
 interface KeyPairGenerator {
-    fun generate(): PrivateAndPublicKey
+    fun generate(): ECKeyPair
 }
