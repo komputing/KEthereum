@@ -1,7 +1,6 @@
 package org.kethereum.functions.rlp
 
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.Assert
 import org.junit.jupiter.api.Test
 import org.kethereum.extensions.toByteArray
 import org.kethereum.extensions.toMinimalByteArray
@@ -62,11 +61,11 @@ class TheRLPEncoder {
     }
 
     @Test
-    fun testZeroBytes(){
-        val zeroBytes = ByteArray(1){0.toByte()}
+    fun testZeroBytes() {
+        val zeroBytes = ByteArray(1) { 0.toByte() }
         val rlp = zeroBytes.toRLP()
         val bytes = rlp.encode()
         val rlp1 = bytes.decodeRLP()
-        Assert.assertEquals(rlp, rlp1)
+        assertThat(rlp).isEqualTo(rlp1)
     }
 }
