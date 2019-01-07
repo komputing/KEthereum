@@ -1,6 +1,7 @@
 package org.kethereum.functions.rlp
 
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.Assert
 import org.junit.jupiter.api.Test
 import org.kethereum.extensions.toByteArray
 import org.kethereum.extensions.toMinimalByteArray
@@ -58,5 +59,14 @@ class TheRLPEncoder {
         assertThat(0xaabb.toMinimalByteArray()).isEqualTo("aabb".hexToByteArray())
         assertThat(0xaabbcd.toMinimalByteArray()).isEqualTo("aabbcd".hexToByteArray())
         assertThat(0xaabbcdef.toInt().toMinimalByteArray()).isEqualTo("aabbcdef".hexToByteArray())
+    }
+
+    @Test
+    fun testZeroBytes(){
+        val zeroBytes = ByteArray(1){0.toByte()}
+        val rlp = zeroBytes.toRLP()
+        val bytes = rlp.encode()
+        val rlp1 = bytes.decodeRLP()
+        Assert.assertEquals(rlp, rlp1)
     }
 }

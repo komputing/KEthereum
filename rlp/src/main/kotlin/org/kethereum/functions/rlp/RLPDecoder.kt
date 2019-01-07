@@ -20,7 +20,7 @@ private fun ByteArray.decodeRLPWithSize(offset: Int = 0): DecodeResult {
 
     val value = this[offset].toInt() and 0xFF
     return when {
-        value < ELEMENT_OFFSET -> DecodeResult(value.toRLP(), 1)
+        value < ELEMENT_OFFSET -> DecodeResult(value.toByte().toRLP(), 1)
         value < LIST_OFFSET -> (value - ELEMENT_OFFSET).let {
             val lengthAndOffset = getLengthAndOffset(it, offset)
             DecodeResult(copyOfRange(lengthAndOffset.offset, lengthAndOffset.offset + lengthAndOffset.length).toRLP(), lengthAndOffset.length + lengthAndOffset.offset - offset)
