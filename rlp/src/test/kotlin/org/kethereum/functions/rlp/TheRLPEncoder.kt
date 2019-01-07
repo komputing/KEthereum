@@ -59,4 +59,13 @@ class TheRLPEncoder {
         assertThat(0xaabbcd.toMinimalByteArray()).isEqualTo("aabbcd".hexToByteArray())
         assertThat(0xaabbcdef.toInt().toMinimalByteArray()).isEqualTo("aabbcdef".hexToByteArray())
     }
+
+    @Test
+    fun testZeroBytes() {
+        val zeroBytes = ByteArray(1) { 0.toByte() }
+        val rlp = zeroBytes.toRLP()
+        val bytes = rlp.encode()
+        val rlp1 = bytes.decodeRLP()
+        assertThat(rlp).isEqualTo(rlp1)
+    }
 }
