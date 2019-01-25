@@ -1,4 +1,0 @@
-dependencies {
-    implementation 'org.bouncycastle:bcprov-jdk15on:1.60'
-    implementation project(":crypto_api")
-}

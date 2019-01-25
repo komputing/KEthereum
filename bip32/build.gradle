@@ -3,9 +3,12 @@ dependencies {
     implementation project(path: ':base58')
     implementation project(path: ':crypto')
     implementation project(path: ':crypto_api')
-    implementation project(path: ':crypto_api_wrapper')
     implementation project(path: ':hashes')
     implementation project(path: ':extensions')
+    implementation project(path: ':model')
 
     testImplementation "com.github.walleth:khex:$khex_version"
+    testImplementation project(path: ':crypto_impl_bouncycastle')
+
+    testImplementation project(":test_data")
 }

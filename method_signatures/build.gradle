@@ -1,4 +1,6 @@
 dependencies {
     implementation project(':keccak_shortcut')
     implementation "com.github.walleth:khex:$khex_version"
+
+    testImplementation project(":crypto_impl_spongycastle")
 }

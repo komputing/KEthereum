@@ -16,4 +16,6 @@ dependencies {
 
     implementation "com.squareup.moshi:moshi:$moshi_version"
     implementation "com.squareup.moshi:moshi-adapters:$moshi_version"
+
+    testImplementation project(":crypto_impl_spongycastle")
 }

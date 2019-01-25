@@ -2,11 +2,11 @@ package org.kethereum.crypto
 
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
-import org.kethereum.crypto.data.KEY_PAIR
-import org.kethereum.crypto.data.PRIVATE_KEY
-import org.kethereum.crypto.data.PUBLIC_KEY
-import org.kethereum.crypto.data.TEST_MESSAGE
-import org.kethereum.crypto.model.PrivateKey
+import org.kethereum.model.PrivateKey
+import org.kethereum.crypto.test_data.KEY_PAIR
+import org.kethereum.crypto.test_data.PRIVATE_KEY
+import org.kethereum.crypto.test_data.PUBLIC_KEY
+import org.kethereum.crypto.test_data.TEST_MESSAGE
 import org.kethereum.extensions.hexToBigInteger
 import org.kethereum.hashes.sha256
 import org.kethereum.model.SignatureData

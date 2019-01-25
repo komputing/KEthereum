@@ -7,17 +7,13 @@ import org.kethereum.bip32.model.ExtendedKey
 import org.kethereum.bip32.model.Seed
 import org.kethereum.bip44.BIP44
 import org.kethereum.bip44.BIP44Element
-import org.kethereum.crypto.CURVE
-import org.kethereum.crypto.api.mac.hmac
-import org.kethereum.crypto.getCompressedPublicKey
-import org.kethereum.crypto.model.ECKeyPair
-import org.kethereum.crypto.model.PRIVATE_KEY_SIZE
-import org.kethereum.crypto.model.PrivateKey
-import org.kethereum.crypto.toECKeyPair
-import org.kethereum.crypto.toPublicKey
+import org.kethereum.crypto.*
 import org.kethereum.extensions.toBytesPadded
 import org.kethereum.hashes.ripemd160
 import org.kethereum.hashes.sha256
+import org.kethereum.model.ECKeyPair
+import org.kethereum.model.PRIVATE_KEY_SIZE
+import org.kethereum.model.PrivateKey
 import java.math.BigInteger
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
@@ -54,7 +50,7 @@ fun ExtendedKey.generateChildKey(element: BIP44Element): ExtendedKey {
         if (element.hardened && keyPair.privateKey.key == BigInteger.ZERO) {
             throw IllegalArgumentException("need private key for private generation using hardened paths")
         }
-        val mac = hmac().init(chainCode)
+        val mac = CryptoAPI.hmac.init(chainCode)
 
         val extended: ByteArray
         val pub = keyPair.getCompressedPublicKey()

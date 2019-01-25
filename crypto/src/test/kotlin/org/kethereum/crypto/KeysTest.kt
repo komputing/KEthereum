@@ -2,11 +2,11 @@ package org.kethereum.crypto
 
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
-import org.kethereum.crypto.data.ADDRESS
-import org.kethereum.crypto.data.PUBLIC_KEY
-import org.kethereum.crypto.data.PUBLIC_KEY_STRING
-import org.kethereum.crypto.model.PublicKey
+import org.kethereum.crypto.test_data.ADDRESS
+import org.kethereum.crypto.test_data.PUBLIC_KEY
+import org.kethereum.crypto.test_data.PUBLIC_KEY_STRING
 import org.kethereum.model.Address
+import org.kethereum.model.PublicKey
 
 class KeysTest {
 
@@ -25,7 +25,7 @@ class KeysTest {
     @Test
     fun testGetAddressZeroPaddedAddress() {
         val publicKey =
-            PublicKey("0xa1b31be4d58a7ddd24b135db0da56a90fb5382077ae26b250e1dc9cd6232ce22" + "70f4c995428bc76aa78e522316e95d7834d725efc9ca754d043233af6ca90113")
+                PublicKey("0xa1b31be4d58a7ddd24b135db0da56a90fb5382077ae26b250e1dc9cd6232ce22" + "70f4c995428bc76aa78e522316e95d7834d725efc9ca754d043233af6ca90113")
         assertThat(publicKey.toAddress()).isEqualTo(Address("01c52b08330e05d731e38c856c1043288f7d9744"))
     }
 

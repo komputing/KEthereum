@@ -3,7 +3,7 @@ package org.kethereum.wallet
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.Test
-import org.kethereum.crypto.model.PrivateKey
+import org.kethereum.model.PrivateKey
 import org.kethereum.crypto.toECKeyPair
 import org.kethereum.extensions.hexToBigInteger
 import org.kethereum.wallet.data.KEY_PAIR

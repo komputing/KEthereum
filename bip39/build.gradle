@@ -4,9 +4,9 @@ dependencies {
     implementation project(path: ':hashes')
     implementation project(path: ':crypto')
     implementation project(path: ':crypto_api')
-    implementation project(path: ':crypto_api_wrapper')
 
     implementation "com.github.walleth:khex:$khex_version"
 
     testImplementation project(path: ':bip39_wordlist_en')
+    testImplementation project(path: ':crypto_impl_spongycastle')
 }

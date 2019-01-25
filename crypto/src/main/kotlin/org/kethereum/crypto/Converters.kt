@@ -1,10 +1,9 @@
 package org.kethereum.crypto
 
 import org.kethereum.crypto.api.ec.CurvePoint
-import org.kethereum.crypto.model.*
 import org.kethereum.extensions.toHexStringZeroPadded
 import org.kethereum.keccakshortcut.keccak
-import org.kethereum.model.Address
+import org.kethereum.model.*
 import org.walleth.khex.hexToByteArray
 import org.walleth.khex.toHexString
 import java.math.BigInteger

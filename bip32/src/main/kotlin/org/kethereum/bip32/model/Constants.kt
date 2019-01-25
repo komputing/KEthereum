@@ -1,6 +1,6 @@
 package org.kethereum.bip32.model
 
-import org.kethereum.crypto.model.PRIVATE_KEY_SIZE
+import org.kethereum.model.PRIVATE_KEY_SIZE
 
 
 internal val BITCOIN_SEED = "Bitcoin seed".toByteArray()

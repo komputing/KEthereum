@@ -2,8 +2,8 @@ package org.kethereum.crypto
 
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
-import org.kethereum.crypto.data.ADDRESS
-import org.kethereum.crypto.data.KEY_PAIR
+import org.kethereum.crypto.test_data.ADDRESS
+import org.kethereum.crypto.test_data.KEY_PAIR
 
 class CredentialsTest {
 

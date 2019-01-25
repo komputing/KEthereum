@@ -5,10 +5,11 @@ dependencies {
     implementation project(":hashes")
     implementation project(":extensions")
     implementation project(":crypto_api")
-    implementation project(':crypto_api_wrapper')
-
+    
     implementation "com.github.walleth:khex:$khex_version"
 
     implementation "org.slf4j:slf4j-api:$slf4jVersion"
 
+    implementation project(":test_data")
+    testImplementation project(":crypto_impl_spongycastle")
 }

@@ -1,5 +1,5 @@
 dependencies {
     implementation "com.github.walleth:khex:$khex_version"
     compile project(path: ':crypto_api')
-    compile project(path: ':crypto_api_wrapper')
+
 }

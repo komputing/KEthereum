@@ -1,8 +1,8 @@
 package org.kethereum.wallet.data
 
-import org.kethereum.crypto.model.ECKeyPair
-import org.kethereum.crypto.model.PrivateKey
-import org.kethereum.crypto.model.PublicKey
+import org.kethereum.model.ECKeyPair
+import org.kethereum.model.PrivateKey
+import org.kethereum.model.PublicKey
 import org.kethereum.extensions.hexToBigInteger
 import org.walleth.khex.clean0xPrefix
 

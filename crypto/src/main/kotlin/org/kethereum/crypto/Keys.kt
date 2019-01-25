@@ -1,8 +1,7 @@
 package org.kethereum.crypto
 
-import org.kethereum.crypto.api.ec.keyPairGenerator
-import org.kethereum.crypto.model.ECKeyPair
-import org.kethereum.crypto.model.PUBLIC_KEY_SIZE
+import org.kethereum.model.ECKeyPair
+import org.kethereum.model.PUBLIC_KEY_SIZE
 import org.kethereum.extensions.toBytesPadded
 import java.util.*
 
@@ -15,7 +14,7 @@ import java.util.*
  *
  * Private keys are encoded using X.509
  */
-fun createEthereumKeyPair(): ECKeyPair = keyPairGenerator().generate()
+fun createEthereumKeyPair(): ECKeyPair = CryptoAPI.keyPairGenerator.generate()
 
 fun ECKeyPair.getCompressedPublicKey(): ByteArray {
     //add the uncompressed prefix

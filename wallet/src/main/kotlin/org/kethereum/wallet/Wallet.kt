@@ -1,18 +1,17 @@
 package org.kethereum.wallet
 
+import org.kethereum.crypto.CryptoAPI
+import org.kethereum.crypto.CryptoAPI.aesCipher
 import org.kethereum.crypto.SecureRandomUtils.secureRandom
 import org.kethereum.crypto.api.cipher.AESCipher
-import org.kethereum.crypto.api.cipher.aesCipher
 import org.kethereum.crypto.api.hashing.DigestParams
-import org.kethereum.crypto.model.ECKeyPair
-import org.kethereum.crypto.model.PRIVATE_KEY_SIZE
-import org.kethereum.crypto.model.PrivateKey
 import org.kethereum.crypto.toAddress
 import org.kethereum.crypto.toECKeyPair
-import org.kethereum.crypto.api.kdf.pbkdf2
-import org.kethereum.crypto.api.kdf.scrypt
 import org.kethereum.extensions.toBytesPadded
 import org.kethereum.keccakshortcut.keccak
+import org.kethereum.model.ECKeyPair
+import org.kethereum.model.PRIVATE_KEY_SIZE
+import org.kethereum.model.PrivateKey
 import org.kethereum.wallet.model.*
 import org.walleth.khex.hexToByteArray
 import org.walleth.khex.toNoPrefixHexString
@@ -75,7 +74,7 @@ private fun createWallet(ecKeyPair: ECKeyPair,
 )
 
 private fun generateDerivedScryptKey(password: ByteArray, kdfParams: ScryptKdfParams) =
-    scrypt().derive(password, kdfParams.salt?.hexToByteArray(), kdfParams.n, kdfParams.r, kdfParams.p, kdfParams.dklen)
+    CryptoAPI.scrypt.derive(password, kdfParams.salt?.hexToByteArray(), kdfParams.n, kdfParams.r, kdfParams.p, kdfParams.dklen)
 
 @Throws(CipherException::class)
 private fun generateAes128CtrDerivedKey(password: ByteArray, kdfParams: Aes128CtrKdfParams): ByteArray {
@@ -87,12 +86,12 @@ private fun generateAes128CtrDerivedKey(password: ByteArray, kdfParams: Aes128Ct
     // Java 8 supports this, but you have to convert the password to a character array, see
     // http://stackoverflow.com/a/27928435/3211687
 
-    return pbkdf2().derive(password, kdfParams.salt?.hexToByteArray(), kdfParams.c, DigestParams.Sha256)
+    return CryptoAPI.pbkdf2.derive(password, kdfParams.salt?.hexToByteArray(), kdfParams.c, DigestParams.Sha256)
 }
 
 @Throws(CipherException::class)
 private fun performCipherOperation(operation: AESCipher.Operation, iv: ByteArray, encryptKey: ByteArray, text: ByteArray) = try {
-    aesCipher().init(AESCipher.Mode.CTR, AESCipher.Padding.NO, operation, encryptKey, iv).performOperation(text)
+    aesCipher.init(AESCipher.Mode.CTR, AESCipher.Padding.NO, operation, encryptKey, iv).performOperation(text)
 } catch (e: Exception) {
     throw CipherException("Error performing cipher operation", e)
 }

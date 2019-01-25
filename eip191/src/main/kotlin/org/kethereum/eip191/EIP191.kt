@@ -1,6 +1,6 @@
 package org.kethereum.eip191
 
-import org.kethereum.crypto.model.ECKeyPair
+import org.kethereum.model.ECKeyPair
 import org.kethereum.crypto.signMessage
 
 /*

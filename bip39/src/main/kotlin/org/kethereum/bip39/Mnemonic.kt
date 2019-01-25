@@ -3,7 +3,7 @@ package org.kethereum.bip39
 import org.kethereum.bip32.model.Seed
 import org.kethereum.bip32.toKey
 import org.kethereum.bip39.model.MnemonicWords
-import org.kethereum.crypto.api.kdf.pbkdf2
+import org.kethereum.crypto.CryptoAPI
 import org.kethereum.extensions.toBitArray
 import org.kethereum.extensions.toByteArray
 import org.kethereum.hashes.sha256
@@ -26,7 +26,7 @@ fun MnemonicWords.toSeed(password: String = ""): Seed {
     val pass = words.joinToString(" ")
     val salt = "mnemonic$password"
 
-    return Seed(pbkdf2().derive(pass.toCharArray(), salt.toByteArray()))
+    return Seed(CryptoAPI.pbkdf2.derive(pass.toCharArray(), salt.toByteArray()))
 }
 
 /**
@@ -138,7 +138,7 @@ fun generateMnemonic(strength: Int = 128, wordList: List<String>): String {
 fun MnemonicWords.validate(wordList: List<String>) = try {
     mnemonicToEntropy(wordList)
     true
-} catch (e: Exception) {
+} catch (e: IllegalArgumentException) {
     e.printStackTrace()
     false
 }

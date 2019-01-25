@@ -1,9 +1,10 @@
 package org.kethereum.crypto
 
-import org.kethereum.crypto.api.ec.*
-import org.kethereum.crypto.model.ECKeyPair
-import org.kethereum.crypto.model.PrivateKey
-import org.kethereum.crypto.model.PublicKey
+import org.kethereum.crypto.api.ec.Curve
+import org.kethereum.crypto.api.ec.ECDSASignature
+import org.kethereum.model.ECKeyPair
+import org.kethereum.model.PrivateKey
+import org.kethereum.model.PublicKey
 import org.kethereum.keccakshortcut.keccak
 import org.kethereum.model.SignatureData
 import java.security.SignatureException
@@ -17,7 +18,7 @@ import kotlin.experimental.and
  * Adapted from the
  * [BitcoinJ ECKey](https://github.com/bitcoinj/bitcoinj/blob/master/core/src/main/java/org/bitcoinj/core/ECKey.java) implementation.
  */
-val CURVE: Curve = curve()
+val CURVE: Curve = CryptoAPI.curve
 
 /**
  * Signs the [keccak] hash of the [message] buffer.
@@ -53,7 +54,7 @@ fun signMessageHash(messageHash: ByteArray, keyPair: ECKeyPair, toCanonical: Boo
 }
 
 fun ECDSASignature.determineRecId(messageHash: ByteArray, publicKey: PublicKey): Int {
-    val signer = signer()
+    val signer = CryptoAPI.signer
     for (i in 0..3) {
         val k = signer.recover(i, this, messageHash)
         if (k != null && k == publicKey.key) {
@@ -64,13 +65,7 @@ fun ECDSASignature.determineRecId(messageHash: ByteArray, publicKey: PublicKey):
 }
 
 private fun sign(transactionHash: ByteArray, privateKey: PrivateKey, canonical: Boolean): ECDSASignature =
-        signer().sign(transactionHash, privateKey.key).let {
-            if (canonical) {
-                it.toCanonicalised()
-            } else {
-                it
-            }
-        }
+        CryptoAPI.signer.sign(transactionHash, privateKey.key, canonical)
 
 /**
  * Given an arbitrary piece of text and an Ethereum message signature encoded in bytes,
@@ -98,7 +93,7 @@ fun signedMessageToKey(message: ByteArray, signatureData: SignatureData): Public
     val messageHash = message.keccak()
     val recId = header - 27
     return PublicKey(
-            signer().recover(recId, sig, messageHash) ?: throw SignatureException("Could not recover public key from signature")
+            CryptoAPI.signer.recover(recId, sig, messageHash) ?: throw SignatureException("Could not recover public key from signature")
     )
 }
 
@@ -109,5 +104,5 @@ fun signedMessageToKey(message: ByteArray, signatureData: SignatureData): Public
  * @return BigInteger encoded public key
  */
 fun publicKeyFromPrivate(privateKey: PrivateKey): PublicKey {
-    return PublicKey(signer().publicFromPrivate(privateKey.key))
+    return PublicKey(CryptoAPI.signer.publicFromPrivate(privateKey.key))
 }

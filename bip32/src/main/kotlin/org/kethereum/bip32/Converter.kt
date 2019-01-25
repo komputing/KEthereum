@@ -2,14 +2,14 @@ package org.kethereum.bip32
 
 import org.kethereum.bip32.model.*
 import org.kethereum.crypto.CURVE
-import org.kethereum.crypto.api.mac.hmac
+import org.kethereum.crypto.CryptoAPI
 import org.kethereum.crypto.decompressKey
-import org.kethereum.crypto.model.ECKeyPair
-import org.kethereum.crypto.model.PRIVATE_KEY_SIZE
-import org.kethereum.crypto.model.PrivateKey
-import org.kethereum.crypto.model.PublicKey
 import org.kethereum.crypto.toECKeyPair
 import org.kethereum.encodings.decodeBase58WithChecksum
+import org.kethereum.model.ECKeyPair
+import org.kethereum.model.PRIVATE_KEY_SIZE
+import org.kethereum.model.PrivateKey
+import org.kethereum.model.PublicKey
 import java.math.BigInteger
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
@@ -21,7 +21,7 @@ import java.util.*
 
 fun Seed.toExtendedKey(publicKeyOnly: Boolean = false): ExtendedKey {
     try {
-        val lr = hmac().init(BITCOIN_SEED).generate(seed)
+        val lr = CryptoAPI.hmac.init(BITCOIN_SEED).generate(seed)
         val l = Arrays.copyOfRange(lr, 0, PRIVATE_KEY_SIZE)
         val r = Arrays.copyOfRange(lr, PRIVATE_KEY_SIZE, PRIVATE_KEY_SIZE + CHAINCODE_SIZE)
         val m = BigInteger(1, l)
