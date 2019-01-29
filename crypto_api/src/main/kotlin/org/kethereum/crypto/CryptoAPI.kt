@@ -4,14 +4,14 @@ import org.kethereum.crypto.api.cipher.AESCipher
 import org.kethereum.crypto.api.ec.Curve
 import org.kethereum.crypto.api.ec.KeyPairGenerator
 import org.kethereum.crypto.api.ec.Signer
-import org.kethereum.crypto.api.hashing.KeccakDigest256
-import org.kethereum.crypto.api.kdf.PBKDF2
-import org.kethereum.crypto.api.kdf.SCrypt
 import org.kethereum.crypto.api.mac.Hmac
+import org.kethereum.crypto.impl.hashing.KeccakDigest256
+import org.kethereum.crypto.impl.kdf.PBKDF2
+import org.kethereum.crypto.impl.kdf.SCrypt
 
 fun <T> loadClass(name: String): T = try {
     @Suppress("UNCHECKED_CAST")
-    Class.forName("org.kethereum.crypto.api.$name").newInstance() as T
+    Class.forName("org.kethereum.crypto.impl.$name").newInstance() as T
 } catch (e: ClassNotFoundException) {
     throw RuntimeException("There is not implementation found for $name - you need to either depend on crypto_impl_spongycastle or crypto_impl_bouncycastle")
 }

@@ -4,7 +4,7 @@ import org.kethereum.crypto.CryptoAPI
 import org.kethereum.crypto.CryptoAPI.aesCipher
 import org.kethereum.crypto.SecureRandomUtils.secureRandom
 import org.kethereum.crypto.api.cipher.AESCipher
-import org.kethereum.crypto.api.hashing.DigestParams
+import org.kethereum.crypto.impl.hashing.DigestParams
 import org.kethereum.crypto.toAddress
 import org.kethereum.crypto.toECKeyPair
 import org.kethereum.extensions.toBytesPadded
