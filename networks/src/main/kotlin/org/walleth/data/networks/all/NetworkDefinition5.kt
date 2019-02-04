@@ -13,7 +13,7 @@ class NetworkDefinition5 : NetworkDefinition {
     override val infoUrl = "https://goerli.net/#about"
 
     override val faucets = listOf(
-            "https://bridge.goerli.com"
+            "https://goerli-faucet.slock.it/?address=%address%"
     )
 
 }
