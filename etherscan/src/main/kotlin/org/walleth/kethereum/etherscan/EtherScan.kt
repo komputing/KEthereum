@@ -7,6 +7,7 @@ private val ETHERSCAN_PREFIX_MAP = mapOf(
         1L to null,
         3L to "ropsten",
         4L to "rinkeby",
+        5L to "goerli",
         42L to "kovan"
 )
 

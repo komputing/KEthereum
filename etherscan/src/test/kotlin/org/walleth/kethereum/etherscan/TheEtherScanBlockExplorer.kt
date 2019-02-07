@@ -37,7 +37,7 @@ class TheEtherScanBlockExplorer {
     @Test
     fun support4Networks() {
         assertThat(ALL_ETHERSCAN_SUPPORTED_NETWORKS.size)
-                .isEqualTo(4)
+                .isEqualTo(5)
     }
 
 
