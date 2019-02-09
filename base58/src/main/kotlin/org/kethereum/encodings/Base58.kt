@@ -22,7 +22,7 @@ import java.util.*
 private const val ENCODED_ZERO = '1'
 private const val CHECKSUM_SIZE = 4
 
-private val alphabet by lazy { "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz".toCharArray() }
+private const val alphabet = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz"
 private val alphabetIndices by lazy {
     IntArray(128) { alphabet.indexOf(it.toChar()) }
 }
@@ -34,7 +34,7 @@ private val alphabetIndices by lazy {
  */
 fun ByteArray.encodeToBase58String(): String {
 
-    val input = copyOf(this.size) // since we modify it in-place
+    val input = copyOf(size) // since we modify it in-place
     if (input.isEmpty()) {
         return ""
     }
@@ -72,12 +72,12 @@ fun ByteArray.encodeToBase58String(): String {
  */
 @Throws(NumberFormatException::class)
 fun String.decodeBase58(): ByteArray {
-    if (this.isEmpty()) {
+    if (isEmpty()) {
         return ByteArray(0)
     }
     // Convert the base58-encoded ASCII chars to a base58 byte sequence (base58 digits).
-    val input58 = ByteArray(this.length)
-    for (i in 0 until this.length) {
+    val input58 = ByteArray(length)
+    for (i in 0 until length) {
         val c = this[i]
         val digit = if (c.toInt() < 128) alphabetIndices[c.toInt()] else -1
         if (digit < 0) {
@@ -91,7 +91,7 @@ fun String.decodeBase58(): ByteArray {
         ++zeros
     }
     // Convert base-58 digits to base-256 digits.
-    val decoded = ByteArray(this.length)
+    val decoded = ByteArray(length)
     var outputStart = decoded.size
     var inputStart = zeros
     while (inputStart < input58.size) {
@@ -133,20 +133,19 @@ private fun divmod(number: ByteArray, firstDigit: UInt, base: UInt, divisor: UIn
 }
 
 /**
- * Encodes the given bytes as a base58 string, a checksum is appended according to
+ * Encodes the given bytes as a base58 string, a checksum is appended
  *
  * @return the base58-encoded string
  */
-fun ByteArray.encodeToBase58WithChecksum(): String {
-    val checksum = sha256().sha256()
-    val extended = ByteArray(this.size + CHECKSUM_SIZE)
-    System.arraycopy(this, 0, extended, 0, this.size)
-    System.arraycopy(checksum, 0, extended, this.size, CHECKSUM_SIZE)
-    return extended.encodeToBase58String()
-}
+fun ByteArray.encodeToBase58WithChecksum() = ByteArray(size + CHECKSUM_SIZE).apply {
+    System.arraycopy(this@encodeToBase58WithChecksum, 0, this, 0, this@encodeToBase58WithChecksum.size)
+    val checksum = this@encodeToBase58WithChecksum.sha256().sha256()
+    System.arraycopy(checksum, 0, this, this@encodeToBase58WithChecksum.size, CHECKSUM_SIZE)
+
+}.encodeToBase58String()
 
 fun String.decodeBase58WithChecksum(): ByteArray {
-    val rawBytes = this.decodeBase58()
+    val rawBytes = decodeBase58()
     if (rawBytes.size < CHECKSUM_SIZE) {
         throw Exception("Too short for checksum: $this l:  ${rawBytes.size}")
     }
