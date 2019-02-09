@@ -10,6 +10,7 @@ buildscript {
 
         klaxon_version = '5.0.4'
         moshi_version = '1.8.0'
+        jupiter_version = '5.4.0'
     }
 
     repositories {
@@ -39,9 +40,9 @@ subprojects {
             implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 
             testImplementation 'org.assertj:assertj-core:3.11.1'
-            testCompile 'org.junit.jupiter:junit-jupiter-api:5.3.2'
-            testCompile 'org.junit.jupiter:junit-jupiter-params:5.3.2'
-            testRuntime 'org.junit.jupiter:junit-jupiter-engine:5.3.2'
+            testCompile "org.junit.jupiter:junit-jupiter-api:$jupiter_version"
+            testCompile "org.junit.jupiter:junit-jupiter-params:$jupiter_version"
+            testRuntime "org.junit.jupiter:junit-jupiter-engine:$jupiter_version"
         }
 
         task sourcesJar(type: Jar, dependsOn: classes) {
