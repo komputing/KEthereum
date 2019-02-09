@@ -10,6 +10,10 @@ package org.kethereum.encodings
  * base-256 digits, convert the number to be represented using base-58 digits, preserve the exact
  * number of leading zeros (which are otherwise lost during the mathematical operations on the
  * numbers), and finally represent the resulting base-58 digits as alphanumeric ASCII characters.
+ *
+ * This is the Kotlin implementation of base58 - it is based implementation of base58 in java
+ * in bitcoinj (https://bitcoinj.github.io) - thanks to  Google Inc. and Andreas Schildbach
+ *
  */
 
 import org.kethereum.hashes.sha256
