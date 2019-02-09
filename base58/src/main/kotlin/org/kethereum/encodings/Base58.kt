@@ -48,7 +48,7 @@ fun ByteArray.encodeToBase58String(): String {
     var outputStart = encoded.size
     var inputStart = zeros
     while (inputStart < input.size) {
-        encoded[--outputStart] = alphabet[divmod(input, inputStart, 256, 58)]
+        encoded[--outputStart] = alphabet[divmod(input, inputStart.toUInt(), 256.toUInt(), 58.toUInt()).toInt()]
         if (input[inputStart].toInt() == 0) {
             ++inputStart // optimization - skip leading zeros
         }
@@ -95,7 +95,7 @@ fun String.decodeBase58(): ByteArray {
     var outputStart = decoded.size
     var inputStart = zeros
     while (inputStart < input58.size) {
-        decoded[--outputStart] = divmod(input58, inputStart, 58, 256).toByte()
+        decoded[--outputStart] = divmod(input58, inputStart.toUInt(), 58.toUInt(), 256.toUInt()).toByte()
         if (input58[inputStart].toInt() == 0) {
             ++inputStart // optimization - skip leading zeros
         }
@@ -120,13 +120,13 @@ fun String.decodeBase58(): ByteArray {
  * @param divisor    the number to divide by (up to 256)
  * @return the remainder of the division operation
  */
-private fun divmod(number: ByteArray, firstDigit: Int, base: Int, divisor: Int): Int {
+private fun divmod(number: ByteArray, firstDigit: UInt, base: UInt, divisor: UInt): UInt {
     // this is just long division which accounts for the base of the input digits
-    var remainder = 0
-    for (i in firstDigit until number.size) {
-        val digit = number[i].toInt() and 0xFF
+    var remainder = 0.toUInt()
+    for (i in firstDigit until number.size.toUInt()) {
+        val digit = number[i.toInt()].toUByte()
         val temp = remainder * base + digit
-        number[i] = (temp / divisor).toByte()
+        number[i.toInt()] = (temp / divisor).toByte()
         remainder = temp % divisor
     }
     return remainder
