@@ -68,8 +68,8 @@ internal fun ByteArray.arrayCopy(srcPos: Int, dest: ByteArray, destPos: Int, len
  */
 internal fun ByteArray.putLong(offset: Int, value: Long) {
     for(i in 7 downTo 0) {
-        val temp =  ((value ushr (i *  8)) and 0xff).toInt()
-        this[offset + 7 - i] = temp.toUByte()
+        val temp =  (value ushr (i *  8)).toUByte()
+        this[offset + 7 - i] = temp.toByte()
     }
 }
 

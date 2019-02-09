@@ -25,14 +25,3 @@ internal fun Int.toBytes(): Array<Byte> {
     result[3] = this.toByte()
     return result.toTypedArray()
 }
-
-/**
- * Converts an [Int] to an unsigned [Byte].
- * Thanks to manu0466
- *
- * TODO: Remove this once Kotlin 1.3 is released as it brings support for UByte
- */
-internal fun Int.toUByte(): Byte  = when {
-    this < 128 -> toByte()
-    else -> (-256 + this).toByte()
-}
