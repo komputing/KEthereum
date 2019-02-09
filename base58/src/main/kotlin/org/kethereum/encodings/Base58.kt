@@ -34,7 +34,7 @@ private val alphabetIndices by lazy {
  */
 fun ByteArray.encodeToBase58String(): String {
 
-    val input = Arrays.copyOf(this, this.size) // since we modify it in-place
+    val input = copyOf(this.size) // since we modify it in-place
     if (input.isEmpty()) {
         return ""
     }
