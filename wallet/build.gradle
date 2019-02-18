@@ -8,6 +8,7 @@ buildscript {
 
 dependencies {
     implementation project(":crypto")
+    implementation project(":crypto_api")
     implementation project(":keccak_shortcut")
     implementation project(":extensions")
     implementation project(":model")

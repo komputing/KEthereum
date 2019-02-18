@@ -5,7 +5,6 @@ import org.kethereum.crypto.api.ec.Curve
 import org.kethereum.crypto.api.ec.KeyPairGenerator
 import org.kethereum.crypto.api.ec.Signer
 import org.kethereum.crypto.api.mac.Hmac
-import org.kethereum.crypto.impl.hashing.KeccakDigest256
 import org.kethereum.crypto.impl.kdf.PBKDF2
 import org.kethereum.crypto.impl.kdf.SCrypt
 
@@ -18,7 +17,6 @@ fun <T> loadClass(name: String): T = try {
 
 object CryptoAPI {
     val hmac by lazy { loadClass("mac.HmacImpl") as Hmac }
-    val keccakDigest256 by lazy { loadClass("hashing.KeccakDigest256Impl") as KeccakDigest256 }
 
     val keyPairGenerator by lazy { loadClass("ec.EllipticCurveKeyPairGenerator") as KeyPairGenerator }
     val curve by lazy { loadClass("ec.EllipticCurve") as Curve }
