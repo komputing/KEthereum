@@ -3,14 +3,14 @@ package org.kethereum.erc961
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.kethereum.model.Address
-import org.kethereum.model.ChainDefinition
+import org.kethereum.model.ChainId
 import org.kethereum.model.Token
 
 class TheERC961Generator {
 
     private val testAddress = Address("0x00AB42")
-    private val testChain = ChainDefinition(4)
-    private val baseToken = Token("TST", testAddress, testChain)
+    private val testChainId = ChainId(4)
+    private val baseToken = Token("TST", testAddress, testChainId)
 
     @Test
     fun basicTo961Works() {

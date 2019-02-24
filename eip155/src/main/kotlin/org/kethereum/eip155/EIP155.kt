@@ -1,11 +1,11 @@
 package org.kethereum.eip155
 
-import org.kethereum.model.ECKeyPair
 import org.kethereum.crypto.signMessage
 import org.kethereum.crypto.signedMessageToKey
 import org.kethereum.crypto.toAddress
 import org.kethereum.functions.encodeRLP
 import org.kethereum.model.ChainDefinition
+import org.kethereum.model.ECKeyPair
 import org.kethereum.model.SignatureData
 import org.kethereum.model.Transaction
 import java.math.BigInteger.ZERO
@@ -24,8 +24,8 @@ import java.math.BigInteger.ZERO
  */
 
 fun Transaction.signViaEIP155(key: ECKeyPair, chainDefinition: ChainDefinition): SignatureData {
-    val signatureData = key.signMessage(encodeRLP(SignatureData().apply { v = chainDefinition.id.toByte() }))
-    return signatureData.copy(v = (signatureData.v + chainDefinition.id * 2 + 8).toByte())
+    val signatureData = key.signMessage(encodeRLP(SignatureData().apply { v = chainDefinition.id.value.toByte() }))
+    return signatureData.copy(v = (signatureData.v + chainDefinition.id.value * 2 + 8).toByte())
 }
 
 /**

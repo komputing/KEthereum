@@ -1,12 +1,13 @@
 package org.walleth.data.networks.all
 
 import org.kethereum.model.ChainDefinition
+import org.kethereum.model.ChainId
 import org.walleth.data.networks.NetworkDefinition
 
 
 class NetworkDefinition5 : NetworkDefinition {
 
-    override val chain = ChainDefinition(5L, "GOR")
+    override val chain = ChainDefinition(ChainId(5L), "GOR")
 
     override fun getNetworkName() = "goerli"
 

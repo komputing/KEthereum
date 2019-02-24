@@ -20,5 +20,5 @@ fun Token.generateURL(): String {
         params.add("type=$it")
     }
 
-    return "ethereum:token_info-$address@${chain.id}?" + params.joinToString("&")
+    return "ethereum:token_info-$address@${chain.value}?" + params.joinToString("&")
 }

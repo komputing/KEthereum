@@ -2,17 +2,13 @@ package org.kethereum.eip155
 
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
-import org.kethereum.model.PrivateKey
 import org.kethereum.crypto.toECKeyPair
 import org.kethereum.functions.encodeRLP
 import org.kethereum.functions.rlp.RLPList
 import org.kethereum.functions.rlp.decodeRLP
 import org.kethereum.functions.toTransaction
 import org.kethereum.functions.toTransactionSignatureData
-import org.kethereum.model.Address
-import org.kethereum.model.ChainDefinition
-import org.kethereum.model.SignatureData
-import org.kethereum.model.Transaction
+import org.kethereum.model.*
 import org.walleth.khex.hexToByteArray
 import org.walleth.khex.toHexString
 import java.math.BigInteger
@@ -41,7 +37,7 @@ class TheEIP155 {
             to = Address("0x3535353535353535353535353535353535353535")
             value = BigInteger.valueOf(1000000000000000000L)
         }
-        val signatureData = transaction.signViaEIP155(KEY_PAIR, ChainDefinition(1L))
+        val signatureData = transaction.signViaEIP155(KEY_PAIR, ChainDefinition(ChainId(1L), "ETH"))
 
         val result = transaction.encodeRLP(signatureData).toHexString()
         val expected = "0xf86c098504a817c800825208943535353535353535353535353535353535353535880" +
@@ -58,7 +54,7 @@ class TheEIP155 {
         val tx = (hex.hexToByteArray().decodeRLP() as RLPList).toTransaction()!!
         val sig = (hex.hexToByteArray().decodeRLP() as RLPList).toTransactionSignatureData()
 
-        assertThat(tx.extractFrom(sig,4)).isEqualTo(Address("8a681d2b7400d67966eef4f585b31a7458f96dba"))
+        assertThat(tx.extractFrom(sig, 4)).isEqualTo(Address("8a681d2b7400d67966eef4f585b31a7458f96dba"))
 
 
     }
