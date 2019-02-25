@@ -29,23 +29,33 @@ class EthereumRPC(val baseURL: String, private val okhttp: OkHttpClient = OkHttp
 
     private fun buildRequest(medhod: String, params: String = "") = buildRequest(RequestBody.create(JSONMediaType, """{"jsonrpc":"2.0","method":"$medhod","params":[$params],"id":1}"""))
 
-    fun getBlockNumberString() = okhttp.newCall(buildRequest("eth_blockNumber")).execute().body().use { body ->
-        body?.source()?.use { stringResultAdapter.fromJson(it) }
-    }?.result
+    private fun stringCall(function: String, params: String = ""): StringResultResponse? {
+        return okhttp.newCall(buildRequest(function, params)).execute().body().use { body ->
+            body?.source()?.use { stringResultAdapter.fromJson(it) }
+        }
+    }
 
     fun getBlockByNumber(number: String) = okhttp.newCall(buildRequest("eth_blockByNumber", "\"$number \", true")).execute().body().use { body ->
         body?.source()?.use { blockInfoAdapter.fromJson(it) }
     }?.result?.toBlockInformation()
 
+    fun sendRawTransaction(data: String) = stringCall("eth_sendRawTransaction", "\"$data\"")
 
-    fun sendRawTransaction(data: String) = okhttp.newCall(buildRequest("eth_sendRawTransaction", "\"$data\"")).execute().body().use { body ->
-        body?.source()?.use { stringResultAdapter.fromJson(it) }
-    }
+    fun blockNumber() = stringCall("eth_blockNumber")
 
+    fun call(callObject: String, block: String) = stringCall("eth_call", "\"$callObject\",\"$block\"")
 
-    fun getBalance(address: Address, block: String) = okhttp.newCall(buildRequest("eth_getBalance", "\"${address.hex}\",\"$block\"")).execute().body().use { body ->
-        body?.source()?.use { stringResultAdapter.fromJson(it) }
-    }
+    fun gasPrice() = stringCall("eth_gasPrice")
+
+    fun getStorageAt(address: String, position: String, block: String) = stringCall("eth_getStorageAt", "\"$address\",\"$position\",\"$block\"")
+
+    fun getTransactionCount(address: String, block: String) = stringCall("eth_getTransactionCount", "\"$address\",\"$block\"")
+
+    fun getCode(address: String, block: String) = stringCall("eth_getCode", "\"$address\",\"$block\"")
+
+    fun estimateGas(callObject: String, block: String) = stringCall("eth_estimateGas", "\"$callObject\",\"$block\"")
+
+    fun getBalance(address: Address, block: String) = stringCall("eth_getBalance", "\"${address.hex}\",\"$block\"")
 }
 
 

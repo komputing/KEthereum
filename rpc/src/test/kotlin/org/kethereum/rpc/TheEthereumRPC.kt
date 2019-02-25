@@ -64,7 +64,7 @@ class TheEthereumRPC {
         val response = "{\"jsonrpc\":\"2.0\",\"id\":83,\"result\":\"0x4299d\"}\n"
         server.enqueue(MockResponse().setBody(response))
 
-        assertThat(tested.getBlockNumberString()).isEqualTo("0x4299d")
+        assertThat(tested.blockNumber()?.result).isEqualTo("0x4299d")
     }
 
     @Test
