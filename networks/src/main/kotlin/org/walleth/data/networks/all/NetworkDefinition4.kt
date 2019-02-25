@@ -7,9 +7,10 @@ import org.walleth.data.networks.NetworkDefinition
 
 class NetworkDefinition4 : NetworkDefinition {
 
-    override val tokenName = "RIN"
+    override val tokenShortName = "RIN"
+    override val tokenName = "Rinkeby Ether"
 
-    override val chain = ChainDefinition(ChainId(4L), tokenName)
+    override val chain = ChainDefinition(ChainId(4L), tokenShortName)
 
     override fun getNetworkName() = "rinkeby"
 

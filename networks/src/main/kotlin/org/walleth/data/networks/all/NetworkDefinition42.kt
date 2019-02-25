@@ -6,7 +6,8 @@ import org.walleth.data.networks.NetworkDefinition
 
 class NetworkDefinition42 : NetworkDefinition {
 
-    override val tokenName = "KOV"
+    override val tokenShortName = "KOV"
+    override val tokenName = "Kovan Ether"
 
     override val chain = ChainDefinition(ChainId(42L), "KOV")
 

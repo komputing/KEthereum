@@ -6,9 +6,10 @@ import org.walleth.data.networks.NetworkDefinition
 
 class NetworkDefinition3 : NetworkDefinition {
 
-    override val tokenName = "ROP"
+    override val tokenShortName = "ROP"
+    override val tokenName = "Ropsten Ether"
 
-    override val chain = ChainDefinition(ChainId(3L), tokenName)
+    override val chain = ChainDefinition(ChainId(3L), tokenShortName)
 
     override fun getNetworkName() = "ropsten"
 

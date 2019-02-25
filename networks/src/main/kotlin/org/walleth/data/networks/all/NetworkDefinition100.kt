@@ -6,9 +6,10 @@ import org.walleth.data.networks.NetworkDefinition
 
 class NetworkDefinition100 : NetworkDefinition {
 
+    override val tokenShortName = "xDAI"
     override val tokenName = "xDAI"
 
-    override val chain = ChainDefinition(ChainId(100L), tokenName)
+    override val chain = ChainDefinition(ChainId(100L), tokenShortName)
 
     override fun getNetworkName() = "xDai"
 

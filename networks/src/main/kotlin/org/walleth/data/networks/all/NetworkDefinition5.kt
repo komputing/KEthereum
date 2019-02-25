@@ -7,9 +7,10 @@ import org.walleth.data.networks.NetworkDefinition
 
 class NetworkDefinition5 : NetworkDefinition {
 
-    override val tokenName = "GOR"
+    override val tokenShortName = "GOR"
+    override val tokenName = "Goerli Ether"
 
-    override val chain = ChainDefinition(ChainId(5L), tokenName)
+    override val chain = ChainDefinition(ChainId(5L), tokenShortName)
 
     override fun getNetworkName() = "goerli"
 
