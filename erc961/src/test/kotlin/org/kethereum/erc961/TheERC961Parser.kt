@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Assertions.assertThrows
 import org.junit.jupiter.api.Test
 import org.kethereum.model.Address
 import org.kethereum.model.ChainDefinition
+import org.kethereum.model.ChainId
 
 class TheERC961Parser {
 
@@ -16,8 +17,8 @@ class TheERC961Parser {
 
     @Test
     fun canParseChain() {
-        assertThat(parseTokenFromEthereumURI("ethereum:token_info-0x00AB42@4?symbol=TST").chain)
-                .isEqualTo(ChainDefinition(4))
+        assertThat(parseTokenFromEthereumURI("ethereum:token_info-0x00AB42@425?symbol=TST").chain)
+                .isEqualTo(ChainId(425))
     }
 
     @Test
@@ -52,9 +53,9 @@ class TheERC961Parser {
 
     @Test
     fun canParseFull() {
-        val parseTokenFromEthereumURI = parseTokenFromEthereumURI("ethereum:token_info-0x00AB43@42?type=TypTest&name=NameTest&decimals=2&symbol=SymbolTest")
+        val parseTokenFromEthereumURI = parseTokenFromEthereumURI("ethereum:token_info-0x00AB43@425?type=TypTest&name=NameTest&decimals=2&symbol=SymbolTest")
         assertThat(parseTokenFromEthereumURI.address).isEqualTo(Address("0x00AB43"))
-        assertThat(parseTokenFromEthereumURI.chain).isEqualTo(ChainDefinition(42))
+        assertThat(parseTokenFromEthereumURI.chain).isEqualTo(ChainId(425))
         assertThat(parseTokenFromEthereumURI.type).isEqualTo("TypTest")
         assertThat(parseTokenFromEthereumURI.name).isEqualTo("NameTest")
         assertThat(parseTokenFromEthereumURI.symbol).isEqualTo("SymbolTest")

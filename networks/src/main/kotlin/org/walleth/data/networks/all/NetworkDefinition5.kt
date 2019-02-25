@@ -1,12 +1,15 @@
 package org.walleth.data.networks.all
 
 import org.kethereum.model.ChainDefinition
+import org.kethereum.model.ChainId
 import org.walleth.data.networks.NetworkDefinition
 
 
 class NetworkDefinition5 : NetworkDefinition {
 
-    override val chain = ChainDefinition(5L, "GOR")
+    override val tokenName = "GOR"
+
+    override val chain = ChainDefinition(ChainId(5L), tokenName)
 
     override fun getNetworkName() = "goerli"
 
@@ -14,6 +17,11 @@ class NetworkDefinition5 : NetworkDefinition {
 
     override val faucets = listOf(
             "https://goerli-faucet.slock.it/?address=%address%"
+    )
+
+    override val rpcEndpoints = listOf("https://rpc.goerli.mudit.blog/",
+            "https://rpc.slock.it/goerli ",
+            "https://goerli.prylabs.net/"
     )
 
 }

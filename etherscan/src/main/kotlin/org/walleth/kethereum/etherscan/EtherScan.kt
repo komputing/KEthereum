@@ -13,7 +13,7 @@ private val ETHERSCAN_PREFIX_MAP = mapOf(
 
 val ALL_ETHERSCAN_SUPPORTED_NETWORKS = ETHERSCAN_PREFIX_MAP.map { it.key }.toSet()
 
-private fun getPrefix(chain: ChainDefinition) =  ETHERSCAN_PREFIX_MAP[chain.id]
+private fun getPrefix(chain: ChainDefinition) =  ETHERSCAN_PREFIX_MAP[chain.id.value]
 
 private fun getAPIPrefix(chain: ChainDefinition) = getPrefix(chain)?.let { "-$it" } ?: ""
 fun getEtherScanAPIBaseURL(chain: ChainDefinition) = "https://api" + getAPIPrefix(chain) + ".etherscan.io"
