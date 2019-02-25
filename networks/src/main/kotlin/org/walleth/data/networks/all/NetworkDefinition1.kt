@@ -6,7 +6,9 @@ import org.walleth.data.networks.NetworkDefinition
 
 class NetworkDefinition1 : NetworkDefinition {
 
-    override val chain = ChainDefinition(ChainId(1L), "ETH")
+    override val tokenName = "ETH"
+
+    override val chain = ChainDefinition(ChainId(1L), tokenName)
 
     override fun getNetworkName() = "main"
 
