@@ -19,4 +19,9 @@ class NetworkDefinition5 : NetworkDefinition {
             "https://goerli-faucet.slock.it/?address=%address%"
     )
 
+    override val rpcEndpoints = listOf("https://rpc.goerli.mudit.blog/",
+            "https://rpc.slock.it/goerli ",
+            "https://goerli.prylabs.net/"
+    )
+
 }

@@ -19,4 +19,6 @@ class NetworkDefinition42 : NetworkDefinition {
             "https://gitter.im/kovan-testnet/faucet"
     )
 
+    override val rpcEndpoints = listOf("https://kovan.infura.io")
+
 }

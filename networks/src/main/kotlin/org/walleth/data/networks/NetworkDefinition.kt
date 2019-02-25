@@ -9,4 +9,6 @@ interface NetworkDefinition {
     val chain: ChainDefinition
     val infoUrl: String
     val faucets: List<String>
+
+    val rpcEndpoints: List<String>
 }

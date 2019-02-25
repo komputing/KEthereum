@@ -17,4 +17,6 @@ class NetworkDefinition3 : NetworkDefinition {
     override val faucets = listOf(
             "https://faucet.ropsten.be?%address%"
     )
+
+    override val rpcEndpoints = listOf("https://ropsten.infura.io")
 }

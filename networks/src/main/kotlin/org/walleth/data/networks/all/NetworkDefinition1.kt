@@ -15,4 +15,6 @@ class NetworkDefinition1 : NetworkDefinition {
     override val infoUrl = "https://ethstats.net"
 
     override val faucets = emptyList<String>()
+
+    override val rpcEndpoints = listOf("https://mainnet.infura.io", "https://api.mycryptoapi.com/eth")
 }

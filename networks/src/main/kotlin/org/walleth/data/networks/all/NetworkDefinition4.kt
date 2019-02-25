@@ -19,4 +19,5 @@ class NetworkDefinition4 : NetworkDefinition {
             "https://faucet.rinkeby.io"
     )
 
+    override val rpcEndpoints = listOf("https://rinkeby.infura.io")
 }
