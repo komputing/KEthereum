@@ -40,12 +40,12 @@ class EthereumRPC(val baseURL: String, private val okhttp: OkHttpClient = OkHttp
 
     fun sendRawTransaction(data: String) = okhttp.newCall(buildRequest("eth_sendRawTransaction", "\"$data\"")).execute().body().use { body ->
         body?.source()?.use { stringResultAdapter.fromJson(it) }
-    }?.result
+    }
 
 
     fun getBalance(address: Address, block: String) = okhttp.newCall(buildRequest("eth_getBalance", "\"${address.hex}\",\"$block\"")).execute().body().use { body ->
         body?.source()?.use { stringResultAdapter.fromJson(it) }
-    }?.result
+    }
 }
 
 
