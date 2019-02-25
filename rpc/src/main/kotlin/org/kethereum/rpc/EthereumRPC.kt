@@ -23,7 +23,7 @@ class EthereumRPC(val baseURL: String, private val okhttp: OkHttpClient = OkHttp
 
     private fun buildBlockRequest() = buildRequest(RequestBody.create(JSONMediaType, "{\"jsonrpc\":\"2.0\",\"method\":\"eth_blockNumber\",\"params\":[],\"id\":1}"))
 
-    private fun buildBlockByNumberRequest(number: String) = buildRequest(RequestBody.create(JSONMediaType, """{"jsonrpc":"2.0","method":"eth_getBlockByNumber","params":["$number", true],"id":1}}"""))
+    private fun buildBlockByNumberRequest(number: String) = buildRequest(RequestBody.create(JSONMediaType, """{"jsonrpc":"2.0","method":"eth_getBlockByNumber","params":["$number", true],"id":1}"""))
 
     private fun buildRequest(body: RequestBody) = Request.Builder().url(baseURL)
             .method("POST", body)
