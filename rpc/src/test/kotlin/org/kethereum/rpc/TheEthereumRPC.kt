@@ -28,6 +28,24 @@ class TheEthereumRPC {
     }
 
     @Test
+    fun getBalanceWorks() {
+        //language=JSON
+        val response = "{\"jsonrpc\":\"2.0\",\"id\":83,\"result\":\"0x0234c8a3397aab58\"}\n"
+        server.enqueue(MockResponse().setBody(response))
+
+        assertThat(tested.getBalance(Address("0x0"),"latest")).isEqualTo("0x0234c8a3397aab58")
+    }
+
+    @Test
+    fun sendRawTransactionWorks() {
+        //language=JSON
+        val response = "{\"jsonrpc\":\"2.0\",\"id\":83,\"result\":\"0xe670ec64341771606e55d6b4ca35a1a6b75ee3d5145a99d05921026d1527331\"}\n"
+        server.enqueue(MockResponse().setBody(response))
+
+        assertThat(tested.sendRawTransaction("0x00")).isEqualTo("0xe670ec64341771606e55d6b4ca35a1a6b75ee3d5145a99d05921026d1527331")
+    }
+
+    @Test
     fun getBlockNumberWorks() {
         //language=JSON
         val response = "{\"jsonrpc\":\"2.0\",\"id\":83,\"result\":\"0x4299d\"}\n"

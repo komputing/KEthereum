@@ -6,9 +6,10 @@ import okhttp3.MediaType
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody
+import org.kethereum.model.Address
 import org.kethereum.rpc.model.BigIntegerAdapter
 import org.kethereum.rpc.model.BlockInformationResponse
-import org.kethereum.rpc.model.BlockNumberResponse
+import org.kethereum.rpc.model.StringResultResponse
 
 
 val JSONMediaType: MediaType = MediaType.parse("application/json")!!
@@ -17,24 +18,34 @@ class EthereumRPC(val baseURL: String, private val okhttp: OkHttpClient = OkHttp
 
     private val moshi = Moshi.Builder().build().newBuilder().add(BigIntegerAdapter()).build()
 
-    private val blockNumberAdapter: JsonAdapter<BlockNumberResponse> = moshi.adapter(BlockNumberResponse::class.java)
+    private val stringResultAdapter: JsonAdapter<StringResultResponse> = moshi.adapter(StringResultResponse::class.java)
 
     private val blockInfoAdapter: JsonAdapter<BlockInformationResponse> = moshi.adapter(BlockInformationResponse::class.java)
 
-    private fun buildBlockRequest() = buildRequest(RequestBody.create(JSONMediaType, "{\"jsonrpc\":\"2.0\",\"method\":\"eth_blockNumber\",\"params\":[],\"id\":1}"))
-
-    private fun buildBlockByNumberRequest(number: String) = buildRequest(RequestBody.create(JSONMediaType, """{"jsonrpc":"2.0","method":"eth_getBlockByNumber","params":["$number", true],"id":1}"""))
 
     private fun buildRequest(body: RequestBody) = Request.Builder().url(baseURL)
             .method("POST", body)
             .build()
 
-    fun getBlockNumberString() = okhttp.newCall(buildBlockRequest()).execute().body().use { body ->
-        body?.source()?.use { blockNumberAdapter.fromJson(it) }
+    private fun buildRequest(medhod: String, params: String = "") = buildRequest(RequestBody.create(JSONMediaType, """{"jsonrpc":"2.0","method":"$medhod","params":[$params],"id":1}"""))
+
+    fun getBlockNumberString() = okhttp.newCall(buildRequest("eth_blockNumber")).execute().body().use { body ->
+        body?.source()?.use { stringResultAdapter.fromJson(it) }
     }?.result
 
-    fun getBlockByNumber(number: String) = okhttp.newCall(buildBlockByNumberRequest(number)).execute().body().use { body ->
+    fun getBlockByNumber(number: String) = okhttp.newCall(buildRequest("eth_blockByNumber", "\"$number \", true")).execute().body().use { body ->
         body?.source()?.use { blockInfoAdapter.fromJson(it) }
     }?.result?.toBlockInformation()
 
+
+    fun sendRawTransaction(data: String) = okhttp.newCall(buildRequest("eth_sendRawTransaction", "\"$data\"")).execute().body().use { body ->
+        body?.source()?.use { stringResultAdapter.fromJson(it) }
+    }?.result
+
+
+    fun getBalance(address: Address, block: String) = okhttp.newCall(buildRequest("eth_getBalance", "\"${address.hex}\",\"$block\"")).execute().body().use { body ->
+        body?.source()?.use { stringResultAdapter.fromJson(it) }
+    }?.result
 }
+
+
