@@ -74,7 +74,7 @@ private fun createWallet(ecKeyPair: ECKeyPair,
 )
 
 private fun generateDerivedScryptKey(password: ByteArray, kdfParams: ScryptKdfParams) =
-    CryptoAPI.scrypt.derive(password, kdfParams.salt?.hexToByteArray(), kdfParams.n, kdfParams.r, kdfParams.p, kdfParams.dklen)
+        CryptoAPI.scrypt.derive(password, kdfParams.salt?.hexToByteArray(), kdfParams.n, kdfParams.r, kdfParams.p, kdfParams.dklen)
 
 @Throws(CipherException::class)
 private fun generateAes128CtrDerivedKey(password: ByteArray, kdfParams: Aes128CtrKdfParams): ByteArray {
@@ -124,7 +124,7 @@ fun Wallet.decrypt(password: String): ECKeyPair {
     val derivedMac = generateMac(derivedKey, cipherText)
 
     if (!Arrays.equals(derivedMac, mac)) {
-        throw CipherException("Invalid password provided")
+        throw InvalidPasswordException()
     }
 
     val encryptKey = Arrays.copyOfRange(derivedKey, 0, 16)
