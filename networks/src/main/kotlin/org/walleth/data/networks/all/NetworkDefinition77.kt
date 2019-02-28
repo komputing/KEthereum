@@ -15,7 +15,9 @@ class NetworkDefinition77 : NetworkDefinition {
 
     override val infoUrl = "https://poa.network"
 
-    override val faucets = emptyList<String>()
+    override val faucets = listOf(
+            "https://faucet-sokol.herokuapp.com"
+    )
 
     override val rpcEndpoints = listOf("https://sokol.poa.network")
 }
