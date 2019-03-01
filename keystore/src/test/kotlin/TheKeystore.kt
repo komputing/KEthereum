@@ -4,7 +4,7 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.kethereum.crypto.createEthereumKeyPair
 import org.kethereum.crypto.toAddress
-import org.kethereum.keystore.api.InitializingKeyStore
+import org.kethereum.keystore.api.InitializingFileKeyStore
 import org.kethereum.wallet.model.InvalidPasswordException
 import java.io.File
 import kotlin.test.assertFailsWith
@@ -23,12 +23,12 @@ class TheKeystore {
 
     @Test
     fun startsEmpty() {
-        assertThat(InitializingKeyStore(keyStoreDir).getAddresses()).isEmpty()
+        assertThat(InitializingFileKeyStore(keyStoreDir).getAddresses()).isEmpty()
     }
 
     @Test
     fun canInsertKey() {
-        val tested = InitializingKeyStore(keyStoreDir)
+        val tested = InitializingFileKeyStore(keyStoreDir)
         tested.addKey(key1, "pwd")
         assertThat(tested.getAddresses().size).isEqualTo(1)
     }
@@ -36,7 +36,7 @@ class TheKeystore {
 
     @Test
     fun whenAddingTheSameKeyTwiceWeHaveOneInStore() {
-        val tested = InitializingKeyStore(keyStoreDir)
+        val tested = InitializingFileKeyStore(keyStoreDir)
         tested.addKey(key1, "pwd")
         tested.addKey(key1, "yolo")
         assertThat(tested.getAddresses().size).isEqualTo(1)
@@ -44,7 +44,7 @@ class TheKeystore {
 
     @Test
     fun whenAddingTwoKeysWeHaveTwoInStore() {
-        val tested = InitializingKeyStore(keyStoreDir)
+        val tested = InitializingFileKeyStore(keyStoreDir)
         tested.addKey(key1, "pwd")
         tested.addKey(key2, "pwd")
         assertThat(tested.getAddresses().size).isEqualTo(2)
@@ -52,7 +52,7 @@ class TheKeystore {
 
     @Test
     fun weCanDeleteAKey() {
-        val tested = InitializingKeyStore(keyStoreDir)
+        val tested = InitializingFileKeyStore(keyStoreDir)
         tested.addKey(key1, "pwd")
         tested.deleteKey(tested.getAddresses().first())
         assertThat(tested.getAddresses()).isEmpty()
@@ -60,7 +60,7 @@ class TheKeystore {
 
     @Test
     fun hasKeyReturnsTrueForAddressInStore() {
-        val tested = InitializingKeyStore(keyStoreDir)
+        val tested = InitializingFileKeyStore(keyStoreDir)
         tested.addKey(key1, "pwd")
         assertThat(tested.hasKeyForForAddress(tested.getAddresses().first())).isTrue()
     }
@@ -68,7 +68,7 @@ class TheKeystore {
 
     @Test
     fun weCanGetTheKey() {
-        val tested = InitializingKeyStore(keyStoreDir)
+        val tested = InitializingFileKeyStore(keyStoreDir)
         tested.addKey(key1, "pwd")
         assertThat(tested.getKeyForAddress(tested.getAddresses().first(),"pwd")).isEqualTo(key1)
     }
@@ -76,7 +76,7 @@ class TheKeystore {
 
     @Test
     fun rejectsWrongPassword() {
-        val tested = InitializingKeyStore(keyStoreDir)
+        val tested = InitializingFileKeyStore(keyStoreDir)
         tested.addKey(key1, "pwd")
         assertFailsWith<InvalidPasswordException> {
             tested.getKeyForAddress(tested.getAddresses().first(), "foo")
@@ -85,7 +85,7 @@ class TheKeystore {
 
     @Test
     fun hasKeyReturnsFalseForAddressNotInStore() {
-        val tested = InitializingKeyStore(keyStoreDir)
+        val tested = InitializingFileKeyStore(keyStoreDir)
         assertThat(tested.hasKeyForForAddress(key2.toAddress())).isFalse()
     }
 }
