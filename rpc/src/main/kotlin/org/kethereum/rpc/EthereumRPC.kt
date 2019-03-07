@@ -35,7 +35,7 @@ class EthereumRPC(val baseURL: String, private val okhttp: OkHttpClient = OkHttp
         }
     }
 
-    fun getBlockByNumber(number: String) = okhttp.newCall(buildRequest("eth_blockByNumber", "\"$number\", true")).execute().body().use { body ->
+    fun getBlockByNumber(number: String) = okhttp.newCall(buildRequest("eth_getBlockByNumber", "\"$number\", true")).execute().body().use { body ->
         body?.source()?.use { blockInfoAdapter.fromJson(it) }
     }?.result?.toBlockInformation()
 
