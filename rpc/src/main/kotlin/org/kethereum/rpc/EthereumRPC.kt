@@ -10,6 +10,7 @@ import org.kethereum.model.Address
 import org.kethereum.rpc.model.BigIntegerAdapter
 import org.kethereum.rpc.model.BlockInformationResponse
 import org.kethereum.rpc.model.StringResultResponse
+import java.io.IOException
 
 
 val JSONMediaType: MediaType = MediaType.parse("application/json")!!
@@ -30,13 +31,19 @@ class EthereumRPC(val baseURL: String, private val okhttp: OkHttpClient = OkHttp
     private fun buildRequest(medhod: String, params: String = "") = buildRequest(RequestBody.create(JSONMediaType, """{"jsonrpc":"2.0","method":"$medhod","params":[$params],"id":1}"""))
 
     private fun stringCall(function: String, params: String = ""): StringResultResponse? {
-        return okhttp.newCall(buildRequest(function, params)).execute().body().use { body ->
-            body?.source()?.use { stringResultAdapter.fromJson(it) }
-        }
+        return executeCallToString(function, params)?.let { string -> stringResultAdapter.fromJsonNoThrow(string) }
     }
 
-    fun getBlockByNumber(number: String) = okhttp.newCall(buildRequest("eth_getBlockByNumber", "\"$number\", true")).execute().body().use { body ->
-        body?.source()?.use { blockInfoAdapter.fromJson(it) }
+    private fun executeCallToString(function: String, params: String) = try {
+        okhttp.newCall(buildRequest(function, params)).execute().body().use { body ->
+            body?.string()
+        }
+    } catch (e: IOException) {
+        null
+    }
+
+    fun getBlockByNumber(number: String) = executeCallToString("eth_getBlockByNumber", "\"$number\", true")?.let { string ->
+        blockInfoAdapter.fromJsonNoThrow(string)
     }?.result?.toBlockInformation()
 
     fun sendRawTransaction(data: String) = stringCall("eth_sendRawTransaction", "\"$data\"")
