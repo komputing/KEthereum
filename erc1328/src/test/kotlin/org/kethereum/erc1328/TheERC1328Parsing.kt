@@ -7,20 +7,13 @@ class TheERC1328Parsing {
 
     @Test
     fun weCanParseSessionId() {
-        Assertions.assertThat(parseERC1328("ethereum:wc-theSessionID@2").sessionID).isEqualTo("theSessionID")
+        Assertions.assertThat(parseERC1328("ethereum:wc-theSessionID@2").topic).isEqualTo("theSessionID")
     }
 
     @Test
     fun weCanParseVersion() {
         Assertions.assertThat(parseERC1328("ethereum:wc-theSessionID@2?name=foo").version).isEqualTo(2)
     }
-
-
-    @Test
-    fun weCanParseAppName() {
-        Assertions.assertThat(parseERC1328("ethereum:wc-theSessionID@3?name=foo").name).isEqualTo("foo")
-    }
-
 
     @Test
     fun weCanParseBridge() {

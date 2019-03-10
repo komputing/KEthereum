@@ -7,13 +7,12 @@ fun EthereumURI.toERC1328() = ERC1328().apply {
 
     val commonURI = parseCommonURI(uri)
 
-    valid = commonURI.valid && commonURI.prefix == ERC1328_PREFIX && commonURI.scheme == "ethereum"
+    valid = commonURI.valid && commonURI.prefix == ERC1328_SCHEMA && commonURI.scheme == "ethereum"
 
     version = commonURI.chainId ?: 1
-    sessionID = commonURI.address
+    topic = commonURI.address
     val queryAsMap = commonURI.query.toMap()
 
-    name = queryAsMap["name"]
     bridge = queryAsMap["bridge"]
     symKey = queryAsMap["symKey"]
 

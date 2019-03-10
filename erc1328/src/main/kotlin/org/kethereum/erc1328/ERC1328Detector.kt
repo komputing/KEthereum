@@ -5,6 +5,6 @@ import org.kethereum.erc831.toERC831
 import org.kethereum.model.EthereumURI
 
 fun ERC831.isERC1328() =
-        scheme == "ethereum" && prefix == ERC1328_PREFIX
+        scheme == "wc"
 
 fun EthereumURI.isERC1328() = toERC831().isERC1328()
