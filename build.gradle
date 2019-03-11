@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.konan.target.HostManager
+
 apply plugin: "com.github.ben-manes.versions"
 
 buildscript {
@@ -20,51 +22,105 @@ buildscript {
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath 'com.github.ben-manes:gradle-versions-plugin:0.20.0'
+        classpath "org.jetbrains.dokka:dokka-gradle-plugin:$dokka_version"
     }
 }
 
-subprojects {
+def platforms = ["common", "jvm", "posix", "darwin"]
+rootProject.ext.skipPublish = []
+
+def projectNeedsPlatform(project, platform) {
+    if (rootProject.ext.skipPublish.contains(project.name)) return platform == "jvm"
+
+    def files = project.projectDir.listFiles()
+    def hasPosix = files.any { it.name == "posix" }
+    def hasDarwin = files.any { it.name == "darwin" }
+
+    if (hasPosix && hasDarwin) return false
+
+    if (hasPosix && platform == "darwin") return false
+    if (hasDarwin && platform == "posix") return false
+    if (!hasPosix && !hasDarwin && platform == "darwin") return false
+
+    return files.any { it.name == "common" || it.name == platform }
+}
+
+allprojects {
+    project.ext.hostManager = new HostManager()
+    
     repositories {
         jcenter()
         maven { url 'https://jitpack.io' }
         maven { url "https://kotlin.bintray.com/kotlinx" }
     }
 
-    apply plugin: "kotlin"
+    apply plugin: "kotlin-multiplatform"
+
+    platforms.each { platform ->
+        if (projectNeedsPlatform(project, platform)) {
+            configure([it]) {
+                apply from: rootProject.file("gradle/utility.gradle")
+                apply from: rootProject.file("gradle/${platform}.gradle")
+            }
+        }
+    }
+
+    apply from: rootProject.file('gradle/dokka.gradle')
+
     apply plugin: "jacoco"
     apply plugin: "maven"
 
-    afterEvaluate { project ->
 
-        dependencies {
-            implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    kotlin {
+        configure(sourceSets) {
+            def srcDir = name.endsWith("Main") ? "src" : "test"
+            def resourcesPrefix = name.endsWith("Test") ? "test-" : ""
+            def platform = name[0..-5]
 
-            testImplementation 'org.assertj:assertj-core:3.11.1'
-            testCompile "org.junit.jupiter:junit-jupiter-api:$jupiter_version"
-            testCompile "org.junit.jupiter:junit-jupiter-params:$jupiter_version"
-            testRuntime "org.junit.jupiter:junit-jupiter-engine:$jupiter_version"
-        }
+            kotlin.srcDirs = ["$platform/$srcDir"]
+            resources.srcDirs = ["$platform/${resourcesPrefix}resources"]
 
-        task sourcesJar(type: Jar, dependsOn: classes) {
-            classifier = 'sources'
-            from sourceSets.main.allSource
-        }
-
-        task javadocJar(type: Jar, dependsOn: javadoc) {
-            classifier = 'javadoc'
-            from javadoc.destinationDir
-        }
-
-        artifacts {
-            archives sourcesJar
-            archives javadocJar
-        }
-    }
-
-    test {
-        useJUnitPlatform()
-        reports {
-            html.enabled = true
+            if (rootProject.ext.skipPublish.contains(project.name)) return
+            languageSettings {
+                progressiveMode = true
+//                experimentalAnnotations.each { useExperimentalAnnotation(it) }
+            }
         }
     }
 }
+
+
+afterEvaluate {
+    def allCompileKotlinTasks = subprojects.collect {
+        it.hasProperty("compileKotlinJvm") ? [it.compileKotlinJvm] : []
+    }.flatten()
+
+    configure(allCompileKotlinTasks) {
+        kotlinOptions.freeCompilerArgs += ["-XXLanguage:+InlineClasses"]
+    }
+
+//    dependencies {
+//        implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+//
+//        testImplementation 'org.assertj:assertj-core:3.11.1'
+//        testCompile "org.junit.jupiter:junit-jupiter-api:$jupiter_version"
+//        testCompile "org.junit.jupiter:junit-jupiter-params:$jupiter_version"
+//        testRuntime "org.junit.jupiter:junit-jupiter-engine:$jupiter_version"
+//    }
+
+//    task sourcesJar(type: Jar, dependsOn: classes) {
+//        classifier = 'sources'
+//        from sourceSets.main.allSource
+//    }
+//
+//    task javadocJar(type: Jar, dependsOn: javadoc) {
+//        classifier = 'javadoc'
+//        from javadoc.destinationDir
+//    }
+
+//    artifacts {
+//        archives sourcesJar
+//        archives javadocJar
+//    }
+}
+

@@ -1,5 +1,18 @@
-dependencies {
-    implementation project(path: ':hashes')
-    testImplementation "com.github.walleth:khex:$khex_version"
-
+kotlin.sourceSets {
+    commonMain.dependencies {
+        api project(':hashes')
+    }
+    jvmMain.dependencies {
+//        api project(':ktor-network')
+    }
+    jvmTest.dependencies {
+//        api project(':ktor-client:ktor-client-mock')
+//        api project(':ktor-client:ktor-client-tests')
+    }
 }
+
+//dependencies {
+//    implementation project(path: ':hashes')
+//    testImplementation "com.github.walleth:khex:$khex_version"
+//
+//}

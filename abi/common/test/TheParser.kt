@@ -8,7 +8,7 @@ class TheParser {
 
     @Test
     fun convertingTransactionRPC2KethereumTransactionWorks() {
-        val parsed = EthereumABI(javaClass.getResource("/peepeth.abi").readText(), Moshi.Builder().build())
+        val parsed = EthereumABI(javaClass.getResource("/common/test/resources/peepeth.abi").readText(), Moshi.Builder().build())
         assertThat(parsed.methodList.size).isEqualTo(31)
     }
 }

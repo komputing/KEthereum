@@ -1,3 +1,18 @@
-dependencies {
-    implementation "com.squareup.moshi:moshi:$moshi_version"
+kotlin.sourceSets {
+    commonMain.dependencies {
+//        api project(':ktor-http')
+    }
+    jvmMain.dependencies {
+//        api project(':ktor-network')
+    }
+    jvmTest.dependencies {
+//        api project(':ktor-client:ktor-client-mock')
+//        api project(':ktor-client:ktor-client-tests')
+    }
 }
+
+
+
+//dependencies {
+//    implementation "com.squareup.moshi:moshi:$moshi_version"
+//}
