@@ -1,14 +1,33 @@
-dependencies {
-    implementation project(path: ':bip44')
-    implementation project(path: ':base58')
-    implementation project(path: ':crypto')
-    implementation project(path: ':crypto_api')
-    implementation project(path: ':hashes')
-    implementation project(path: ':extensions')
-    implementation project(path: ':model')
+//dependencies {
+//    implementation project(path: ':bip44')
+//    implementation project(path: ':base58')
+//    implementation project(path: ':crypto')
+//    implementation project(path: ':crypto_api')
+//    implementation project(path: ':hashes')
+//    implementation project(path: ':extensions')
+//    implementation project(path: ':model')
+//
+//    testImplementation "com.github.walleth:khex:$khex_version"
+//    testImplementation project(path: ':crypto_impl_bouncycastle')
+//
+//    testImplementation project(":test_data")
+//}
 
-    testImplementation "com.github.walleth:khex:$khex_version"
-    testImplementation project(path: ':crypto_impl_bouncycastle')
-
-    testImplementation project(":test_data")
+kotlin.sourceSets {
+    commonMain.dependencies {
+        api project(':bip44')
+        api project(':base58')
+        api project(':crypto')
+        api project(':crypto_api')
+        api project(':hashes')
+        api project(':extensions')
+        api project(':model')
+    }
+    jvmMain.dependencies {
+//        api project(':ktor-network')
+    }
+    jvmTest.dependencies {
+//        api project(':ktor-client:ktor-client-mock')
+//        api project(':ktor-client:ktor-client-tests')
+    }
 }

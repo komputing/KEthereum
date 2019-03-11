@@ -1,3 +1,8 @@
-dependencies {
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+kotlin.sourceSets {
+    commonMain.dependencies {
+    }
+    jvmMain.dependencies {
+    }
+    jvmTest.dependencies {
+    }
 }

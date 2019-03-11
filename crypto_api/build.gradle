@@ -1,4 +1,6 @@
-dependencies {
-    implementation project(":extensions")
-    implementation project(":model")
+kotlin.sourceSets {
+    commonMain.dependencies {
+        implementation project(":extensions")
+        implementation project(":model")
+    }
 }

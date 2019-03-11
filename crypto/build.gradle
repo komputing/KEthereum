@@ -1,15 +1,23 @@
-dependencies {
-    implementation project(":model")
-    implementation project(":functions")
-    implementation project(":keccak_shortcut")
-    implementation project(":hashes")
-    implementation project(":extensions")
-    implementation project(":crypto_api")
-    
-    implementation "com.github.walleth:khex:$khex_version"
+kotlin.sourceSets {
+    commonMain.dependencies {
+        implementation project(":model")
+        implementation project(":functions")
+        implementation project(":keccak_shortcut")
+        implementation project(":hashes")
+        implementation project(":extensions")
+        implementation project(":crypto_api")
 
-    implementation "org.slf4j:slf4j-api:$slf4jVersion"
+        implementation "com.github.walleth:khex:$khex_version"
 
-    implementation project(":test_data")
-    testImplementation project(":crypto_impl_spongycastle")
+        implementation "org.slf4j:slf4j-api:$slf4jVersion"
+
+        implementation project(":test_data")
+    }
+    commonTest.dependencies {
+        implementation project(":crypto_impl_spongycastle")
+    }
+    jvmMain.dependencies {
+    }
+    jvmTest.dependencies {
+    }
 }

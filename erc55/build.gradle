@@ -1,8 +1,11 @@
-dependencies {
-    implementation project(":model")
-    implementation project(":functions")
-    implementation project(":keccak_shortcut")
-    implementation "com.github.walleth:khex:$khex_version"
-
-    testImplementation project(":crypto_impl_spongycastle")
+kotlin.sourceSets {
+    commonMain.dependencies {
+        implementation project(":model")
+        implementation project(":functions")
+        implementation project(":keccak_shortcut")
+        implementation "com.github.walleth:khex:$khex_version"
+    }
+    commonTest.dependencies {
+        implementation project(":crypto_impl_spongycastle")
+    }
 }

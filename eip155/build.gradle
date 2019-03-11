@@ -1,11 +1,14 @@
-dependencies {
-    implementation project(":model")
-    implementation project(":crypto")
-    implementation project(":crypto_api")
-    implementation project(":functions")
-    implementation project(":rlp")
-
-    testImplementation "com.github.walleth:khex:$khex_version"
-    testImplementation project(":crypto_impl_spongycastle")
-    testImplementation "com.beust:klaxon:$klaxon_version"
+kotlin.sourceSets {
+    commonMain.dependencies {
+        implementation project(":model")
+        implementation project(":crypto")
+        implementation project(":crypto_api")
+        implementation project(":functions")
+        implementation project(":rlp")
+    }
+    commonTest.dependencies {
+        implementation "com.github.walleth:khex:$khex_version"
+        implementation project(":crypto_impl_spongycastle")
+        implementation "com.beust:klaxon:$klaxon_version"
+    }
 }
