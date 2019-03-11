@@ -1,33 +1,20 @@
-//dependencies {
-//    implementation project(path: ':bip44')
-//    implementation project(path: ':base58')
-//    implementation project(path: ':crypto')
-//    implementation project(path: ':crypto_api')
-//    implementation project(path: ':hashes')
-//    implementation project(path: ':extensions')
-//    implementation project(path: ':model')
-//
-//    testImplementation "com.github.walleth:khex:$khex_version"
-//    testImplementation project(path: ':crypto_impl_bouncycastle')
-//
-//    testImplementation project(":test_data")
-//}
+apply plugin: 'kotlinx-serialization'
 
 kotlin.sourceSets {
     commonMain.dependencies {
-        api project(':bip44')
-        api project(':base58')
-        api project(':crypto')
-        api project(':crypto_api')
-        api project(':hashes')
-        api project(':extensions')
-        api project(':model')
+        implementation "org.jetbrains.kotlinx:kotlinx-serialization-runtime-common:$serialization_version"
+        
+        implementation project(':bip44')
+        implementation project(':base58')
+        implementation project(':crypto')
+        implementation project(':crypto_api')
+        implementation project(':hashes')
+        implementation project(':extensions')
+        implementation project(':model')
     }
-    jvmMain.dependencies {
-//        api project(':ktor-network')
-    }
-    jvmTest.dependencies {
-//        api project(':ktor-client:ktor-client-mock')
-//        api project(':ktor-client:ktor-client-tests')
+    commonTest.dependencies {
+        implementation "com.github.walleth:khex:$khex_version"
+        implementation project(':crypto_impl_bouncycastle')
+        implementation project(':test_data')
     }
 }

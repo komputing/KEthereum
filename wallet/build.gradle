@@ -1,22 +1,17 @@
-buildscript {
-    repositories {
-        jcenter()
-        maven { url "https://kotlin.bintray.com/kotlinx" }
+kotlin.sourceSets {
+    commonMain.dependencies {
+        implementation project(":crypto")
+        implementation project(":crypto_api")
+        implementation project(":keccak_shortcut")
+        implementation project(":extensions")
+        implementation project(":model")
+
+        implementation "com.github.walleth:khex:$khex_version"
+
+        implementation "com.squareup.moshi:moshi:$moshi_version"
+        implementation "com.squareup.moshi:moshi-adapters:$moshi_version"
     }
-
-}
-
-dependencies {
-    implementation project(":crypto")
-    implementation project(":crypto_api")
-    implementation project(":keccak_shortcut")
-    implementation project(":extensions")
-    implementation project(":model")
-
-    implementation "com.github.walleth:khex:$khex_version"
-
-    implementation "com.squareup.moshi:moshi:$moshi_version"
-    implementation "com.squareup.moshi:moshi-adapters:$moshi_version"
-
-    testImplementation project(":crypto_impl_spongycastle")
+    commonTest.dependencies {
+        implementation project(":crypto_impl_spongycastle")
+    }
 }

@@ -1,13 +1,12 @@
 package org.kethereum.encodings
 
-import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.Test
-import org.walleth.khex.hexToByteArray
+import kotlin.test.Test
+import kotlin.test.assertEquals
 
 class Base58Test {
 
     // Tests from https://github.com/bitcoin/bitcoin/blob/master/src/test/data/base58_encode_decode.json
-    val TEST_VECTORS = mapOf(
+    private val TEST_VECTORS = mapOf(
             "" to "",
             "61" to "2g",
             "626262" to "a3gV",
@@ -25,14 +24,14 @@ class Base58Test {
     @Test
     fun encodingToBase58Works() {
         TEST_VECTORS.forEach {
-            assertThat(it.key.hexToByteArray().encodeToBase58String()).isEqualTo(it.value)
+            assertEquals(it.key.hexToByteArray().encodeToBase58String(), it.value)
         }
     }
 
     @Test
     fun decodingFromBase58Works() {
         TEST_VECTORS.forEach {
-            assertThat(it.value.decodeBase58()).isEqualTo(it.key.hexToByteArray())
+            assertEquals(it.value.decodeBase58(), it.key.hexToByteArray())
         }
     }
 }

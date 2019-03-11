@@ -17,7 +17,8 @@ package org.kethereum.encodings
  */
 
 import org.kethereum.hashes.sha256
-import java.util.*
+import org.kethereum.utils.copy
+import kotlin.jvm.JvmName
 
 private const val ENCODED_ZERO = '1'
 private const val CHECKSUM_SIZE = 4
@@ -70,7 +71,6 @@ fun ByteArray.encodeToBase58String(): String {
  * @return the decoded data bytes
  * @throws NumberFormatException if the string is not a valid base58 string
  */
-@Throws(NumberFormatException::class)
 fun String.decodeBase58(): ByteArray {
     if (isEmpty()) {
         return ByteArray(0)
@@ -105,7 +105,7 @@ fun String.decodeBase58(): ByteArray {
         ++outputStart
     }
     // Return decoded data (including original number of leading zeros).
-    return Arrays.copyOfRange(decoded, outputStart - zeros, decoded.size)
+    return decoded.copyOfRange(outputStart - zeros, decoded.size)
 }
 
 /**
@@ -138,9 +138,9 @@ private fun divmod(number: ByteArray, firstDigit: UInt, base: UInt, divisor: UIn
  * @return the base58-encoded string
  */
 fun ByteArray.encodeToBase58WithChecksum() = ByteArray(size + CHECKSUM_SIZE).apply {
-    System.arraycopy(this@encodeToBase58WithChecksum, 0, this, 0, this@encodeToBase58WithChecksum.size)
+    this@encodeToBase58WithChecksum.copy(0, this, 0, this@encodeToBase58WithChecksum.size)
     val checksum = this@encodeToBase58WithChecksum.sha256().sha256()
-    System.arraycopy(checksum, 0, this, this@encodeToBase58WithChecksum.size, CHECKSUM_SIZE)
+    checksum.copy(0, this, this@encodeToBase58WithChecksum.size, CHECKSUM_SIZE)
 
 }.encodeToBase58String()
 
@@ -149,14 +149,14 @@ fun String.decodeBase58WithChecksum(): ByteArray {
     if (rawBytes.size < CHECKSUM_SIZE) {
         throw Exception("Too short for checksum: $this l:  ${rawBytes.size}")
     }
-    val checksum = Arrays.copyOfRange(rawBytes, rawBytes.size - CHECKSUM_SIZE, rawBytes.size)
+    val checksum = rawBytes.copyOfRange(rawBytes.size - CHECKSUM_SIZE, rawBytes.size)
 
-    val payload = Arrays.copyOfRange(rawBytes, 0, rawBytes.size - CHECKSUM_SIZE)
+    val payload = rawBytes.copyOfRange(0, rawBytes.size - CHECKSUM_SIZE)
 
     val hash = payload.sha256().sha256()
-    val computedChecksum = Arrays.copyOfRange(hash, 0, CHECKSUM_SIZE)
+    val computedChecksum = hash.copyOfRange(0, CHECKSUM_SIZE)
 
-    if (Arrays.equals(checksum, computedChecksum)) {
+    if (checksum.contentEquals(computedChecksum)) {
         return payload
     } else {
         throw Exception("Checksum mismatch: $this ")

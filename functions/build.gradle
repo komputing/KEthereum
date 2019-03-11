@@ -1,9 +1,12 @@
-dependencies {
-    implementation project(':model')
-    implementation project(':rlp')
-    implementation project(":keccak_shortcut")
+kotlin.sourceSets {
+    commonMain.dependencies {
+        implementation project(':model')
+        implementation project(':rlp')
+        implementation project(":keccak_shortcut")
 
-    implementation "com.github.walleth:khex:$khex_version"
-
-    testImplementation "com.beust:klaxon:$klaxon_version"
+        implementation "com.github.walleth:khex:$khex_version"
+    }
+    commonTest.dependencies {
+        implementation "com.beust:klaxon:$klaxon_version"
+    }
 }

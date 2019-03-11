@@ -2,26 +2,25 @@
 
 package org.kethereum.bip32
 
+import kotlinx.io.ByteBuffer
+import kotlinx.io.ByteOrder
 import org.kethereum.bip32.model.CHAINCODE_SIZE
 import org.kethereum.bip32.model.ExtendedKey
 import org.kethereum.bip32.model.Seed
 import org.kethereum.bip44.BIP44
 import org.kethereum.bip44.BIP44Element
 import org.kethereum.crypto.*
-import org.kethereum.extensions.toBytesPadded
+import org.kethereum.exceptions.InvalidKeyException
+import org.kethereum.exceptions.KeyException
+import org.kethereum.exceptions.NoSuchAlgorithmException
+import org.kethereum.exceptions.NoSuchProviderException
 import org.kethereum.hashes.ripemd160
 import org.kethereum.hashes.sha256
 import org.kethereum.model.ECKeyPair
 import org.kethereum.model.PRIVATE_KEY_SIZE
 import org.kethereum.model.PrivateKey
-import java.math.BigInteger
-import java.nio.ByteBuffer
-import java.nio.ByteOrder
-import java.security.InvalidKeyException
-import java.security.KeyException
-import java.security.NoSuchAlgorithmException
-import java.security.NoSuchProviderException
-import java.util.*
+import org.kethereum.number.BigInteger
+import kotlin.jvm.JvmName
 
 fun Seed.toKey(pathString: String) = BIP44(pathString).path
         .fold(toExtendedKey()) { current, bip44Element ->
@@ -74,8 +73,8 @@ fun ExtendedKey.generateChildKey(element: BIP44Element): ExtendedKey {
                     .array()
         }
         val lr = mac.generate(extended)
-        val l = Arrays.copyOfRange(lr, 0, PRIVATE_KEY_SIZE)
-        val r = Arrays.copyOfRange(lr, PRIVATE_KEY_SIZE, PRIVATE_KEY_SIZE + CHAINCODE_SIZE)
+        val l = lr.copyOfRange(0, PRIVATE_KEY_SIZE)
+        val r = lr.copyOfRange(PRIVATE_KEY_SIZE, PRIVATE_KEY_SIZE + CHAINCODE_SIZE)
 
         val m = BigInteger(1, l)
         if (m >= CURVE.n) {

@@ -1,4 +1,6 @@
-dependencies {
-    implementation project(":erc831")
-    implementation project(":model")
+kotlin.sourceSets {
+    commonMain.dependencies {
+        implementation project(":erc831")
+        implementation project(":model")
+    }
 }

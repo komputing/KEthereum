@@ -1,13 +1,16 @@
-dependencies {
-    implementation project(':model')
-    implementation project(':functions')
-    implementation project(':extensions')
+kotlin.sourceSets {
+    commonMain.dependencies {
+        implementation project(':model')
+        implementation project(':functions')
+        implementation project(':extensions')
 
-    implementation "com.squareup.okhttp3:okhttp:${okhttp_version}"
-    implementation "com.squareup.moshi:moshi:${moshi_version}"
+        implementation "com.squareup.okhttp3:okhttp:${okhttp_version}"
+        implementation "com.squareup.moshi:moshi:${moshi_version}"
 
-    implementation "com.github.walleth:khex:$khex_version"
-
-    testImplementation "com.squareup.okhttp3:mockwebserver:${okhttp_version}"
-    testImplementation 'org.threeten:threetenbp:1.3.8'
+        implementation "com.github.walleth:khex:$khex_version"
+    }
+    commonTest.dependencies {
+        implementation "com.squareup.okhttp3:mockwebserver:${okhttp_version}"
+        implementation 'org.threeten:threetenbp:1.3.8'
+    }
 }

@@ -1,4 +1,6 @@
-dependencies {
-    implementation project(":model")
-    implementation "com.github.walleth:khex:$khex_version"
+kotlin.sourceSets {
+    commonMain.dependencies {
+        implementation project(":model")
+        implementation "com.github.walleth:khex:$khex_version"
+    }
 }

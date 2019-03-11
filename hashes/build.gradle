@@ -1,4 +1,6 @@
-dependencies {
-    implementation "com.github.walleth:khex:$khex_version"
-    compile project(path: ':ripemd160')
+kotlin.sourceSets {
+    commonMain.dependencies {
+        implementation "com.github.walleth:khex:$khex_version"
+        implementation project(':ripemd160')
+    }
 }

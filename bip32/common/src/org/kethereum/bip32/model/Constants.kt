@@ -1,5 +1,6 @@
 package org.kethereum.bip32.model
 
+import kotlinx.io.core.toByteArray
 import org.kethereum.model.PRIVATE_KEY_SIZE
 
 

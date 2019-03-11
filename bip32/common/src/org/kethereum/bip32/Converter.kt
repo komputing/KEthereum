@@ -1,15 +1,22 @@
 package org.kethereum.bip32
 
+import kotlinx.io.ByteBuffer
+import kotlinx.io.ByteOrder
 import org.kethereum.bip32.model.*
 import org.kethereum.crypto.CURVE
 import org.kethereum.crypto.CryptoAPI
 import org.kethereum.crypto.decompressKey
 import org.kethereum.crypto.toECKeyPair
 import org.kethereum.encodings.decodeBase58WithChecksum
+import org.kethereum.exceptions.InvalidKeyException
+import org.kethereum.exceptions.KeyException
+import org.kethereum.exceptions.NoSuchAlgorithmException
+import org.kethereum.exceptions.NoSuchProviderException
 import org.kethereum.model.ECKeyPair
 import org.kethereum.model.PRIVATE_KEY_SIZE
 import org.kethereum.model.PrivateKey
 import org.kethereum.model.PublicKey
+import org.kethereum.number.BigInteger
 import java.math.BigInteger
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
@@ -52,8 +59,8 @@ fun XPriv.toExtendedKey(): ExtendedKey {
         throw KeyException("invalid extended key")
     }
 
-    val buff = ByteBuffer
-            .wrap(data)
+    val buff = ByteBuffer.allocate(data.size)
+            .put(data)
             .order(ByteOrder.BIG_ENDIAN)
 
     val type = ByteArray(4)
