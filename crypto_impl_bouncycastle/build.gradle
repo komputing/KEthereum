@@ -3,7 +3,7 @@ kotlin.sourceSets {
         api project(":crypto_api")
         api project(":crypto_impl_java_provider")
         api project(":model")
-        implementation 'org.bouncycastle:bcprov-jdk15on:1.60'
+        api 'org.bouncycastle:bcprov-jdk15on:1.60'
     }
 }
 

@@ -16,24 +16,34 @@ object CryptoAPI {
         this.provider = provider
     }
 
-    private fun <T> lazyCheck(block: () -> T): Lazy<T> {
+    private fun <T> lazyCheck(block: () -> T): T {
         if (!::provider.isInitialized) {
             throw UnsupportedOperationException("Please set a provider using CryptoAPI.setProvider")
         }
-        return lazy { block() }
+        return block()
     }
 
-    val hmac by lazyCheck { provider.hmacProvider() }
+    val hmac: Hmac
+        get() { return lazyCheck { provider.hmacProvider() } }
 
-    val keyPairGenerator by lazyCheck { provider.keyPairGeneratorProvider() }
-    val curve by lazyCheck { provider.curveProvider() }
-    val signer by lazyCheck { provider.signerProvider() }
+    val keyPairGenerator: KeyPairGenerator
+        get() { return lazyCheck { provider.keyPairGeneratorProvider() } }
+
+    val curve: Curve
+        get() { return lazyCheck { provider.curveProvider() } }
+
+    val signer: Signer
+        get() { return lazyCheck { provider.signerProvider() } }
 
 
-    val pbkdf2 by lazyCheck { provider.pbkf2Provider() }
-    val scrypt by lazyCheck { provider.scryptProvider() }
+    val pbkdf2: PBKDF2
+        get() { return lazyCheck { provider.pbkf2Provider() } }
 
-    val aesCipher by lazyCheck { provider.aesCipherProvider() }
+    val scrypt: SCrypt
+        get() { return lazyCheck { provider.scryptProvider() } }
+
+    val aesCipher: AESCipher
+        get() { return lazyCheck { provider.aesCipherProvider() } }
 
     abstract class Provider {
         abstract fun hmacProvider(): Hmac

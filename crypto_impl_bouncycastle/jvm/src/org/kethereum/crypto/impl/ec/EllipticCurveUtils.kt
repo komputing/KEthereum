@@ -9,7 +9,7 @@ private val HALF_CURVE_ORDER = CURVE_PARAMS.n.shiftRight(1)
  * [HALF_CURVE_ORDER]. See
  * [BIP62](https://github.com/bitcoin/bips/blob/master/bip-0062.mediawiki#Low_S_values_in_signatures).
  */
-private fun ECDSASignature.isCanonical() = s <= HALF_CURVE_ORDER
+private fun ECDSASignature.isCanonical() = s <= BigInteger(HALF_CURVE_ORDER)
 
 /**
  * Will automatically adjust the S component to be less than or equal to half the curve

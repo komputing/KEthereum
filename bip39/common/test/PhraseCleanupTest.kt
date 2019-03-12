@@ -1,40 +1,35 @@
 package org.kethereum.bip39
 
-import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.Test
 import org.kethereum.bip39.model.MnemonicWords
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertNotEquals
 
 class PhraseCleanupTest {
 
     @Test
     fun fixesCase() {
-        assertThat(dirtyPhraseToMnemonicWords("Foo Bar"))
-                .isEqualTo(MnemonicWords("foo bar"))
+        assertEquals(dirtyPhraseToMnemonicWords("Foo Bar"), MnemonicWords("foo bar"))
     }
-
 
     @Test
     fun trims() {
-        assertThat(dirtyPhraseToMnemonicWords(" jo no "))
-                .isEqualTo(MnemonicWords("jo no"))
+        assertEquals(dirtyPhraseToMnemonicWords(" jo no "), MnemonicWords("jo no"))
     }
 
     @Test
     fun removesSpaceInBetween() {
-        assertThat(dirtyPhraseToMnemonicWords(" jo     no "))
-                .isEqualTo(MnemonicWords("jo no"))
+        assertEquals(dirtyPhraseToMnemonicWords(" jo     no "), MnemonicWords("jo no"))
     }
 
     @Test
     fun allInCombination() {
-        assertThat(dirtyPhraseToMnemonicWords(" Tu     Wat "))
-                .isEqualTo(MnemonicWords("tu wat"))
+        assertEquals(dirtyPhraseToMnemonicWords(" Tu     Wat "), MnemonicWords("tu wat"))
     }
 
     @Test
     fun negativeTest() {
-        assertThat(dirtyPhraseToMnemonicWords(" lo ko"))
-                .isNotEqualTo(MnemonicWords("jo no"))
+        assertNotEquals(dirtyPhraseToMnemonicWords(" lo ko"), MnemonicWords("jo no"))
     }
 
 }

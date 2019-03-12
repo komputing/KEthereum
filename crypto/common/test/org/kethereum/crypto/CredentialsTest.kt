@@ -1,9 +1,9 @@
 package org.kethereum.crypto
 
-import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.Test
 import org.kethereum.crypto.test_data.ADDRESS
 import org.kethereum.crypto.test_data.KEY_PAIR
+import kotlin.test.Test
+import kotlin.test.assertEquals
 
 class CredentialsTest {
 
@@ -11,7 +11,7 @@ class CredentialsTest {
     fun testCredentialsFromString() {
         val credentials = KEY_PAIR.toCredentials()
 
-        assertThat(credentials.address).isEqualTo(ADDRESS)
-        assertThat(credentials.ecKeyPair).isEqualToComparingFieldByField(KEY_PAIR)
+        assertEquals(credentials.address, ADDRESS)
+        assertEquals(credentials.ecKeyPair, KEY_PAIR)
    }
 }

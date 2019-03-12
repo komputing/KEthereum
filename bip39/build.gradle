@@ -1,16 +1,3 @@
-//dependencies {
-//    implementation project(path: ':bip32')
-//    implementation project(path: ':extensions')
-//    implementation project(path: ':hashes')
-//    implementation project(path: ':crypto')
-//    implementation project(path: ':crypto_api')
-//
-//    implementation "com.github.walleth:khex:$khex_version"
-//
-//    testImplementation project(path: ':bip39_wordlist_en')
-//    testImplementation project(path: ':crypto_impl_spongycastle')
-//}
-
 kotlin.sourceSets {
     commonMain.dependencies {
         api project(':bip32')
@@ -20,7 +7,7 @@ kotlin.sourceSets {
         api project(':crypto_api')
         api project(':bip39_wordlist_en')
     }
-    jvmMain.dependencies {
-//        api project(':model-jvm')
+    jvmTest.dependencies {
+        api project(':crypto_impl_bouncycastle')
     }
 }

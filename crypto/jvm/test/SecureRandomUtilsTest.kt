@@ -1,8 +1,8 @@
 package org.kethereum.crypto
 
-import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.Test
 import org.kethereum.crypto.SecureRandomUtils.secureRandom
+import kotlin.test.Test
+import kotlin.test.assertFalse
 
 class SecureRandomUtilsTest {
 
@@ -13,6 +13,6 @@ class SecureRandomUtilsTest {
 
     @Test
     fun testIsNotAndroidRuntime() {
-        assertThat(SecureRandomUtils.isAndroidRuntime).isFalse()
+        assertFalse(SecureRandomUtils.isAndroidRuntime)
     }
 }

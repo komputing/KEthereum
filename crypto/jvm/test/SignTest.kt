@@ -1,21 +1,26 @@
 package org.kethereum.crypto
 
-import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.Test
-import org.kethereum.model.PrivateKey
+import kotlinx.io.core.toByteArray
+import org.kethereum.crypto.impl.BouncyCastleCryptoAPIProvider
 import org.kethereum.crypto.test_data.KEY_PAIR
 import org.kethereum.crypto.test_data.PRIVATE_KEY
 import org.kethereum.crypto.test_data.PUBLIC_KEY
 import org.kethereum.crypto.test_data.TEST_MESSAGE
-import org.kethereum.model.extensions.hexToBigInteger
+import org.kethereum.hashes.sha256
+import org.kethereum.model.PrivateKey
 import org.kethereum.model.SignatureData
-import org.walleth.khex.hexToByteArray
-import java.security.SignatureException
+import org.kethereum.model.exceptions.SignatureException
+import org.kethereum.model.extensions.hexToBigInteger
+import org.kethereum.model.extensions.hexToByteArray
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertFailsWith
 
 class SignTest {
 
     @Test
     fun testSignMessage() {
+        CryptoAPI.setProvider(BouncyCastleCryptoAPIProvider)
         val signatureData = KEY_PAIR.signMessage(TEST_MESSAGE)
 
         val expected = SignatureData(
@@ -24,11 +29,12 @@ class SignTest {
                 27.toByte()
         )
 
-        assertThat(signatureData).isEqualTo(expected)
+        assertEquals(signatureData, expected)
     }
 
     @Test
     fun testSignMessageHash() {
+        CryptoAPI.setProvider(BouncyCastleCryptoAPIProvider)
         val privateKey = PrivateKey("0x65fc670d9351cb87d1f56702fb56a7832ae2aab3427be944ab8c9f2a0ab87960".hexToByteArray())
         val keyPair = privateKey.toECKeyPair()
 
@@ -41,20 +47,22 @@ class SignTest {
                 28.toByte()
         )
 
-        assertThat(expected).isEqualTo(signatureData)
+        assertEquals(expected, signatureData)
     }
 
     @Test
-    @Throws(SignatureException::class)
     fun testSignedMessageToKey() {
-        val signatureData = KEY_PAIR.signMessage(TEST_MESSAGE)
-        val key = signedMessageToKey(TEST_MESSAGE, signatureData)
-        assertThat(key).isEqualTo(PUBLIC_KEY)
+        assertFailsWith<SignatureException> {
+            val signatureData = KEY_PAIR.signMessage(TEST_MESSAGE)
+            val key = signedMessageToKey(TEST_MESSAGE, signatureData)
+            assertEquals(key, PUBLIC_KEY)
+        }
     }
 
     @Test
     fun testPublicKeyFromPrivateKey() {
-        assertThat(publicKeyFromPrivate(PRIVATE_KEY)).isEqualTo(PUBLIC_KEY)
+        CryptoAPI.setProvider(BouncyCastleCryptoAPIProvider)
+        assertEquals(publicKeyFromPrivate(PRIVATE_KEY), PUBLIC_KEY)
     }
 
 }

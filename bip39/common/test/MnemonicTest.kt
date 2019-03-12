@@ -1,6 +1,5 @@
 package org.kethereum.bip39
 
-import org.kethereum.bip32.model.Seed
 import org.kethereum.bip39.model.MnemonicWords
 import org.kethereum.bip39.wordlists.WORDLIST_ENGLISH
 import org.kethereum.model.extensions.hexToByteArray
@@ -56,18 +55,6 @@ class MnemonicTest {
     }
 
     @Test
-    fun mnemonicToSeed() {
-        testData.forEach {
-
-            val expectedSeed = Seed(it.seed.hexToByteArray())
-            val actualSeed = MnemonicWords(it.phrase).toSeed("TREZOR")
-
-            assertTrue(expectedSeed.seed.contentEquals(actualSeed.seed))
-        }
-
-    }
-
-    @Test
     fun mnemonicToEntropy() {
         testData.forEach {
 
@@ -86,15 +73,6 @@ class MnemonicTest {
 
             assertEquals(it.phrase, actualPhrase)
         }
-    }
-
-    @Test
-    fun mnemonicToMasterKey() {
-        testData.forEach {
-            val gen = MnemonicWords(it.phrase).toKey("m/", "TREZOR")
-            assertEquals(it.masterKey, gen.serialize())
-        }
-
     }
 
     @Test

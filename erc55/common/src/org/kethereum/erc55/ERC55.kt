@@ -1,16 +1,16 @@
 package org.kethereum.erc55
 
+import kotlinx.io.core.toByteArray
 import org.kethereum.functions.isValid
 import org.kethereum.keccakshortcut.keccak
 import org.kethereum.model.Address
-import org.walleth.khex.toNoPrefixHexString
-import java.util.*
+import org.kethereum.model.extensions.toNoPrefixHexString
 
 /*
 ERC-55 Checksum as in https://github.com/ethereum/EIPs/blob/master/EIPS/eip-55.md
  */
 
-fun Address.withERC55Checksum() = cleanHex.toLowerCase(Locale.ROOT).toByteArray().keccak().toNoPrefixHexString().let { hexHash ->
+fun Address.withERC55Checksum() = cleanHex.toLowerCase().toByteArray().keccak().toNoPrefixHexString().let { hexHash ->
     Address(cleanHex.mapIndexed { index, hexChar ->
         when {
             hexChar in '0'..'9' -> hexChar

@@ -52,8 +52,9 @@ fun XPriv.toExtendedKey(): ExtendedKey {
     }
 
     val buff = ByteBuffer.allocate(data.size)
-            .put(data)
-            .order(ByteOrder.BIG_ENDIAN)
+        .put(data)
+        .order(ByteOrder.BIG_ENDIAN)
+        .flip()
 
     val type = ByteArray(4)
 

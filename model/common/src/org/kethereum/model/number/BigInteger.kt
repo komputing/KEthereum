@@ -3,7 +3,7 @@ package org.kethereum.model.number
 /**
  *
  */
-expect class BigInteger: Number, Comparable<Number> {
+expect class BigInteger: Number, Comparable<BigInteger> {
 
     /**
      * Translates the sign-magnitude representation of a BigInteger into a BigInteger.
@@ -37,8 +37,6 @@ expect class BigInteger: Number, Comparable<Number> {
     fun toString(radix: Int): String
 
     fun toByteArray(): ByteArray
-
-    fun toBigDecimal(): BigDecimal
 
     fun byteValueExact(): Byte
 

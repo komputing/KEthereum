@@ -2,7 +2,7 @@ package org.kethereum.model.number
 
 import java.math.BigInteger
 
-actual class BigInteger(val value: BigInteger): Number(), Comparable<Number> {
+actual class BigInteger(val value: BigInteger): Number(), Comparable<org.kethereum.model.number.BigInteger> {
 
     /**
      * Translates the sign-magnitude representation of a BigInteger into a BigInteger.
@@ -71,10 +71,6 @@ actual class BigInteger(val value: BigInteger): Number(), Comparable<Number> {
         return this.value.toByteArray()
     }
 
-    actual fun toBigDecimal(): BigDecimal {
-        return BigDecimal(this.value.toBigDecimal())
-    }
-
     actual fun byteValueExact(): Byte {
         return this.value.byteValueExact()
     }
@@ -100,8 +96,8 @@ actual class BigInteger(val value: BigInteger): Number(), Comparable<Number> {
         return other is org.kethereum.model.number.BigInteger && this.value == other.value
     }
 
-    override fun compareTo(other: Number): Int {
-        return value.compareTo(BigInteger.valueOf(other.toLong()))
+    override fun compareTo(other: org.kethereum.model.number.BigInteger): Int {
+        return value.compareTo(other.value)
     }
 }
 

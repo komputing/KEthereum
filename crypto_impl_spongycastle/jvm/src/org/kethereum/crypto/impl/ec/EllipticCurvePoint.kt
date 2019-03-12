@@ -1,17 +1,18 @@
 package org.kethereum.crypto.impl.ec
 
 import org.kethereum.crypto.api.ec.CurvePoint
+import org.kethereum.model.number.BigInteger
 import org.spongycastle.math.ec.ECPoint
-import java.math.BigInteger
 
 class EllipticCurvePoint(private val ecPoint: ECPoint) : CurvePoint {
     override val x: BigInteger
-        get() = ecPoint.xCoord.toBigInteger()
+        get() = BigInteger(ecPoint.xCoord.toBigInteger())
+
     override val y: BigInteger
-        get() = ecPoint.yCoord.toBigInteger()
+        get() = BigInteger(ecPoint.yCoord.toBigInteger())
 
     override fun mul(n: BigInteger): CurvePoint =
-        ecPoint.multiply(n).toCurvePoint()
+        ecPoint.multiply(n.value).toCurvePoint()
 
     override fun add(p: CurvePoint): CurvePoint =
         (p as? EllipticCurvePoint)?.let {
