@@ -1,7 +1,7 @@
 package org.kethereum.contract.abi.types.model
 
 import org.kethereum.extensions.toBytesPadded
-import java.math.BigInteger
+import org.kethereum.number.BigInteger
 
 open class IntABIType(val bits: Int, val signed: Boolean) : ContractABIType {
 

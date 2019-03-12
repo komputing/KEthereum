@@ -1,7 +1,7 @@
 package org.kethereum.bip44
 
 /*
-BIP44 as in https://github.com/bitcoin/bips/blob/master/bip-0044.mediawiki
+ * BIP44 as in https://github.com/bitcoin/bips/blob/master/bip-0044.mediawiki
  */
 
 const val BIP44_HARDENING_FLAG = 0x80000000.toInt()

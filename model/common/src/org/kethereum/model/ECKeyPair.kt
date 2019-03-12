@@ -2,7 +2,7 @@ package org.kethereum.model
 
 import org.kethereum.extensions.hexToBigInteger
 import org.kethereum.extensions.toBigInteger
-import java.math.BigInteger
+import org.kethereum.number.BigInteger
 
 inline class PrivateKey(val key: BigInteger) {
     constructor(privateKey: ByteArray) : this(privateKey.toBigInteger())

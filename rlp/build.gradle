@@ -1,6 +1,6 @@
 kotlin.sourceSets {
     commonMain.dependencies {
-        implementation project(":extensions")
+        implementation project(":model")
     }
     commonTest.dependencies {
         implementation project(":functions")

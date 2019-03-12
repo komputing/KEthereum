@@ -1,10 +1,5 @@
 kotlin.sourceSets {
     commonMain.dependencies {
-        implementation project(":extensions")
-        implementation "com.github.walleth:khex:$khex_version"
-    }
-    jvmMain.dependencies {
-    }
-    jvmTest.dependencies {
+        api project(':model')
     }
 }

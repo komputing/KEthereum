@@ -2,7 +2,6 @@ kotlin.sourceSets {
     commonMain.dependencies {
         implementation project(':model')
         implementation project(':functions')
-        implementation project(':extensions')
 
         implementation "com.squareup.okhttp3:okhttp:${okhttp_version}"
         implementation "com.squareup.moshi:moshi:${moshi_version}"

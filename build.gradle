@@ -27,7 +27,9 @@ buildscript {
     }
 }
 
-def platforms = ["common", "jvm", "posix", "darwin"]
+apply from: "gradle/experimental.gradle"
+
+def platforms = ["common", "jvm"]
 rootProject.ext.skipPublish = []
 
 def projectNeedsPlatform(project, platform) {
@@ -47,6 +49,7 @@ def projectNeedsPlatform(project, platform) {
 }
 
 allprojects {
+    group = "org.kethereum"
     project.ext.hostManager = new HostManager()
     
     repositories {
@@ -71,7 +74,8 @@ allprojects {
     apply plugin: "jacoco"
     apply plugin: "maven"
 
-
+    configurations { testOutput }
+    
     kotlin {
         configure(sourceSets) {
             def srcDir = name.endsWith("Main") ? "src" : "test"
@@ -84,7 +88,7 @@ allprojects {
             if (rootProject.ext.skipPublish.contains(project.name)) return
             languageSettings {
                 progressiveMode = true
-//                experimentalAnnotations.each { useExperimentalAnnotation(it) }
+                experimentalAnnotations.each { useExperimentalAnnotation(it) }
             }
         }
     }

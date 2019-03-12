@@ -1,5 +1,6 @@
 package org.kethereum.encodings
 
+import org.kethereum.extensions.hexToByteArray
 import kotlin.test.Test
 import kotlin.test.assertEquals
 

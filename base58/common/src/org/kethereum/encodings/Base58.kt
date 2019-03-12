@@ -17,7 +17,7 @@ package org.kethereum.encodings
  */
 
 import org.kethereum.hashes.sha256
-import org.kethereum.utils.copy
+import org.kethereum.extensions.copy
 import kotlin.jvm.JvmName
 
 private const val ENCODED_ZERO = '1'

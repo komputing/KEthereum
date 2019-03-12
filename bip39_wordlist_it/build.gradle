@@ -1,8 +1,0 @@
-kotlin.sourceSets {
-    commonMain.dependencies {
-    }
-    jvmMain.dependencies {
-    }
-    jvmTest.dependencies {
-    }
-}

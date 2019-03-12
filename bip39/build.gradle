@@ -14,7 +14,7 @@
 kotlin.sourceSets {
     commonMain.dependencies {
         api project(':bip32')
-        api project(':extensions')
+        api project(':model')
         api project(':hashes')
         api project(':crypto')
         api project(':crypto_api')

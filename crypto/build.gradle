@@ -4,7 +4,6 @@ kotlin.sourceSets {
         implementation project(":functions")
         implementation project(":keccak_shortcut")
         implementation project(":hashes")
-        implementation project(":extensions")
         implementation project(":crypto_api")
 
         implementation "com.github.walleth:khex:$khex_version"
