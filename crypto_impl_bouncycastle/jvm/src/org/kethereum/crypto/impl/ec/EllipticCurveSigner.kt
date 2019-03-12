@@ -11,7 +11,7 @@ import org.bouncycastle.math.ec.FixedPointCombMultiplier
 import org.bouncycastle.math.ec.custom.sec.SecP256K1Curve
 import org.kethereum.crypto.api.ec.ECDSASignature
 import org.kethereum.crypto.api.ec.Signer
-import java.math.BigInteger
+import org.kethereum.model.number.BigInteger
 import java.util.*
 
 class EllipticCurveSigner : Signer {
@@ -19,11 +19,11 @@ class EllipticCurveSigner : Signer {
     override fun sign(transactionHash: ByteArray, privateKey: BigInteger, canonical: Boolean): ECDSASignature {
         val signer = ECDSASigner(HMacDSAKCalculator(SHA256Digest()))
 
-        val ecPrivateKeyParameters = ECPrivateKeyParameters(privateKey, DOMAIN_PARAMS)
+        val ecPrivateKeyParameters = ECPrivateKeyParameters(privateKey.value, DOMAIN_PARAMS)
         signer.init(true, ecPrivateKeyParameters)
         val components = signer.generateSignature(transactionHash)
 
-        return ECDSASignature(components[0], components[1]).let {
+        return ECDSASignature(BigInteger(components[0]), BigInteger(components[1])).let {
             if (canonical) {
                 it.canonicalise()
             } else {
@@ -69,7 +69,7 @@ class EllipticCurveSigner : Signer {
         //   1.1 Let x = r + jn
         val n = CURVE_PARAMS.n  // Curve order.
         val i = BigInteger.valueOf(recId.toLong() / 2)
-        val x = sig.r.add(i.multiply(n))
+        val x = sig.r.value.add(i.value.multiply(n))
         //   1.2. Convert the integer x to an octet string X of length mlen using the conversion
         //        routine specified in Section 2.3.7, where mlen = ⌈(log2 p)/8⌉ or mlen = ⌈m/8⌉.
         //   1.3. Convert the octet string (16 set binary digits)||X to an elliptic curve point R
@@ -84,14 +84,14 @@ class EllipticCurveSigner : Signer {
         }
         // Compressed keys require you to know an extra bit of data about the y-coord as there are
         // two possibilities. So it's encoded in the recId.
-        val r = decompressKey(x, recId and 1 == 1)
+        val r = decompressKey(BigInteger(x), recId and 1 == 1)
         //   1.4. If nR != point at infinity, then do another iteration of Step 1 (callers
         //        responsibility).
         if (!r.multiply(n).isInfinity) {
             return null
         }
         //   1.5. Compute e from M using Steps 2 and 3 of ECDSA signature verification.
-        val e = BigInteger(1, message!!)
+        val e = BigInteger(1, message)
         //   1.6. For k from 1 to 2 do the following.   (loop is outside this function via
         //        iterating recId)
         //   1.6.1. Compute a candidate public key as:
@@ -106,9 +106,9 @@ class EllipticCurveSigner : Signer {
         // We can find the additive inverse by subtracting e from zero then taking the mod. For
         // example the additive inverse of 3 modulo 11 is 8 because 3 + 8 mod 11 = 0, and
         // -3 mod 11 = 8.
-        val eInv = BigInteger.ZERO.subtract(e).mod(n)
-        val rInv = sig.r.modInverse(n)
-        val srInv = rInv.multiply(sig.s).mod(n)
+        val eInv = BigInteger.ZERO.value.subtract(e.value).mod(n)
+        val rInv = sig.r.value.modInverse(n)
+        val srInv = rInv.multiply(sig.s.value).mod(n)
         val eInvrInv = rInv.multiply(eInv).mod(n)
         val q = ECAlgorithms.sumOfTwoMultiplies(CURVE_PARAMS.g, eInvrInv, r, srInv)
 
@@ -120,7 +120,7 @@ class EllipticCurveSigner : Signer {
     /** Decompress a compressed public key (x co-ord and low-bit of y-coord).  */
     private fun decompressKey(xBN: BigInteger, yBit: Boolean): ECPoint {
         val x9 = X9IntegerConverter()
-        val compEnc = x9.integerToBytes(xBN, 1 + x9.getByteLength(CURVE_PARAMS.curve))
+        val compEnc = x9.integerToBytes(xBN.value, 1 + x9.getByteLength(CURVE_PARAMS.curve))
         compEnc[0] = (if (yBit) 0x03 else 0x02).toByte()
         return DOMAIN_PARAMS.curve.decodePoint(compEnc)
     }
@@ -141,10 +141,10 @@ class EllipticCurveSigner : Signer {
          * TODO: FixedPointCombMultiplier currently doesn't support scalars longer than the group
          * order, but that could change in future versions.
          */
-        val postProcessedPrivateKey = if (privateKey.bitLength() > CURVE_PARAMS.n.bitLength()) {
-            privateKey.mod(DOMAIN_PARAMS.n)
+        val postProcessedPrivateKey = if (privateKey.value.bitLength() > CURVE_PARAMS.n.bitLength()) {
+            privateKey.value.mod(DOMAIN_PARAMS.n)
         } else {
-            privateKey
+            privateKey.value
         }
         return FixedPointCombMultiplier().multiply(DOMAIN_PARAMS.g, postProcessedPrivateKey)
     }

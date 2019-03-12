@@ -1,7 +1,7 @@
 package org.kethereum.erc961
 
 import org.kethereum.model.Address
-import org.kethereum.model.ChainDefinition
+import org.kethereum.model.ChainId
 import org.kethereum.model.EthereumURI
 import org.kethereum.model.Token
 import org.kethereum.uri.common.parseCommonURI
@@ -25,7 +25,7 @@ fun parseTokenFromEthereumURI(uri: String): Token {
     return Token(
             symbol = queryMap["symbol"] ?: "SYM",
             address = Address(commonEthereumURI.address ?: ""),
-            chain = ChainDefinition(commonEthereumURI.chainId ?: 1),
+            chain = ChainId(commonEthereumURI.chainId ?: 1),
             name = queryMap["name"],
             decimals = queryMap["decimals"]?.toInt() ?: 18,
             type = queryMap["type"]

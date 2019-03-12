@@ -1,22 +1,13 @@
 kotlin.sourceSets {
     commonMain.dependencies {
-        implementation project(":model")
-        implementation project(":functions")
-        implementation project(":keccak_shortcut")
-        implementation project(":hashes")
-        implementation project(":crypto_api")
-
-        implementation "com.github.walleth:khex:$khex_version"
-
-        implementation "org.slf4j:slf4j-api:$slf4jVersion"
-
-        implementation project(":test_data")
+        api project(":model")
+        api project(":functions")
+        api project(":keccak_shortcut")
+        api project(":hashes")
+        api project(":crypto_api")
     }
     commonTest.dependencies {
-        implementation project(":crypto_impl_spongycastle")
-    }
-    jvmMain.dependencies {
-    }
-    jvmTest.dependencies {
+        api project(":test_data")
+        api project(":crypto_impl_spongycastle")
     }
 }

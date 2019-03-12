@@ -6,9 +6,11 @@ import okhttp3.MediaType
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody
+import org.kethereum.model.Address
 import org.kethereum.rpc.model.BigIntegerAdapter
 import org.kethereum.rpc.model.BlockInformationResponse
-import org.kethereum.rpc.model.BlockNumberResponse
+import org.kethereum.rpc.model.StringResultResponse
+import java.io.IOException
 
 
 val JSONMediaType: MediaType = MediaType.parse("application/json")!!
@@ -17,24 +19,50 @@ class EthereumRPC(val baseURL: String, private val okhttp: OkHttpClient = OkHttp
 
     private val moshi = Moshi.Builder().build().newBuilder().add(BigIntegerAdapter()).build()
 
-    private val blockNumberAdapter: JsonAdapter<BlockNumberResponse> = moshi.adapter(BlockNumberResponse::class.java)
+    private val stringResultAdapter: JsonAdapter<StringResultResponse> = moshi.adapter(StringResultResponse::class.java)
 
     private val blockInfoAdapter: JsonAdapter<BlockInformationResponse> = moshi.adapter(BlockInformationResponse::class.java)
 
-    private fun buildBlockRequest() = buildRequest(RequestBody.create(JSONMediaType, "{\"jsonrpc\":\"2.0\",\"method\":\"eth_blockNumber\",\"params\":[],\"id\":1}"))
-
-    private fun buildBlockByNumberRequest(number: String) = buildRequest(RequestBody.create(JSONMediaType, """{"jsonrpc":"2.0","method":"eth_getBlockByNumber","params":["$number", true],"id":1}}"""))
 
     private fun buildRequest(body: RequestBody) = Request.Builder().url(baseURL)
             .method("POST", body)
-            .build()!!
+            .build()
 
-    fun getBlockNumberString() = okhttp.newCall(buildBlockRequest()).execute().body().use { body ->
-        body?.source()?.use { blockNumberAdapter.fromJson(it) }
-    }?.result
+    private fun buildRequest(medhod: String, params: String = "") = buildRequest(RequestBody.create(JSONMediaType, """{"jsonrpc":"2.0","method":"$medhod","params":[$params],"id":1}"""))
 
-    fun getBlockByNumber(number: String) = okhttp.newCall(buildBlockByNumberRequest(number)).execute().body().use { body ->
-        body?.source()?.use { blockInfoAdapter.fromJson(it) }
+    private fun stringCall(function: String, params: String = ""): StringResultResponse? {
+        return executeCallToString(function, params)?.let { string -> stringResultAdapter.fromJsonNoThrow(string) }
+    }
+
+    private fun executeCallToString(function: String, params: String) = try {
+        okhttp.newCall(buildRequest(function, params)).execute().body().use { body ->
+            body?.string()
+        }
+    } catch (e: IOException) {
+        null
+    }
+
+    fun getBlockByNumber(number: String) = executeCallToString("eth_getBlockByNumber", "\"$number\", true")?.let { string ->
+        blockInfoAdapter.fromJsonNoThrow(string)
     }?.result?.toBlockInformation()
 
+    fun sendRawTransaction(data: String) = stringCall("eth_sendRawTransaction", "\"$data\"")
+
+    fun blockNumber() = stringCall("eth_blockNumber")
+
+    fun call(callObject: String, block: String) = stringCall("eth_call", "$callObject,\"$block\"")
+
+    fun gasPrice() = stringCall("eth_gasPrice")
+
+    fun getStorageAt(address: String, position: String, block: String) = stringCall("eth_getStorageAt", "\"$address\",\"$position\",\"$block\"")
+
+    fun getTransactionCount(address: String, block: String) = stringCall("eth_getTransactionCount", "\"$address\",\"$block\"")
+
+    fun getCode(address: String, block: String) = stringCall("eth_getCode", "\"$address\",\"$block\"")
+
+    fun estimateGas(callObject: String, block: String) = stringCall("eth_estimateGas", "$callObject,\"$block\"")
+
+    fun getBalance(address: Address, block: String) = stringCall("eth_getBalance", "\"${address.hex}\",\"$block\"")
 }
+
+

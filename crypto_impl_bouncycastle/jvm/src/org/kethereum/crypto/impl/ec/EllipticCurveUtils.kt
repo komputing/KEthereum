@@ -1,6 +1,7 @@
 package org.kethereum.crypto.impl.ec
 
 import org.kethereum.crypto.api.ec.ECDSASignature
+import org.kethereum.model.number.BigInteger
 
 private val HALF_CURVE_ORDER = CURVE_PARAMS.n.shiftRight(1)
 /**
@@ -27,5 +28,5 @@ fun ECDSASignature.canonicalise() = if (isCanonical()) {
     //    N = 10
     //    s = 8, so (-8 % 10 == 2) thus both (r, 8) and (r, 2) are valid solutions.
     //    10 - 8 == 2, giving us always the latter solution, which is canonical.
-    ECDSASignature(r, CURVE_PARAMS.n.subtract(s))
+    ECDSASignature(r, BigInteger(CURVE_PARAMS.n.subtract(s.value)))
 }

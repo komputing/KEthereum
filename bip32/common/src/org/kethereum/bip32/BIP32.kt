@@ -10,15 +10,16 @@ import org.kethereum.bip32.model.Seed
 import org.kethereum.bip44.BIP44
 import org.kethereum.bip44.BIP44Element
 import org.kethereum.crypto.*
-import org.kethereum.model.exceptions.InvalidKeyException
-import org.kethereum.model.exceptions.KeyException
-import org.kethereum.model.exceptions.NoSuchAlgorithmException
-import org.kethereum.model.exceptions.NoSuchProviderException
 import org.kethereum.hashes.ripemd160
 import org.kethereum.hashes.sha256
 import org.kethereum.model.ECKeyPair
 import org.kethereum.model.PRIVATE_KEY_SIZE
 import org.kethereum.model.PrivateKey
+import org.kethereum.model.exceptions.InvalidKeyException
+import org.kethereum.model.exceptions.KeyException
+import org.kethereum.model.exceptions.NoSuchAlgorithmException
+import org.kethereum.model.exceptions.NoSuchProviderException
+import org.kethereum.model.extensions.toBytesPadded
 import org.kethereum.model.number.BigInteger
 import kotlin.jvm.JvmName
 

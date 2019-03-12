@@ -2,17 +2,20 @@ apply plugin: 'kotlinx-serialization'
 
 kotlin.sourceSets {
     commonMain.dependencies {
-        implementation "org.jetbrains.kotlinx:kotlinx-serialization-runtime-common:$serialization_version"
+        api "org.jetbrains.kotlinx:kotlinx-serialization-runtime-common:$serialization_version"
         
-        implementation project(':bip44')
-        implementation project(':base58')
-        implementation project(':crypto')
-        implementation project(':crypto_api')
-        implementation project(':hashes')
-        implementation project(':model')
+        api project(':bip44')
+        api project(':base58')
+        api project(':crypto')
+        api project(':crypto_api')
+        api project(':hashes')
+        api project(':model')
     }
     commonTest.dependencies {
-        implementation project(':crypto_impl_bouncycastle')
-        implementation project(':test_data')
+        api project(':test_data')
+    }
+    jvmTest.dependencies {
+        api "org.jetbrains.kotlinx:kotlinx-serialization-runtime:$serialization_version"
+        api project(':crypto_impl_bouncycastle')
     }
 }

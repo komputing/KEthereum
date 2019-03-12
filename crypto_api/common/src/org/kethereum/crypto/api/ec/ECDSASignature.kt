@@ -1,5 +1,5 @@
 package org.kethereum.crypto.api.ec
 
-import java.math.BigInteger
+import org.kethereum.model.number.BigInteger
 
 data class ECDSASignature(val r: BigInteger, val s: BigInteger)

@@ -21,6 +21,7 @@ expect class BigInteger: Number, Comparable<Number> {
     constructor(value: String, radix: Int)
 
     fun add(value: BigInteger): BigInteger
+    fun multiply(value: BigInteger): BigInteger
     fun mod(value: BigInteger): BigInteger
     fun minus(value: BigInteger): BigInteger
     fun xor(value: BigInteger?): BigInteger

@@ -8,29 +8,21 @@ import org.kethereum.crypto.CryptoAPI
 import org.kethereum.crypto.decompressKey
 import org.kethereum.crypto.toECKeyPair
 import org.kethereum.encodings.decodeBase58WithChecksum
-import org.kethereum.model.exceptions.InvalidKeyException
-import org.kethereum.model.exceptions.KeyException
-import org.kethereum.model.exceptions.NoSuchAlgorithmException
-import org.kethereum.model.exceptions.NoSuchProviderException
 import org.kethereum.model.ECKeyPair
 import org.kethereum.model.PRIVATE_KEY_SIZE
 import org.kethereum.model.PrivateKey
 import org.kethereum.model.PublicKey
+import org.kethereum.model.exceptions.InvalidKeyException
+import org.kethereum.model.exceptions.KeyException
+import org.kethereum.model.exceptions.NoSuchAlgorithmException
+import org.kethereum.model.exceptions.NoSuchProviderException
 import org.kethereum.model.number.BigInteger
-import java.math.BigInteger
-import java.nio.ByteBuffer
-import java.nio.ByteOrder
-import java.security.InvalidKeyException
-import java.security.KeyException
-import java.security.NoSuchAlgorithmException
-import java.security.NoSuchProviderException
-import java.util.*
 
 fun Seed.toExtendedKey(publicKeyOnly: Boolean = false): ExtendedKey {
     try {
         val lr = CryptoAPI.hmac.init(BITCOIN_SEED).generate(seed)
-        val l = Arrays.copyOfRange(lr, 0, PRIVATE_KEY_SIZE)
-        val r = Arrays.copyOfRange(lr, PRIVATE_KEY_SIZE, PRIVATE_KEY_SIZE + CHAINCODE_SIZE)
+        val l = lr.copyOfRange(0, PRIVATE_KEY_SIZE)
+        val r = lr.copyOfRange(PRIVATE_KEY_SIZE, PRIVATE_KEY_SIZE + CHAINCODE_SIZE)
         val m = BigInteger(1, l)
         if (m >= CURVE.n) {
             throw KeyException("Master key creation resulted in a key with higher modulus. Suggest deriving the next increment.")
@@ -65,29 +57,29 @@ fun XPriv.toExtendedKey(): ExtendedKey {
 
     val type = ByteArray(4)
 
-    buff.get(type)
+    buff.get(type, 0, type.size)
 
     val hasPrivate = when {
-        Arrays.equals(type, xprv) -> true
-        Arrays.equals(type, xpub) -> false
+        type.contentEquals(xprv) -> true
+        type.contentEquals(xpub) -> false
         else -> throw KeyException("invalid magic number for an extended key")
     }
 
     val depth = buff.get()
-    val parent = buff.int
-    val sequence = buff.int
+    val parent = buff.getInt()
+    val sequence = buff.getInt()
 
     val chainCode = ByteArray(PRIVATE_KEY_SIZE)
-    buff.get(chainCode)
+    buff.get(chainCode, 0, chainCode.size)
 
     val keyPair = if (hasPrivate) {
         buff.get() // ignore the leading 0
         val privateBytes = ByteArray(PRIVATE_KEY_SIZE)
-        buff.get(privateBytes)
+        buff.get(privateBytes, 0, privateBytes.size)
         PrivateKey(privateBytes).toECKeyPair()
     } else {
         val compressedPublicBytes = ByteArray(COMPRESSED_PUBLIC_KEY_SIZE)
-        buff.get(compressedPublicBytes)
+        buff.get(compressedPublicBytes, 0, compressedPublicBytes.size)
         val uncompressedPublicBytes = decompressKey(compressedPublicBytes)
         ECKeyPair(
             PrivateKey(BigInteger.ZERO),

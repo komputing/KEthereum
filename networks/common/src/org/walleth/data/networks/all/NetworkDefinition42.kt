@@ -1,11 +1,15 @@
 package org.walleth.data.networks.all
 
 import org.kethereum.model.ChainDefinition
+import org.kethereum.model.ChainId
 import org.walleth.data.networks.NetworkDefinition
 
 class NetworkDefinition42 : NetworkDefinition {
 
-    override val chain = ChainDefinition(42L,"KOV")
+    override val tokenShortName = "KOV"
+    override val tokenName = "Kovan Ether"
+
+    override val chain = ChainDefinition(ChainId(42L), "KOV")
 
     override fun getNetworkName() = "kovan"
 
@@ -15,5 +19,7 @@ class NetworkDefinition42 : NetworkDefinition {
             "https://faucet.kovan.network",
             "https://gitter.im/kovan-testnet/faucet"
     )
+
+    override val rpcEndpoints = listOf("https://kovan.infura.io")
 
 }

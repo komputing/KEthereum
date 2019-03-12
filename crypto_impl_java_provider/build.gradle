@@ -1,5 +1,5 @@
 kotlin.sourceSets {
     jvmMain.dependencies {
-        implementation project(":crypto_api")
+        api project(":crypto_api")
     }
 }

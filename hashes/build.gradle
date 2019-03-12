@@ -1,5 +1,9 @@
 kotlin.sourceSets {
     commonMain.dependencies {
-        implementation project(':ripemd160')
+        api project(':ripemd160')
+        api "org.jetbrains.kotlinx:kotlinx-serialization-runtime-common:$serialization_version"
+    }
+    jvmMain.dependencies {
+        api "org.jetbrains.kotlinx:kotlinx-serialization-runtime:$serialization_version"
     }
 }

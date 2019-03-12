@@ -28,12 +28,43 @@ class TheEthereumRPC {
     }
 
     @Test
+    fun getBalanceWorks() {
+        //language=JSON
+        val response = "{\"jsonrpc\":\"2.0\",\"id\":83,\"result\":\"0x0234c8a3397aab58\"}\n"
+        server.enqueue(MockResponse().setBody(response))
+
+        assertThat(tested.getBalance(Address("0x0"),"latest")?.result).isEqualTo("0x0234c8a3397aab58")
+    }
+
+    @Test
+    fun sendTxErrorWorks() {
+        //language=JSON
+        val response = "{\"jsonrpc\":\"2.0\",\"error\":{\"code\":-32010,\"message\":\"Transaction with the same hash was already imported.\"},\"id\":1,\"in3\":{\"lastValidatorChange\":68593,\"lastNodeList\":21988,\"execTime\":76}}\n"
+        server.enqueue(MockResponse().setBody(response))
+
+        val sendRawTransaction = tested.sendRawTransaction("0x0")
+        assertThat(sendRawTransaction?.error?.message).isEqualTo("Transaction with the same hash was already imported.")
+        assertThat(sendRawTransaction?.error?.code).isEqualTo(-32010)
+    }
+
+
+
+    @Test
+    fun sendRawTransactionWorks() {
+        //language=JSON
+        val response = "{\"jsonrpc\":\"2.0\",\"id\":83,\"result\":\"0xe670ec64341771606e55d6b4ca35a1a6b75ee3d5145a99d05921026d1527331\"}\n"
+        server.enqueue(MockResponse().setBody(response))
+
+        assertThat(tested.sendRawTransaction("0x00")?.result).isEqualTo("0xe670ec64341771606e55d6b4ca35a1a6b75ee3d5145a99d05921026d1527331")
+    }
+
+    @Test
     fun getBlockNumberWorks() {
         //language=JSON
         val response = "{\"jsonrpc\":\"2.0\",\"id\":83,\"result\":\"0x4299d\"}\n"
         server.enqueue(MockResponse().setBody(response))
 
-        assertThat(tested.getBlockNumberString()).isEqualTo("0x4299d")
+        assertThat(tested.blockNumber()?.result).isEqualTo("0x4299d")
     }
 
     @Test

@@ -2,13 +2,12 @@ package org.kethereum.crypto
 
 import org.kethereum.crypto.api.ec.Curve
 import org.kethereum.crypto.api.ec.ECDSASignature
+import org.kethereum.keccakshortcut.keccak
 import org.kethereum.model.ECKeyPair
 import org.kethereum.model.PrivateKey
 import org.kethereum.model.PublicKey
-import org.kethereum.keccakshortcut.keccak
 import org.kethereum.model.SignatureData
 import org.kethereum.model.exceptions.SignatureException
-import java.security.SignatureException
 import kotlin.experimental.and
 
 /**

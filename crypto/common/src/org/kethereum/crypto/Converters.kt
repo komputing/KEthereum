@@ -1,10 +1,11 @@
 package org.kethereum.crypto
 
 import org.kethereum.crypto.api.ec.CurvePoint
-import org.kethereum.model.extensions.hexToByteArray
-import org.kethereum.model.extensions.toHexStringZeroPadded
 import org.kethereum.keccakshortcut.keccak
 import org.kethereum.model.*
+import org.kethereum.model.extensions.hexToByteArray
+import org.kethereum.model.extensions.toHexString
+import org.kethereum.model.extensions.toHexStringZeroPadded
 import org.kethereum.model.number.BigInteger
 
 

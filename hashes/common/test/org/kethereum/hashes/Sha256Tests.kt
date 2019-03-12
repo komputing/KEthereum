@@ -1,15 +1,18 @@
 package org.kethereum.hashes
 
-import org.junit.jupiter.api.Assertions.*
-import org.junit.jupiter.api.Test
-import javax.xml.bind.DatatypeConverter
+import kotlinx.io.core.toByteArray
+import kotlinx.serialization.internal.HexConverter.parseHexBinary
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 
 
 class Sha256Tests {
 
     // HASHING
 
-    @Test fun testDigest() {
+    @Test
+    fun testDigest() {
         testHash("", "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855")
         testHash("Hello world!", "c0535e4be2b79ffd93291305436bf889314e4a3faec05ecffcbb7df31ad9e51a")
 
@@ -20,8 +23,8 @@ class Sha256Tests {
 
     private fun testHash(input: String, expected: String) {
         val inputArray = input.toByteArray()
-        val expectedOutput = DatatypeConverter.parseHexBinary(expected)
-        assertArrayEquals(expectedOutput, Sha256.digest(inputArray))
+        val expectedOutput = parseHexBinary(expected)
+        assertTrue(expectedOutput.contentEquals(Sha256.digest(inputArray)))
     }
 
     @Test fun testHashRawBytes() {
@@ -30,8 +33,8 @@ class Sha256Tests {
             b[i] = i.toByte()
         }
 
-        val expected = DatatypeConverter.parseHexBinary("40aff2e9d2d8922e47afd4648e6967497158785fbd1da870e7110266bf944880")
-        assertArrayEquals(expected, Sha256.digest(b))
+        val expected = parseHexBinary("40aff2e9d2d8922e47afd4648e6967497158785fbd1da870e7110266bf944880")
+        assertTrue(expected.contentEquals(Sha256.digest(b)))
     }
 
 
@@ -41,7 +44,7 @@ class Sha256Tests {
         val b = byteArrayOf(0, 1, 2, 3, 0)
         val padded = Sha256.padMessage(b)
         val paddedLengthBits = padded.size * 8
-        assertTrue(paddedLengthBits % 512 == 0)
+        assertEquals(paddedLengthBits % 512, 0)
     }
 
     @Test fun testPaddedMessageHas1Bit() {

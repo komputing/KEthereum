@@ -8,25 +8,40 @@ import org.kethereum.crypto.api.mac.Hmac
 import org.kethereum.crypto.impl.kdf.PBKDF2
 import org.kethereum.crypto.impl.kdf.SCrypt
 
-fun <T> loadClass(name: String): T = try {
-    @Suppress("UNCHECKED_CAST")
-    Class.forName("org.kethereum.crypto.impl.$name").newInstance() as T
-} catch (e: ClassNotFoundException) {
-    throw RuntimeException("There is not implementation found for $name - you need to either depend on crypto_impl_spongycastle or crypto_impl_bouncycastle")
-}
-
 object CryptoAPI {
-    val hmac by lazy { loadClass("mac.HmacImpl") as Hmac }
 
-    val keyPairGenerator by lazy { loadClass("ec.EllipticCurveKeyPairGenerator") as KeyPairGenerator }
-    val curve by lazy { loadClass("ec.EllipticCurve") as Curve }
-    val signer by lazy { loadClass("ec.EllipticCurveSigner") as Signer }
+    private lateinit var provider: Provider
+
+    fun setProvider(provider: Provider) {
+        this.provider = provider
+    }
+
+    private fun <T> lazyCheck(block: () -> T): Lazy<T> {
+        if (!::provider.isInitialized) {
+            throw UnsupportedOperationException("Please set a provider using CryptoAPI.setProvider")
+        }
+        return lazy { block() }
+    }
+
+    val hmac by lazyCheck { provider.hmacProvider() }
+
+    val keyPairGenerator by lazyCheck { provider.keyPairGeneratorProvider() }
+    val curve by lazyCheck { provider.curveProvider() }
+    val signer by lazyCheck { provider.signerProvider() }
 
 
-    val pbkdf2 by lazy { loadClass("kdf.PBKDF2Impl") as PBKDF2 }
-    val scrypt by lazy { loadClass("kdf.SCryptImpl") as SCrypt }
+    val pbkdf2 by lazyCheck { provider.pbkf2Provider() }
+    val scrypt by lazyCheck { provider.scryptProvider() }
 
-    val aesCipher by lazy { loadClass("cipher.AESCipherImpl") as AESCipher }
+    val aesCipher by lazyCheck { provider.aesCipherProvider() }
 
-
+    abstract class Provider {
+        abstract fun hmacProvider(): Hmac
+        abstract fun keyPairGeneratorProvider(): KeyPairGenerator
+        abstract fun curveProvider(): Curve
+        abstract fun signerProvider(): Signer
+        abstract fun pbkf2Provider(): PBKDF2
+        abstract fun scryptProvider(): SCrypt
+        abstract fun aesCipherProvider(): AESCipher
+    }
 }

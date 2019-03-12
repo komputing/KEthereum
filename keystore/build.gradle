@@ -1,0 +1,10 @@
+kotlin.sourceSets {
+    commonMain.dependencies {
+        api project(":model")
+        api project(":wallet")
+    }
+    commonTest.dependencies {
+        api project(":crypto_impl_bouncycastle")
+        api project(":crypto")
+    }
+}

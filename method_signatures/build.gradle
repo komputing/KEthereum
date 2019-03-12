@@ -1,7 +1,6 @@
 kotlin.sourceSets {
     commonMain.dependencies {
         implementation project(':keccak_shortcut')
-        implementation "com.github.walleth:khex:$khex_version"
     }
     commonTest.dependencies {
         implementation project(":crypto_impl_spongycastle")

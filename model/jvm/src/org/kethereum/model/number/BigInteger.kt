@@ -23,6 +23,10 @@ actual class BigInteger(val value: BigInteger): Number(), Comparable<Number> {
         return BigInteger(this.value.add(value.value))
     }
 
+    actual fun multiply(value: org.kethereum.model.number.BigInteger): org.kethereum.model.number.BigInteger {
+        return BigInteger(this.value.multiply(value.value))
+    }
+
     actual fun mod(value: org.kethereum.model.number.BigInteger): org.kethereum.model.number.BigInteger {
         return BigInteger(this.value.mod(value.value))
     }
