@@ -1,14 +1,14 @@
 package org.kethereum.rpc
 
-import org.kethereum.extensions.hexToBigInteger
 import org.kethereum.model.Address
 import org.kethereum.model.SignatureData
 import org.kethereum.model.SignedTransaction
 import org.kethereum.model.createTransactionWithDefaults
+import org.kethereum.model.extensions.hexToBigInteger
+import org.kethereum.model.extensions.hexToByteArray
 import org.kethereum.rpc.model.BlockInformation
 import org.kethereum.rpc.model.rpc.BlockInformationRPC
 import org.kethereum.rpc.model.rpc.TransactionRPC
-import org.walleth.khex.hexToByteArray
 
 internal fun TransactionRPC.toKethereumTransaction() = SignedTransaction(
         createTransactionWithDefaults(

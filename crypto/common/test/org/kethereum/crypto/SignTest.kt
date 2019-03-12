@@ -7,8 +7,7 @@ import org.kethereum.crypto.test_data.KEY_PAIR
 import org.kethereum.crypto.test_data.PRIVATE_KEY
 import org.kethereum.crypto.test_data.PUBLIC_KEY
 import org.kethereum.crypto.test_data.TEST_MESSAGE
-import org.kethereum.extensions.hexToBigInteger
-import org.kethereum.hashes.sha256
+import org.kethereum.model.extensions.hexToBigInteger
 import org.kethereum.model.SignatureData
 import org.walleth.khex.hexToByteArray
 import java.security.SignatureException

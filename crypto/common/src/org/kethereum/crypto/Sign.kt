@@ -7,6 +7,7 @@ import org.kethereum.model.PrivateKey
 import org.kethereum.model.PublicKey
 import org.kethereum.keccakshortcut.keccak
 import org.kethereum.model.SignatureData
+import org.kethereum.model.exceptions.SignatureException
 import java.security.SignatureException
 import kotlin.experimental.and
 
@@ -78,7 +79,6 @@ private fun sign(transactionHash: ByteArray, privateKey: PrivateKey, canonical: 
  * @throws SignatureException If the public key could not be recovered or if there was a
  * signature format error.
  */
-@Throws(SignatureException::class)
 fun signedMessageToKey(message: ByteArray, signatureData: SignatureData): PublicKey {
 
     val header = signatureData.v and 0xFF.toByte()

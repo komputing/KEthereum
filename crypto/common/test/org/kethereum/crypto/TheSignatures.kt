@@ -2,7 +2,7 @@ package org.kethereum.crypto
 
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
-import org.kethereum.extensions.hexToBigInteger
+import org.kethereum.model.extensions.hexToBigInteger
 import org.kethereum.model.SignatureData
 
 class TheSignatures {

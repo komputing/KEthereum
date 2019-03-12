@@ -1,5 +1,6 @@
 package org.kethereum.crypto.test_data
 
+import kotlinx.io.core.toByteArray
 import org.kethereum.model.Address
 import org.kethereum.model.ECKeyPair
 import org.kethereum.model.PrivateKey

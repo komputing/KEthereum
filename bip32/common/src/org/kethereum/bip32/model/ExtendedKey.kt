@@ -6,7 +6,7 @@ import org.kethereum.crypto.getCompressedPublicKey
 import org.kethereum.encodings.encodeToBase58WithChecksum
 import org.kethereum.model.ECKeyPair
 import org.kethereum.model.PRIVATE_KEY_SIZE
-import org.kethereum.number.BigInteger
+import org.kethereum.model.number.BigInteger
 
 
 data class ExtendedKey(

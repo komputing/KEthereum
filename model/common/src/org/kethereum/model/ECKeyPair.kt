@@ -1,8 +1,8 @@
 package org.kethereum.model
 
-import org.kethereum.extensions.hexToBigInteger
-import org.kethereum.extensions.toBigInteger
-import org.kethereum.number.BigInteger
+import org.kethereum.model.extensions.hexToBigInteger
+import org.kethereum.model.extensions.toBigInteger
+import org.kethereum.model.number.BigInteger
 
 inline class PrivateKey(val key: BigInteger) {
     constructor(privateKey: ByteArray) : this(privateKey.toBigInteger())

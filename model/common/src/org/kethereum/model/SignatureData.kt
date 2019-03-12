@@ -1,7 +1,7 @@
 package org.kethereum.model
 
-import org.kethereum.number.BigInteger
-import org.kethereum.number.BigInteger.Companion.ZERO
+import org.kethereum.model.number.BigInteger
+import org.kethereum.model.number.BigInteger.Companion.ZERO
 
 data class SignatureData(var r: BigInteger = ZERO,
                          var s: BigInteger = ZERO,

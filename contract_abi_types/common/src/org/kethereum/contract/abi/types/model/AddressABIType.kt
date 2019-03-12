@@ -1,6 +1,6 @@
 package org.kethereum.contract.abi.types.model
 
-import org.kethereum.extensions.hexToByteArray
+import org.kethereum.model.extensions.hexToByteArray
 
 
 class AddressABIType : BytesABIType(20) {

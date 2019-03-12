@@ -2,8 +2,4 @@ kotlin.sourceSets {
     commonMain.dependencies {
         implementation project(":model")
     }
-    jvmMain.dependencies {
-    }
-    jvmTest.dependencies {
-    }
 }

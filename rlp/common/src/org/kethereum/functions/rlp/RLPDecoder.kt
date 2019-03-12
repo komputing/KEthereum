@@ -1,6 +1,7 @@
 package org.kethereum.functions.rlp
 
-import java.math.BigInteger
+import org.kethereum.model.number.BigInteger
+
 
 /**
 RLP as of Appendix B. Recursive Length Prefix at https://github.com/ethereum/yellowpaper

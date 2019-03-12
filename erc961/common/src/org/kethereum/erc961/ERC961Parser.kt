@@ -1,6 +1,5 @@
 package org.kethereum.erc961
 
-import com.sun.xml.internal.fastinfoset.vocab.Vocabulary.PREFIX
 import org.kethereum.model.Address
 import org.kethereum.model.ChainDefinition
 import org.kethereum.model.EthereumURI
@@ -18,7 +17,7 @@ fun parseTokenFromEthereumURI(uri: String): Token {
     val commonEthereumURI = EthereumURI(uri).parseCommonURI()
     val queryMap = commonEthereumURI.query.toMap()
 
-    if (uri.startsWith("ethereum:$PREFIX")
+    if (uri.startsWith("ethereum:2")
             || !commonEthereumURI.valid) {
         throw InvalidTokenURIException()
     }

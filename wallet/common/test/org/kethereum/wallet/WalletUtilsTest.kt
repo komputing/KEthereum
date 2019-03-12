@@ -5,7 +5,7 @@ import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.Test
 import org.kethereum.model.PrivateKey
 import org.kethereum.crypto.toECKeyPair
-import org.kethereum.extensions.hexToBigInteger
+import org.kethereum.model.extensions.hexToBigInteger
 import org.kethereum.wallet.data.KEY_PAIR
 import org.kethereum.wallet.data.PASSWORD
 import java.io.File

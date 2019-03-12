@@ -7,7 +7,8 @@ import org.kethereum.functions.rlp.toUnsignedBigIntegerFromRLP
 import org.kethereum.model.Address
 import org.kethereum.model.SignatureData
 import org.kethereum.model.Transaction
-import org.walleth.khex.toHexString
+import org.kethereum.model.extensions.currentTimeMillis
+import org.kethereum.model.extensions.toHexString
 
 fun RLPList.toTransaction(): Transaction? {
     if (element.size != 6 && element.size != 9) {
@@ -19,7 +20,7 @@ fun RLPList.toTransaction(): Transaction? {
     }
 
     return Transaction(chain = null,
-            creationEpochSecond = System.currentTimeMillis(),
+            creationEpochSecond = currentTimeMillis(),
             from = null,
             nonce = elements[0].toUnsignedBigIntegerFromRLP(),
             gasPrice = elements[1].toUnsignedBigIntegerFromRLP(),
@@ -41,5 +42,4 @@ fun RLPList.toTransactionSignatureData(): SignatureData {
             r = elements[7].toUnsignedBigIntegerFromRLP(),
             s = elements[8].toUnsignedBigIntegerFromRLP()
     )
-
 }

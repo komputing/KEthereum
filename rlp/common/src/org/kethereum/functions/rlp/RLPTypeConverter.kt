@@ -1,9 +1,11 @@
 package org.kethereum.functions.rlp
 
-import org.kethereum.extensions.removeLeadingZero
-import org.kethereum.extensions.toMinimalByteArray
-import java.math.BigInteger
-import java.math.BigInteger.ZERO
+import kotlinx.io.core.String
+import kotlinx.io.core.toByteArray
+import org.kethereum.model.extensions.removeLeadingZero
+import org.kethereum.model.extensions.toMinimalByteArray
+import org.kethereum.model.number.BigInteger
+import org.kethereum.model.number.BigInteger.Companion.ZERO
 
 /**
 RLP as of Appendix B. Recursive Length Prefix at https://github.com/ethereum/yellowpaper

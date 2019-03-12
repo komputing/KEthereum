@@ -4,6 +4,5 @@ kotlin.sourceSets {
     }
     commonTest.dependencies {
         implementation project(":functions")
-        implementation "com.github.walleth:khex:$khex_version"
     }
 }

@@ -1,6 +1,6 @@
-import org.kethereum.extensions.maybeHexToBigInteger
-import org.kethereum.extensions.toBytesPadded
-import org.kethereum.number.BigInteger
+import org.kethereum.model.extensions.maybeHexToBigInteger
+import org.kethereum.model.extensions.toBytesPadded
+import org.kethereum.model.number.BigInteger
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith

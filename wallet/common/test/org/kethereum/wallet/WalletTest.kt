@@ -2,7 +2,7 @@ package org.kethereum.wallet
 
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
-import org.kethereum.extensions.toHexStringNoPrefix
+import org.kethereum.model.extensions.toHexStringNoPrefix
 import org.kethereum.wallet.data.*
 import org.kethereum.wallet.model.WalletForImport
 

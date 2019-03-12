@@ -18,7 +18,7 @@ class EllipticCurveKeyPairGenerator : KeyPairGenerator {
             val privateKeyValue = (private as ECPrivateKeyParameters).d
             val publicKeyBytes = (public as ECPublicKeyParameters).q.getEncoded(false)
             val publicKeyValue = BigInteger(1, Arrays.copyOfRange(publicKeyBytes, 1, publicKeyBytes.size))
-            ECKeyPair(PrivateKey(privateKeyValue), PublicKey(publicKeyValue))
+            ECKeyPair(PrivateKey(privateKeyValue.toString()), PublicKey(publicKeyValue.toString()))
         }
     }
 }

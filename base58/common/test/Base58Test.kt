@@ -1,13 +1,14 @@
 package org.kethereum.encodings
 
-import org.kethereum.extensions.hexToByteArray
+import org.kethereum.model.extensions.hexToByteArray
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 
 class Base58Test {
 
     // Tests from https://github.com/bitcoin/bitcoin/blob/master/src/test/data/base58_encode_decode.json
-    private val TEST_VECTORS = mapOf(
+    private val testVectors = mapOf(
             "" to "",
             "61" to "2g",
             "626262" to "a3gV",
@@ -24,15 +25,15 @@ class Base58Test {
 
     @Test
     fun encodingToBase58Works() {
-        TEST_VECTORS.forEach {
+        testVectors.forEach {
             assertEquals(it.key.hexToByteArray().encodeToBase58String(), it.value)
         }
     }
 
     @Test
     fun decodingFromBase58Works() {
-        TEST_VECTORS.forEach {
-            assertEquals(it.value.decodeBase58(), it.key.hexToByteArray())
+        testVectors.forEach {
+            assertTrue(it.value.decodeBase58().contentEquals(it.key.hexToByteArray()))
         }
     }
 }

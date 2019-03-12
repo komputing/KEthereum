@@ -3,7 +3,7 @@ package org.kethereum.wallet.data
 import org.kethereum.model.ECKeyPair
 import org.kethereum.model.PrivateKey
 import org.kethereum.model.PublicKey
-import org.kethereum.extensions.hexToBigInteger
+import org.kethereum.model.extensions.hexToBigInteger
 import org.walleth.khex.clean0xPrefix
 
 internal const val PASSWORD = "Insecure Pa55w0rd"

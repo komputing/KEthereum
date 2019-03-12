@@ -1,12 +1,13 @@
 kotlin.sourceSets {
     commonMain.dependencies {
-        implementation project(':model')
-        implementation project(':rlp')
-        implementation project(":keccak_shortcut")
-
-        implementation "com.github.walleth:khex:$khex_version"
+        api project(':model')
+        api project(':rlp')
+        api project(":keccak_shortcut")
     }
     commonTest.dependencies {
-        implementation "com.beust:klaxon:$klaxon_version"
+        api "org.jetbrains.kotlinx:kotlinx-serialization-runtime-common:$serialization_version"
+    }
+    jvmTest.dependencies {
+        api "org.jetbrains.kotlinx:kotlinx-serialization-runtime:$serialization_version"
     }
 }

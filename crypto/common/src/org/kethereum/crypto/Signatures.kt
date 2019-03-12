@@ -1,9 +1,9 @@
 package org.kethereum.crypto
 
-import org.kethereum.extensions.toHexStringZeroPadded
 import org.kethereum.model.SignatureData
-import org.walleth.khex.toHexString
-import java.math.BigInteger
+import org.kethereum.model.extensions.toHexString
+import org.kethereum.model.extensions.toHexStringZeroPadded
+import org.kethereum.model.number.BigInteger
 
 fun SignatureData.toHex() = r.to64BytePaddedHex() + s.to64BytePaddedHex() + v.toHexString()
 

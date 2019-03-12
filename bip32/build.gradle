@@ -12,7 +12,6 @@ kotlin.sourceSets {
         implementation project(':model')
     }
     commonTest.dependencies {
-        implementation "com.github.walleth:khex:$khex_version"
         implementation project(':crypto_impl_bouncycastle')
         implementation project(':test_data')
     }

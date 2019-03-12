@@ -1,9 +1,10 @@
 package org.kethereum.methodsignatures
 
+import kotlinx.io.core.toByteArray
 import org.kethereum.keccakshortcut.keccak
 import org.kethereum.methodsignatures.model.HexMethodSignature
 import org.kethereum.methodsignatures.model.TextMethodSignature
-import org.walleth.khex.toNoPrefixHexString
+import org.kethereum.model.extensions.toNoPrefixHexString
 
 private fun String.getHexSignature() = toByteArray().keccak().toNoPrefixHexString().substring(0, 8)
 

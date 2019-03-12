@@ -7,7 +7,7 @@ import org.kethereum.crypto.api.cipher.AESCipher
 import org.kethereum.crypto.impl.hashing.DigestParams
 import org.kethereum.crypto.toAddress
 import org.kethereum.crypto.toECKeyPair
-import org.kethereum.extensions.toBytesPadded
+import org.kethereum.model.extensions.toBytesPadded
 import org.kethereum.keccakshortcut.keccak
 import org.kethereum.model.ECKeyPair
 import org.kethereum.model.PRIVATE_KEY_SIZE

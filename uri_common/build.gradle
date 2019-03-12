@@ -1,6 +1,6 @@
 kotlin.sourceSets {
     commonMain.dependencies {
-        implementation project(":erc831")
-        implementation project(":model")
+        api project(":erc831")
+        api project(":model")
     }
 }

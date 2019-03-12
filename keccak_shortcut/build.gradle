@@ -1,6 +1,5 @@
 kotlin.sourceSets {
     commonMain.dependencies {
-        implementation "com.github.walleth:sha3:0.7"
-        implementation "com.github.walleth:khex:$khex_version"
+        api project(':model')
     }
 }

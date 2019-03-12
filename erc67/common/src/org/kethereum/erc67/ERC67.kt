@@ -1,9 +1,9 @@
 package org.kethereum.erc67
 
-import org.kethereum.ETH_IN_WEI
+import org.kethereum.model.ETH_IN_WEI
 import org.kethereum.model.Address
-import java.math.BigDecimal
-import java.math.BigInteger
+import org.kethereum.model.number.BigDecimal
+import org.kethereum.model.number.BigInteger
 
 // https://github.com/ethereum/EIPs/issues/67
 

@@ -1,14 +1,16 @@
 package org.kethereum.bip39
 
+import kotlinx.io.core.toByteArray
 import org.kethereum.bip32.model.Seed
 import org.kethereum.bip32.toKey
 import org.kethereum.bip39.model.MnemonicWords
 import org.kethereum.crypto.CryptoAPI
-import org.kethereum.extensions.toBitArray
-import org.kethereum.extensions.toByteArray
+import org.kethereum.model.extensions.toBitArray
 import org.kethereum.hashes.sha256
-import java.security.SecureRandom
-import java.util.*
+import org.kethereum.model.extensions.toCharArray
+import org.kethereum.model.extensions.copy
+import org.kethereum.model.extensions.toByteArray
+import org.kethereum.model.secure.SecureRandom
 
 fun dirtyPhraseToMnemonicWords(string: String) = MnemonicWords(
         string.trim().toLowerCase().split(" ")
@@ -51,7 +53,7 @@ fun MnemonicWords.mnemonicToEntropy(wordList: List<String>): ByteArray {
 
     for ((phraseIndex, word) in words.withIndex()) {
 
-        val dictIndex = Collections.binarySearch(wordList, word)
+        val dictIndex = wordList.binarySearch(word)
         if (dictIndex < 0)
             throw IllegalArgumentException("word($word) not in known word list")
 
@@ -97,8 +99,8 @@ fun entropyToMnemonic(entropy: ByteArray, wordList: List<String>): String {
     val checksumLengthBits = entropyBits.size / 32
 
     val concatBits = BooleanArray(entropyBits.size + checksumLengthBits)
-    System.arraycopy(entropyBits, 0, concatBits, 0, entropyBits.size)
-    System.arraycopy(hashBits, 0, concatBits, entropyBits.size, checksumLengthBits)
+    entropyBits.copy(0, concatBits, 0, entropyBits.size)
+    hashBits.copy(0, concatBits, entropyBits.size, checksumLengthBits)
 
 
     val words = ArrayList<String>().toMutableList()
@@ -139,7 +141,7 @@ fun MnemonicWords.validate(wordList: List<String>) = try {
     mnemonicToEntropy(wordList)
     true
 } catch (e: IllegalArgumentException) {
-    e.printStackTrace()
+    println(e)
     false
 }
 
