@@ -11,6 +11,7 @@ import org.kethereum.rpc.model.BigIntegerAdapter
 import org.kethereum.rpc.model.BlockInformationResponse
 import org.kethereum.rpc.model.StringResultResponse
 import java.io.IOException
+import java.security.GeneralSecurityException
 
 
 val JSONMediaType: MediaType = MediaType.parse("application/json")!!
@@ -39,6 +40,8 @@ class EthereumRPC(val baseURL: String, private val okhttp: OkHttpClient = OkHttp
             body?.string()
         }
     } catch (e: IOException) {
+        null
+    } catch (e: GeneralSecurityException) {
         null
     }
 
