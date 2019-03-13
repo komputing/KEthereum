@@ -1,5 +1,6 @@
 package org.kethereum.abi.model
 
+import kotlinx.serialization.Optional
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -10,9 +11,9 @@ data class EthereumFunctionParameter(
 
 @Serializable
 data class EthereumFunction(
-        val name: String?,
-        val id: String,
         val constant: Boolean,
         val inputs: List<EthereumFunctionParameter>?,
-        val result: String
+        val name: String?,
+        @Optional val id: String? = null,
+        @Optional val result: String? = null
 )

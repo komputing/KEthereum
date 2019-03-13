@@ -7,25 +7,24 @@ class TheERC1328Generator {
 
     @Test
     fun basicToERC1328Works() {
-        assertEquals(ERC1328(sessionID = "mySession").generateURL(), "ethereum:wc-mySession")
+        assertEquals(ERC1328(topic = "myTopic").generateURL(), "wc:myTopic")
     }
 
     @Test
     fun thatERC1328WithVersionWorks() {
-        assertEquals(ERC1328(sessionID = "mySession", version = 2).generateURL(), "ethereum:wc-mySession@2")
+        assertEquals(ERC1328(topic = "myTopic", version = 2).generateURL(), "wc:myTopic@2")
     }
 
     @Test
     fun thatERC1328FullyFeaturedWorks() {
         assertEquals(
             ERC1328(
-                sessionID = "mySession",
-                name = "myApp",
+                topic = "myTopic",
                 bridge = "myBridge",
                 symKey = "mySymKey",
                 version = 2
             ).generateURL(),
-            "ethereum:wc-mySession@2?name=myApp&bridge=myBridge&symKey=mySymKey"
+            "wc:myTopic@2?bridge=myBridge&key=mySymKey"
         )
     }
 

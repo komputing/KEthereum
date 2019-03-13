@@ -7,20 +7,13 @@ class TheERC1328Parsing {
 
     @Test
     fun weCanParseSessionId() {
-        assertEquals(parseERC1328("ethereum:wc-theSessionID@2").sessionID, "theSessionID")
+        assertEquals(parseERC1328("ethereum:wc-theSessionID@2").topic, "theSessionID")
     }
 
     @Test
     fun weCanParseVersion() {
         assertEquals(parseERC1328("ethereum:wc-theSessionID@2?name=foo").version, 2)
     }
-
-
-    @Test
-    fun weCanParseAppName() {
-        assertEquals(parseERC1328("ethereum:wc-theSessionID@3?name=foo").name, "foo")
-    }
-
 
     @Test
     fun weCanParseBridge() {

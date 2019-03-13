@@ -1,7 +1,9 @@
 package org.kethereum.model
 
+import kotlinx.serialization.Serializable
 import kotlin.jvm.Transient
 
+@Serializable
 data class Address(private val input: String) {
 
     val cleanHex = input.removePrefix("0x")

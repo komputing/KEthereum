@@ -3,6 +3,7 @@ package org.kethereum.wallet.model
 import kotlinx.serialization.*
 import kotlinx.serialization.internal.SerialClassDescImpl
 
+@Serializable(with = KdfParams.Companion::class)
 sealed class KdfParams {
     abstract var dklen: Int
     abstract var salt: String?

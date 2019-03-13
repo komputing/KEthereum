@@ -1,7 +1,7 @@
 package org.kethereum.erc961
 
 import org.kethereum.model.Address
-import org.kethereum.model.ChainDefinition
+import org.kethereum.model.ChainId
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
@@ -15,7 +15,7 @@ class TheERC961Parser {
 
     @Test
     fun canParseChain() {
-        assertEquals(parseTokenFromEthereumURI("ethereum:token_info-0x00AB42@4?symbol=TST").chain, ChainDefinition(4))
+        assertEquals(parseTokenFromEthereumURI("ethereum:token_info-0x00AB42@4?symbol=TST").chain, ChainId(4))
     }
 
     @Test
@@ -47,7 +47,7 @@ class TheERC961Parser {
     fun canParseFull() {
         val parseTokenFromEthereumURI = parseTokenFromEthereumURI("ethereum:token_info-0x00AB43@42?type=TypTest&name=NameTest&decimals=2&symbol=SymbolTest")
         assertEquals(parseTokenFromEthereumURI.address, Address("0x00AB43"))
-        assertEquals(parseTokenFromEthereumURI.chain, ChainDefinition(42))
+        assertEquals(parseTokenFromEthereumURI.chain, ChainId(42), "ETH")
         assertEquals(parseTokenFromEthereumURI.type, "TypTest")
         assertEquals(parseTokenFromEthereumURI.name, "NameTest")
         assertEquals(parseTokenFromEthereumURI.symbol, "SymbolTest")

@@ -1,7 +1,9 @@
 package org.kethereum.rpc.model
 
+import kotlinx.serialization.Optional
+
 open class BaseResponse(
         val jsonrpc: String = "",
         val id: String = "",
-        val error: Error? = null
+        @Optional val error: Error? = null
 )

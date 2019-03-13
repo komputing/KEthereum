@@ -1,18 +1,21 @@
 package org.kethereum.model
 
+import kotlinx.serialization.Serializable
 import org.kethereum.model.number.BigInteger
+import org.kethereum.model.serializer.BigIntegerSerializer
 
+@Serializable
 data class Transaction(
     var chain: ChainDefinition?,
     var creationEpochSecond: Long?,
     var from: Address?,
-    var gasLimit: BigInteger,
-    var gasPrice: BigInteger,
+    @Serializable(with = BigIntegerSerializer::class) var gasLimit: BigInteger,
+    @Serializable(with = BigIntegerSerializer::class) var gasPrice: BigInteger,
     var input: List<Byte>,
-    var nonce: BigInteger?,
+    @Serializable(with = BigIntegerSerializer::class) var nonce: BigInteger?,
     var to: Address?,
     var txHash: String?,
-    var value: BigInteger
+    @Serializable(with = BigIntegerSerializer::class) var value: BigInteger
 ) {
     constructor() : this(
             chain = null,

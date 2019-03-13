@@ -1,16 +1,18 @@
 package org.kethereum.rpc
 
+import kotlinx.coroutines.runBlocking
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
-import org.assertj.core.api.Assertions.assertThat
 import org.junit.After
 import org.junit.Before
-import org.junit.jupiter.api.Test
-import org.kethereum.model.extensions.hexToBigInteger
+import org.junit.Test
 import org.kethereum.model.Address
+import org.kethereum.model.extensions.hexToBigInteger
+import org.kethereum.model.extensions.hexToByteArray
+import org.kethereum.model.number.BigInteger
 import org.kethereum.rpc.model.BlockInformation
-import org.walleth.khex.hexToByteArray
-import java.math.BigInteger
+import kotlin.test.assertEquals
+import kotlin.test.assertNotNull
 
 class TheEthereumRPC {
 
@@ -28,47 +30,47 @@ class TheEthereumRPC {
     }
 
     @Test
-    fun getBalanceWorks() {
+    fun getBalanceWorks() = runBlocking {
         //language=JSON
         val response = "{\"jsonrpc\":\"2.0\",\"id\":83,\"result\":\"0x0234c8a3397aab58\"}\n"
         server.enqueue(MockResponse().setBody(response))
 
-        assertThat(tested.getBalance(Address("0x0"),"latest")?.result).isEqualTo("0x0234c8a3397aab58")
+        assertEquals(tested.getBalance(Address("0x0"),"latest")?.result, "0x0234c8a3397aab58")
     }
 
     @Test
-    fun sendTxErrorWorks() {
+    fun sendTxErrorWorks() = runBlocking {
         //language=JSON
         val response = "{\"jsonrpc\":\"2.0\",\"error\":{\"code\":-32010,\"message\":\"Transaction with the same hash was already imported.\"},\"id\":1,\"in3\":{\"lastValidatorChange\":68593,\"lastNodeList\":21988,\"execTime\":76}}\n"
         server.enqueue(MockResponse().setBody(response))
 
         val sendRawTransaction = tested.sendRawTransaction("0x0")
-        assertThat(sendRawTransaction?.error?.message).isEqualTo("Transaction with the same hash was already imported.")
-        assertThat(sendRawTransaction?.error?.code).isEqualTo(-32010)
+        assertEquals(sendRawTransaction?.error?.message, "Transaction with the same hash was already imported.")
+        assertEquals(sendRawTransaction?.error?.code, -32010)
     }
 
 
 
     @Test
-    fun sendRawTransactionWorks() {
+    fun sendRawTransactionWorks() = runBlocking {
         //language=JSON
         val response = "{\"jsonrpc\":\"2.0\",\"id\":83,\"result\":\"0xe670ec64341771606e55d6b4ca35a1a6b75ee3d5145a99d05921026d1527331\"}\n"
         server.enqueue(MockResponse().setBody(response))
 
-        assertThat(tested.sendRawTransaction("0x00")?.result).isEqualTo("0xe670ec64341771606e55d6b4ca35a1a6b75ee3d5145a99d05921026d1527331")
+        assertEquals(tested.sendRawTransaction("0x00")?.result, "0xe670ec64341771606e55d6b4ca35a1a6b75ee3d5145a99d05921026d1527331")
     }
 
     @Test
-    fun getBlockNumberWorks() {
+    fun getBlockNumberWorks() = runBlocking {
         //language=JSON
         val response = "{\"jsonrpc\":\"2.0\",\"id\":83,\"result\":\"0x4299d\"}\n"
         server.enqueue(MockResponse().setBody(response))
 
-        assertThat(tested.blockNumber()?.result).isEqualTo("0x4299d")
+        assertEquals(tested.blockNumber()?.result, "0x4299d")
     }
 
     @Test
-    fun getBlockByNumberWorks() {
+    fun getBlockByNumberWorks() = runBlocking {
         //language=JSON
         val response = """{"jsonrpc": "2.0",
   "id": 2,
@@ -114,29 +116,33 @@ class TheEthereumRPC {
         server.enqueue(MockResponse().setBody(response))
 
         val blockByNumber: BlockInformation? = tested.getBlockByNumber("0x1234")
-        assertThat(blockByNumber).isNotNull
-        assertThat(blockByNumber!!.transactions.size).isEqualTo(1)
+        assertNotNull(blockByNumber)
+        assertEquals(blockByNumber.transactions.size, 1)
         val firstSignedTransaction = blockByNumber.transactions.first()
         val firstTransaction = firstSignedTransaction.transaction
         val firstSignature = firstSignedTransaction.signatureData
-        assertThat(firstTransaction.from).isEqualTo(Address("0x867a5221564160c128f2b0ec6b22216c380ddc76"))
-        assertThat(firstTransaction.gasLimit).isEqualTo("0x5208".hexToBigInteger())
-        assertThat(firstTransaction.gasPrice).isEqualTo("0xd4fc47cf6".hexToBigInteger())
-        assertThat(firstTransaction.txHash).isEqualTo("0xceebdef59ab3cdde152672014b451f75bb7974b9dca4b30e545b6864d9ffca9d")
-        assertThat(firstTransaction.input).isEqualTo("0x".hexToByteArray().toList())
-        assertThat(firstTransaction.nonce).isEqualTo(BigInteger.valueOf(16))
-        assertThat(firstTransaction.to).isEqualTo(Address("0x32be343b94f860124dc4fee278fdcbd38c102d88"))
-        assertThat(firstTransaction.value).isEqualTo("0x596c90f09f547400".hexToBigInteger())
+        assertEquals(firstTransaction.from, Address("0x867a5221564160c128f2b0ec6b22216c380ddc76"))
+        assertEquals(firstTransaction.gasLimit, "0x5208".hexToBigInteger())
+        assertEquals(firstTransaction.gasPrice, "0xd4fc47cf6".hexToBigInteger())
+        assertEquals(firstTransaction.txHash, "0xceebdef59ab3cdde152672014b451f75bb7974b9dca4b30e545b6864d9ffca9d")
+        assertEquals(firstTransaction.input, "0x".hexToByteArray().toList())
+        assertEquals(firstTransaction.nonce!!, BigInteger.valueOf(16))
+        assertEquals(firstTransaction.to, Address("0x32be343b94f860124dc4fee278fdcbd38c102d88"))
+        assertEquals(firstTransaction.value, "0x596c90f09f547400".hexToBigInteger())
 
-        assertThat(firstSignature.v)
-                .isEqualTo("0x1c".hexToBigInteger().toByte())
+        assertEquals(
+            firstSignature.v,
+            "0x1c".hexToBigInteger().toByte()
+        )
 
-        assertThat(firstSignature.r)
-                .isEqualTo("0xdcd183c34a1ceb7934b7fb32f3169b8f3fff43da936553e4d92ae97bb0a9a765".hexToBigInteger())
+        assertEquals(
+            firstSignature.r,
+            "0xdcd183c34a1ceb7934b7fb32f3169b8f3fff43da936553e4d92ae97bb0a9a765".hexToBigInteger()
+        )
 
-        assertThat(firstSignature.s)
-                .isEqualTo("0x76d4be3d62b9e6e6bb8c494c3228f4df31b5c20d8f892fe1d9d35f07afab3d73".hexToBigInteger())
+        assertEquals(
+            firstSignature.s,
+            "0x76d4be3d62b9e6e6bb8c494c3228f4df31b5c20d8f892fe1d9d35f07afab3d73".hexToBigInteger()
+        )
     }
-
-
 }

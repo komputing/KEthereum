@@ -1,7 +1,7 @@
 package org.kethereum.erc961
 
 import org.kethereum.model.Address
-import org.kethereum.model.ChainDefinition
+import org.kethereum.model.ChainId
 import org.kethereum.model.Token
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -9,8 +9,8 @@ import kotlin.test.assertEquals
 class TheERC961Generator {
 
     private val testAddress = Address("0x00AB42")
-    private val testChain = ChainDefinition(4)
-    private val baseToken = Token("TST", testAddress, testChain)
+    private val testChain = ChainId(4)
+    private val baseToken = Token("TST", testAddress, chain = testChain)
 
     @Test
     fun basicTo961Works() {
