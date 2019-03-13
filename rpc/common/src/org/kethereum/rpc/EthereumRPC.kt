@@ -11,6 +11,7 @@ import org.kethereum.rpc.model.BigIntegerAdapter
 import org.kethereum.rpc.model.BlockInformationResponse
 import org.kethereum.rpc.model.StringResultResponse
 import java.io.IOException
+import java.security.GeneralSecurityException
 
 
 val JSONMediaType: MediaType = MediaType.parse("application/json")!!
@@ -40,6 +41,8 @@ class EthereumRPC(val baseURL: String, private val okhttp: OkHttpClient = OkHttp
         }
     } catch (e: IOException) {
         null
+    } catch (e: GeneralSecurityException) {
+        null
     }
 
     fun getBlockByNumber(number: String) = executeCallToString("eth_getBlockByNumber", "\"$number\", true")?.let { string ->
@@ -53,6 +56,8 @@ class EthereumRPC(val baseURL: String, private val okhttp: OkHttpClient = OkHttp
     fun call(callObject: String, block: String) = stringCall("eth_call", "$callObject,\"$block\"")
 
     fun gasPrice() = stringCall("eth_gasPrice")
+
+    fun clientVersion() = stringCall("web3_clientVersion")
 
     fun getStorageAt(address: String, position: String, block: String) = stringCall("eth_getStorageAt", "\"$address\",\"$position\",\"$block\"")
 
