@@ -1,52 +1,14 @@
 package org.kethereum.wallet
 
-import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.Test
-import org.kethereum.model.extensions.toHexStringNoPrefix
-import org.kethereum.wallet.data.*
-import org.kethereum.wallet.model.WalletForImport
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 
 class WalletTest {
 
     @Test
-    fun testCreateStandard() {
-        assertThat(KEY_PAIR.createWallet(PASSWORD, STANDARD_SCRYPT_CONFIG).address).isEqualTo(ADDRESS_NO_PREFIX)
-    }
-
-    @Test
-    fun testCreateLight() {
-        assertThat(KEY_PAIR.createWallet(PASSWORD, LIGHT_SCRYPT_CONFIG).address).isEqualTo(ADDRESS_NO_PREFIX)
-    }
-
-    @Test
-    fun testEncryptDecryptStandard() {
-        assertThat(KEY_PAIR.createWallet(PASSWORD, STANDARD_SCRYPT_CONFIG).decrypt(PASSWORD)).isEqualTo(KEY_PAIR)
-    }
-
-    @Test
-    fun testEncryptDecryptLight() {
-        assertThat(KEY_PAIR.createWallet(PASSWORD, LIGHT_SCRYPT_CONFIG).decrypt(PASSWORD)).isEqualTo(KEY_PAIR)
-    }
-
-    @Test
-    fun testDecryptAes128Ctr() {
-        val walletFile = load(AES_128_CTR_TEST_JSON)
-        val (privateKey) = walletFile.toTypedWallet().decrypt(PASSWORD)
-        assertThat(privateKey.key.toHexStringNoPrefix()).isEqualTo(PRIVATE_KEY_STRING)
-    }
-
-    @Test
-    fun testDecryptScrypt() {
-        val walletFile = load(SCRYPT_TEST_JSON)
-        val (privateKey) = walletFile.toTypedWallet().decrypt(PASSWORD)
-        assertThat(privateKey.key.toHexStringNoPrefix()).isEqualTo(PRIVATE_KEY_STRING)
-    }
-
-    @Test
     fun testGenerateRandomBytes() {
-        assertThat(generateRandomBytes(0)).isEqualTo(byteArrayOf())
-        assertThat(generateRandomBytes(10).size).isEqualTo(10)
+        assertTrue(generateRandomBytes(0).contentEquals(byteArrayOf()))
+        assertEquals(generateRandomBytes(10).size, 10)
     }
-
-    private fun load(source: String): WalletForImport = moshi.adapter(WalletForImport::class.java).fromJson(source)!!
 }

@@ -3,11 +3,16 @@ package org.kethereum.model.number
 /**
  *
  */
-expect class BigDecimal: Number, Comparable<Number> {
+expect class BigDecimal: Number, Comparable<BigDecimal> {
     constructor(value: String)
     constructor(value: BigInteger)
 
-    operator fun times(value: BigDecimal): BigDecimal
+    fun multiply(value: BigDecimal): BigDecimal
+    fun pow(exponent: Int): BigDecimal
 
     fun toBigInteger(): BigInteger
+
+    companion object {
+        val TEN: BigDecimal
+    }
 }

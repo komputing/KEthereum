@@ -2,10 +2,10 @@ package org.kethereum.erc681
 
 import org.kethereum.erc831.ERC831
 import org.kethereum.model.EthereumURI
+import org.kethereum.model.number.BigDecimal
+import org.kethereum.model.number.BigInteger
 import org.kethereum.uri.common.CommonEthereumURIData
 import org.kethereum.uri.common.parseCommonURI
-import java.math.BigDecimal
-import java.math.BigInteger
 
 private val scientificNumberRegEx = Regex("^[0-9]+(\\.[0-9]+)?(e[0-9]+)?$")
 

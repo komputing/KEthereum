@@ -1,36 +1,44 @@
 package org.kethereum.wallet.model
 
-import com.squareup.moshi.Json
+import kotlinx.serialization.Optional
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
 
 const val AES_128_CTR = "pbkdf2"
 const val SCRYPT = "scrypt"
 
+@Serializable
 data class CipherParams(var iv: String)
 
+@Serializable
 data class WalletCrypto(
-        var cipher: String,
-        var ciphertext: String,
-        var cipherparams: CipherParams,
-        var kdf: String,
-        var kdfparams: KdfParams,
-        var mac: String)
-
-
-internal data class WalletForImport(
-
-        var address: String? = null,
-
-        var crypto: WalletCrypto? = null,
-
-        @field:Json(name = "Crypto") //for MyEtherWallet json
-        var cryptoFromMEW: WalletCrypto? = null,
-
-        var id: String? = null,
-        var version: Int = 0
+    var cipher: String,
+    var ciphertext: String,
+    var cipherparams: CipherParams,
+    var kdf: String,
+    @Serializable(with = KdfParams.Companion::class) var kdfparams: KdfParams,
+    var mac: String
 )
 
-data class Wallet(val address: String?,
-                  val crypto: WalletCrypto,
-                  val id: String,
-                  val version: Int)
+@Serializable
+internal data class WalletForImport(
+    @Optional var address: String? = null,
+    @Optional var crypto: WalletCrypto? = null,
+    @Optional @SerialName("Crypto") var cryptoFromMEW: WalletCrypto? = null, //for MyEtherWallet json
+    var id: String? = null,
+    var version: Int = 0
+) {
+    init {
+        // Make sure either crypto or crypto from MEW is not null
+        check(crypto != null || cryptoFromMEW != null)
+    }
+}
+
+@Serializable
+data class Wallet(
+    val address: String?,
+    val crypto: WalletCrypto,
+    val id: String,
+    val version: Int
+)

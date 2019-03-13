@@ -1,16 +1,17 @@
+apply plugin: 'kotlinx-serialization'
+
 kotlin.sourceSets {
     commonMain.dependencies {
-        implementation project(":crypto")
-        implementation project(":crypto_api")
-        implementation project(":keccak_shortcut")
-        implementation project(":model")
-
-        implementation "com.github.walleth:khex:$khex_version"
-
-        implementation "com.squareup.moshi:moshi:$moshi_version"
-        implementation "com.squareup.moshi:moshi-adapters:$moshi_version"
+        api project(":crypto")
+        api project(":crypto_api")
+        api project(":keccak_shortcut")
+        api project(":model")
+        api "org.jetbrains.kotlinx:kotlinx-serialization-runtime-common:$serialization_version"
     }
-    commonTest.dependencies {
-        implementation project(":crypto_impl_spongycastle")
+    jvmMain.dependencies {
+        api "org.jetbrains.kotlinx:kotlinx-serialization-runtime:$serialization_version"
+    }
+    jvmTest.dependencies {
+        implementation project(":crypto_impl_bouncycastle")
     }
 }

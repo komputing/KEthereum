@@ -1,6 +1,6 @@
 package org.kethereum.erc681
 
-import java.math.BigInteger
+import org.kethereum.model.number.BigInteger
 
 data class ERC681(
         var valid: Boolean = true,

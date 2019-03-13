@@ -1,7 +1,7 @@
 package org.kethereum.erc67
 
-import org.kethereum.model.ETH_IN_WEI
 import org.kethereum.model.Address
+import org.kethereum.model.ETH_IN_WEI
 import org.kethereum.model.number.BigDecimal
 import org.kethereum.model.number.BigInteger
 
@@ -9,7 +9,7 @@ import org.kethereum.model.number.BigInteger
 
 fun Address.toERC67String() = "ethereum:$hex"
 fun Address.toERC67String(valueInWei: BigInteger) = "ethereum:$hex?value=$valueInWei"
-fun Address.toERC67String(valueInEther: BigDecimal) = toERC67String((valueInEther * BigDecimal(ETH_IN_WEI)).toBigInteger())
+fun Address.toERC67String(valueInEther: BigDecimal) = toERC67String((valueInEther.multiply(BigDecimal(ETH_IN_WEI))).toBigInteger())
 
 fun String.isERC67String() = startsWith("ethereum:")
 

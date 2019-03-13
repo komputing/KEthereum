@@ -2,7 +2,4 @@ kotlin.sourceSets {
     commonMain.dependencies {
         implementation project(':keccak_shortcut')
     }
-    commonTest.dependencies {
-        implementation project(":crypto_impl_spongycastle")
-    }
 }

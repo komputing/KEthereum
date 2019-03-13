@@ -1,14 +1,12 @@
 kotlin.sourceSets {
     commonMain.dependencies {
-        implementation project(":model")
-        implementation project(":crypto")
-        implementation project(":crypto_api")
-        implementation project(":functions")
-        implementation project(":rlp")
+        api project(":model")
+        api project(":crypto")
+        api project(":crypto_api")
+        api project(":functions")
+        api project(":rlp")
     }
-    commonTest.dependencies {
-        implementation "com.github.walleth:khex:$khex_version"
-        implementation project(":crypto_impl_spongycastle")
-        implementation "com.beust:klaxon:$klaxon_version"
+    jvmTest.dependencies {
+        api project(":crypto_impl_bouncycastle")
     }
 }

@@ -1,5 +1,7 @@
 package org.kethereum.wallet
 
+import kotlinx.io.charsets.Charset
+import kotlinx.io.core.toByteArray
 import org.kethereum.crypto.CryptoAPI
 import org.kethereum.crypto.CryptoAPI.aesCipher
 import org.kethereum.crypto.SecureRandomUtils.secureRandom
@@ -7,16 +9,16 @@ import org.kethereum.crypto.api.cipher.AESCipher
 import org.kethereum.crypto.impl.hashing.DigestParams
 import org.kethereum.crypto.toAddress
 import org.kethereum.crypto.toECKeyPair
-import org.kethereum.model.extensions.toBytesPadded
 import org.kethereum.keccakshortcut.keccak
 import org.kethereum.model.ECKeyPair
 import org.kethereum.model.PRIVATE_KEY_SIZE
 import org.kethereum.model.PrivateKey
+import org.kethereum.model.extensions.copy
+import org.kethereum.model.extensions.hexToByteArray
+import org.kethereum.model.extensions.toBytesPadded
+import org.kethereum.model.extensions.toNoPrefixHexString
+import org.kethereum.model.random.UUID
 import org.kethereum.wallet.model.*
-import org.walleth.khex.hexToByteArray
-import org.walleth.khex.toNoPrefixHexString
-import java.nio.charset.Charset
-import java.util.*
 
 private val UTF_8 = Charset.forName("UTF-8")
 
@@ -39,7 +41,7 @@ fun ECKeyPair.createWallet(password: String, config: ScryptConfig): Wallet {
         salt = mySalt.toNoPrefixHexString()
     })
 
-    val encryptKey = Arrays.copyOfRange(derivedKey, 0, 16)
+    val encryptKey = derivedKey.copyOfRange(0, 16)
     val iv = generateRandomBytes(16)
 
     val privateKeyBytes = privateKey.key.toBytesPadded(PRIVATE_KEY_SIZE)
@@ -69,14 +71,16 @@ private fun createWallet(ecKeyPair: ECKeyPair,
 
                 mac = mac.toNoPrefixHexString()
         ),
-        id = UUID.randomUUID().toString(),
+        id = UUID.randomUUID(),
         version = CURRENT_VERSION
 )
 
 private fun generateDerivedScryptKey(password: ByteArray, kdfParams: ScryptKdfParams) =
         CryptoAPI.scrypt.derive(password, kdfParams.salt?.hexToByteArray(), kdfParams.n, kdfParams.r, kdfParams.p, kdfParams.dklen)
 
-@Throws(CipherException::class)
+/**
+ * @throws CipherException
+ */
 private fun generateAes128CtrDerivedKey(password: ByteArray, kdfParams: Aes128CtrKdfParams): ByteArray {
 
     if (kdfParams.prf != "hmac-sha256") {
@@ -89,7 +93,9 @@ private fun generateAes128CtrDerivedKey(password: ByteArray, kdfParams: Aes128Ct
     return CryptoAPI.pbkdf2.derive(password, kdfParams.salt?.hexToByteArray(), kdfParams.c, DigestParams.Sha256)
 }
 
-@Throws(CipherException::class)
+/**
+ * @throws CipherException
+ */
 private fun performCipherOperation(operation: AESCipher.Operation, iv: ByteArray, encryptKey: ByteArray, text: ByteArray) = try {
     aesCipher.init(AESCipher.Mode.CTR, AESCipher.Padding.NO, operation, encryptKey, iv).performOperation(text)
 } catch (e: Exception) {
@@ -100,13 +106,15 @@ private fun performCipherOperation(operation: AESCipher.Operation, iv: ByteArray
 private fun generateMac(derivedKey: ByteArray, cipherText: ByteArray): ByteArray {
     val result = ByteArray(16 + cipherText.size)
 
-    System.arraycopy(derivedKey, 16, result, 0, 16)
-    System.arraycopy(cipherText, 0, result, 16, cipherText.size)
+    derivedKey.copy(16, result, 0, 16)
+    cipherText.copy(0, result, 16, cipherText.size)
 
     return result.keccak()
 }
 
-@Throws(CipherException::class)
+/**
+ * @throws CipherException
+ */
 fun Wallet.decrypt(password: String): ECKeyPair {
 
     validate()
@@ -123,16 +131,18 @@ fun Wallet.decrypt(password: String): ECKeyPair {
 
     val derivedMac = generateMac(derivedKey, cipherText)
 
-    if (!Arrays.equals(derivedMac, mac)) {
+    if (!derivedMac.contentEquals(mac)) {
         throw InvalidPasswordException()
     }
 
-    val encryptKey = Arrays.copyOfRange(derivedKey, 0, 16)
+    val encryptKey = derivedKey.copyOfRange(0, 16)
     val privateKey = PrivateKey(performCipherOperation(AESCipher.Operation.DESCRYPTION, iv, encryptKey, cipherText))
     return privateKey.toECKeyPair()
 }
 
-@Throws(CipherException::class)
+/**
+ * @throws CipherException
+ */
 fun Wallet.validate() {
     when {
         version != CURRENT_VERSION

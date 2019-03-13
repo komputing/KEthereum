@@ -2,7 +2,4 @@ kotlin.sourceSets {
     commonMain.dependencies {
         api project(":model")
     }
-    commonTest.dependencies {
-        implementation project(":crypto_impl_spongycastle")
-    }
 }
