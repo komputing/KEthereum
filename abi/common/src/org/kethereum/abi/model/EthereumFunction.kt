@@ -11,9 +11,9 @@ data class EthereumFunctionParameter(
 
 @Serializable
 data class EthereumFunction(
-        val constant: Boolean,
-        val inputs: List<EthereumFunctionParameter>?,
-        val name: String?,
+        @Optional val constant: Boolean = false,
+        @Optional val inputs: List<EthereumFunctionParameter>? = null,
+        @Optional val name: String? = null,
         @Optional val id: String? = null,
         @Optional val result: String? = null
 )
