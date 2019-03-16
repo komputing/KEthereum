@@ -14,7 +14,7 @@ class NetworkDefinition4 : NetworkDefinition {
 
     override fun getNetworkName() = "rinkeby"
 
-    override val infoUrl = "https://www.rinkeby.io"
+    override val infoUrl = "https://www.rinkeby.net"
 
     override val faucets = listOf(
             "https://faucet.rinkeby.io"
