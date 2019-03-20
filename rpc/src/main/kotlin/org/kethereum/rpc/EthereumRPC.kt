@@ -63,6 +63,8 @@ class EthereumRPC(val baseURL: String, private val okhttp: OkHttpClient = OkHttp
 
     fun clientVersion() = stringCall("web3_clientVersion")
 
+    fun chainId() = stringCall("eth_chainId")
+
     fun getStorageAt(address: String, position: String, block: String) = stringCall("eth_getStorageAt", "\"$address\",\"$position\",\"$block\"")
 
     fun getTransactionCount(address: String, block: String) = stringCall("eth_getTransactionCount", "\"$address\",\"$block\"")
