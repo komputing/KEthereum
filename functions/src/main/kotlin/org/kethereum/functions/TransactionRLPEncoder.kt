@@ -10,10 +10,10 @@ import org.walleth.khex.hexToByteArray
 
 fun Transaction.toRLPList(signature: SignatureData?) = RLPList(listOf(
         nonce!!.toRLP(),
-        gasPrice.toRLP(),
-        gasLimit.toRLP(),
+        gasPrice!!.toRLP(),
+        gasLimit!!.toRLP(),
         (to?.hex?.let { it } ?: "0x").hexToByteArray().toRLP(),
-        value.toRLP(),
+        value!!.toRLP(),
         input.toByteArray().toRLP()
 ).let {
 

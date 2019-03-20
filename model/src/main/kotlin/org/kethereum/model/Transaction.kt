@@ -5,16 +5,16 @@ import org.kethereum.DEFAULT_GAS_PRICE
 import java.math.BigInteger
 
 data class Transaction(
-        var chain: ChainDefinition?,
+        var chain: ChainId?,
         var creationEpochSecond: Long?,
         var from: Address?,
-        var gasLimit: BigInteger,
-        var gasPrice: BigInteger,
+        var gasLimit: BigInteger?,
+        var gasPrice: BigInteger?,
         var input: List<Byte>,
         var nonce: BigInteger?,
         var to: Address?,
         var txHash: String?,
-        var value: BigInteger
+        var value: BigInteger?
 ) {
     constructor() : this(
             chain = null,
@@ -32,7 +32,7 @@ data class Transaction(
 
 // we cannot use default values in the data class when we want to use it with room
 fun createTransactionWithDefaults(
-        chain: ChainDefinition? = null,
+        chain: ChainId? = null,
         creationEpochSecond: Long? = null,
         from: Address,
         gasLimit: BigInteger = DEFAULT_GAS_LIMIT,

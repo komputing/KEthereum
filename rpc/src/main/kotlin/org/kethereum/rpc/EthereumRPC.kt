@@ -7,9 +7,11 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody
 import org.kethereum.model.Address
+import org.kethereum.model.Transaction
 import org.kethereum.rpc.model.BigIntegerAdapter
 import org.kethereum.rpc.model.BlockInformationResponse
 import org.kethereum.rpc.model.StringResultResponse
+import org.kethereum.rpc.model.TransactionResponse
 import java.io.IOException
 import java.security.GeneralSecurityException
 
@@ -23,6 +25,8 @@ class EthereumRPC(val baseURL: String, private val okhttp: OkHttpClient = OkHttp
     private val stringResultAdapter: JsonAdapter<StringResultResponse> = moshi.adapter(StringResultResponse::class.java)
 
     private val blockInfoAdapter: JsonAdapter<BlockInformationResponse> = moshi.adapter(BlockInformationResponse::class.java)
+
+    private val transactionAdapter: JsonAdapter<TransactionResponse> = moshi.adapter(TransactionResponse::class.java)
 
 
     private fun buildRequest(body: RequestBody) = Request.Builder().url(baseURL)
@@ -53,7 +57,7 @@ class EthereumRPC(val baseURL: String, private val okhttp: OkHttpClient = OkHttp
 
     fun blockNumber() = stringCall("eth_blockNumber")
 
-    fun call(callObject: String, block: String) = stringCall("eth_call", "$callObject,\"$block\"")
+    fun call(transaction: Transaction, block: String) = stringCall("eth_call", "${transaction.toJSON()},\"$block\"")
 
     fun gasPrice() = stringCall("eth_gasPrice")
 
@@ -65,9 +69,16 @@ class EthereumRPC(val baseURL: String, private val okhttp: OkHttpClient = OkHttp
 
     fun getCode(address: String, block: String) = stringCall("eth_getCode", "\"$address\",\"$block\"")
 
-    fun estimateGas(callObject: String, block: String) = stringCall("eth_estimateGas", "$callObject,\"$block\"")
+    fun estimateGas(transaction: Transaction, block: String) = stringCall("eth_estimateGas", "${transaction.toJSON()},\"$block\"")
 
     fun getBalance(address: Address, block: String) = stringCall("eth_getBalance", "\"${address.hex}\",\"$block\"")
+
+    fun getTransactionByHash(hash: String) = executeCallToString("eth_getTransactionByHash", "\"$hash\"")?.let { string ->
+        transactionAdapter.fromJsonNoThrow(string)
+    }?.result?.toKethereumTransaction()
+
+
+
 }
 
 
