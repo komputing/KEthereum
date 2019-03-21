@@ -65,15 +65,15 @@ class EthereumRPC(val baseURL: String, private val okhttp: OkHttpClient = OkHttp
 
     fun chainId() = stringCall("eth_chainId")
 
-    fun getStorageAt(address: String, position: String, block: String) = stringCall("eth_getStorageAt", "\"$address\",\"$position\",\"$block\"")
+    fun getStorageAt(address: String, position: String, block: String = "latest") = stringCall("eth_getStorageAt", "\"$address\",\"$position\",\"$block\"")
 
-    fun getTransactionCount(address: String, block: String) = stringCall("eth_getTransactionCount", "\"$address\",\"$block\"")
+    fun getTransactionCount(address: String, block: String = "latest") = stringCall("eth_getTransactionCount", "\"$address\",\"$block\"")
 
     fun getCode(address: String, block: String) = stringCall("eth_getCode", "\"$address\",\"$block\"")
 
-    fun estimateGas(transaction: Transaction, block: String) = stringCall("eth_estimateGas", "${transaction.toJSON()},\"$block\"")
+    fun estimateGas(transaction: Transaction, block: String = "latest") = stringCall("eth_estimateGas", "${transaction.toJSON()},\"$block\"")
 
-    fun getBalance(address: Address, block: String) = stringCall("eth_getBalance", "\"${address.hex}\",\"$block\"")
+    fun getBalance(address: Address, block: String = "latest") = stringCall("eth_getBalance", "\"${address.hex}\",\"$block\"")
 
     fun getTransactionByHash(hash: String) = executeCallToString("eth_getTransactionByHash", "\"$hash\"")?.let { string ->
         transactionAdapter.fromJsonNoThrow(string)
