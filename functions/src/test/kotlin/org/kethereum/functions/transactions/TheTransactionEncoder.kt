@@ -1,7 +1,7 @@
 package org.kethereum.functions.transactions
 
 import com.beust.klaxon.JsonObject
-import com.beust.klaxon.Parser
+import com.beust.klaxon.Klaxon
 import org.junit.jupiter.api.Test
 import org.kethereum.functions.encodeRLP
 import org.kethereum.model.Address
@@ -16,7 +16,7 @@ class TheTransactionEncoder {
 
     @Test
     fun weCanEncodeTransactions() {
-        val jsonObject = Parser().parse(transactionTestData.reader()) as JsonObject
+        val jsonObject = Klaxon().parseJsonObject(transactionTestData.reader())
         jsonObject.keys.forEach {
 
             val current = jsonObject[it] as JsonObject
