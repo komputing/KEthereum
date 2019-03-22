@@ -8,7 +8,6 @@ import org.junit.Before
 import org.junit.jupiter.api.Test
 import org.kethereum.extensions.hexToBigInteger
 import org.kethereum.model.Address
-import org.kethereum.model.ChainId
 import org.kethereum.model.SignedTransaction
 import org.kethereum.rpc.model.BlockInformation
 import org.walleth.khex.hexToByteArray
@@ -77,7 +76,7 @@ class TheEthereumRPC {
 
         val transaction: SignedTransaction? = tested.getTransactionByHash("0x1234")
 
-        assertThat(transaction?.transaction?.chain).isEqualTo(ChainId(5L))
+        assertThat(transaction?.transaction?.chain).isEqualTo(5L)
         assertThat(transaction?.transaction?.from).isEqualTo(Address("0x03e0ffece04d779388b7a1d5c5102ac54bd479ee"))
         assertThat(transaction?.transaction?.to).isEqualTo(Address("0x7af963cf6d228e564e2a0aa0ddbf06210b38615d"))
         assertThat(transaction?.transaction?.txHash).isEqualTo("0x6fead4befd1d2b69f1aa39a0f43ff9c3d4c5f3953ae1071127209d5608fe3fb7")

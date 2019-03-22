@@ -5,7 +5,7 @@ import org.kethereum.DEFAULT_GAS_PRICE
 import java.math.BigInteger
 
 data class Transaction(
-        var chain: ChainId?,
+        var chain: Long?,
         var creationEpochSecond: Long?,
         var from: Address?,
         var gasLimit: BigInteger?,
@@ -42,5 +42,5 @@ fun createTransactionWithDefaults(
         to: Address?,
         txHash: String? = null,
         value: BigInteger
-) = Transaction(chain, creationEpochSecond, from, gasLimit, gasPrice, input, nonce, to, txHash, value)
+) = Transaction(chain?.value, creationEpochSecond, from, gasLimit, gasPrice, input, nonce, to, txHash, value)
 
