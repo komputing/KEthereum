@@ -91,7 +91,7 @@ class EllipticCurveSigner : Signer {
             return null
         }
         //   1.5. Compute e from M using Steps 2 and 3 of ECDSA signature verification.
-        val e = BigInteger(1, message!!)
+        val e = BigInteger(1, message)
         //   1.6. For k from 1 to 2 do the following.   (loop is outside this function via
         //        iterating recId)
         //   1.6.1. Compute a candidate public key as:
