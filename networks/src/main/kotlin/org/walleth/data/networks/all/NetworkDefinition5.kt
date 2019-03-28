@@ -21,7 +21,8 @@ class NetworkDefinition5 : NetworkDefinition {
     )
 
     override val rpcEndpoints = listOf(
-            "https://rpc.slock.it/goerli ",
+            "https://rpc.slock.it/goerli",
+            "https://goerli.infura.io/v3/\${INFURA_API_KEY}",
             "https://goerli.prylabs.net",
             "https://rpc.goerli.mudit.blog"
     )

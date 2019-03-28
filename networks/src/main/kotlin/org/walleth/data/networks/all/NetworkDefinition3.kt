@@ -19,5 +19,5 @@ class NetworkDefinition3 : NetworkDefinition {
             "https://faucet.ropsten.be?%address%"
     )
 
-    override val rpcEndpoints = listOf("https://ropsten.infura.io")
+    override val rpcEndpoints = listOf("https://ropsten.infura.io/v3/\${INFURA_API_KEY}")
 }

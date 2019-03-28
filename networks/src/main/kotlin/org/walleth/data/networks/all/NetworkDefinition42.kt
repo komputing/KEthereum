@@ -19,7 +19,6 @@ class NetworkDefinition42 : NetworkDefinition {
             "https://faucet.kovan.network",
             "https://gitter.im/kovan-testnet/faucet"
     )
-
-    override val rpcEndpoints = listOf("https://kovan.infura.io")
+    override val rpcEndpoints = listOf("https://kovan.infura.io/v3/\${INFURA_API_KEY}")
 
 }
