@@ -1,17 +1,20 @@
 ![](assets/logo_smaller.png)
 
-This is a Kotlin library for [Ethereum](https://ethereum.org).
-Currently it is not a full featured Ethereum implementation - but a library to share common Ethereum code between different apps to [prevent WET code and make things more DRY](https://en.wikipedia.org/wiki/Don%27t_repeat_yourself). Mainly in the context of the [WallETH Project](https://walleth.org).
-Later I could imagine that this extends to a full implementation of Ethereum in Kotlin. But as this would be a huge endeavour and I want to continue with my projects don't expect this in the near future - but I accept PRs ;-)
+Mission statement
+=================
 
-Projects that use kethereum
+This is a Kotlin library for [Ethereum](https://ethereum.org). Trying to strive to 100% Kotlin to enable multi platform support in the future. Currently mainly used in JVM projects but could this way also target e.g. JavaScript and WebAssembly that are broadly used in the web3 space.
+
+Projects that use KEthereum
 ===========================
 
  * [WallETH](https://walleth.org)
  * [Gnosis Safe Android App](https://github.com/gnosis/safe-android)
  * [kmnid](https://github.com/uport-project/kmnid)
  * [uport android signer](https://github.com/uport-project/uport-android-signer)
- * [multiple scripts in ethereum-lists](https://github.com/ethereum-lists)
+ * [goerli pusher](https://github.com/walleth/goerli_pusher) (pushes out TST tokens)
+ * [KHardwareWallet](https://github.com/walleth/KHardWareWallet)
+ * multiple scripts in [ethereum-lists](https://github.com/ethereum-lists)
  * [mobidex](https://github.com/sigillabs/mobidex)
  * add yours
 
