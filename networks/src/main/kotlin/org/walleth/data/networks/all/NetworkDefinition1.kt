@@ -18,5 +18,12 @@ class NetworkDefinition1 : NetworkDefinition {
 
     override val faucets = emptyList<String>()
 
-    override val rpcEndpoints = listOf("https://mainnet.infura.io/v3/\${INFURA_API_KEY}", "https://api.mycryptoapi.com/eth")
+    override val rpcEndpoints = listOf(
+            "https://mainnet.infura.io/v3/\${INFURA_API_KEY}",
+            "https://api.mycryptoapi.com/eth",
+            "https://in3.slock.it/mainnet/nd-1",
+            "https://in3.slock.it/mainnet/nd-2",
+            "https://in3.slock.it/mainnet/nd-3",
+            "https://in3.slock.it/mainnet/nd-4"
+    )
 }
