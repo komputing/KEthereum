@@ -36,7 +36,7 @@ class TheTransactionDecoder {
                     assertThat(transaction.value).isEqualTo(transactionMap["value"].getBigInteger())
                     assertThat(transaction.nonce).isEqualTo(transactionMap["nonce"].getBigInteger())
                     assertThat(transaction.to).isEqualTo(Address(transactionMap["to"] as String))
-                    assertThat(transaction.input).isEqualTo((transactionMap["data"] as String).hexToByteArray().toList())
+                    assertThat(transaction.input).isEqualTo((transactionMap["data"] as String).hexToByteArray())
 
                     val signatureData = rlp.toTransactionSignatureData()
                     assertThat(signatureData.r).isEqualTo(transactionMap["r"].getBigInteger() )

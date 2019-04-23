@@ -14,7 +14,7 @@ fun Transaction.toRLPList(signature: SignatureData?) = RLPList(listOf(
         gasLimit!!.toRLP(),
         (to?.hex?.let { it } ?: "0x").hexToByteArray().toRLP(),
         value!!.toRLP(),
-        input.toByteArray().toRLP()
+        input.toRLP()
 ).let {
 
     if (signature == null) {

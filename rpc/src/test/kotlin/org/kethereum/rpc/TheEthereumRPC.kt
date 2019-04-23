@@ -140,7 +140,7 @@ class TheEthereumRPC {
         assertThat(firstTransaction.gasLimit).isEqualTo("0x5208".hexToBigInteger())
         assertThat(firstTransaction.gasPrice).isEqualTo("0xd4fc47cf6".hexToBigInteger())
         assertThat(firstTransaction.txHash).isEqualTo("0xceebdef59ab3cdde152672014b451f75bb7974b9dca4b30e545b6864d9ffca9d")
-        assertThat(firstTransaction.input).isEqualTo("0x".hexToByteArray().toList())
+        assertThat(firstTransaction.input).isEqualTo("0x".hexToByteArray())
         assertThat(firstTransaction.nonce).isEqualTo(BigInteger.valueOf(16))
         assertThat(firstTransaction.to).isEqualTo(Address("0x32be343b94f860124dc4fee278fdcbd38c102d88"))
         assertThat(firstTransaction.value).isEqualTo("0x596c90f09f547400".hexToBigInteger())

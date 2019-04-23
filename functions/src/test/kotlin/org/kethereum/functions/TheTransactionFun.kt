@@ -14,7 +14,7 @@ class TheTransactionFun {
     @Test
     fun weCanCreateTokenTransfer() {
 
-        assertThat(createTokenTransferTransactionInput(someAddress, BigInteger("10")).startsWith(tokenTransferSignature)).isTrue()
+        assertThat(createTokenTransferTransactionInput(someAddress, BigInteger("10")).toList().startsWith(tokenTransferSignature)).isTrue()
     }
 
     @Test

@@ -36,7 +36,7 @@ class TheTransactionEncoder {
                         nonce = transactionMap["nonce"].getBigInteger(),
 
                         to = Address((transactionMap["to"] as String)),
-                        input = (transactionMap["data"] as String).hexToByteArray().toList(),
+                        input = (transactionMap["data"] as String).hexToByteArray(),
                         from = Address("0x0"))
                 val encodedRLPString = transaction.encodeRLP(signatureData).toHexString()
                 if (encodedRLPString != rlp) {

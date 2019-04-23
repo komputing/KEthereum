@@ -26,7 +26,7 @@ fun RLPList.toTransaction(): Transaction? {
             gasLimit = elements[2].toUnsignedBigIntegerFromRLP(),
             to = Address(elements[3].bytes.toHexString()),
             value = elements[4].toUnsignedBigIntegerFromRLP(),
-            input = elements[5].bytes.toList(),
+            input = elements[5].bytes,
             txHash = null
     )
 }

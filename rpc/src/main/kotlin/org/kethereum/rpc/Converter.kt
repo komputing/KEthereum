@@ -20,7 +20,7 @@ internal fun TransactionRPC.toKethereumTransaction() = SignedTransaction(
                 gasPrice = gasPrice.hexToBigInteger(),
                 gasLimit = gas.hexToBigInteger(),
                 txHash = hash,
-                input = input.hexToByteArray().toList()
+                input = input.hexToByteArray()
 
         ), signatureData = SignatureData(r = r.hexToBigInteger(), s = s.hexToBigInteger(), v = v.hexToBigInteger().toByte())
 )
