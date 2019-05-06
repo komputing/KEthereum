@@ -7,6 +7,7 @@ buildscript {
 
         slf4jVersion = '1.7.25'
         khex_version = '0.6'
+        khash_version = '0.8'
 
         klaxon_version = '5.0.5'
         moshi_version = '1.8.0'

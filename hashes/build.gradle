@@ -1,4 +1,4 @@
 dependencies {
-    implementation "com.github.walleth:khex:$khex_version"
+    implementation "com.github.komputing:KHex:$khex_version"
     compile project(path: ':ripemd160')
 }

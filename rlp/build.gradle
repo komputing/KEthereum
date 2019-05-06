@@ -2,5 +2,5 @@ dependencies {
     implementation project(":extensions")
 
     testImplementation project(":functions")
-    testImplementation "com.github.walleth:khex:$khex_version"
+    testImplementation "com.github.komputing:KHex:$khex_version"
 }

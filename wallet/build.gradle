@@ -13,7 +13,7 @@ dependencies {
     implementation project(":extensions")
     implementation project(":model")
 
-    implementation "com.github.walleth:khex:$khex_version"
+    implementation "com.github.komputing:KHex:$khex_version"
 
     implementation "com.squareup.moshi:moshi:$moshi_version"
     implementation "com.squareup.moshi:moshi-adapters:$moshi_version"

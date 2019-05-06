@@ -7,7 +7,7 @@ dependencies {
     implementation project(path: ':extensions')
     implementation project(path: ':model')
 
-    testImplementation "com.github.walleth:khex:$khex_version"
+    testImplementation "com.github.komputing:KHex:$khex_version"
     testImplementation project(path: ':crypto_impl_bouncycastle')
 
     testImplementation project(":test_data")

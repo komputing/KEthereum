@@ -5,7 +5,7 @@ dependencies {
     implementation project(":functions")
     implementation project(":rlp")
 
-    testImplementation "com.github.walleth:khex:$khex_version"
+    testImplementation "com.github.komputing:KHex:$khex_version"
     testImplementation project(":crypto_impl_spongycastle")
     testImplementation "com.beust:klaxon:$klaxon_version"
 }
