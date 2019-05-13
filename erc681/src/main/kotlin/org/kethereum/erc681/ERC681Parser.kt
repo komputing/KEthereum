@@ -49,7 +49,7 @@ fun CommonEthereumURIData.toERC681() = let { commonURI ->
         val queryAsMap = commonURI.query.toMap() // should be improved https://github.com/walleth/kethereum/issues/25
 
         gas = queryAsMap["gas"].toBigInteger()
-        value = queryAsMap["value"].toBigInteger()
+        value = queryAsMap["value"]?.split("-")?.first()?.toBigInteger()
 
         functionParams = commonURI.query.filter { it.first != "gas" && it.first != "value" }
     }

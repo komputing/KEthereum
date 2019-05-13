@@ -138,4 +138,9 @@ class TheERC681Parsing {
     fun weDoNotStumbleUponIllegal681() {
         Assertions.assertThat(parseERC681("ethereum:pay-0x00AB42@23?value=42.42").valid).isEqualTo(false)
     }
+
+    @Test
+    fun testSupportsValueSuffix() {
+        Assertions.assertThat(parseERC681("ethereum:pay-0x00AB42@23?value=42-ETH").valid).isEqualTo(true)
+    }
 }
