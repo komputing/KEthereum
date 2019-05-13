@@ -9,5 +9,5 @@ dependencies {
     implementation "com.github.komputing:KHex:$khex_version"
 
     testImplementation "com.squareup.okhttp3:mockwebserver:${okhttp_version}"
-    testImplementation 'org.threeten:threetenbp:1.3.8'
+    testImplementation 'org.threeten:threetenbp:1.4.0'
 }
