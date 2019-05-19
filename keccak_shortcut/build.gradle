@@ -1,4 +1,4 @@
 dependencies {
     implementation "com.github.komputing:KHex:$khex_version"
-    implementation "com.github.komputing:KHash:$khash_version"
+    implementation "com.github.komputing.KHash:keccak-jvm:$khash_version"
 }

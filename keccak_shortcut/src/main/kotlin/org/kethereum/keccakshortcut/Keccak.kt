@@ -1,8 +1,8 @@
 package org.kethereum.keccakshortcut
 
+import org.komputing.khash.keccak.Keccak
+import org.komputing.khash.keccak.KeccakParameter
 import org.walleth.khex.hexToByteArray
-import org.walleth.sha3.SHA3Parameter
-import org.walleth.sha3.calculateSHA3
 
 fun String.keccak() = hexToByteArray().keccak()
-fun ByteArray.keccak() = calculateSHA3(SHA3Parameter.KECCAK_256)
+fun ByteArray.keccak() = Keccak.digest(this, KeccakParameter.KECCAK_256)
