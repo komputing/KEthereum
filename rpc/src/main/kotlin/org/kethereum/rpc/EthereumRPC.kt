@@ -71,7 +71,7 @@ class EthereumRPC(val baseURL: String, private val okhttp: OkHttpClient = OkHttp
 
     fun getCode(address: String, block: String) = stringCall("eth_getCode", "\"$address\",\"$block\"")
 
-    fun estimateGas(transaction: Transaction, block: String = "latest") = stringCall("eth_estimateGas", "${transaction.toJSON()},\"$block\"")
+    fun estimateGas(transaction: Transaction) = stringCall("eth_estimateGas", transaction.toJSON())
 
     fun getBalance(address: Address, block: String = "latest") = stringCall("eth_getBalance", "\"${address.hex}\",\"$block\"")
 
