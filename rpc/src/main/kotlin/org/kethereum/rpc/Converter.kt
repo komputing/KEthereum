@@ -29,27 +29,29 @@ internal fun BlockInformationRPC.toBlockInformation() = BlockInformation(transac
 
 internal fun Transaction.toJSON(): String {
 
-        var res = """{"to":"$to""""
+    val elements = mutableListOf<String>()
 
-        if (from != null) {
-                res += ""","from":"$from""""
-        }
+    if (from != null) {
+        elements.add(""""from":"$from"""")
+    }
 
-        if (input.isNotEmpty()) {
-                res += ""","data":"${input.toHexString()}""""
-        }
+    elements.add(""""to":"$to"""")
 
-        if (gasLimit != null) {
-                res += ""","gas":"${gasLimit!!.toHexString()}""""
-        }
+    if (input.isNotEmpty()) {
+        elements.add(""""data":"${input.toHexString()}"""")
+    }
 
-        if (gasPrice != null) {
-                res += ""","gasPrice":"${gasPrice!!.toHexString()}""""
-        }
+    if (gasLimit != null) {
+        elements.add(""""gas":"${gasLimit!!.toHexString()}"""")
+    }
 
-        if (value != null) {
-                res += ""","value":"${value!!.toHexString()}""""
-        }
+    if (gasPrice != null) {
+        elements.add(""""gasPrice":"${gasPrice!!.toHexString()}"""")
+    }
 
-        return "$res}"
+    if (value != null) {
+        elements.add(""""value":"${value!!.toHexString()}"""")
+    }
+
+    return "{${elements.joinToString(",")}}"
 }
