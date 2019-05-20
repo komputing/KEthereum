@@ -17,7 +17,7 @@ import java.math.BigInteger.ZERO
 class TheEthereumRPC {
 
     private val server = MockWebServer()
-    private val tested by lazy { EthereumRPC(baseURL = server.url("").toString()) }
+    private val tested by lazy { HttpEthereumRPC(baseURL = server.url("").toString()) }
 
     @Before
     fun runBeforeEveryTest() {
