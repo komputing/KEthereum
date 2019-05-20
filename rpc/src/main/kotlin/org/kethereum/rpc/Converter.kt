@@ -48,7 +48,7 @@ internal fun Transaction.toJSON(): String {
         }
 
         if (value != null) {
-                res += ""","gasPrice":"${value!!.toHexString()}""""
+                res += ""","value":"${value!!.toHexString()}""""
         }
 
         return "$res}"
