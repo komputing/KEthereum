@@ -1,7 +1,5 @@
 package org.walleth.kethereum.blockscout
 
-import org.kethereum.model.ChainDefinition
-
 
 private val BLOCKSCOUT_PATH = mapOf(
         1L to "eth/mainnet",
@@ -17,8 +15,8 @@ private val BLOCKSCOUT_PATH = mapOf(
 
 val ALL_BLOCKSCOUT_SUPPORTED_NETWORKS = BLOCKSCOUT_PATH.map { it.key }.toSet()
 
-private fun getPath(chain: ChainDefinition) =  BLOCKSCOUT_PATH[chain.id.value]
+private fun getPath(chain: Long) =  BLOCKSCOUT_PATH[chain]
 
-fun getBlockscoutBaseURL(chain: ChainDefinition) = "https://blockscout.com/" + getPath(chain)
+fun getBlockscoutBaseURL(chain: Long) = "https://blockscout.com/" + getPath(chain)
 
-fun getBlockScoutBlockExplorer(chain: ChainDefinition) = BlockScoutBlockExplorer(getPath(chain))
+fun getBlockScoutBlockExplorer(chain: Long) = BlockScoutBlockExplorer(getPath(chain))
