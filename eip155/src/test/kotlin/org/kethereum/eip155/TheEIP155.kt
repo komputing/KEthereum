@@ -37,7 +37,7 @@ class TheEIP155 {
             to = Address("0x3535353535353535353535353535353535353535")
             value = BigInteger.valueOf(1000000000000000000L)
         }
-        val signatureData = transaction.signViaEIP155(KEY_PAIR, ChainId(1L))
+        val signatureData = transaction.signViaEIP155(KEY_PAIR, ChainId(1))
 
         val result = transaction.encodeRLP(signatureData).toHexString()
         val expected = "0xf86c098504a817c800825208943535353535353535353535353535353535353535880" +

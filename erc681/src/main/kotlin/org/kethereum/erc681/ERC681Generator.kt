@@ -10,8 +10,8 @@ fun ERC681.generateURL(): String {
         res += address
     }
 
-    if (chainId != null) {
-        res += "@$chainId"
+    chainId?.let {
+        res += "@${it.value}"
     }
 
     if (function != null) {

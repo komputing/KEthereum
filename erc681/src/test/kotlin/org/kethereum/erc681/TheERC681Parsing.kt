@@ -3,6 +3,7 @@ package org.kethereum.erc681
 import org.assertj.core.api.Assertions
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
+import org.kethereum.model.ChainId
 import java.math.BigInteger
 
 class TheERC681Parsing {
@@ -72,7 +73,7 @@ class TheERC681Parsing {
 
     @Test
     fun parsingERC681WithChainIdWorks() {
-        Assertions.assertThat(parseERC681("ethereum:0x00AB42@4?gas=2").chainId).isEqualTo(4)
+        Assertions.assertThat(parseERC681("ethereum:0x00AB42@4?gas=2").chainId).isEqualTo(ChainId(4))
     }
 
     @Test
@@ -92,7 +93,7 @@ class TheERC681Parsing {
 
     @Test
     fun canParseChainWhenLastElement() {
-        Assertions.assertThat(parseERC681("ethereum:0x00AB42@42").chainId).isEqualTo(42)
+        Assertions.assertThat(parseERC681("ethereum:0x00AB42@42").chainId).isEqualTo(ChainId(42))
     }
 
     @Test

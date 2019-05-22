@@ -14,7 +14,7 @@ internal fun TransactionRPC.toKethereumTransaction() = SignedTransaction(
                 value = value.hexToBigInteger(),
                 from = Address(from),
                 to = to?.let { Address(it) },
-                chain = chainId?.hexToBigInteger()?.let { ChainId(it.toLong()) },
+                chain = chainId?.hexToBigInteger()?.let { ChainId(it) },
 
                 nonce = nonce.hexToBigInteger(),
                 gasPrice = gasPrice.hexToBigInteger(),

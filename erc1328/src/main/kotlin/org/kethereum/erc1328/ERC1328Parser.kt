@@ -9,7 +9,7 @@ fun EthereumURI.toERC1328() = ERC1328().apply {
 
     valid = commonURI.valid && commonURI.prefix == ERC1328_SCHEMA && commonURI.scheme == "ethereum"
 
-    version = commonURI.chainId ?: 1
+    version = commonURI.chainId?.value?.toLong() ?: 1L
     topic = commonURI.address
     val queryAsMap = commonURI.query.toMap()
 

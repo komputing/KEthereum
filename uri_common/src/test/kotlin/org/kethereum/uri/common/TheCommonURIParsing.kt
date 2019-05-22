@@ -3,6 +3,7 @@ package org.kethereum.uri.common
 import org.assertj.core.api.Assertions
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
+import org.kethereum.model.ChainId
 
 class TheCommonURIParsing {
 
@@ -50,7 +51,7 @@ class TheCommonURIParsing {
 
     @Test
     fun parsingERC681WithChainIdWorks() {
-        Assertions.assertThat(parseCommonURI("ethereum:0x00AB42@4?gas=2").chainId).isEqualTo(4)
+        Assertions.assertThat(parseCommonURI("ethereum:0x00AB42@4?gas=2").chainId).isEqualTo(ChainId(4))
     }
 
     @Test
@@ -70,7 +71,7 @@ class TheCommonURIParsing {
 
     @Test
     fun canParseChainWhenLastElement() {
-        Assertions.assertThat(parseCommonURI("ethereum:0x00AB42@42").chainId).isEqualTo(42)
+        Assertions.assertThat(parseCommonURI("ethereum:0x00AB42@42").chainId).isEqualTo(ChainId(42))
     }
 
     @Test

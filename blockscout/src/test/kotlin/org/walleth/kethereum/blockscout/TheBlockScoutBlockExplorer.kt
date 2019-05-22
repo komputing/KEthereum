@@ -3,6 +3,7 @@ package org.walleth.kethereum.blockscout
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.kethereum.model.Address
+import org.kethereum.model.ChainId
 
 class TheBlockScoutBlockExplorer {
 
@@ -10,25 +11,25 @@ class TheBlockScoutBlockExplorer {
 
     @Test
     fun rinkebyAddressWorks() {
-        assertThat(getBlockScoutBlockExplorer(4L).getAddressURL(address))
+        assertThat(getBlockScoutBlockExplorer(ChainId(4)).getAddressURL(address))
                 .isEqualTo("https://blockscout.com/eth/rinkeby/address/0x1234567890123456789012345678901234567890")
     }
 
     @Test
     fun mainAddressWorks() {
-        assertThat(getBlockScoutBlockExplorer(1L).getAddressURL(address))
+        assertThat(getBlockScoutBlockExplorer(ChainId(1)).getAddressURL(address))
                 .isEqualTo("https://blockscout.com/eth/mainnet/address/0x1234567890123456789012345678901234567890")
     }
 
     @Test
     fun baseAPIWorks() {
-        assertThat(getBlockscoutBaseURL(1L))
+        assertThat(getBlockscoutBaseURL(ChainId(1)))
                 .isEqualTo("https://blockscout.com/eth/mainnet")
     }
 
     @Test
     fun baseAPIRopstenWorks() {
-        assertThat(getBlockscoutBaseURL(3L))
+        assertThat(getBlockscoutBaseURL(ChainId(3)))
                 .isEqualTo("https://blockscout.com/eth/ropsten")
     }
 
