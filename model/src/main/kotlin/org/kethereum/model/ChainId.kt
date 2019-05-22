@@ -1,3 +1,7 @@
 package org.kethereum.model
 
-inline class ChainId(val value: Long)
+import java.math.BigInteger
+
+inline class ChainId(val value: BigInteger) {
+    constructor(longValue: Long) : this(BigInteger.valueOf(longValue))
+}

@@ -2,13 +2,13 @@ package org.kethereum.crypto
 
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
-import org.kethereum.model.PrivateKey
 import org.kethereum.crypto.test_data.KEY_PAIR
 import org.kethereum.crypto.test_data.PRIVATE_KEY
 import org.kethereum.crypto.test_data.PUBLIC_KEY
 import org.kethereum.crypto.test_data.TEST_MESSAGE
 import org.kethereum.extensions.hexToBigInteger
 import org.kethereum.hashes.sha256
+import org.kethereum.model.PrivateKey
 import org.kethereum.model.SignatureData
 import org.walleth.khex.hexToByteArray
 import java.security.SignatureException
@@ -22,7 +22,7 @@ class SignTest {
         val expected = SignatureData(
                 "0x9631f6d21dec448a213585a4a41a28ef3d4337548aa34734478b563036163786".hexToBigInteger(),
                 "0x2ff816ee6bbb82719e983ecd8a33a4b45d32a4b58377ef1381163d75eedc900b".hexToBigInteger(),
-                27.toByte()
+                27.toBigInteger()
         )
 
         assertThat(signatureData).isEqualTo(expected)
@@ -39,7 +39,7 @@ class SignTest {
         val expected = SignatureData(
                 "0x6bcd81446183af193ca4a172d5c5c26345903b24770d90b5d790f74a9dec1f68".hexToBigInteger(),
                 "0xe2b85b3c92c9b4f3cf58de46e7997d8efb6e14b2e532d13dfa22ee02f3a43d5d".hexToBigInteger(),
-                28.toByte()
+                28.toBigInteger()
         )
 
         assertThat(expected).isEqualTo(signatureData)

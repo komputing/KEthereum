@@ -2,7 +2,6 @@ package org.kethereum.functions
 
 import org.kethereum.functions.rlp.RLPElement
 import org.kethereum.functions.rlp.RLPList
-import org.kethereum.functions.rlp.toByteFromRLP
 import org.kethereum.functions.rlp.toUnsignedBigIntegerFromRLP
 import org.kethereum.model.Address
 import org.kethereum.model.SignatureData
@@ -37,7 +36,7 @@ fun RLPList.toTransactionSignatureData(): SignatureData {
     }
 
     return SignatureData(
-            v = elements[6].toByteFromRLP(),
+            v = elements[6].toUnsignedBigIntegerFromRLP(),
             r = elements[7].toUnsignedBigIntegerFromRLP(),
             s = elements[8].toUnsignedBigIntegerFromRLP()
     )

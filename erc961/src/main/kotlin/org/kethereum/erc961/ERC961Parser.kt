@@ -26,7 +26,7 @@ fun parseTokenFromEthereumURI(uri: String): Token {
     return Token(
             symbol = queryMap["symbol"] ?: "SYM",
             address = Address(commonEthereumURI.address ?: ""),
-            chain = ChainId(commonEthereumURI.chainId ?: 1),
+            chain = commonEthereumURI.chainId ?: ChainId(1),
             name = queryMap["name"],
             decimals = queryMap["decimals"]?.toInt() ?: 18,
             type = queryMap["type"]

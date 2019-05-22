@@ -2,13 +2,12 @@ package org.kethereum.crypto
 
 import org.kethereum.crypto.api.ec.Curve
 import org.kethereum.crypto.api.ec.ECDSASignature
+import org.kethereum.keccakshortcut.keccak
 import org.kethereum.model.ECKeyPair
 import org.kethereum.model.PrivateKey
 import org.kethereum.model.PublicKey
-import org.kethereum.keccakshortcut.keccak
 import org.kethereum.model.SignatureData
 import java.security.SignatureException
-import kotlin.experimental.and
 
 /**
  *
@@ -48,9 +47,7 @@ fun signMessageHash(messageHash: ByteArray, keyPair: ECKeyPair, toCanonical: Boo
 
     val headerByte = recId + 27
 
-    val v = headerByte.toByte()
-
-    return SignatureData(signature.r, signature.s, v)
+    return SignatureData(signature.r, signature.s, headerByte.toBigInteger())
 }
 
 fun ECDSASignature.determineRecId(messageHash: ByteArray, publicKey: PublicKey): Int {
@@ -81,7 +78,7 @@ private fun sign(transactionHash: ByteArray, privateKey: PrivateKey, canonical: 
 @Throws(SignatureException::class)
 fun signedMessageToKey(message: ByteArray, signatureData: SignatureData): PublicKey {
 
-    val header = signatureData.v and 0xFF.toByte()
+    val header = signatureData.v.toByteArray().last()
     // The header byte: 0x1B = first key with even y, 0x1C = first key with odd y,
     //                  0x1D = second key with even y, 0x1E = second key with odd y
     if (header < 27 || header > 34) {

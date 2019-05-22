@@ -22,7 +22,7 @@ internal fun TransactionRPC.toKethereumTransaction() = SignedTransaction(
                 txHash = hash,
                 input = input.hexToByteArray()
 
-        ), signatureData = SignatureData(r = r.hexToBigInteger(), s = s.hexToBigInteger(), v = v.hexToBigInteger().toByte())
+        ), signatureData = SignatureData(r = r.hexToBigInteger(), s = s.hexToBigInteger(), v = v.hexToBigInteger())
 )
 
 internal fun BlockInformationRPC.toBlockInformation() = BlockInformation(transactions.map { it.toKethereumTransaction() })

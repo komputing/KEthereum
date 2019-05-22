@@ -5,7 +5,7 @@ import org.kethereum.DEFAULT_GAS_PRICE
 import java.math.BigInteger
 
 data class Transaction(
-        var chain: Long?,
+        var chain: BigInteger?,
         var creationEpochSecond: Long?,
         var from: Address?,
         var gasLimit: BigInteger?,

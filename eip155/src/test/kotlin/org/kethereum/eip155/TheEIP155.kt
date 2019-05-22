@@ -21,10 +21,10 @@ class TheEIP155 {
 
     @Test
     fun canExtractChainIDs() {
-        assertThat(SignatureData().copy(v = 37).extractChainID()).isEqualTo(1)
-        assertThat(SignatureData().copy(v = 38).extractChainID()).isEqualTo(1)
-        assertThat(SignatureData().copy(v = 39).extractChainID()).isEqualTo(2)
-        assertThat(SignatureData().copy(v = 40).extractChainID()).isEqualTo(2)
+        assertThat(SignatureData().copy(v = BigInteger.valueOf(37)).extractChainID()).isEqualTo(1)
+        assertThat(SignatureData().copy(v = BigInteger.valueOf(38)).extractChainID()).isEqualTo(1)
+        assertThat(SignatureData().copy(v = BigInteger.valueOf(39)).extractChainID()).isEqualTo(2)
+        assertThat(SignatureData().copy(v = BigInteger.valueOf(40)).extractChainID()).isEqualTo(2)
     }
 
 
@@ -37,7 +37,7 @@ class TheEIP155 {
             to = Address("0x3535353535353535353535353535353535353535")
             value = BigInteger.valueOf(1000000000000000000L)
         }
-        val signatureData = transaction.signViaEIP155(KEY_PAIR, ChainDefinition(ChainId(1L), "ETH"))
+        val signatureData = transaction.signViaEIP155(KEY_PAIR, ChainId(1L))
 
         val result = transaction.encodeRLP(signatureData).toHexString()
         val expected = "0xf86c098504a817c800825208943535353535353535353535353535353535353535880" +
@@ -54,7 +54,7 @@ class TheEIP155 {
         val tx = (hex.hexToByteArray().decodeRLP() as RLPList).toTransaction()!!
         val sig = (hex.hexToByteArray().decodeRLP() as RLPList).toTransactionSignatureData()
 
-        assertThat(tx.extractFrom(sig, 4)).isEqualTo(Address("8a681d2b7400d67966eef4f585b31a7458f96dba"))
+        assertThat(tx.extractFrom(sig, ChainId(4))).isEqualTo(Address("8a681d2b7400d67966eef4f585b31a7458f96dba"))
 
 
     }

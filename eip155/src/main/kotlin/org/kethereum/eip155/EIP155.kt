@@ -4,11 +4,13 @@ import org.kethereum.crypto.signMessage
 import org.kethereum.crypto.signedMessageToKey
 import org.kethereum.crypto.toAddress
 import org.kethereum.functions.encodeRLP
-import org.kethereum.model.ChainDefinition
+import org.kethereum.model.ChainId
 import org.kethereum.model.ECKeyPair
 import org.kethereum.model.SignatureData
 import org.kethereum.model.Transaction
+import java.math.BigInteger
 import java.math.BigInteger.ZERO
+import java.math.BigInteger.valueOf
 
 /*
 *
@@ -23,9 +25,9 @@ import java.math.BigInteger.ZERO
  *
  */
 
-fun Transaction.signViaEIP155(key: ECKeyPair, chainDefinition: ChainDefinition): SignatureData {
-    val signatureData = key.signMessage(encodeRLP(SignatureData().apply { v = chainDefinition.id.value.toByte() }))
-    return signatureData.copy(v = (signatureData.v + chainDefinition.id.value * 2 + 8).toByte())
+fun Transaction.signViaEIP155(key: ECKeyPair, chainId: ChainId): SignatureData {
+    val signatureData = key.signMessage(encodeRLP(SignatureData().apply { v = chainId.value }))
+    return signatureData.copy(v = (signatureData.v.plus(chainId.value.shl(1)).plus(valueOf(8))))
 }
 
 /**
@@ -34,11 +36,11 @@ fun Transaction.signViaEIP155(key: ECKeyPair, chainDefinition: ChainDefinition):
  * @return ChainID or null when not EIP155 signed
  *
  */
-fun SignatureData.extractChainID() = if (v < 37) { // not EIP 155 signed
+fun SignatureData.extractChainID() = if (v < BigInteger.valueOf(37)) { // not EIP 155 signed
     null
 } else {
-    (v - 35) / 2
+    (v - valueOf(35)).shr(1)
 }
 
-fun Transaction.extractFrom(eip155signatureData: SignatureData, chainId: Int) =
-        signedMessageToKey(encodeRLP(SignatureData(ZERO, ZERO, chainId.toByte())), eip155signatureData.copy(v = (eip155signatureData.v - 8 - (chainId * 2)).toByte())).toAddress()
+fun Transaction.extractFrom(eip155signatureData: SignatureData, chainId: ChainId) =
+        signedMessageToKey(encodeRLP(SignatureData(ZERO, ZERO, chainId.value)), eip155signatureData.copy(v = (eip155signatureData.v - valueOf(8) - (chainId.value * valueOf(2))))).toAddress()

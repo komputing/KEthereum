@@ -26,7 +26,7 @@ class TheTransactionEncoder {
                 val signatureData = SignatureData(
                         r = transactionMap["r"].getBigInteger(),
                         s = transactionMap["s"].getBigInteger(),
-                        v = (transactionMap["v"] as String).hexToByteArray().first()
+                        v = transactionMap["v"].getBigInteger()
 
                 )
                 val transaction = createTransactionWithDefaults(

@@ -146,7 +146,7 @@ class TheEthereumRPC {
         assertThat(firstTransaction.value).isEqualTo("0x596c90f09f547400".hexToBigInteger())
 
         assertThat(firstSignature.v)
-                .isEqualTo("0x1c".hexToBigInteger().toByte())
+                .isEqualTo("0x1c".hexToBigInteger())
 
         assertThat(firstSignature.r)
                 .isEqualTo("0xdcd183c34a1ceb7934b7fb32f3169b8f3fff43da936553e4d92ae97bb0a9a765".hexToBigInteger())

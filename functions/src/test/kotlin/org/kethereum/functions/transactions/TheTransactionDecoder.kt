@@ -39,9 +39,9 @@ class TheTransactionDecoder {
                     assertThat(transaction.input).isEqualTo((transactionMap["data"] as String).hexToByteArray())
 
                     val signatureData = rlp.toTransactionSignatureData()
-                    assertThat(signatureData.r).isEqualTo(transactionMap["r"].getBigInteger() )
-                    assertThat(signatureData.s).isEqualTo(transactionMap["s"].getBigInteger() )
-                    assertThat(signatureData.v).isEqualTo(transactionMap["v"].getBigInteger().toByte() )
+                    assertThat(signatureData.r).isEqualTo(transactionMap["r"].getBigInteger())
+                    assertThat(signatureData.s).isEqualTo(transactionMap["s"].getBigInteger())
+                    assertThat(signatureData.v).isEqualTo(transactionMap["v"].getBigInteger())
 
                 } catch (e: Exception) {
                     throw IllegalArgumentException("problem with " + current.map["rlp"] + e)

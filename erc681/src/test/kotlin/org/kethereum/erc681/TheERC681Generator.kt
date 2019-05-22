@@ -2,6 +2,7 @@ package org.kethereum.erc681
 
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
+import org.kethereum.model.ChainId
 import java.math.BigInteger
 
 class TheERC681Generator {
@@ -19,8 +20,8 @@ class TheERC681Generator {
 
     @Test
     fun toERC681WithChainIdWorks() {
-        assertThat(ERC681(address = "0x00AB42", chainId = 2L).generateURL()).isEqualTo("ethereum:0x00AB42@2")
-        assertThat(ERC681(address = "0x00AB42", chainId = 4L).generateURL()).isEqualTo("ethereum:0x00AB42@4")
+        assertThat(ERC681(address = "0x00AB42", chainId = ChainId(2)).generateURL()).isEqualTo("ethereum:0x00AB42@2")
+        assertThat(ERC681(address = "0x00AB42", chainId = ChainId(4)).generateURL()).isEqualTo("ethereum:0x00AB42@4")
     }
 
     @Test
@@ -43,7 +44,7 @@ class TheERC681Generator {
 
     @Test
     fun toERC681Full() {
-        val highUsageERC681 = ERC681(address = "0x00AB42", prefix = "prefixFTW", chainId = 42, function = "funfun", value = BigInteger("100"), gas= BigInteger("5"),
+        val highUsageERC681 = ERC681(address = "0x00AB42", prefix = "prefixFTW", chainId = ChainId(42), function = "funfun", value = BigInteger("100"), gas= BigInteger("5"),
                 functionParams = listOf("uint256" to "0", "address" to "0x0"))
         assertThat(highUsageERC681.generateURL()).isEqualTo("ethereum:prefixFTW-0x00AB42@42/funfun?uint256=0&address=0x0&gas=5&value=100")
         assertThat(highUsageERC681.copy(prefix = null).generateURL()).isEqualTo("ethereum:0x00AB42@42/funfun?uint256=0&address=0x0&gas=5&value=100")

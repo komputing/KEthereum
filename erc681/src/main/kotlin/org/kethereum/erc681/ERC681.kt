@@ -1,5 +1,6 @@
 package org.kethereum.erc681
 
+import org.kethereum.model.ChainId
 import java.math.BigInteger
 
 data class ERC681(
@@ -9,7 +10,7 @@ data class ERC681(
         var function: String? = null,
         var functionParams: List<Pair<String, String>> = listOf(),
         var scheme: String? = null,
-        var chainId: Long? = null,
+        var chainId: ChainId? = null,
 
         var value: BigInteger? = null,
         var gas: BigInteger? = null
