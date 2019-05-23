@@ -17,8 +17,8 @@ private val BLOCKSCOUT_PATH = mapOf(
 
 val ALL_BLOCKSCOUT_SUPPORTED_NETWORKS = BLOCKSCOUT_PATH.map { it.key }.toSet()
 
-private fun getPath(chain: ChainId) =  BLOCKSCOUT_PATH[chain.value]
+private fun getPath(chain: ChainId) = BLOCKSCOUT_PATH[chain.value]
 
-fun getBlockscoutBaseURL(chain: ChainId) = "https://blockscout.com/" + getPath(chain)
+fun getBlockscoutBaseURL(chain: ChainId) = getPath(chain)?.let { "https://blockscout.com/$it" }
 
-fun getBlockScoutBlockExplorer(chain: ChainId) = BlockScoutBlockExplorer(getPath(chain))
+fun getBlockScoutBlockExplorer(chain: ChainId) = getPath(chain)?.let { BlockScoutBlockExplorer(it) }

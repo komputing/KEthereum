@@ -3,7 +3,7 @@ package org.walleth.kethereum.blockscout
 import org.kethereum.model.Address
 import org.kethereum.model.BlockExplorer
 
-class BlockScoutBlockExplorer(private val path: String?) : BlockExplorer {
+class BlockScoutBlockExplorer(private val path: String) : BlockExplorer {
 
     private val baseURL by lazy { "https://blockscout.com/$path" }
 

@@ -11,13 +11,13 @@ class TheBlockScoutBlockExplorer {
 
     @Test
     fun rinkebyAddressWorks() {
-        assertThat(getBlockScoutBlockExplorer(ChainId(4)).getAddressURL(address))
+        assertThat(getBlockScoutBlockExplorer(ChainId(4))?.getAddressURL(address))
                 .isEqualTo("https://blockscout.com/eth/rinkeby/address/0x1234567890123456789012345678901234567890")
     }
 
     @Test
     fun mainAddressWorks() {
-        assertThat(getBlockScoutBlockExplorer(ChainId(1)).getAddressURL(address))
+        assertThat(getBlockScoutBlockExplorer(ChainId(1))?.getAddressURL(address))
                 .isEqualTo("https://blockscout.com/eth/mainnet/address/0x1234567890123456789012345678901234567890")
     }
 
@@ -40,5 +40,16 @@ class TheBlockScoutBlockExplorer {
                 .isEqualTo(9)
     }
 
+    @Test
+    fun returnsNullPathForBaseURLForUnknownNetwork() {
+        assertThat(getBlockscoutBaseURL(ChainId(666)))
+                .isEqualTo(null)
+    }
+
+    @Test
+    fun returnsNullForBaseURLForUnknownNetwork() {
+        assertThat(getBlockScoutBlockExplorer(ChainId(666)))
+                .isEqualTo(null)
+    }
 
 }
