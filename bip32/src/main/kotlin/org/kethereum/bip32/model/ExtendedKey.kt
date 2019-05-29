@@ -8,6 +8,7 @@ import org.kethereum.model.PRIVATE_KEY_SIZE
 import java.io.IOException
 import java.math.BigInteger
 import java.nio.ByteBuffer
+import java.security.*
 import java.util.*
 
 
@@ -15,8 +16,8 @@ data class ExtendedKey(val keyPair: ECKeyPair,
                        internal val chainCode: ByteArray,
                        internal val depth: Byte,
                        private val parentFingerprint: Int,
-                       private val sequence: Int) {
-
+                       private val sequence: Int,
+                       internal val versionBytes: ByteArray) {
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -25,6 +26,7 @@ data class ExtendedKey(val keyPair: ECKeyPair,
         other as ExtendedKey
 
         if (keyPair != other.keyPair) return false
+        if (!Arrays.equals(versionBytes, other.versionBytes)) return false
         if (!Arrays.equals(chainCode, other.chainCode)) return false
         if (depth != other.depth) return false
         if (parentFingerprint != other.parentFingerprint) return false
@@ -35,6 +37,7 @@ data class ExtendedKey(val keyPair: ECKeyPair,
 
     override fun hashCode(): Int {
         var result = keyPair.hashCode()
+        result = 31 * result + Arrays.hashCode(versionBytes)
         result = 31 * result + Arrays.hashCode(chainCode)
         result = 31 * result + depth
         result = 31 * result + parentFingerprint
@@ -45,16 +48,19 @@ data class ExtendedKey(val keyPair: ECKeyPair,
     fun serialize(publicKeyOnly: Boolean = false): String {
         val out = ByteBuffer.allocate(EXTENDED_KEY_SIZE)
         try {
-            if (publicKeyOnly || keyPair.privateKey.key == BigInteger.ZERO) {
-                out.put(xpub)
-            } else {
-                out.put(xprv)
-            }
+
+            if (!publicKeyOnly && !Arrays.equals(versionBytes, xprv) && !Arrays.equals(versionBytes, tprv))
+                throw KeyException("The extended version bytes dedicated to public keys. Suggest using publicKeyOnly mode")
+
+            if (!publicKeyOnly && keyPair.privateKey.key == BigInteger.ZERO)
+                throw KeyException("The extended key doesn't provide any private key. Suggest using publicKeyOnly mode")
+
+            out.put(if (publicKeyOnly && Arrays.equals(versionBytes, xprv)) xpub else if (publicKeyOnly && Arrays.equals(versionBytes, tprv)) tpub else versionBytes)
             out.put(depth)
             out.putInt(parentFingerprint)
             out.putInt(sequence)
             out.put(chainCode)
-            if (publicKeyOnly || keyPair.privateKey.key == BigInteger.ZERO) {
+            if (publicKeyOnly) {
                 out.put(keyPair.getCompressedPublicKey())
             } else {
                 out.put(0x00)

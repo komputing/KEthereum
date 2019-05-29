@@ -23,8 +23,8 @@ import java.security.NoSuchAlgorithmException
 import java.security.NoSuchProviderException
 import java.util.*
 
-fun Seed.toKey(pathString: String) = BIP44(pathString).path
-        .fold(toExtendedKey()) { current, bip44Element ->
+fun Seed.toKey(pathString: String, testnet: Boolean = false) = BIP44(pathString).path
+        .fold(toExtendedKey(testnet = testnet)) { current, bip44Element ->
             current.generateChildKey(bip44Element)
         }
 
@@ -87,7 +87,7 @@ fun ExtendedKey.generateChildKey(element: BIP44Element): ExtendedKey {
             if (k == BigInteger.ZERO) {
                 throw KeyException("Child key derivation resulted in zeros. Suggest deriving the next increment.")
             }
-            ExtendedKey(PrivateKey(k).toECKeyPair(), r, (depth + 1).toByte(), keyPair.computeFingerPrint(), element.numberWithHardeningFlag)
+            ExtendedKey(PrivateKey(k).toECKeyPair(), r, (depth + 1).toByte(), keyPair.computeFingerPrint(), element.numberWithHardeningFlag, versionBytes)
         } else {
             val q = CURVE.g.mul(m).add(CURVE.decodePoint(pub)).normalize()
             if (q.isInfinity()) {
@@ -95,7 +95,7 @@ fun ExtendedKey.generateChildKey(element: BIP44Element): ExtendedKey {
             }
             val point = CURVE.createPoint(q.x, q.y)
 
-            ExtendedKey(ECKeyPair(PrivateKey(BigInteger.ZERO), point.toPublicKey()), r, (depth + 1).toByte(), keyPair.computeFingerPrint(), element.numberWithHardeningFlag)
+            ExtendedKey(ECKeyPair(PrivateKey(BigInteger.ZERO), point.toPublicKey()), r, (depth + 1).toByte(), keyPair.computeFingerPrint(), element.numberWithHardeningFlag, versionBytes)
         }
     } catch (e: NoSuchAlgorithmException) {
         throw KeyException(e)

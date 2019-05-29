@@ -19,7 +19,7 @@ import java.security.NoSuchAlgorithmException
 import java.security.NoSuchProviderException
 import java.util.*
 
-fun Seed.toExtendedKey(publicKeyOnly: Boolean = false): ExtendedKey {
+fun Seed.toExtendedKey(publicKeyOnly: Boolean = false, testnet: Boolean = false): ExtendedKey {
     try {
         val lr = CryptoAPI.hmac.init(BITCOIN_SEED).generate(seed)
         val l = Arrays.copyOfRange(lr, 0, PRIVATE_KEY_SIZE)
@@ -31,9 +31,9 @@ fun Seed.toExtendedKey(publicKeyOnly: Boolean = false): ExtendedKey {
         val keyPair = PrivateKey(l).toECKeyPair()
         return if (publicKeyOnly) {
             val pubKeyPair = ECKeyPair(PrivateKey(BigInteger.ZERO), keyPair.publicKey)
-            ExtendedKey(pubKeyPair, r, 0, 0, 0)
+            ExtendedKey(pubKeyPair, r, 0, 0, 0, if (testnet) tpub else xpub)
         } else {
-            ExtendedKey(keyPair, r, 0, 0, 0)
+            ExtendedKey(keyPair, r, 0, 0, 0, if (testnet) tprv else xprv)
         }
     } catch (e: NoSuchAlgorithmException) {
         throw KeyException(e)
@@ -56,14 +56,14 @@ fun XPriv.toExtendedKey(): ExtendedKey {
             .wrap(data)
             .order(ByteOrder.BIG_ENDIAN)
 
-    val type = ByteArray(4)
+    val versionBytes = ByteArray(4)
 
-    buff.get(type)
+    buff.get(versionBytes)
 
     val hasPrivate = when {
-        Arrays.equals(type, xprv) -> true
-        Arrays.equals(type, xpub) -> false
-        else -> throw KeyException("invalid magic number for an extended key")
+        Arrays.equals(versionBytes, xprv) || Arrays.equals(versionBytes, tprv) -> true
+        Arrays.equals(versionBytes, xpub) || Arrays.equals(versionBytes, tpub) -> false
+        else -> throw KeyException("invalid version bytes for an extended key")
     }
 
     val depth = buff.get()
@@ -83,9 +83,9 @@ fun XPriv.toExtendedKey(): ExtendedKey {
         buff.get(compressedPublicBytes)
         val uncompressedPublicBytes = decompressKey(compressedPublicBytes)
         ECKeyPair(
-            PrivateKey(BigInteger.ZERO),
-            PublicKey(BigInteger(1, uncompressedPublicBytes))
+                PrivateKey(BigInteger.ZERO),
+                PublicKey(BigInteger(1, uncompressedPublicBytes))
         )
     }
-    return ExtendedKey(keyPair, chainCode, depth, parent, sequence)
+    return ExtendedKey(keyPair, chainCode, depth, parent, sequence, versionBytes)
 }
