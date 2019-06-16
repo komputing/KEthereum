@@ -6,13 +6,13 @@ import org.junit.jupiter.api.Test
 
 class BloomFilterTest {
     @Test
-    fun mightContains() {
+    fun mightContain() {
         val bloomFilter = BloomFilter(100)
         bloomFilter.add("hello".toByteArray())
         bloomFilter.add("bloom filter".toByteArray())
 
-        assertTrue(bloomFilter.mightContains("hello".toByteArray()))
-        assertTrue(bloomFilter.mightContains("bloom filter".toByteArray()))
-        assertFalse(bloomFilter.mightContains("xxx".toByteArray()))
+        assertTrue(bloomFilter.mightContain("hello".toByteArray()))
+        assertTrue(bloomFilter.mightContain("bloom filter".toByteArray()))
+        assertFalse(bloomFilter.mightContain("xxx".toByteArray()))
     }
 }

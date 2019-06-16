@@ -19,7 +19,7 @@ class BloomFilter(private val size: Int) {
         }
     }
 
-    fun mightContains(value: ByteArray): Boolean {
+    fun mightContain(value: ByteArray): Boolean {
         lock.read {
             for (seed in 1..3) {
                 if (!bits.get(hashing(size, seed, value))) {
