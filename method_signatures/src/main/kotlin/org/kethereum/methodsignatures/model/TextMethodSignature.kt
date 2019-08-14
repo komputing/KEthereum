@@ -13,6 +13,7 @@ data class TextMethodSignature(val signature: String) {
                 "int" -> "int256"
                 "fixed" -> "fixed128x18"
                 "ufixed" -> "ufixed128x18"
+                "byte" -> "bytes1"
                 else -> it
             }
         }
