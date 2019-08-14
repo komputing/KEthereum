@@ -9,7 +9,7 @@ buildscript {
         khex_version = '0.6'
         khash_version = '1.0.0-RC2'
 
-        klaxon_version = '5.0.7'
+        klaxon_version = '5.0.11'
         moshi_version = '1.8.0'
         jupiter_version = '5.4.2'
     }
