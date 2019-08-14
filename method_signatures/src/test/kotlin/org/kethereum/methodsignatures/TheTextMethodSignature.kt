@@ -1,0 +1,38 @@
+package org.kethereum.methodsignatures
+
+import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.Test
+import org.kethereum.methodsignatures.model.TextMethodSignature
+
+class TheTextMethodSignature {
+
+    @Test
+    fun normalizingWorks() {
+        assertThat(TextMethodSignature("\ttransfer \t( address,\tuint256 ) ").normalizedSignature).isEqualTo("transfer(address,uint256)")
+    }
+
+    @Test
+    fun replacementsOfSynonymsReflectedInNormalizedSignature() {
+        assertThat(TextMethodSignature("transfer(address,uint,int,fixed,ufixed,byte)").normalizedSignature)
+                .isEqualTo("transfer(address,uint256,int256,fixed128x18,ufixed128x18,bytes1)")
+    }
+
+    @Test
+    fun canGetFunctionName() {
+        assertThat(TextMethodSignature(" yolo (address,uint,int,fixed,ufixed)").functionName)
+                .isEqualTo("yolo")
+    }
+
+    @Test
+    fun canGetParameters() {
+        assertThat(TextMethodSignature(" yolo (address,uint)").parameters)
+                .isEqualTo(listOf("address","uint"))
+    }
+
+    @Test
+    fun canGetNormalizedParameters() {
+        assertThat(TextMethodSignature(" yolo (address,uint)").normalizedParameters)
+                .isEqualTo(listOf("address","uint256"))
+    }
+
+}
