@@ -18,6 +18,11 @@ class TheTextMethodSignature {
     }
 
     @Test
+    fun normalizingWorksForArrays() {
+        assertThat(TextMethodSignature("multisetProofType(uint[],address[]))").normalizedSignature)
+                .isEqualTo("multisetProofType(uint256[],address[])")
+    }
+    @Test
     fun canGetFunctionName() {
         assertThat(TextMethodSignature(" yolo (address,uint,int,fixed,ufixed)").functionName)
                 .isEqualTo("yolo")

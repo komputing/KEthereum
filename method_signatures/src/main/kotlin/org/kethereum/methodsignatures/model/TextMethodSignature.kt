@@ -8,14 +8,14 @@ data class TextMethodSignature(val signature: String) {
     // see https://solidity.readthedocs.io/en/develop/abi-spec.htm
     val normalizedParameters by lazy {
         parameters.map {
-            when (it) {
+            when (val type = it.substringBefore("[")) {
                 "uint" -> "uint256"
                 "int" -> "int256"
                 "fixed" -> "fixed128x18"
                 "ufixed" -> "ufixed128x18"
                 "byte" -> "bytes1"
-                else -> it
-            }
+                else -> type
+            } + if (it.contains("[")) "[" + it.substringAfter("[") else ""
         }
     }
 
