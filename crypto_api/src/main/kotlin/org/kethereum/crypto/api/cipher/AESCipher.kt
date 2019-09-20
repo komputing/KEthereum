@@ -7,11 +7,14 @@ interface AESCipher {
     fun performOperation(data: ByteArray): ByteArray
 
     enum class Mode(val id: String) {
-        CTR("CTR")
+        CTR("CTR"),
+        CDC("CDC")
+
     }
 
     enum class Padding(val id: String) {
-        NO("NoPadding")
+        NO("NoPadding"),
+        PKCS5("PKCS5Padding")
     }
 
     enum class Operation {
