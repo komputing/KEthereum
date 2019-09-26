@@ -31,7 +31,7 @@ Get it
 ======
 
 KEthereum is available via jitpack:
-[![](https://jitpack.io/v/komputing/KEthereum.svg)](https://jitpack.io/#komputing/KEthereum)
+[![](https://jitpack.io/v/komputing/kethereum.svg)](https://jitpack.io/#komputing/kethereum)
 
 License
 =======
