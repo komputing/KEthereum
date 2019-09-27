@@ -11,7 +11,7 @@ buildscript {
 
         klaxon_version = '5.0.11'
         moshi_version = '1.8.0'
-        jupiter_version = '5.5.1'
+        jupiter_version = '5.5.2'
     }
 
     repositories {
