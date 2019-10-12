@@ -33,11 +33,17 @@ class TheBlockScoutBlockExplorer {
                 .isEqualTo("https://blockscout.com/eth/ropsten")
     }
 
+    @Test
+    fun baseAPIAthereumWorks() {
+        assertThat(getBlockscoutBaseURL(ChainId(43110)))
+                .isEqualTo("http://athexplorer.ava.network")
+    }
+
 
     @Test
-    fun support9Networks() {
+    fun support10Networks() {
         assertThat(ALL_BLOCKSCOUT_SUPPORTED_NETWORKS.size)
-                .isEqualTo(9)
+                .isEqualTo(10)
     }
 
     @Test
