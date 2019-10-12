@@ -17,7 +17,6 @@ package org.kethereum.encodings
  */
 
 import org.kethereum.hashes.sha256
-import java.util.*
 
 private const val ENCODED_ZERO = '1'
 private const val CHECKSUM_SIZE = 4
@@ -105,7 +104,7 @@ fun String.decodeBase58(): ByteArray {
         ++outputStart
     }
     // Return decoded data (including original number of leading zeros).
-    return Arrays.copyOfRange(decoded, outputStart - zeros, decoded.size)
+    return decoded.copyOfRange(outputStart - zeros, decoded.size)
 }
 
 /**
@@ -149,14 +148,14 @@ fun String.decodeBase58WithChecksum(): ByteArray {
     if (rawBytes.size < CHECKSUM_SIZE) {
         throw Exception("Too short for checksum: $this l:  ${rawBytes.size}")
     }
-    val checksum = Arrays.copyOfRange(rawBytes, rawBytes.size - CHECKSUM_SIZE, rawBytes.size)
+    val checksum = rawBytes.copyOfRange(rawBytes.size - CHECKSUM_SIZE, rawBytes.size)
 
-    val payload = Arrays.copyOfRange(rawBytes, 0, rawBytes.size - CHECKSUM_SIZE)
+    val payload = rawBytes.copyOfRange(0, rawBytes.size - CHECKSUM_SIZE)
 
     val hash = payload.sha256().sha256()
-    val computedChecksum = Arrays.copyOfRange(hash, 0, CHECKSUM_SIZE)
+    val computedChecksum = hash.copyOfRange(0, CHECKSUM_SIZE)
 
-    if (Arrays.equals(checksum, computedChecksum)) {
+    if (checksum.contentEquals(computedChecksum)) {
         return payload
     } else {
         throw Exception("Checksum mismatch: $this ")
