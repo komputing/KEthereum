@@ -21,7 +21,6 @@ import java.security.InvalidKeyException
 import java.security.KeyException
 import java.security.NoSuchAlgorithmException
 import java.security.NoSuchProviderException
-import java.util.*
 
 fun Seed.toKey(pathString: String, testnet: Boolean = false) = BIP44(pathString).path
         .fold(toExtendedKey(testnet = testnet)) { current, bip44Element ->
@@ -47,8 +46,8 @@ private fun ECKeyPair.computeFingerPrint(): Int {
 
 fun ExtendedKey.generateChildKey(element: BIP44Element): ExtendedKey {
     try {
-        if (element.hardened && keyPair.privateKey.key == BigInteger.ZERO) {
-            throw IllegalArgumentException("need private key for private generation using hardened paths")
+        require(!(element.hardened && keyPair.privateKey.key == BigInteger.ZERO)) {
+            "need private key for private generation using hardened paths"
         }
         val mac = CryptoAPI.hmac.init(chainCode)
 
@@ -74,8 +73,8 @@ fun ExtendedKey.generateChildKey(element: BIP44Element): ExtendedKey {
                     .array()
         }
         val lr = mac.generate(extended)
-        val l = Arrays.copyOfRange(lr, 0, PRIVATE_KEY_SIZE)
-        val r = Arrays.copyOfRange(lr, PRIVATE_KEY_SIZE, PRIVATE_KEY_SIZE + CHAINCODE_SIZE)
+        val l = lr.copyOfRange(0, PRIVATE_KEY_SIZE)
+        val r = lr.copyOfRange(PRIVATE_KEY_SIZE, PRIVATE_KEY_SIZE + CHAINCODE_SIZE)
 
         val m = BigInteger(1, l)
         if (m >= CURVE.n) {

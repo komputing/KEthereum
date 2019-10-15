@@ -12,9 +12,7 @@ open class IntABIType(val bits: Int, val signed: Boolean) : ContractABIType {
     override fun parseValueFromString(string: String) {
         value = BigInteger(string)
 
-        if (!signed && value < BigInteger.ZERO) {
-            throw IllegalArgumentException("value cannot be less than 0 for unsigned int")
-        }
+        require(!(!signed && value < BigInteger.ZERO)) { "value cannot be less than 0 for unsigned int" }
     }
 
     override fun isDynamic() = false

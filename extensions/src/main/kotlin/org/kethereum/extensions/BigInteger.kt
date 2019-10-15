@@ -3,7 +3,6 @@ package org.kethereum.extensions
 import org.walleth.khex.clean0xPrefix
 import org.walleth.khex.has0xPrefix
 import java.math.BigInteger
-import java.util.*
 
 fun BigInteger.toBytesPadded(length: Int): ByteArray {
     val result = ByteArray(length)
@@ -60,6 +59,6 @@ fun String.maybeHexToBigInteger() = if (has0xPrefix()) {
     BigInteger(this)
 }
 
-fun ByteArray.toBigInteger(offset: Int, length: Int) = BigInteger(1, Arrays.copyOfRange(this, offset, offset + length))
+fun ByteArray.toBigInteger(offset: Int, length: Int) = BigInteger(1, copyOfRange(offset, offset + length))
 fun ByteArray.toBigInteger() = BigInteger(1, this)
 

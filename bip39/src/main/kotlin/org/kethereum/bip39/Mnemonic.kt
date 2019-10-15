@@ -40,11 +40,9 @@ fun mnemonicToEntropy(phrase: String, wordList: List<String>) =
  * Converts a list of words into a [ByteArray] entropy buffer according to the BIP39 spec
  */
 fun MnemonicWords.mnemonicToEntropy(wordList: List<String>): ByteArray {
-    if (words.size % 3 > 0)
-        throw IllegalArgumentException("Word list size must be multiple of three words.")
+    require(words.size % 3 <= 0) { "Word list size must be multiple of three words." }
 
-    if (words.isEmpty())
-        throw IllegalArgumentException("Word list is empty.")
+    require(words.isNotEmpty()) { "Word list is empty." }
 
     val numTotalBits = words.size * 11
     val bitArray = BooleanArray(numTotalBits)
@@ -52,8 +50,7 @@ fun MnemonicWords.mnemonicToEntropy(wordList: List<String>): ByteArray {
     for ((phraseIndex, word) in words.withIndex()) {
 
         val dictIndex = Collections.binarySearch(wordList, word)
-        if (dictIndex < 0)
-            throw IllegalArgumentException("word($word) not in known word list")
+        require(dictIndex >= 0) { "word($word) not in known word list" }
 
         // Set the next 11 bits to the value of the index.
         for (bit in 0..10)
@@ -71,8 +68,7 @@ fun MnemonicWords.mnemonicToEntropy(wordList: List<String>): ByteArray {
 
     // Check all the checksum bits.
     for (i in 0 until numChecksumBits)
-        if (bitArray[numEntropyBits + i] != hashBits[i])
-            throw IllegalArgumentException("mnemonic checksum does not match")
+        require(bitArray[numEntropyBits + i] == hashBits[i]) { "mnemonic checksum does not match" }
 
     return entropy
 }
@@ -122,9 +118,7 @@ fun entropyToMnemonic(entropy: ByteArray, wordList: List<String>): String {
  */
 fun generateMnemonic(strength: Int = 128, wordList: List<String>): String {
 
-    if (strength % 32 != 0) {
-        throw IllegalArgumentException("The entropy strength needs to be a multiple of 32")
-    }
+    require(strength % 32 == 0) { "The entropy strength needs to be a multiple of 32" }
 
     val entropyBuffer = ByteArray(strength / 8)
     SecureRandom().nextBytes(entropyBuffer)

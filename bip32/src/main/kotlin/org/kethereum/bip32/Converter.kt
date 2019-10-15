@@ -17,13 +17,12 @@ import java.security.InvalidKeyException
 import java.security.KeyException
 import java.security.NoSuchAlgorithmException
 import java.security.NoSuchProviderException
-import java.util.*
 
 fun Seed.toExtendedKey(publicKeyOnly: Boolean = false, testnet: Boolean = false): ExtendedKey {
     try {
         val lr = CryptoAPI.hmac.init(BITCOIN_SEED).generate(seed)
-        val l = Arrays.copyOfRange(lr, 0, PRIVATE_KEY_SIZE)
-        val r = Arrays.copyOfRange(lr, PRIVATE_KEY_SIZE, PRIVATE_KEY_SIZE + CHAINCODE_SIZE)
+        val l = lr.copyOfRange(0, PRIVATE_KEY_SIZE)
+        val r = lr.copyOfRange(PRIVATE_KEY_SIZE, PRIVATE_KEY_SIZE + CHAINCODE_SIZE)
         val m = BigInteger(1, l)
         if (m >= CURVE.n) {
             throw KeyException("Master key creation resulted in a key with higher modulus. Suggest deriving the next increment.")
@@ -61,8 +60,8 @@ fun XPriv.toExtendedKey(): ExtendedKey {
     buff.get(versionBytes)
 
     val hasPrivate = when {
-        Arrays.equals(versionBytes, xprv) || Arrays.equals(versionBytes, tprv) -> true
-        Arrays.equals(versionBytes, xpub) || Arrays.equals(versionBytes, tpub) -> false
+        versionBytes.contentEquals(xprv) || versionBytes.contentEquals(tprv) -> true
+        versionBytes.contentEquals(xpub) || versionBytes.contentEquals(tpub) -> false
         else -> throw KeyException("invalid version bytes for an extended key")
     }
 

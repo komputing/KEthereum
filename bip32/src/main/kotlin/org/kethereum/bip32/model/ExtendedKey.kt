@@ -8,7 +8,7 @@ import org.kethereum.model.PRIVATE_KEY_SIZE
 import java.io.IOException
 import java.math.BigInteger
 import java.nio.ByteBuffer
-import java.security.*
+import java.security.KeyException
 import java.util.*
 
 
@@ -26,8 +26,8 @@ data class ExtendedKey(val keyPair: ECKeyPair,
         other as ExtendedKey
 
         if (keyPair != other.keyPair) return false
-        if (!Arrays.equals(versionBytes, other.versionBytes)) return false
-        if (!Arrays.equals(chainCode, other.chainCode)) return false
+        if (!versionBytes.contentEquals(other.versionBytes)) return false
+        if (!chainCode.contentEquals(other.chainCode)) return false
         if (depth != other.depth) return false
         if (parentFingerprint != other.parentFingerprint) return false
         if (sequence != other.sequence) return false
@@ -37,8 +37,8 @@ data class ExtendedKey(val keyPair: ECKeyPair,
 
     override fun hashCode(): Int {
         var result = keyPair.hashCode()
-        result = 31 * result + Arrays.hashCode(versionBytes)
-        result = 31 * result + Arrays.hashCode(chainCode)
+        result = 31 * result + versionBytes.contentHashCode()
+        result = 31 * result + chainCode.contentHashCode()
         result = 31 * result + depth
         result = 31 * result + parentFingerprint
         result = 31 * result + sequence

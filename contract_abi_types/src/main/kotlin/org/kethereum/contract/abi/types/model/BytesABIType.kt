@@ -7,12 +7,8 @@ open class BytesABIType(val bytes: Int) : ContractABIType {
     var value: ByteArray
 
     init {
-        if (bytes < 1) {
-            throw IllegalArgumentException("bytes must be >0")
-        }
-        if (bytes > 32) {
-            throw IllegalArgumentException("bytes must be <=32")
-        }
+        require(bytes >= 1) { "bytes must be >0" }
+        require(bytes <= 32) { "bytes must be <=32" }
         value = ByteArray(bytes)
     }
 
@@ -21,9 +17,7 @@ open class BytesABIType(val bytes: Int) : ContractABIType {
 
     override fun parseValueFromString(string: String) {
         val tempValue = string.hexToByteArray()
-        if (tempValue.size > bytes) {
-            throw IllegalArgumentException("The given value does not fit into $bytes bytes")
-        }
+        require(tempValue.size <= bytes) { "The given value does not fit into $bytes bytes" }
         value = tempValue
     }
 

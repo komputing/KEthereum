@@ -19,7 +19,7 @@ open class FileKeyStore(private val dir: File) : KeyStore {
     }
 
     private fun MutableMap<Address, File>.rebuildList() {
-        dir.listFiles().forEach {
+        dir.listFiles()?.forEach {
             put(Address(it.name.split("--").last().removeSuffix(".json")), it)
         }
     }

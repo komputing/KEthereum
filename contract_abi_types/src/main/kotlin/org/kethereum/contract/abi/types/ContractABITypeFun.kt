@@ -6,22 +6,16 @@ import org.kethereum.contract.abi.types.model.*
 
 
 val BYTES_COUNT_CONSTRAINT: (Int) -> Unit = {
-    if (it < 1) throw  IllegalArgumentException("bytes count MUST be more than 0")
-    if (it > 32) throw  IllegalArgumentException("bytes count MUST be less than 20")
+    require(it >= 1) { "bytes count MUST be more than 0" }
+    require(it <= 32) { "bytes count MUST be less than 20" }
 }
 
 val INT_BITS_CONSTRAINT: (Int) -> Unit = {
-    if (it % BYTE_IN_BITS > 0) {
-        throw IllegalArgumentException("bits%$BYTE_IN_BITS MUST be 0 but ist not for $it")
-    }
+    require(it % BYTE_IN_BITS <= 0) { "bits%$BYTE_IN_BITS MUST be 0 but ist not for $it" }
 
-    if (it < 8) {
-        throw IllegalArgumentException("cannot have less than 8 bit")
-    }
+    require(it >= 8) { "cannot have less than 8 bit" }
 
-    if (it > 256) {
-        throw IllegalArgumentException("cannot have more than 256 bits")
-    }
+    require(it <= 256) { "cannot have more than 256 bits" }
 }
 
 

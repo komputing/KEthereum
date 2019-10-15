@@ -1,9 +1,8 @@
 package org.kethereum.crypto
 
+import org.kethereum.extensions.toBytesPadded
 import org.kethereum.model.ECKeyPair
 import org.kethereum.model.PUBLIC_KEY_SIZE
-import org.kethereum.extensions.toBytesPadded
-import java.util.*
 
 /**
  * Create a keypair using SECP-256k1 curve.
@@ -31,5 +30,5 @@ fun ECKeyPair.getCompressedPublicKey(): ByteArray {
 fun decompressKey(publicBytes: ByteArray): ByteArray {
     val point = CURVE.decodePoint(publicBytes)
     val encoded = point.encoded()
-    return Arrays.copyOfRange(encoded, 1, encoded.size)
+    return encoded.copyOfRange(1, encoded.size)
 }

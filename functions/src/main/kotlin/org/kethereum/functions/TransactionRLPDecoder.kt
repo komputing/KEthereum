@@ -9,9 +9,7 @@ import org.kethereum.model.Transaction
 import org.walleth.khex.toHexString
 
 fun RLPList.toTransaction(): Transaction? {
-    if (element.size != 6 && element.size != 9) {
-        throw IllegalArgumentException("RLPList for transaction must have 6(unsigned) or 9(signed) elements - but has " + element.size)
-    }
+    require(!(element.size != 6 && element.size != 9)) { "RLPList for transaction must have 6(unsigned) or 9(signed) elements - but has " + element.size }
 
     val elements: List<RLPElement> = element.map {
         it as? RLPElement ?: throw IllegalArgumentException("RLPList to make transaction must consist only of elements - no list ")

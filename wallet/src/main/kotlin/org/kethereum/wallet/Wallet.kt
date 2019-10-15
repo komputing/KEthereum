@@ -39,7 +39,7 @@ fun ECKeyPair.createWallet(password: String, config: ScryptConfig): Wallet {
         salt = mySalt.toNoPrefixHexString()
     })
 
-    val encryptKey = Arrays.copyOfRange(derivedKey, 0, 16)
+    val encryptKey = derivedKey.copyOfRange(0, 16)
     val iv = generateRandomBytes(16)
 
     val privateKeyBytes = privateKey.key.toBytesPadded(PRIVATE_KEY_SIZE)
@@ -115,19 +115,18 @@ fun Wallet.decrypt(password: String): ECKeyPair {
     val iv = crypto.cipherparams.iv.hexToByteArray()
     val cipherText = crypto.ciphertext.hexToByteArray()
 
-    val kdfparams = crypto.kdfparams
-    val derivedKey = when (kdfparams) {
-        is ScryptKdfParams -> generateDerivedScryptKey(password.toByteArray(UTF_8), kdfparams)
-        is Aes128CtrKdfParams -> generateAes128CtrDerivedKey(password.toByteArray(UTF_8), kdfparams)
+    val derivedKey = when (val kdfParams = crypto.kdfparams) {
+        is ScryptKdfParams -> generateDerivedScryptKey(password.toByteArray(UTF_8), kdfParams)
+        is Aes128CtrKdfParams -> generateAes128CtrDerivedKey(password.toByteArray(UTF_8), kdfParams)
     }
 
     val derivedMac = generateMac(derivedKey, cipherText)
 
-    if (!Arrays.equals(derivedMac, mac)) {
+    if (!derivedMac.contentEquals(mac)) {
         throw InvalidPasswordException()
     }
 
-    val encryptKey = Arrays.copyOfRange(derivedKey, 0, 16)
+    val encryptKey = derivedKey.copyOfRange(0, 16)
     val privateKey = PrivateKey(performCipherOperation(AESCipher.Operation.DESCRYPTION, iv, encryptKey, cipherText))
     return privateKey.toECKeyPair()
 }
