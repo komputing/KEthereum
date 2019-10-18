@@ -3,23 +3,62 @@ package org.kethereum.methodsignatures.model
 data class TextMethodSignature(val signature: String) {
     val functionName by lazy { signature.substringBefore("(").trim() }
 
-    val parameters by lazy { signature.substringAfter("(").substringBefore(")").split(",").map { it.trim() } }
+    private val parameterElements by lazy {
+        val params = signature.substringAfter("(").trim().removeSuffix(")")
+        val paramList = mutableListOf<String>()
+        var currentParam = ""
+        params.toCharArray().forEach {
+            when (it) {
+                '(' -> {
+                    paramList.add(currentParam)
+                    currentParam = ""
+                    paramList.add("(")
+                }
+                ')' -> {
+                    paramList.add(currentParam)
+                    currentParam = ""
+                    paramList.add(")")
+                }
+                ',' -> {
+                    paramList.add(currentParam)
+                    currentParam = ""
+                    paramList.add(",")
+                }
+                '[' -> {
+                    paramList.add(currentParam)
+                    currentParam = ""
+                    paramList.add("[")
+                }
+                ']' -> {
+                    paramList.add(currentParam)
+                    currentParam = ""
+                    paramList.add("]")
+                }
+                ' ', '\t' -> Unit
+                else -> currentParam += it
+            }
+        }
+        if (currentParam.isNotEmpty()) {
+            paramList.add(currentParam)
+        }
+        paramList
+    }
 
     // see https://solidity.readthedocs.io/en/develop/abi-spec.htm
-    val normalizedParameters by lazy {
-        parameters.map {
-            when (val type = it.substringBefore("[")) {
+    private val normalizedParameters by lazy {
+        parameterElements.map {
+            when (it) {
                 "uint" -> "uint256"
                 "int" -> "int256"
                 "fixed" -> "fixed128x18"
                 "ufixed" -> "ufixed128x18"
                 "byte" -> "bytes1"
-                else -> type
-            } + if (it.contains("[")) "[" + it.substringAfter("[") else ""
+                else -> it
+            }
         }
     }
 
-    private val normalizedParametersString by lazy { normalizedParameters.joinToString(",")}
+    private val normalizedParametersString by lazy { normalizedParameters.joinToString("") }
 
     val normalizedSignature by lazy { "$functionName($normalizedParametersString)" }
 }

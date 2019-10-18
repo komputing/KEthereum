@@ -11,6 +11,17 @@ class TheTextMethodSignature {
         assertThat(TextMethodSignature("\ttransfer \t( address,\tuint256 ) ").normalizedSignature).isEqualTo("transfer(address,uint256)")
     }
 
+
+    @Test
+    fun normalizingWorksWithTuples() {
+        assertThat(TextMethodSignature("\ttransfer \t( address,\t ( uint256) ) ").normalizedSignature).isEqualTo("transfer(address,(uint256))")
+    }
+
+    @Test
+    fun normalizingWorksWithArrayOfTuples() {
+        assertThat(TextMethodSignature("\ttransfer \t( address,\t ( uint256)[] ) ").normalizedSignature).isEqualTo("transfer(address,(uint256)[])")
+    }
+
     @Test
     fun replacementsOfSynonymsReflectedInNormalizedSignature() {
         assertThat(TextMethodSignature("transfer(address,uint,int,fixed,ufixed,byte)").normalizedSignature)
@@ -19,25 +30,13 @@ class TheTextMethodSignature {
 
     @Test
     fun normalizingWorksForArrays() {
-        assertThat(TextMethodSignature("multisetProofType(uint[],address[]))").normalizedSignature)
+        assertThat(TextMethodSignature("multisetProofType(uint[],address[])").normalizedSignature)
                 .isEqualTo("multisetProofType(uint256[],address[])")
     }
     @Test
     fun canGetFunctionName() {
         assertThat(TextMethodSignature(" yolo (address,uint,int,fixed,ufixed)").functionName)
                 .isEqualTo("yolo")
-    }
-
-    @Test
-    fun canGetParameters() {
-        assertThat(TextMethodSignature(" yolo (address,uint)").parameters)
-                .isEqualTo(listOf("address","uint"))
-    }
-
-    @Test
-    fun canGetNormalizedParameters() {
-        assertThat(TextMethodSignature(" yolo (address,uint)").normalizedParameters)
-                .isEqualTo(listOf("address","uint256"))
     }
 
 }
