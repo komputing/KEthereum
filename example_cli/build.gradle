@@ -1,0 +1,10 @@
+apply plugin: "application"
+
+mainClassName = "org.kethereum.example_cli.ExampleCLIkt"
+
+dependencies {
+    implementation project(path: ":model")
+    implementation project(path: ":erc55")
+    implementation project(path: ":eip137")
+
+}
