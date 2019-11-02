@@ -13,11 +13,8 @@ private fun createAdapter(moshi: Moshi): JsonAdapter<List<EthereumFunction>> {
 }
 
 class EthereumABI(val methodList: List<EthereumFunction>) {
-
-    constructor(abiString: String, moshi: Moshi) : this(parse(abiString, moshi))
-
+    constructor(abiString: String, moshi: Moshi = Moshi.Builder().build()) : this(parse(abiString, moshi))
 }
-
 
 fun EthereumABI.toFunctionSignaturesString() = methodList.filter { it.name != null }.joinToString("\n") { function ->
     function.name + "(" + function.inputs?.joinToString(",") { it.type + " " + it.name } + ")"
