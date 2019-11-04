@@ -22,7 +22,7 @@ data class Transaction(
             from = null,
             gasLimit = DEFAULT_GAS_LIMIT,
             gasPrice = DEFAULT_GAS_PRICE,
-            input =  ByteArray(0),
+            input = ByteArray(0),
             nonce = null,
             to = null,
             txHash = null,
@@ -78,3 +78,5 @@ fun createTransactionWithDefaults(
         value: BigInteger
 ) = Transaction(chain?.value, creationEpochSecond, from, gasLimit, gasPrice, input, nonce, to, txHash, value)
 
+
+fun createEmptyTransaction() = Transaction(null, null, null, null, null, ByteArray(0), null, null, null, null)

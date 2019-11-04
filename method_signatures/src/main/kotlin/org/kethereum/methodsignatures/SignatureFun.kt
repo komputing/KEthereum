@@ -1,5 +1,6 @@
 package org.kethereum.methodsignatures
 
+import org.kethereum.abi.model.EthereumFunction
 import org.kethereum.keccakshortcut.keccak
 import org.kethereum.methodsignatures.model.HexMethodSignature
 import org.kethereum.methodsignatures.model.TextMethodSignature
@@ -10,3 +11,5 @@ private fun String.getHexSignature() = toByteArray().keccak().toNoPrefixHexStrin
 fun TextMethodSignature.toHexSignatureUnsafe() = HexMethodSignature(signature.getHexSignature())
 
 fun TextMethodSignature.toHexSignature() = HexMethodSignature(normalizedSignature.getHexSignature())
+
+fun EthereumFunction.toTextMethodSignature() = TextMethodSignature(name!!+"(" + inputs?.joinToString(",") { it.type }+")")
