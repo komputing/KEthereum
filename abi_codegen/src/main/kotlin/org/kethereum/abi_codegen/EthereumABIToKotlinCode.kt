@@ -6,6 +6,30 @@ import org.kethereum.methodsignatures.toHexSignature
 import org.kethereum.methodsignatures.toTextMethodSignature
 import org.kethereum.model.Address
 import org.kethereum.rpc.EthereumRPC
+import kotlin.reflect.KClass
+
+
+data class CodeWithImport(
+        val code: String,
+        val imports: List<String> = emptyList()
+)
+
+data class TypeDefinition(
+        val kclass: KClass<out Any>,
+        val incode: CodeWithImport,
+        val outcode: CodeWithImport
+)
+
+val typeMap = mapOf(
+        "address" to TypeDefinition(
+                Address::class,
+                CodeWithImport(".hex.toFixedLengthByteArray(32)", listOf("org.kethereum.extensions.toFixedLengthByteArray")),
+                CodeWithImport("Address(%%HEX%%.substring(24, 64))")),
+        "bytes32" to TypeDefinition(
+                ByteArray::class,
+                CodeWithImport(".toFixedLengthByteArray(32)", listOf("org.kethereum.extensions.toFixedLengthByteArray")),
+                CodeWithImport("%%HEX%%.hexToByteArray()", listOf("org.walleth.khex.hexToByteArray")))
+)
 
 fun EthereumABI.toKotlinCode(className: String, packageName: String = ""): FileSpec {
 
@@ -19,6 +43,7 @@ fun EthereumABI.toKotlinCode(className: String, packageName: String = ""): FileS
     classBuilder.addProperty(PropertySpec.builder("address", Address::class).addModifiers(KModifier.PRIVATE).initializer("address").build())
 
     val createEmptyTX = MemberName("org.kethereum.model", "createEmptyTransaction")
+    val imports = mutableSetOf<String>()
 
     methodList.filter { it.type == "function" }.forEach { it ->
 
@@ -30,10 +55,26 @@ fun EthereumABI.toKotlinCode(className: String, packageName: String = ""): FileS
 
         funBuilder.addKdoc("Signature: " + textMethodSignature.signature)
         funBuilder.addKdoc("\n4Byte: $fourByteSignature")
+
+        val inputCodeList = mutableListOf(signatureCode)
+
+        it.inputs?.forEach {
+            val typeDefinition = typeMap[it.type]
+            if (typeDefinition != null) {
+                funBuilder.addParameter(it.name, typeDefinition.kclass)
+                inputCodeList.add(it.name + typeDefinition.incode.code)
+                imports.addAll(typeDefinition.incode.imports)
+            } else {
+                funBuilder.addKdoc("\n!!Function contains unsupported parameter type ${it.type} for ${it.name}")
+            }
+
+        }
+
+        val input = inputCodeList.joinToString(" + ")
         funBuilder.addCode("""
             |val tx = %M().apply {
             |    to = address
-            |    input = $signatureCode
+            |    input = $input
             |}
             |val result = rpc.call(tx, "latest")?.result?.removePrefix("0x")
             |
@@ -42,19 +83,23 @@ fun EthereumABI.toKotlinCode(className: String, packageName: String = ""): FileS
         if (outputCount > 1) {
             funBuilder.addKdoc("!!Warning!! this function has more than one output - which is currently not supported")
         } else if (outputCount == 1) {
-            when (it.outputs!!.first().type) {
-                "address" -> {
-                    funBuilder.returns(Address::class.asTypeName().copy(nullable = true))
-                    funBuilder.addStatement("return result?.let { Address(result.substring(24, 64)) }")
-                }
-            }
+            val type = it.outputs!!.first().type
 
+            val typeDefinition = typeMap[type]
+            if (typeDefinition != null) {
+                imports.addAll(typeDefinition.outcode.imports)
+                funBuilder.returns(typeDefinition.kclass.asTypeName().copy(nullable = true))
+                funBuilder.addStatement("return result?.let {" + typeDefinition.outcode.code.replace("%%HEX%%", "result") + "}")
+            }
         }
 
         classBuilder.addFunction(funBuilder.build())
     }
 
-    return FileSpec.builder(packageName, className)
+    val fileSpec = FileSpec.builder(packageName, className)
             .addType(classBuilder.build())
-            .build()
+    imports.forEach {
+        fileSpec.addImport(it.substringBeforeLast("."), it.substringAfterLast("."))
+    }
+    return fileSpec.build()
 }
