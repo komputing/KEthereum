@@ -23,7 +23,7 @@ data class TypeDefinition(
 val typeMap = mapOf(
         "address" to TypeDefinition(
                 Address::class,
-                CodeWithImport(".hex.toFixedLengthByteArray(32)", listOf("org.kethereum.extensions.toFixedLengthByteArray")),
+                CodeWithImport(".hex.hexToByteArray().toFixedLengthByteArray(32)", listOf("org.walleth.khex.hexToByteArray", "org.kethereum.extensions.toFixedLengthByteArray")),
                 CodeWithImport("Address(%%HEX%%.substring(24, 64))")),
         "bytes32" to TypeDefinition(
                 ByteArray::class,
