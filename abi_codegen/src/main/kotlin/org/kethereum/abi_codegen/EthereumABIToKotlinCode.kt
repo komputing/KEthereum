@@ -45,6 +45,8 @@ fun EthereumABI.toKotlinCode(className: String, packageName: String = ""): FileS
     val createEmptyTX = MemberName("org.kethereum.model", "createEmptyTransaction")
     val imports = mutableSetOf<String>()
 
+    val skippedFunctions = mutableMapOf<String, String>()
+
     methodList.filter { it.type == "function" }.forEach { it ->
 
         val funBuilder = FunSpec.builder(it.name!!)
@@ -65,7 +67,7 @@ fun EthereumABI.toKotlinCode(className: String, packageName: String = ""): FileS
                 inputCodeList.add(it.name + typeDefinition.incode.code)
                 imports.addAll(typeDefinition.incode.imports)
             } else {
-                funBuilder.addKdoc("\n!!Function contains unsupported parameter type ${it.type} for ${it.name}")
+                skippedFunctions[fourByteSignature] = "${textMethodSignature.signature} contains unsupported parameter type ${it.type} for ${it.name}"
             }
 
         }
@@ -81,7 +83,7 @@ fun EthereumABI.toKotlinCode(className: String, packageName: String = ""): FileS
                 """.trimMargin(), createEmptyTX)
         val outputCount = it.outputs?.size ?: 0
         if (outputCount > 1) {
-            funBuilder.addKdoc("!!Warning!! this function has more than one output - which is currently not supported")
+            skippedFunctions[fourByteSignature] = "${textMethodSignature.signature} has more than one output - which is currently not supported"
         } else if (outputCount == 1) {
             val type = it.outputs!!.first().type
 
@@ -90,12 +92,19 @@ fun EthereumABI.toKotlinCode(className: String, packageName: String = ""): FileS
                 imports.addAll(typeDefinition.outcode.imports)
                 funBuilder.returns(typeDefinition.kclass.asTypeName().copy(nullable = true))
                 funBuilder.addStatement("return result?.let {" + typeDefinition.outcode.code.replace("%%HEX%%", "result") + "}")
+            } else {
+                skippedFunctions[fourByteSignature] = "${textMethodSignature.signature} has unsupported returntype: $type"
             }
         }
 
-        classBuilder.addFunction(funBuilder.build())
+        if (!skippedFunctions.containsKey(fourByteSignature)) {
+            classBuilder.addFunction(funBuilder.build())
+        }
     }
 
+    skippedFunctions.keys.forEach {
+        classBuilder.addKdoc("\nskipped function $it " + skippedFunctions[it])
+    }
     val fileSpec = FileSpec.builder(packageName, className)
             .addType(classBuilder.build())
     imports.forEach {
