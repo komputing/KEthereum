@@ -20,19 +20,21 @@ data class TypeDefinition(
         val outcode: CodeWithImport
 )
 
+private const val REPLACEMENT_TOKEN = "%%REPLACEMENT_TOKEN%%"
+
 val typeMap = mapOf(
         "address" to TypeDefinition(
                 Address::class,
-                CodeWithImport(".hex.hexToByteArray().toFixedLengthByteArray(32)", listOf("org.walleth.khex.hexToByteArray", "org.kethereum.extensions.toFixedLengthByteArray")),
-                CodeWithImport("Address(%%HEX%%.substring(24, 64))")),
+                CodeWithImport("$REPLACEMENT_TOKEN.hex.hexToByteArray().toFixedLengthByteArray(32)", listOf("org.walleth.khex.hexToByteArray", "org.kethereum.extensions.toFixedLengthByteArray")),
+                CodeWithImport("Address($REPLACEMENT_TOKEN.substring(24, 64))")),
         "bytes32" to TypeDefinition(
                 ByteArray::class,
-                CodeWithImport(".toFixedLengthByteArray(32)", listOf("org.kethereum.extensions.toFixedLengthByteArray")),
-                CodeWithImport("%%HEX%%.hexToByteArray()", listOf("org.walleth.khex.hexToByteArray"))),
+                CodeWithImport("$REPLACEMENT_TOKEN.toFixedLengthByteArray(32)", listOf("org.kethereum.extensions.toFixedLengthByteArray")),
+                CodeWithImport("$REPLACEMENT_TOKEN.hexToByteArray()", listOf("org.walleth.khex.hexToByteArray"))),
         "bool" to TypeDefinition(
                 Boolean::class,
-                CodeWithImport(".let { b -> ByteArray(32,{if (b && it==31) 1 else 0})}"),
-                CodeWithImport("%%HEX%%.replace(\"0\",\"\").isNotEmpty()"))
+                CodeWithImport("ByteArray(32) {if ($REPLACEMENT_TOKEN && it==31) 1 else 0}"),
+                CodeWithImport("$REPLACEMENT_TOKEN.replace(\"0\",\"\").isNotEmpty()"))
 )
 
 fun EthereumABI.toKotlinCode(className: String, packageName: String = ""): FileSpec {
@@ -68,7 +70,7 @@ fun EthereumABI.toKotlinCode(className: String, packageName: String = ""): FileS
             val typeDefinition = typeMap[it.type]
             if (typeDefinition != null) {
                 funBuilder.addParameter(it.name, typeDefinition.kclass)
-                inputCodeList.add(it.name + typeDefinition.incode.code)
+                inputCodeList.add(typeDefinition.incode.code.replace(REPLACEMENT_TOKEN, it.name))
                 imports.addAll(typeDefinition.incode.imports)
             } else {
                 skippedFunctions[fourByteSignature] = "${textMethodSignature.signature} contains unsupported parameter type ${it.type} for ${it.name}"
@@ -95,7 +97,7 @@ fun EthereumABI.toKotlinCode(className: String, packageName: String = ""): FileS
             if (typeDefinition != null) {
                 imports.addAll(typeDefinition.outcode.imports)
                 funBuilder.returns(typeDefinition.kclass.asTypeName().copy(nullable = true))
-                funBuilder.addStatement("return result?.let {" + typeDefinition.outcode.code.replace("%%HEX%%", "result") + "}")
+                funBuilder.addStatement("return result?.let {" + typeDefinition.outcode.code.replace(REPLACEMENT_TOKEN, "result") + "}")
             } else {
                 skippedFunctions[fourByteSignature] = "${textMethodSignature.signature} has unsupported returntype: $type"
             }
