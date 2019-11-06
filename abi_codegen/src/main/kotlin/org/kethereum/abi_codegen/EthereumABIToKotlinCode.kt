@@ -28,7 +28,11 @@ val typeMap = mapOf(
         "bytes32" to TypeDefinition(
                 ByteArray::class,
                 CodeWithImport(".toFixedLengthByteArray(32)", listOf("org.kethereum.extensions.toFixedLengthByteArray")),
-                CodeWithImport("%%HEX%%.hexToByteArray()", listOf("org.walleth.khex.hexToByteArray")))
+                CodeWithImport("%%HEX%%.hexToByteArray()", listOf("org.walleth.khex.hexToByteArray"))),
+        "bool" to TypeDefinition(
+                Boolean::class,
+                CodeWithImport(".let { b -> ByteArray(32,{if (b && it==31) 1 else 0})}"),
+                CodeWithImport("%%HEX%%.replace(\"0\",\"\").isNotEmpty()"))
 )
 
 fun EthereumABI.toKotlinCode(className: String, packageName: String = ""): FileSpec {
