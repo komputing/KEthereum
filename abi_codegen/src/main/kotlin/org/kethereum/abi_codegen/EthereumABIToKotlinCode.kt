@@ -11,20 +11,27 @@ import org.kethereum.model.Address
 import org.kethereum.rpc.EthereumRPC
 import org.kethereum.type_aliases.TypeAliases
 
-internal val typeMap = mapOf(
-        "address" to TypeDefinition(
-                Address::class,
-                CodeWithImport("$REPLACEMENT_TOKEN.hex.hexToByteArray().toFixedLengthByteArray(32)", listOf("org.walleth.khex.hexToByteArray", "org.kethereum.extensions.toFixedLengthByteArray")),
-                CodeWithImport("Address($REPLACEMENT_TOKEN.substring(24, 64))")),
-        "bytes32" to TypeDefinition(
-                ByteArray::class,
-                CodeWithImport("$REPLACEMENT_TOKEN.toFixedLengthByteArray(32)", listOf("org.kethereum.extensions.toFixedLengthByteArray")),
-                CodeWithImport("$REPLACEMENT_TOKEN.hexToByteArray()", listOf("org.walleth.khex.hexToByteArray"))),
-        "bool" to TypeDefinition(
-                Boolean::class,
-                CodeWithImport("ByteArray(32) {if ($REPLACEMENT_TOKEN && it==31) 1 else 0}"),
-                CodeWithImport("$REPLACEMENT_TOKEN.replace(\"0\",\"\").isNotEmpty()"))
-)
+internal val ByteTypeDefinition = TypeDefinition(
+        ByteArray::class,
+        CodeWithImport("$REPLACEMENT_TOKEN.toFixedLengthByteArray(32)", listOf("org.kethereum.extensions.toFixedLengthByteArray")),
+        CodeWithImport("$REPLACEMENT_TOKEN.hexToByteArray()", listOf("org.walleth.khex.hexToByteArray")))
+
+internal val typeMap by lazy {
+    mutableMapOf(
+            "address" to TypeDefinition(
+                    Address::class,
+                    CodeWithImport("$REPLACEMENT_TOKEN.hex.hexToByteArray().toFixedLengthByteArray(32)", listOf("org.walleth.khex.hexToByteArray", "org.kethereum.extensions.toFixedLengthByteArray")),
+                    CodeWithImport("Address($REPLACEMENT_TOKEN.substring(24, 64))")),
+            "bool" to TypeDefinition(
+                    Boolean::class,
+                    CodeWithImport("ByteArray(32) {if ($REPLACEMENT_TOKEN && it==31) 1 else 0}"),
+                    CodeWithImport("$REPLACEMENT_TOKEN.replace(\"0\",\"\").isNotEmpty()"))
+    ).apply {
+        (1..32).forEach {
+            this["byte$it"] = ByteTypeDefinition
+        }
+    }
+}
 
 internal fun getType(string: String) = typeMap[TypeAliases.getOrDefault(string, string)]
 
