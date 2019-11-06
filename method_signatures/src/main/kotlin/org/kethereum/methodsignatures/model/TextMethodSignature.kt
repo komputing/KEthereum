@@ -1,5 +1,7 @@
 package org.kethereum.methodsignatures.model
 
+import org.kethereum.type_aliases.TypeAliases
+
 data class TextMethodSignature(val signature: String) {
     val functionName by lazy { signature.substringBefore("(").trim() }
 
@@ -7,6 +9,7 @@ data class TextMethodSignature(val signature: String) {
         val params = signature.substringAfter("(").trim().removeSuffix(")")
         val paramList = mutableListOf<String>()
         var currentParam = ""
+
         params.toCharArray().forEach {
             when (it) {
                 '(' -> {
@@ -47,14 +50,7 @@ data class TextMethodSignature(val signature: String) {
     // see https://solidity.readthedocs.io/en/develop/abi-spec.htm
     private val normalizedParameters by lazy {
         parameterElements.map {
-            when (it) {
-                "uint" -> "uint256"
-                "int" -> "int256"
-                "fixed" -> "fixed128x18"
-                "ufixed" -> "ufixed128x18"
-                "byte" -> "bytes1"
-                else -> it
-            }
+            TypeAliases.getOrDefault(it, it)
         }
     }
 

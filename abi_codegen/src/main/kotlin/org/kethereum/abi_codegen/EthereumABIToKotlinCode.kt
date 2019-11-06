@@ -9,6 +9,7 @@ import org.kethereum.methodsignatures.toHexSignature
 import org.kethereum.methodsignatures.toTextMethodSignature
 import org.kethereum.model.Address
 import org.kethereum.rpc.EthereumRPC
+import org.kethereum.type_aliases.TypeAliases
 
 internal val typeMap = mapOf(
         "address" to TypeDefinition(
@@ -24,6 +25,8 @@ internal val typeMap = mapOf(
                 CodeWithImport("ByteArray(32) {if ($REPLACEMENT_TOKEN && it==31) 1 else 0}"),
                 CodeWithImport("$REPLACEMENT_TOKEN.replace(\"0\",\"\").isNotEmpty()"))
 )
+
+internal fun getType(string: String) = typeMap[TypeAliases.getOrDefault(string, string)]
 
 fun EthereumABI.toKotlinCode(className: String, packageName: String = ""): FileSpec {
 
@@ -56,7 +59,7 @@ fun EthereumABI.toKotlinCode(className: String, packageName: String = ""): FileS
 
         var blankParamCounter = -1
         it.inputs?.forEach {
-            val typeDefinition = typeMap[it.type]
+            val typeDefinition = getType(it.type)
 
             val parameterName = if (it.name.isBlank()) {
                 blankParamCounter++
@@ -89,7 +92,7 @@ fun EthereumABI.toKotlinCode(className: String, packageName: String = ""): FileS
         } else if (outputCount == 1) {
             val type = it.outputs!!.first().type
 
-            val typeDefinition = typeMap[type]
+            val typeDefinition = getType(type)
             if (typeDefinition != null) {
                 imports.addAll(typeDefinition.outcode.imports)
                 funBuilder.returns(typeDefinition.kclass.asTypeName().copy(nullable = true))
