@@ -2,27 +2,15 @@ package org.kethereum.abi_codegen
 
 import com.squareup.kotlinpoet.*
 import org.kethereum.abi.EthereumABI
+import org.kethereum.abi_codegen.model.CodeWithImport
+import org.kethereum.abi_codegen.model.REPLACEMENT_TOKEN
+import org.kethereum.abi_codegen.model.TypeDefinition
 import org.kethereum.methodsignatures.toHexSignature
 import org.kethereum.methodsignatures.toTextMethodSignature
 import org.kethereum.model.Address
 import org.kethereum.rpc.EthereumRPC
-import kotlin.reflect.KClass
 
-
-data class CodeWithImport(
-        val code: String,
-        val imports: List<String> = emptyList()
-)
-
-data class TypeDefinition(
-        val kclass: KClass<out Any>,
-        val incode: CodeWithImport,
-        val outcode: CodeWithImport
-)
-
-private const val REPLACEMENT_TOKEN = "%%REPLACEMENT_TOKEN%%"
-
-val typeMap = mapOf(
+internal val typeMap = mapOf(
         "address" to TypeDefinition(
                 Address::class,
                 CodeWithImport("$REPLACEMENT_TOKEN.hex.hexToByteArray().toFixedLengthByteArray(32)", listOf("org.walleth.khex.hexToByteArray", "org.kethereum.extensions.toFixedLengthByteArray")),
