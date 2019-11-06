@@ -66,11 +66,19 @@ fun EthereumABI.toKotlinCode(className: String, packageName: String = ""): FileS
 
         val inputCodeList = mutableListOf(signatureCode)
 
+        var blankParamCounter = -1
         it.inputs?.forEach {
             val typeDefinition = typeMap[it.type]
+
+            val parameterName = if (it.name.isBlank()) {
+                blankParamCounter++
+                "parameter$blankParamCounter"
+            } else {
+                it.name
+            }
             if (typeDefinition != null) {
-                funBuilder.addParameter(it.name, typeDefinition.kclass)
-                inputCodeList.add(typeDefinition.incode.code.replace(REPLACEMENT_TOKEN, it.name))
+                funBuilder.addParameter(parameterName, typeDefinition.kclass)
+                inputCodeList.add(typeDefinition.incode.code.replace(REPLACEMENT_TOKEN, parameterName))
                 imports.addAll(typeDefinition.incode.imports)
             } else {
                 skippedFunctions[fourByteSignature] = "${textMethodSignature.signature} contains unsupported parameter type ${it.type} for ${it.name}"
