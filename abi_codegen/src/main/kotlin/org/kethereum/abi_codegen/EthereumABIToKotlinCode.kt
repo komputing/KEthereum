@@ -35,13 +35,19 @@ internal val typeMap by lazy {
 
 internal fun getType(string: String) = typeMap[TypeAliases.getOrDefault(string, string)]
 
-fun EthereumABI.toKotlinCode(className: String, packageName: String = ""): FileSpec {
+fun EthereumABI.toKotlinCode(className: String,
+                             packageName: String = "",
+                             internal: Boolean = true): FileSpec {
 
     val classBuilder = TypeSpec.classBuilder(className)
             .primaryConstructor(FunSpec.constructorBuilder()
                     .addParameter("rpc", EthereumRPC::class)
                     .addParameter("address", Address::class)
                     .build())
+
+    if (internal) {
+        classBuilder.modifiers.add(KModifier.INTERNAL)
+    }
 
     classBuilder.addProperty(PropertySpec.builder("rpc", EthereumRPC::class).addModifiers(KModifier.PRIVATE).initializer("rpc").build())
     classBuilder.addProperty(PropertySpec.builder("address", Address::class).addModifiers(KModifier.PRIVATE).initializer("address").build())
