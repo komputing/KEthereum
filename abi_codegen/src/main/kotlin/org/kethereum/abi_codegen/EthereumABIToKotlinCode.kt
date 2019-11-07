@@ -28,7 +28,7 @@ internal val typeMap by lazy {
                     CodeWithImport("$REPLACEMENT_TOKEN.replace(\"0\",\"\").isNotEmpty()"))
     ).apply {
         (1..32).forEach {
-            this["byte$it"] = ByteTypeDefinition
+            this["bytes$it"] = ByteTypeDefinition
         }
     }
 }
