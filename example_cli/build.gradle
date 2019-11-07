@@ -6,5 +6,9 @@ dependencies {
     implementation project(path: ":model")
     implementation project(path: ":erc55")
     implementation project(path: ":eip137")
+    implementation project(path: ":rpc")
+    implementation project(path: ":ens")
+    implementation "com.squareup.okhttp3:okhttp:${okhttp_version}"
+    implementation 'com.squareup.okio:okio:2.4.0'
 
 }
