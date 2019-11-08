@@ -5,11 +5,17 @@ import org.kethereum.abi_codegen.model.REPLACEMENT_TOKEN
 import org.kethereum.abi_codegen.model.TypeDefinition
 import org.kethereum.model.Address
 import org.kethereum.type_aliases.TypeAliases
+import java.math.BigInteger
 
 internal val ByteTypeDefinition = TypeDefinition(
         ByteArray::class,
         CodeWithImport("$REPLACEMENT_TOKEN.toFixedLengthByteArray(32)", listOf("org.kethereum.extensions.toFixedLengthByteArray")),
         CodeWithImport("$REPLACEMENT_TOKEN.hexToByteArray()", listOf("org.walleth.khex.hexToByteArray")))
+
+internal val UIntTypeDefinition = TypeDefinition(
+        BigInteger::class,
+        CodeWithImport("$REPLACEMENT_TOKEN.toByteArray().toFixedLengthByteArray(32)", listOf("org.kethereum.extensions.toFixedLengthByteArray")),
+        CodeWithImport("BigInteger($REPLACEMENT_TOKEN.hexToByteArray())", listOf("org.walleth.khex.hexToByteArray")))
 
 internal fun getType(string: String) = typeMap[TypeAliases.getOrDefault(string, string)]
 
@@ -26,6 +32,9 @@ internal val typeMap by lazy {
     ).apply {
         (1..32).forEach {
             this["bytes$it"] = ByteTypeDefinition
+        }
+        (8..256 step 8).forEach {
+            this["uint$it"] = UIntTypeDefinition
         }
     }
 }
