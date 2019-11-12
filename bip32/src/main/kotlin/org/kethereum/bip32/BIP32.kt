@@ -9,11 +9,11 @@ import org.kethereum.bip44.BIP44
 import org.kethereum.bip44.BIP44Element
 import org.kethereum.crypto.*
 import org.kethereum.extensions.toBytesPadded
-import org.kethereum.hashes.ripemd160
-import org.kethereum.hashes.sha256
 import org.kethereum.model.ECKeyPair
 import org.kethereum.model.PRIVATE_KEY_SIZE
 import org.kethereum.model.PrivateKey
+import org.komputing.khash.ripemd160.extensions.digestRipemd160
+import org.komputing.khash.sha256.extensions.sha256
 import java.math.BigInteger
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
@@ -35,7 +35,7 @@ fun Seed.toKey(pathString: String, testnet: Boolean = false) = BIP44(pathString)
 private fun ECKeyPair.computeFingerPrint(): Int {
     val pubKeyHash = getCompressedPublicKey()
             .sha256()
-            .ripemd160()
+            .digestRipemd160()
     var fingerprint = 0
     for (i in 0..3) {
         fingerprint = fingerprint shl 8

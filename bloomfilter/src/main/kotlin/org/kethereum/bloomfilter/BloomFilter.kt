@@ -1,8 +1,8 @@
 package org.kethereum.bloomfilter
 
-import org.kethereum.hashes.sha256
+import org.komputing.khash.sha256.extensions.sha256
 import java.math.BigInteger
-import java.util.BitSet
+import java.util.*
 import java.util.concurrent.locks.ReentrantReadWriteLock
 import kotlin.concurrent.read
 import kotlin.concurrent.write

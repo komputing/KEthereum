@@ -6,7 +6,7 @@ import org.kethereum.bip39.model.MnemonicWords
 import org.kethereum.crypto.CryptoAPI
 import org.kethereum.extensions.toBitArray
 import org.kethereum.extensions.toByteArray
-import org.kethereum.hashes.sha256
+import org.komputing.khash.sha256.extensions.sha256
 import java.security.SecureRandom
 import java.util.*
 

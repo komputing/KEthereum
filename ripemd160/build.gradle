@@ -1,3 +1,0 @@
-dependencies {
-    testImplementation "com.github.komputing:khex:$khex_version"
-}

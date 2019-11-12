@@ -2,6 +2,8 @@
 
 package org.kethereum.encodings
 
+import org.komputing.khash.sha256.extensions.sha256
+
 /**
  * Base58 is a way to encode addresses (or arbitrary data) as alphanumeric strings.
  * Compared to base64, this encoding eliminates ambiguities created by O0Il and potential splits from punctuation
@@ -16,7 +18,6 @@ package org.kethereum.encodings
  *
  */
 
-import org.kethereum.hashes.sha256
 
 private const val ENCODED_ZERO = '1'
 private const val CHECKSUM_SIZE = 4
