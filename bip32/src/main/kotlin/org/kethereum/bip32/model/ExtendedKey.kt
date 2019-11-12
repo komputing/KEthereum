@@ -1,10 +1,10 @@
 package org.kethereum.bip32.model
 
 import org.kethereum.crypto.getCompressedPublicKey
-import org.kethereum.encodings.encodeToBase58WithChecksum
 import org.kethereum.extensions.toBytesPadded
 import org.kethereum.model.ECKeyPair
 import org.kethereum.model.PRIVATE_KEY_SIZE
+import org.komputing.kbase58.encodeToBase58WithChecksum
 import java.io.IOException
 import java.math.BigInteger
 import java.nio.ByteBuffer

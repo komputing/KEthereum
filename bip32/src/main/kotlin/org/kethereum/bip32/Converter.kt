@@ -5,11 +5,11 @@ import org.kethereum.crypto.CURVE
 import org.kethereum.crypto.CryptoAPI
 import org.kethereum.crypto.decompressKey
 import org.kethereum.crypto.toECKeyPair
-import org.kethereum.encodings.decodeBase58WithChecksum
 import org.kethereum.model.ECKeyPair
 import org.kethereum.model.PRIVATE_KEY_SIZE
 import org.kethereum.model.PrivateKey
 import org.kethereum.model.PublicKey
+import org.komputing.kbase58.decodeBase58WithChecksum
 import java.math.BigInteger
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
