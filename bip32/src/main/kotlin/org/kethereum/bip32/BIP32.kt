@@ -5,13 +5,13 @@ package org.kethereum.bip32
 import org.kethereum.bip32.model.CHAINCODE_SIZE
 import org.kethereum.bip32.model.ExtendedKey
 import org.kethereum.bip32.model.Seed
-import org.kethereum.bip44.BIP44
-import org.kethereum.bip44.BIP44Element
 import org.kethereum.crypto.*
 import org.kethereum.extensions.toBytesPadded
 import org.kethereum.model.ECKeyPair
 import org.kethereum.model.PRIVATE_KEY_SIZE
 import org.kethereum.model.PrivateKey
+import org.komputing.kbip44.BIP44
+import org.komputing.kbip44.BIP44Element
 import org.komputing.khash.ripemd160.extensions.digestRipemd160
 import org.komputing.khash.sha256.extensions.sha256
 import java.math.BigInteger
