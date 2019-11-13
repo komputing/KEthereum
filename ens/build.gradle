@@ -14,4 +14,6 @@ dependencies {
     implementation project(":eip137")
     implementation project(':method_signatures')
     implementation "com.github.komputing:khex:$khex_version"
+
+    testImplementation project(":contract_abi_types")
 }

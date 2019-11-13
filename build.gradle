@@ -47,6 +47,7 @@ subprojects {
             testRuntime "org.junit.jupiter:junit-jupiter-engine:$jupiter_version"
 
             testImplementation "org.jetbrains.kotlin:kotlin-test"
+            testImplementation "io.mockk:mockk:1.9.3"
         }
 
         java {

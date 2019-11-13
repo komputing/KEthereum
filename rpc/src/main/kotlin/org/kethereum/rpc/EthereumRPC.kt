@@ -14,7 +14,7 @@ interface EthereumRPC {
 
     fun sendRawTransaction(data: String): StringResultResponse?
     fun blockNumber(): StringResultResponse?
-    fun call(transaction: Transaction, block: String): StringResultResponse?
+    fun call(transaction: Transaction, block: String = "latest"): StringResultResponse?
     fun gasPrice(): StringResultResponse?
     fun clientVersion(): StringResultResponse?
     fun chainId(): StringResultResponse?
