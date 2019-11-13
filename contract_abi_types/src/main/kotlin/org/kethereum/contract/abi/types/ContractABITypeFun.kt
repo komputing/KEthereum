@@ -7,7 +7,7 @@ import org.kethereum.contract.abi.types.model.*
 
 val BYTES_COUNT_CONSTRAINT: (Int) -> Unit = {
     require(it >= 1) { "bytes count MUST be more than 0" }
-    require(it <= 32) { "bytes count MUST be less than 20" }
+    require(it <= 32) { "bytes count MUST be less than 32" }
 }
 
 val INT_BITS_CONSTRAINT: (Int) -> Unit = {
