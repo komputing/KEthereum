@@ -1,5 +1,6 @@
 dependencies {
     implementation project(":extensions")
+    implementation project(":model")
 
     implementation "com.github.komputing:khex:$khex_version"
 }
