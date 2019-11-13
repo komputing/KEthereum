@@ -7,8 +7,6 @@ import org.kethereum.ens.generated.Resolver
 import org.kethereum.model.Address
 import org.kethereum.rpc.EthereumRPC
 
-val ADDRESS_NOT_FOUND = Address("0x0000000000000000000000000000000000000000")
-
 class TypedENS(private val rpc: EthereumRPC,
                ensAddress: Address) {
 
@@ -19,7 +17,7 @@ class TypedENS(private val rpc: EthereumRPC,
     fun getAddress(name: ENSName): Address? {
         val bytes32 = name.toNameHashByteArray()
         val resolver = ens.resolver(bytes32)
-        return if (resolver != null && resolver != ADDRESS_NOT_FOUND) {
+        return if (resolver != null && resolver != ENS_ADDRESS_NOT_FOUND) {
             return Resolver(rpc, resolver).addr(bytes32)
         } else {
             null

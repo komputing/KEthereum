@@ -19,8 +19,9 @@ fun main() {
 
 fun demoENS() {
     println("ligi.ethereum.eth -> " + ens.getAddress(ENSName("ligi.ethereum.eth")))
-}
+    println("kevins.xyz " + ens.getAddress(ENSName("kevins.xyz")))
 
+}
 private fun demoEIP137() {
     println("alice.eth -> " + ENSName("alice.eth").toNameHash().toHexString())
 }
