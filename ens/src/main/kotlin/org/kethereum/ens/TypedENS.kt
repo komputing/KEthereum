@@ -8,7 +8,7 @@ import org.kethereum.model.Address
 import org.kethereum.rpc.EthereumRPC
 
 class TypedENS(private val rpc: EthereumRPC,
-               ensAddress: Address) {
+               ensAddress: Address = ENS_DEFAULT_CONTRACT_ADDRESS) {
 
     private val ens = ENS(rpc, ensAddress)
 
