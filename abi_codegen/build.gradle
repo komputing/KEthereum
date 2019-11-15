@@ -3,7 +3,10 @@ dependencies {
     implementation project(path: ":rpc")
     implementation project(path: ":model")
     implementation project(path: ":method_signatures")
-    implementation project(path: ":type_aliases")
+    implementation project(path: ":types")
 
+    api "com.squareup.moshi:moshi:$moshi_version"
     api 'com.squareup:kotlinpoet:1.4.3'
+
+    testImplementation project(path: ":test_data")
 }

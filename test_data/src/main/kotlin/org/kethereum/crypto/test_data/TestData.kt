@@ -4,6 +4,7 @@ import org.kethereum.model.Address
 import org.kethereum.model.ECKeyPair
 import org.kethereum.model.PrivateKey
 import org.kethereum.model.PublicKey
+import java.math.BigInteger.*
 
 
 /**
@@ -20,3 +21,7 @@ val PUBLIC_KEY = PublicKey(PUBLIC_KEY_STRING)
 val KEY_PAIR = ECKeyPair(PRIVATE_KEY, PUBLIC_KEY)
 
 val TEST_MESSAGE = "A test message".toByteArray()
+
+val TEST_ADDRESSES = listOf(ADDRESS, Address("0x0123456789012345678901234567890123456789"))
+
+val TEST_POSITIVE_BIGINTEGERS = listOf(ZERO, ONE, TEN, valueOf(42), valueOf(420), valueOf(Long.MAX_VALUE))

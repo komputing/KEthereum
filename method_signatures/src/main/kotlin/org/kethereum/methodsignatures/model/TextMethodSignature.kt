@@ -1,6 +1,7 @@
 package org.kethereum.methodsignatures.model
 
-import org.kethereum.type_aliases.TypeAliases
+import org.kethereum.contract.abi.types.model.TypeAliases
+
 
 data class TextMethodSignature(val signature: String) {
     val functionName by lazy { signature.substringBefore("(").trim() }

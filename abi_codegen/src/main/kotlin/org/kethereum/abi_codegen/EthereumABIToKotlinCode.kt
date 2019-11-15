@@ -2,107 +2,130 @@ package org.kethereum.abi_codegen
 
 import com.squareup.kotlinpoet.*
 import org.kethereum.abi.EthereumABI
-import org.kethereum.abi_codegen.model.CodeWithImport
-import org.kethereum.abi_codegen.model.REPLACEMENT_TOKEN
-import org.kethereum.abi_codegen.model.TypeDefinition
-import org.kethereum.methodsignatures.toHexSignature
-import org.kethereum.methodsignatures.toTextMethodSignature
+import org.kethereum.abi.getAllFunctions
+import org.kethereum.abi_codegen.model.GeneratorSpec
+import org.kethereum.contract.abi.types.PaginatedByteArray
+import org.kethereum.contract.abi.types.convertStringToABITypeOrNull
 import org.kethereum.model.Address
+import org.kethereum.model.Transaction
 import org.kethereum.rpc.EthereumRPC
-import org.kethereum.type_aliases.TypeAliases
 
-fun EthereumABI.toKotlinCode(className: String,
-                             packageName: String = "",
-                             internal: Boolean = true): FileSpec {
+fun EthereumABI.toKotlinCode(spec: GeneratorSpec): FileSpec {
 
-    val classBuilder = TypeSpec.classBuilder(className)
-            .primaryConstructor(FunSpec.constructorBuilder()
-                    .addParameter("rpc", EthereumRPC::class)
-                    .addParameter("address", Address::class)
-                    .build())
+    val fileSpec = FileSpec.builder(spec.packageName, spec.classPrefix)
 
-    if (internal) {
-        classBuilder.modifiers.add(KModifier.INTERNAL)
+    val transactionDetector = spec.txDecoderName?.let {
+        TypeSpec.classBuilder(it).defaultConstructor(emptyList())
     }
 
-    classBuilder.addProperty(PropertySpec.builder("rpc", EthereumRPC::class).addModifiers(KModifier.PRIVATE).initializer("rpc").build())
-    classBuilder.addProperty(PropertySpec.builder("address", Address::class).addModifiers(KModifier.PRIVATE).initializer("address").build())
+    val transactionsClassBuilder = TypeSpec.classBuilder(spec.classPrefix + "TransactionGenerator")
+            .defaultConstructor(listOf(ParameterSpec.builder("address", Address::class).build()))
+
+    val rpcClassBuilder = spec.rpcConnectorName?.let {
+        TypeSpec.classBuilder(it).defaultConstructor(listOf(
+                ParameterSpec.builder("address", Address::class).build(),
+                ParameterSpec.builder("rpc", EthereumRPC::class).build()))
+    }
+
+    val allClasses = listOf(transactionsClassBuilder, rpcClassBuilder, transactionDetector)
+
+    if (spec.internal) allClasses.forEach {
+        it?.modifiers?.add(KModifier.INTERNAL)
+    }
+
+    rpcClassBuilder?.addProperty(PropertySpec.builder("rpc", EthereumRPC::class).addModifiers(KModifier.PRIVATE).initializer("rpc").build())
+    rpcClassBuilder?.addProperty(PropertySpec.builder("address", Address::class).addModifiers(KModifier.PRIVATE).initializer("address").build())
 
     val createEmptyTX = MemberName("org.kethereum.model", "createEmptyTransaction")
-    val imports = mutableSetOf<String>()
+    val encodeTypes = MemberName("org.kethereum.contract.abi.types", "encodeTypes")
 
-    val skippedFunctions = mutableMapOf<String, String>()
+    val tx = PropertySpec.builder("tx", Transaction::class).addModifiers(KModifier.PRIVATE).initializer("%M().apply { to = address }", createEmptyTX).build()
+    transactionsClassBuilder.addProperty(tx)
 
-    methodList.filter { it.type == "function" }.forEach { it ->
+    val generatorType = ClassName("", spec.classPrefix + "TransactionGenerator")
+    val txGenerator = PropertySpec.builder("txGenerator", generatorType)
+            .addModifiers(KModifier.PRIVATE).initializer("%T(address)", generatorType).build()
 
-        val funBuilder = FunSpec.builder(it.name!!)
+    rpcClassBuilder?.addProperty(txGenerator)
 
-        val textMethodSignature = it.toTextMethodSignature()
-        val fourByteSignature = textMethodSignature.toHexSignature().hex
-        val signatureCode = fourByteSignature.toByteArrayOfCode()
+    methodList.getAllFunctions().createModel().forEach { it ->
 
-        funBuilder.addKdoc("Signature: " + textMethodSignature.signature)
-        funBuilder.addKdoc("\n4Byte: $fourByteSignature")
+        val kotlinTypesFunBuilder = FunSpec.builder(it.functionName)
+        val ethTypeFunBuilder = FunSpec.builder(it.ethTypesFunctionName).addModifiers(KModifier.PRIVATE)
 
-        val inputCodeList = mutableListOf(signatureCode)
+        val kotlinTxTypesFunBuilder = FunSpec.builder(it.functionName)
+        val ethTypeTxFunBuilder = FunSpec.builder(it.ethTypesFunctionName).addModifiers(KModifier.INTERNAL)
 
-        var blankParamCounter = -1
-        it.inputs?.forEach {
-            val typeDefinition = getType(it.type)
+        kotlinTypesFunBuilder.addKdoc(it.kDoc)
+        kotlinTxTypesFunBuilder.addKdoc(it.kDoc)
 
-            val parameterName = if (it.name.isBlank()) {
-                blankParamCounter++
-                "parameter$blankParamCounter"
+        it.params.forEach { param ->
+
+            if (param.typeDefinition != null) {
+                ethTypeFunBuilder.addParameter(param.parameterName, param.typeDefinition.ethTypeKClass)
+                ethTypeTxFunBuilder.addParameter(param.parameterName, param.typeDefinition.ethTypeKClass)
+
+                kotlinTypesFunBuilder.addParameter(param.parameterName, param.typeDefinition.kotlinTypeKClass)
+                kotlinTxTypesFunBuilder.addParameter(param.parameterName, param.typeDefinition.kotlinTypeKClass)
+
             } else {
-                it.name
-            }
-            if (typeDefinition != null) {
-                funBuilder.addParameter(parameterName, typeDefinition.kclass)
-                inputCodeList.add(typeDefinition.incode.code.replace(REPLACEMENT_TOKEN, parameterName))
-                imports.addAll(typeDefinition.incode.imports)
-            } else {
-                skippedFunctions[fourByteSignature] = "${textMethodSignature.signature} contains unsupported parameter type ${it.type} for ${it.name}"
-            }
-
-        }
-
-        val input = inputCodeList.joinToString(" + ")
-        funBuilder.addCode("""
-            |val tx = %M().apply {
-            |    to = address
-            |    input = $input
-            |}
-            |val result = rpc.call(tx, "latest")?.result?.removePrefix("0x")
-            |
-                """.trimMargin(), createEmptyTX)
-        val outputCount = it.outputs?.size ?: 0
-        if (outputCount > 1) {
-            skippedFunctions[fourByteSignature] = "${textMethodSignature.signature} has more than one output - which is currently not supported"
-        } else if (outputCount == 1) {
-            val type = it.outputs!!.first().type
-
-            val typeDefinition = getType(type)
-            if (typeDefinition != null) {
-                imports.addAll(typeDefinition.outcode.imports)
-                funBuilder.returns(typeDefinition.kclass.asTypeName().copy(nullable = true))
-                funBuilder.addStatement("return result?.let {" + typeDefinition.outcode.code.replace(REPLACEMENT_TOKEN, "result") + "}")
-            } else {
-                skippedFunctions[fourByteSignature] = "${textMethodSignature.signature} has unsupported returntype: $type"
+                it.skipReason = "${it.textMethodSignature.signature} contains unsupported parameter type ${param.type} for ${it.functionName}"
             }
         }
 
-        if (!skippedFunctions.containsKey(fourByteSignature)) {
-            classBuilder.addFunction(funBuilder.build())
+        fileSpec.addProperty(PropertySpec.builder(it.fourByteName, ByteArray::class).initializer(it.signatureCode).build())
+
+        transactionDetector?.addFunction(FunSpec.builder("is" + it.maybeExtendedFunctionName)
+                .addParameter("tx", Transaction::class)
+                .addStatement("return tx.input.sliceArray(0..3).contentEquals(${it.fourByteName})")
+                .returns(Boolean::class).build())
+
+        ethTypeTxFunBuilder.addCode("return ${tx.name}.copy(input = ${it.fourByteName} + %M(${it.params.joinToString { it.parameterName }})", encodeTypes)
+
+        ethTypeFunBuilder.addCode("val tx = ${txGenerator.name}.${it.ethTypesFunctionName}(${it.params.joinToString { it.parameterName }})\n")
+        val rpcCall = """rpc.call(tx, "latest")"""
+
+        val ethTypeCallProto = "${it.ethTypesFunctionName}(${it.params.joinToString { "%T.ofNativeKotlinType(${it.parameterName}${it.typeDefinition?.params.toParamIfExist()})" }})"
+
+        kotlinTxTypesFunBuilder.returns(Transaction::class)
+        kotlinTxTypesFunBuilder.addCode("return $ethTypeCallProto\n", *it.ethTypeArray)
+        when {
+            it.outputs.size > 1 -> it.skipReason = "${it.textMethodSignature.signature} has more than one output - which is currently not supported"
+            it.outputs.size == 1 -> {
+                val type = it.outputs.first().type
+
+                val typeDefinition = convertStringToABITypeOrNull(type)
+                if (typeDefinition != null) {
+                    ethTypeFunBuilder.returns(typeDefinition.ethTypeKClass.asTypeName().copy(nullable = true))
+                    kotlinTypesFunBuilder.returns(typeDefinition.kotlinTypeKClass.asTypeName().copy(nullable = true))
+
+                    ethTypeFunBuilder.addStatement(
+                            "return %T.ofPaginatedByteArray(%T($rpcCall?.result)${typeDefinition.params.toParamIfExist()})",
+                            typeDefinition.ethTypeKClass, PaginatedByteArray::class
+                    )
+
+                    kotlinTypesFunBuilder.addCode("return $ethTypeCallProto?.toKotlinType()\n", *it.ethTypeArray)
+                } else {
+                    it.skipReason = "${it.textMethodSignature.signature} has unsupported returntype: $type"
+                }
+            }
+            else -> {
+                ethTypeFunBuilder.addStatement(rpcCall)
+                kotlinTypesFunBuilder.addCode(ethTypeCallProto, *it.ethTypeArray)
+            }
+        }
+
+        transactionsClassBuilder.addFunction(ethTypeTxFunBuilder.build())
+        transactionsClassBuilder.addFunction(kotlinTxTypesFunBuilder.build())
+
+        if (it.skipReason != null) {
+            rpcClassBuilder?.addFunction(ethTypeFunBuilder.build())
+            rpcClassBuilder?.addFunction(kotlinTypesFunBuilder.build())
+        } else {
+            rpcClassBuilder?.addKdoc("\nskipped function $it " + it.skipReason)
         }
     }
 
-    skippedFunctions.keys.forEach {
-        classBuilder.addKdoc("\nskipped function $it " + skippedFunctions[it])
-    }
-    val fileSpec = FileSpec.builder(packageName, className)
-            .addType(classBuilder.build())
-    imports.forEach {
-        fileSpec.addImport(it.substringBeforeLast("."), it.substringAfterLast("."))
-    }
+    if (spec.internal) allClasses.filterNotNull().forEach { fileSpec.addType(it.build()) }
     return fileSpec.build()
 }

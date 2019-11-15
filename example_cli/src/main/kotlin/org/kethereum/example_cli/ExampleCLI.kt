@@ -1,5 +1,8 @@
 package org.kethereum.example_cli
 
+import org.kethereum.abi.EthereumABI
+import org.kethereum.abi_codegen.model.GeneratorSpec
+import org.kethereum.abi_codegen.toKotlinCode
 import org.kethereum.eip137.ENSName
 import org.kethereum.eip137.toHexString
 import org.kethereum.eip137.toNameHash
@@ -15,6 +18,7 @@ fun main() {
     demoERC55()
     demoEIP137()
     demoENS()
+    demoCodeGen()
 }
 
 fun demoENS() {
@@ -22,6 +26,7 @@ fun demoENS() {
     println("kevins.xyz " + ens.getAddress(ENSName("kevins.xyz")))
 
 }
+
 private fun demoEIP137() {
     println("alice.eth -> " + ENSName("alice.eth").toNameHash().toHexString())
 }
@@ -29,4 +34,8 @@ private fun demoEIP137() {
 private fun demoERC55() {
     val addressNoChecksum = "0x112234455c3a32fd11230c42e7bccd4a84e02010"
     println(addressNoChecksum + "->" + Address(addressNoChecksum).withERC55Checksum())
+}
+
+private fun demoCodeGen() {
+    EthereumABI(0.javaClass.getResource("/ENSResolver.abi").readText()).toKotlinCode(GeneratorSpec("PeeETH")).writeTo(System.out)
 }

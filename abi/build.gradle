@@ -1,3 +1,4 @@
 dependencies {
-    implementation "com.squareup.moshi:moshi:$moshi_version"
+    api "com.squareup.moshi:moshi:$moshi_version"
+    testImplementation project(path: ":test_data")
 }

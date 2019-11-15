@@ -8,7 +8,7 @@ import io.mockk.verify
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
-import org.kethereum.contract.abi.types.model.AddressABIType
+import org.kethereum.contract.abi.types.model.types.AddressETHType
 import org.kethereum.eip137.ENSName
 import org.kethereum.ens.ENS_DEFAULT_CONTRACT_ADDRESS
 import org.kethereum.ens.TypedENS
@@ -31,7 +31,7 @@ class TheTypedENS {
     fun testGetResolver() {
         every {
             mockRPC.call(any())
-        } returns StringResultResponse(AddressABIType(PROBE_ADDRESS1).toBytes().toHexString())
+        } returns StringResultResponse(AddressETHType.ofNativeKotlinType(PROBE_ADDRESS1).paddedValue.toHexString())
 
         val ens = TypedENS(mockRPC, ENS_DEFAULT_CONTRACT_ADDRESS)
 
@@ -51,7 +51,7 @@ class TheTypedENS {
     fun testGetAddress() {
         every {
             mockRPC.call(any())
-        } returns StringResultResponse(AddressABIType(PROBE_ADDRESS2).toBytes().toHexString())
+        } returns StringResultResponse(AddressETHType.ofNativeKotlinType(PROBE_ADDRESS2).paddedValue.toHexString())
 
         val ens = TypedENS(mockRPC, ENS_DEFAULT_CONTRACT_ADDRESS)
 
