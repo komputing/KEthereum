@@ -80,7 +80,7 @@ fun EthereumABI.toKotlinCode(spec: GeneratorSpec): FileSpec {
                 .addStatement("return tx.input.sliceArray(0..3).contentEquals(${it.fourByteName})")
                 .returns(Boolean::class).build())
 
-        ethTypeTxFunBuilder.addCode("return ${tx.name}.copy(input = ${it.fourByteName} + %M(${it.params.joinToString { it.parameterName }})", encodeTypes)
+        ethTypeTxFunBuilder.addCode("return ${tx.name}.copy(input = ${it.fourByteName} + %M(${it.params.joinToString { it.parameterName }}))", encodeTypes)
 
         ethTypeFunBuilder.addCode("val tx = ${txGenerator.name}.${it.ethTypesFunctionName}(${it.params.joinToString { it.parameterName }})\n")
         val rpcCall = """rpc.call(tx, "latest")"""
