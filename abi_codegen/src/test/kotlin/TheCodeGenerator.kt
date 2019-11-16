@@ -4,13 +4,33 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.kethereum.abi.EthereumABI
 import org.kethereum.abi_codegen.model.GeneratorSpec
+import kotlin.test.assertFails
 
 class TheCodeGenerator {
 
     @Test
-    fun generatesCodeForCommonABIs() {
-        listOf("peepeth", "ENS", "ENSResolver").forEach {
-            getABI(it, GeneratorSpec(it))
+    fun generatesCodeWithSaneBracketsForCommonABIs() {
+        listOf("peepeth", "ENS", "ENSResolver", "ERC20").forEach { it ->
+            getABI(it, GeneratorSpec(it)).checkForBracketSanity()
+        }
+    }
+
+    @Test
+    fun testBracketSanityChecker() {
+        "{}".checkForBracketSanity()
+        "{[]}".checkForBracketSanity()
+        "{<>[][]}".checkForBracketSanity()
+
+        assertFails {
+            "}".checkForBracketSanity()
+        }
+
+        assertFails {
+            "{<}>".checkForBracketSanity()
+        }
+
+        assertFails {
+            "{".checkForBracketSanity()
         }
     }
 
