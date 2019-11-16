@@ -31,9 +31,20 @@ class TheCodeGenerator {
         assertThat(getABI("peepeth", GeneratorSpec("PeepETH", "eth.peep", false))).doesNotContain("internal class")
     }
 
+    @Test
+    fun testCanDisableTransactionDecoder() {
+        assertThat(getABI("peepeth", GeneratorSpec("PeepETH"))).contains("TransactionDecoder")
+        assertThat(getABI("peepeth", GeneratorSpec("PeepETH", txDecoderName = null))).doesNotContain("TransactionDecoder")
+    }
+
+    @Test
+    fun testCanDisableRPCConnector() {
+        assertThat(getABI("peepeth", GeneratorSpec("PeepETH"))).contains("RPCConnector")
+        assertThat(getABI("peepeth", GeneratorSpec("PeepETH", rpcConnectorName = null))).doesNotContain("RPCConnector")
+    }
+
     private fun getABI(name: String, spec: GeneratorSpec) = StringBuilder().apply {
         EthereumABI(javaClass.getResource("/$name.abi").readText()).toKotlinCode(spec).writeTo(this)
     }.toString()
-
 
 }
