@@ -75,6 +75,9 @@ fun EthereumABI.toKotlinCode(spec: GeneratorSpec): FileSpec {
             }
         }
 
+        kotlinTypesFunBuilder.addParameter(ParameterSpec.builder("blockSpec", String::class).defaultValue("\"latest\"").build())
+        ethTypeFunBuilder.addParameter(ParameterSpec.builder("blockSpec", String::class).defaultValue("\"latest\"").build())
+
         fileSpec.addProperty(PropertySpec.builder(it.fourByteName, ByteArray::class).initializer(it.signatureCode).build())
 
         transactionDetector?.addFunction(FunSpec.builder("is" + it.maybeExtendedFunctionName)
@@ -85,12 +88,12 @@ fun EthereumABI.toKotlinCode(spec: GeneratorSpec): FileSpec {
         ethTypeTxFunBuilder.addCode("return ${tx.name}.copy(input = ${it.fourByteName} + %M(${it.params.joinToString { it.parameterName }}))", encodeTypes)
 
         ethTypeFunBuilder.addCode("val tx = ${txGenerator.name}.${it.ethTypesFunctionName}(${it.params.joinToString { it.parameterName }})\n")
-        val rpcCall = """rpc.call(tx, "latest")"""
+        val rpcCall = """rpc.call(tx, blockSpec)"""
 
-        val ethTypeCallProto = "${it.ethTypesFunctionName}(${it.params.joinToString { "%T.ofNativeKotlinType(${it.parameterName}${it.typeDefinition?.params.toParamIfExist()})" }})"
+        val ethTypeCallProto = "${it.ethTypesFunctionName}(${it.params.joinToString { "%T.ofNativeKotlinType(${it.parameterName}${it.typeDefinition?.params.toParamIfExist()})" }}"
 
         kotlinTxTypesFunBuilder.returns(Transaction::class)
-        kotlinTxTypesFunBuilder.addCode("return $ethTypeCallProto\n", *it.ethTypeArray)
+        kotlinTxTypesFunBuilder.addCode("return $ethTypeCallProto)\n", *it.ethTypeArray)
         when {
             it.outputs.size > 1 -> it.skipReason = "${it.textMethodSignature.signature} has more than one output - which is currently not supported"
             it.outputs.size == 1 -> {
@@ -106,14 +109,14 @@ fun EthereumABI.toKotlinCode(spec: GeneratorSpec): FileSpec {
                             typeDefinition.ethTypeKClass, PaginatedByteArray::class
                     )
 
-                    kotlinTypesFunBuilder.addCode("return $ethTypeCallProto?.toKotlinType()\n", *it.ethTypeArray)
+                    kotlinTypesFunBuilder.addCode("return $ethTypeCallProto,blockSpec)?.toKotlinType()\n", *it.ethTypeArray)
                 } else {
                     it.skipReason = "${it.textMethodSignature.signature} has unsupported returntype: $type"
                 }
             }
             else -> {
                 ethTypeFunBuilder.addStatement(rpcCall)
-                kotlinTypesFunBuilder.addCode(ethTypeCallProto, *it.ethTypeArray)
+                kotlinTypesFunBuilder.addCode("$ethTypeCallProto,blockSpec)", *it.ethTypeArray)
             }
         }
 
