@@ -3,7 +3,9 @@ package org.kethereum.abi_codegen
 import com.squareup.kotlinpoet.*
 import org.kethereum.abi.EthereumABI
 import org.kethereum.abi.getAllFunctions
+import org.kethereum.abi_codegen.model.ADDRESS_FIELD_NAME
 import org.kethereum.abi_codegen.model.GeneratorSpec
+import org.kethereum.abi_codegen.model.RPC_FIELD_NAME
 import org.kethereum.contract.abi.types.PaginatedByteArray
 import org.kethereum.contract.abi.types.convertStringToABITypeOrNull
 import org.kethereum.model.Address
@@ -19,12 +21,12 @@ fun EthereumABI.toKotlinCode(spec: GeneratorSpec): FileSpec {
     }
 
     val transactionsClassBuilder = TypeSpec.classBuilder(spec.classPrefix + "TransactionGenerator")
-            .defaultConstructor(listOf(ParameterSpec.builder("address", Address::class).build()))
+            .defaultConstructor(listOf(ParameterSpec.builder(ADDRESS_FIELD_NAME, Address::class).build()))
 
     val rpcClassBuilder = spec.rpcConnectorName?.let {
         TypeSpec.classBuilder(it).defaultConstructor(listOf(
-                ParameterSpec.builder("address", Address::class).build(),
-                ParameterSpec.builder("rpc", EthereumRPC::class).build()))
+                ParameterSpec.builder(ADDRESS_FIELD_NAME, Address::class).build(),
+                ParameterSpec.builder(RPC_FIELD_NAME, EthereumRPC::class).build()))
     }
 
     val allClasses = listOf(transactionsClassBuilder, rpcClassBuilder, transactionDetector)
@@ -33,8 +35,8 @@ fun EthereumABI.toKotlinCode(spec: GeneratorSpec): FileSpec {
         it?.modifiers?.add(KModifier.INTERNAL)
     }
 
-    rpcClassBuilder?.addProperty(PropertySpec.builder("rpc", EthereumRPC::class).addModifiers(KModifier.PRIVATE).initializer("rpc").build())
-    rpcClassBuilder?.addProperty(PropertySpec.builder("address", Address::class).addModifiers(KModifier.PRIVATE).initializer("address").build())
+    rpcClassBuilder?.addProperty(PropertySpec.builder(RPC_FIELD_NAME, EthereumRPC::class).addModifiers(KModifier.PRIVATE).initializer(RPC_FIELD_NAME).build())
+    rpcClassBuilder?.addProperty(PropertySpec.builder(ADDRESS_FIELD_NAME, Address::class).addModifiers(KModifier.PRIVATE).initializer(ADDRESS_FIELD_NAME).build())
 
     val createEmptyTX = MemberName("org.kethereum.model", "createEmptyTransaction")
     val encodeTypes = MemberName("org.kethereum.contract.abi.types", "encodeTypes")
