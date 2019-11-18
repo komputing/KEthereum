@@ -92,6 +92,8 @@ fun EthereumABI.toKotlinCode(spec: GeneratorSpec): FileSpec {
 
         val ethTypeCallProto = "${it.ethTypesFunctionName}(${it.params.joinToString { "%T.ofNativeKotlinType(${it.parameterName}${it.typeDefinition?.params.toParamIfExist()})" }}"
 
+        val callTypeProtoWithBlockSpec = ethTypeCallProto + (if (it.params.isNotEmpty()) "," else "") + "blockSpec"
+
         kotlinTxTypesFunBuilder.returns(Transaction::class)
         kotlinTxTypesFunBuilder.addCode("return $ethTypeCallProto)\n", *it.ethTypeArray)
         when {
@@ -109,14 +111,14 @@ fun EthereumABI.toKotlinCode(spec: GeneratorSpec): FileSpec {
                             typeDefinition.ethTypeKClass, PaginatedByteArray::class
                     )
 
-                    kotlinTypesFunBuilder.addCode("return $ethTypeCallProto,blockSpec)?.toKotlinType()\n", *it.ethTypeArray)
+                    kotlinTypesFunBuilder.addCode("return $callTypeProtoWithBlockSpec)?.toKotlinType()\n", *it.ethTypeArray)
                 } else {
                     it.skipReason = "${it.textMethodSignature.signature} has unsupported returntype: $type"
                 }
             }
             else -> {
                 ethTypeFunBuilder.addStatement(rpcCall)
-                kotlinTypesFunBuilder.addCode("$ethTypeCallProto,blockSpec)", *it.ethTypeArray)
+                kotlinTypesFunBuilder.addCode("$callTypeProtoWithBlockSpec)", *it.ethTypeArray)
             }
         }
 

@@ -10,8 +10,17 @@ class TheCodeGenerator {
 
     @Test
     fun generatesCodeWithSaneBracketsForCommonABIs() {
-        listOf("peepeth", "ENS", "ENSResolver", "ERC20").forEach { it ->
-            getABI(it, GeneratorSpec(it)).checkForBracketSanity()
+        listOf("peepeth", "ENS", "ENSResolver", "ERC20", "MCD").forEach { it ->
+            getABI(it, GeneratorSpec(it)).apply {
+                checkForBracketSanity()
+                replace(" ", "").also { code ->
+                    assertThat(code).doesNotContain("(,")
+                    assertThat(code).doesNotContain("<,")
+                    assertThat(code).doesNotContain("[,")
+                    assertThat(code).doesNotContain(",,")
+                    assertThat(code).doesNotContain(",)")
+                }
+            }
         }
     }
 
