@@ -49,6 +49,8 @@ class TheCodeGenerator {
     fun internalWorks() {
         assertThat(getABI("peepeth", GeneratorSpec("PeepETH", "eth.peep", true))).contains("internal class")
         assertThat(getABI("peepeth", GeneratorSpec("PeepETH", "eth.peep", false))).doesNotContain("internal class")
+
+        assertThat(getABI("peepeth", GeneratorSpec("PeepETH", "eth.peep", false))).contains("class")
     }
 
     @Test

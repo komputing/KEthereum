@@ -131,6 +131,6 @@ fun EthereumABI.toKotlinCode(spec: GeneratorSpec): FileSpec {
         }
     }
 
-    if (spec.internal) allClasses.filterNotNull().forEach { fileSpec.addType(it.build()) }
+    allClasses.filterNotNull().forEach { fileSpec.addType(it.build()) }
     return fileSpec.build()
 }
