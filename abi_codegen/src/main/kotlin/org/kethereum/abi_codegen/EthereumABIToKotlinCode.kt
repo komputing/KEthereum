@@ -44,7 +44,7 @@ fun EthereumABI.toKotlinCode(spec: GeneratorSpec): FileSpec {
     val tx = PropertySpec.builder("tx", Transaction::class).addModifiers(KModifier.PRIVATE).initializer("%M().apply { to = address }", createEmptyTX).build()
     transactionsClassBuilder.addProperty(tx)
 
-    val generatorType = ClassName("", spec.classPrefix + "TransactionGenerator")
+    val generatorType = ClassName(spec.packageName, spec.classPrefix + "TransactionGenerator")
     val txGenerator = PropertySpec.builder("txGenerator", generatorType)
             .addModifiers(KModifier.PRIVATE).initializer("%T(address)", generatorType).build()
 
