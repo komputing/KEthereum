@@ -22,7 +22,7 @@ fun main() {
 }
 
 fun demoENS() {
-    println("ligi.ethereum.eth addr -> " + ens.getAddress(ENSName("ligi.ethereum.eth")))
+    println("vitalik.eth addr -> " + ens.getAddress(ENSName("vitalik.eth")))
     println("ligi.ethereum.eth node -> " + ENSName("ligi.ethereum.eth").toNameHash().toHexString())
     println("ligi.ethereum.eth github username" + ens.getGithubUserName(ENSName("ligi.ethereum.eth")))
 

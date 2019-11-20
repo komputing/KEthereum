@@ -1,19 +1,19 @@
 import org.junit.jupiter.api.Test
 import org.kethereum.eip137.ENSName
-import org.kethereum.ens.isENSDomain
+import org.kethereum.ens.isPotentialENSDomain
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
 class TheENSUtils {
     @Test
     fun testIsENSDomain() {
-        assertTrue(ENSName("foo.eth").isENSDomain())
-        assertTrue(ENSName("foo.bar.eth").isENSDomain())
-        assertTrue(ENSName("foo.xyz").isENSDomain())
-        assertTrue(ENSName("foo.luxe").isENSDomain())
+        assertTrue(ENSName("foo.eth").isPotentialENSDomain())
+        assertTrue(ENSName("foo.bar.eth").isPotentialENSDomain())
+        assertTrue(ENSName("foo.xyz").isPotentialENSDomain())
+        assertTrue(ENSName("foo.luxe").isPotentialENSDomain())
 
-        assertFalse(ENSName("foo.lux").isENSDomain())
-        assertFalse(ENSName("yolo.eh").isENSDomain())
-        assertFalse(ENSName("yolo.x.yz").isENSDomain())
+        assertFalse(ENSName("foo.lux").isPotentialENSDomain())
+        assertFalse(ENSName("yolo.eh").isPotentialENSDomain())
+        assertFalse(ENSName("yolo.x.yz").isPotentialENSDomain())
     }
 }
