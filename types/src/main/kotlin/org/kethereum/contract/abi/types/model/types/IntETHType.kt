@@ -9,4 +9,5 @@ class IntETHType(override val paddedValue: ByteArray, params: ETHTypeParams) : E
         TODO()
     }
 
+    override fun isDynamic() = TODO()
 }

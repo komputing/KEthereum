@@ -1,9 +1,9 @@
 package org.kethereum.contract.abi.types.model.types
 
-import org.kethereum.contract.abi.types.model.type_params.BitsTypeParams
 import org.kethereum.contract.abi.types.PaginatedByteArray
 import org.kethereum.contract.abi.types.model.ETHType
 import org.kethereum.contract.abi.types.model.ETH_TYPE_PAGESIZE
+import org.kethereum.contract.abi.types.model.type_params.BitsTypeParams
 import org.kethereum.extensions.toBytesPadded
 import java.math.BigInteger
 import java.math.BigInteger.ONE
@@ -31,4 +31,6 @@ class UIntETHType(override val paddedValue: ByteArray, params: String) : ETHType
 
         fun ofSting(string: String, params: String) = ofNativeKotlinType(BigInteger(string), params)
     }
+
+    override fun isDynamic() = false
 }

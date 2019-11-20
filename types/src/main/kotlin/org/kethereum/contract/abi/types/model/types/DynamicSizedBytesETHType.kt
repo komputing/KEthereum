@@ -28,4 +28,6 @@ class DynamicSizedBytesETHType(override val paddedValue: ByteArray) : ETHType<By
                 = DynamicSizedBytesETHType(UIntETHType.ofNativeKotlinType(input.size.toBigInteger(),"256").paddedValue + input.rightPadToFixedPageSize(ETH_TYPE_PAGESIZE))
     }
 
+    override fun isDynamic() = true
+
 }

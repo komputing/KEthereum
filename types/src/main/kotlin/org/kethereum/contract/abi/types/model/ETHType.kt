@@ -16,6 +16,6 @@ data class ContractABITypeDefinition(
 interface ETHType<T> {
     val paddedValue: ByteArray
     fun toKotlinType(): T
-
+    fun isDynamic(): Boolean
     fun toPaged() = PaginatedByteArray(paddedValue)
 }

@@ -12,4 +12,6 @@ class StringETHType(override val paddedValue: ByteArray) : ETHType<String> {
         fun ofString(string: String) =  StringETHType(DynamicSizedBytesETHType.ofNativeKotlinType(string.toByteArray()).paddedValue)
         fun ofNativeKotlinType(input: String) = ofString(input)
     }
+
+    override fun isDynamic() = true
 }

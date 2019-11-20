@@ -23,4 +23,5 @@ class BoolETHType(override val paddedValue: ByteArray) : ETHType<Boolean> {
         })
     }
 
+    override fun isDynamic() = false
 }

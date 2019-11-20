@@ -1,9 +1,9 @@
 package org.kethereum.contract.abi.types.model.types
 
-import org.kethereum.contract.abi.types.model.type_params.BytesTypeParams
 import org.kethereum.contract.abi.types.PaginatedByteArray
 import org.kethereum.contract.abi.types.model.ETHType
 import org.kethereum.contract.abi.types.model.ETH_TYPE_PAGESIZE
+import org.kethereum.contract.abi.types.model.type_params.BytesTypeParams
 import org.kethereum.contract.abi.types.rightPadToFixedSize
 import org.walleth.khex.hexToByteArray
 
@@ -24,4 +24,6 @@ class BytesETHType(override val paddedValue: ByteArray, paramsString: String) : 
 
         fun ofString(string: String, params: String) = ofNativeKotlinType(string.hexToByteArray(), params)
     }
+
+    override fun isDynamic() = false
 }

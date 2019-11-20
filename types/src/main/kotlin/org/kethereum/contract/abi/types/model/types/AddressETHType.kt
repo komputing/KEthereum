@@ -21,4 +21,6 @@ class AddressETHType(override val paddedValue: ByteArray) : ETHType<Address> {
 
         fun ofString(input: String) = ofNativeKotlinType(Address(input))
     }
+
+    override fun isDynamic() = false
 }
