@@ -66,4 +66,11 @@ class TheDecoder {
         assertThat(BoolETHType.ofNativeKotlinType(true).toKotlinType()).isEqualTo(true)
         assertThat(BoolETHType.ofNativeKotlinType(false).toKotlinType()).isEqualTo(false)
     }
+
+    @Test
+    fun testDecodeString() {
+        val input = PaginatedByteArray("0x000000000000000000000000000000000000000000000000000000000000002000000000000000000000000000000000000000000000000000000000000000046c69676900000000000000000000000000000000000000000000000000000000")
+        assertThat(StringETHType.ofPaginatedByteArray(input).toKotlinType()).isEqualTo("ligi")
+
+    }
 }
