@@ -11,7 +11,7 @@ import org.junit.jupiter.api.extension.ExtendWith
 import org.kethereum.contract.abi.types.model.types.AddressETHType
 import org.kethereum.eip137.ENSName
 import org.kethereum.ens.ENS_DEFAULT_CONTRACT_ADDRESS
-import org.kethereum.ens.TypedENS
+import org.kethereum.ens.ENS
 import org.kethereum.model.Address
 import org.kethereum.model.Transaction
 import org.kethereum.rpc.EthereumRPC
@@ -22,7 +22,7 @@ val PROBE_ADDRESS1 = Address("0x1234567890123456789012345678901234567842")
 val PROBE_ADDRESS2 = Address("0x1234567890123456789012345678901234567843")
 
 @ExtendWith(MockKExtension::class)
-class TheTypedENS {
+class TheENS {
 
     @MockK
     lateinit var mockRPC: EthereumRPC
@@ -33,7 +33,7 @@ class TheTypedENS {
             mockRPC.call(any())
         } returns StringResultResponse(AddressETHType.ofNativeKotlinType(PROBE_ADDRESS1).paddedValue.toHexString())
 
-        val ens = TypedENS(mockRPC, ENS_DEFAULT_CONTRACT_ADDRESS)
+        val ens = ENS(mockRPC, ENS_DEFAULT_CONTRACT_ADDRESS)
 
         assertThat(ens.getResolver(ENSName("foo.eth"))).isEqualTo(PROBE_ADDRESS1)
 
@@ -53,7 +53,7 @@ class TheTypedENS {
             mockRPC.call(any())
         } returns StringResultResponse(AddressETHType.ofNativeKotlinType(PROBE_ADDRESS2).paddedValue.toHexString())
 
-        val ens = TypedENS(mockRPC, ENS_DEFAULT_CONTRACT_ADDRESS)
+        val ens = ENS(mockRPC, ENS_DEFAULT_CONTRACT_ADDRESS)
 
         assertThat(ens.getAddress(ENSName("foo.eth"))).isEqualTo(PROBE_ADDRESS2)
 

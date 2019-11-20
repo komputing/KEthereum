@@ -6,13 +6,13 @@ import org.kethereum.abi_codegen.toKotlinCode
 import org.kethereum.eip137.ENSName
 import org.kethereum.eip137.toHexString
 import org.kethereum.eip137.toNameHash
-import org.kethereum.ens.TypedENS
+import org.kethereum.ens.ENS
 import org.kethereum.erc55.withERC55Checksum
 import org.kethereum.model.Address
 import org.kethereum.rpc.HttpEthereumRPC
 
 val rpc = HttpEthereumRPC("https://node3.web3api.com")
-val ens = TypedENS(rpc, Address("0x314159265dd8dbb310642f98f50c066173c1259b"))
+val ens = ENS(rpc)
 
 fun main() {
     demoERC55()

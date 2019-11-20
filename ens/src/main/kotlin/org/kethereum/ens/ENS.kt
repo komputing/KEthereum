@@ -8,8 +8,8 @@ import org.kethereum.model.Address
 import org.kethereum.rpc.EthereumRPC
 import org.komputing.kethereum.erc634.ERC634RPCConnector
 
-class TypedENS(private val rpc: EthereumRPC,
-               ensAddress: Address = ENS_DEFAULT_CONTRACT_ADDRESS) {
+class ENS(private val rpc: EthereumRPC,
+          ensAddress: Address = ENS_DEFAULT_CONTRACT_ADDRESS) {
 
     private val ens = ENSRPCConnector(ensAddress, rpc)
 
