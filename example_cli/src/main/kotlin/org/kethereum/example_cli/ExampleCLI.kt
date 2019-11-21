@@ -18,11 +18,12 @@ fun main() {
     demoERC55()
     demoEIP137()
     demoENS()
-    demoCodeGen()
+    //demoCodeGen()
 }
 
 fun demoENS() {
     println("vitalik.eth addr -> " + ens.getAddress(ENSName("vitalik.eth")))
+    println("ENS reverse " + ens.reverseResolve(Address("d8da6bf26964af9d7eed9e03e53415d37aa96045")))
     println("ligi.ethereum.eth node -> " + ENSName("ligi.ethereum.eth").toNameHash().toHexString())
     println("ligi.ethereum.eth github username" + ens.getGithubUserName(ENSName("ligi.ethereum.eth")))
 

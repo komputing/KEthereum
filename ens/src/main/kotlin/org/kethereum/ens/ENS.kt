@@ -6,12 +6,13 @@ import org.kethereum.ens.generated.ENSRPCConnector
 import org.kethereum.ens.generated.ResolverRPCConnector
 import org.kethereum.model.Address
 import org.kethereum.rpc.EthereumRPC
+import org.komputing.kethereum.erc181.resolver.ENSReverseResolverRPCConnector
 import org.komputing.kethereum.erc634.ERC634RPCConnector
 
 class ENS(private val rpc: EthereumRPC,
           ensAddress: Address = ENS_DEFAULT_CONTRACT_ADDRESS) {
 
-    private val ens = ENSRPCConnector(ensAddress, rpc)
+    private val ens by lazy { ENSRPCConnector(ensAddress, rpc) }
 
     /**
      * get the resolver Address for this ENSName
@@ -93,4 +94,13 @@ class ENS(private val rpc: EthereumRPC,
      * from EIP-634 text record
      */
     fun getTwitterUserName(name: ENSName) = getTextRecord(name, "vnd.twitter")
+
+
+    fun reverseResolve(address: Address): String? {
+        val ensName = ENSName(address.cleanHex.toLowerCase() + ".addr.reverse")
+        val reverseResolver = getResolver(ensName)
+        return if (reverseResolver != null) {
+            ENSReverseResolverRPCConnector(reverseResolver, rpc).name(ensName.toNameHashByteArray())
+        } else null
+    }
 }

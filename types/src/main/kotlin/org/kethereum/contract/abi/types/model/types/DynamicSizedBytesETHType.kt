@@ -14,18 +14,17 @@ class DynamicSizedBytesETHType(override val paddedValue: ByteArray) : ETHType<By
     }
 
     companion object {
-        fun ofPaginatedByteArray(input: PaginatedByteArray): DynamicSizedBytesETHType {
-            val pos = UIntETHType.ofPaginatedByteArray(input, "256")!!.toKotlinType()
+        fun ofPaginatedByteArray(input: PaginatedByteArray): DynamicSizedBytesETHType? {
+            val pos = UIntETHType.ofPaginatedByteArray(input, "256")?.toKotlinType() ?: return null
             input.jumpTo(pos.intValueExact())
-            val len = UIntETHType.ofPaginatedByteArray(input, "256")
+            val len = UIntETHType.ofPaginatedByteArray(input, "256")  ?: return null
 
-            val array = len!!.toPaged().content + input.getBytes(len.toKotlinType().intValueExact()).rightPadToFixedPageSize(ETH_TYPE_PAGESIZE)
+            val array = len.toPaged().content + input.getBytes(len.toKotlinType().intValueExact()).rightPadToFixedPageSize(ETH_TYPE_PAGESIZE)
             input.endJump()
             return DynamicSizedBytesETHType(array)
         }
 
-        fun ofNativeKotlinType(input: ByteArray)
-                = DynamicSizedBytesETHType(UIntETHType.ofNativeKotlinType(input.size.toBigInteger(),"256").paddedValue + input.rightPadToFixedPageSize(ETH_TYPE_PAGESIZE))
+        fun ofNativeKotlinType(input: ByteArray) = DynamicSizedBytesETHType(UIntETHType.ofNativeKotlinType(input.size.toBigInteger(), "256").paddedValue + input.rightPadToFixedPageSize(ETH_TYPE_PAGESIZE))
     }
 
     override fun isDynamic() = true

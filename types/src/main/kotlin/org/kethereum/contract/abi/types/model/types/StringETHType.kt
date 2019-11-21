@@ -8,8 +8,10 @@ class StringETHType(override val paddedValue: ByteArray) : ETHType<String> {
     override fun toKotlinType() = String(DynamicSizedBytesETHType(paddedValue).toKotlinType())
 
     companion object {
-        fun ofPaginatedByteArray(input: PaginatedByteArray) = StringETHType(DynamicSizedBytesETHType.ofPaginatedByteArray(input).paddedValue)
-        fun ofString(string: String) =  StringETHType(DynamicSizedBytesETHType.ofNativeKotlinType(string.toByteArray()).paddedValue)
+        fun ofPaginatedByteArray(input: PaginatedByteArray) = DynamicSizedBytesETHType.ofPaginatedByteArray(input)?.let {
+            StringETHType(it.paddedValue)
+        }
+        fun ofString(string: String) = StringETHType(DynamicSizedBytesETHType.ofNativeKotlinType(string.toByteArray()).paddedValue)
         fun ofNativeKotlinType(input: String) = ofString(input)
     }
 

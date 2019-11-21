@@ -11,11 +11,8 @@ dependencies {
     implementation project(":model")
     implementation project(":extensions")
     implementation project(":rpc")
-    implementation project(":eip137")
-    implementation project(":erc181")
-    implementation project(":erc634")
     implementation project(':method_signatures')
-    implementation project(':types')
 
+    implementation project(':types')
     implementation "com.github.komputing:khex:$khex_version"
 }

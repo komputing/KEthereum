@@ -39,8 +39,13 @@ val willBeTrue = ENSName("test.eth").isPotentialENSDomain()
 val willBeFalse = ENSName("test.yo").isPotentialENSDomain()
 ```
 
-to get the github username for a name you can do:
+To get the github username for a name you can do:
 
 ```kotlin
 val address = ens.getGithubUserName(ENSName("ligi.ethereum.eth"))
 ```
+
+If you want to do a reverse lookup you can do:
+
+```kotlin
+val name = ens.reverseResolve(Address("d8da6bf26964af9d7eed9e03e53415d37aa96045"))```
