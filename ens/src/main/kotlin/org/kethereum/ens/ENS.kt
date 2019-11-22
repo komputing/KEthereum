@@ -81,7 +81,7 @@ class ENS(private val rpc: EthereumRPC,
      * get a list of keywords - A list of keywords, ordered by most significant first; clients that interpresent this field may choose a threshold beyond which to ignore
      * from EIP-634 text record
      */
-    fun getKeywords(name: ENSName) = getTextRecord(name, "keywords")?.let { it.split(",") }
+    fun getKeywords(name: ENSName) = getTextRecord(name, "keywords")?.split(",")
 
     /**
      * get an github username
