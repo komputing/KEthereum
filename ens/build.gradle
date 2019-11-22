@@ -17,5 +17,7 @@ dependencies {
     implementation project(':method_signatures')
     implementation project(':types')
 
+    testImplementation project(':test_data')
+
     implementation "com.github.komputing:khex:$khex_version"
 }
