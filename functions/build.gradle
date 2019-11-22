@@ -6,4 +6,6 @@ dependencies {
     implementation "com.github.komputing:khex:$khex_version"
 
     testImplementation "com.beust:klaxon:$klaxon_version"
+    testImplementation project(":erc20")
+    testImplementation project(":test_data")
 }

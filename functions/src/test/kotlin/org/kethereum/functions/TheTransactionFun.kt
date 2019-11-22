@@ -2,30 +2,21 @@ package org.kethereum.functions
 
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
-import org.kethereum.model.Address
-import org.kethereum.model.createTransactionWithDefaults
+import org.kethereum.crypto.test_data.TEST_ADDRESSES
+import org.komputing.kethereum.erc20.ERC20TransactionGenerator
 import java.math.BigInteger
 
 class TheTransactionFun {
 
-    val someAddress = Address("0xfdf1210fc262c73d0436236a0e07be419babbbc4")
-    val anotherAddress = Address("0xfdf1210fc262c73d0436236a0e07be419babbbc7")
-
-    @Test
-    fun weCanCreateTokenTransfer() {
-
-        assertThat(createTokenTransferTransactionInput(someAddress, BigInteger("10")).toList().startsWith(tokenTransferSignature)).isTrue()
-    }
-
     @Test
     fun weCanParseTokenTransferValue() {
-        val createTokenTransferTransactionInput = createTransactionWithDefaults(value = BigInteger.valueOf(103), from = someAddress, to = someAddress, input = createTokenTransferTransactionInput(someAddress, BigInteger("10")))
+        val createTokenTransferTransactionInput = ERC20TransactionGenerator(TEST_ADDRESSES.first()).transfer(TEST_ADDRESSES.first(), BigInteger("10"))
         assertThat(createTokenTransferTransactionInput.getTokenTransferValue()).isEqualTo(BigInteger("10"))
     }
 
     @Test
     fun weCanParseTokenTransferTo() {
-        val createTokenTransferTransactionInput = createTransactionWithDefaults(value = BigInteger.valueOf(103), from = someAddress, to = someAddress, input = createTokenTransferTransactionInput(anotherAddress, BigInteger("10")))
-        assertThat(createTokenTransferTransactionInput.getTokenTransferTo()).isEqualTo(anotherAddress)
+        val createTokenTransferTransactionInput = ERC20TransactionGenerator(TEST_ADDRESSES.first()).transfer(TEST_ADDRESSES.last(), BigInteger("10"))
+        assertThat (createTokenTransferTransactionInput.getTokenTransferTo()).isEqualTo(TEST_ADDRESSES.last())
     }
 }
