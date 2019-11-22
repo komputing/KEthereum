@@ -1,6 +1,7 @@
 package org.kethereum.contract.abi.types
 
 import org.kethereum.contract.abi.types.model.ContractABITypeDefinition
+import org.kethereum.contract.abi.types.model.ETHType
 import org.kethereum.contract.abi.types.model.TypeAliases
 import org.kethereum.contract.abi.types.model.type_params.BitsTypeParams
 import org.kethereum.contract.abi.types.model.type_params.BytesTypeParams
@@ -11,8 +12,7 @@ import java.math.BigInteger
 fun convertStringToABIType(string: String) = convertStringToABITypeOrNull(string)
         ?: throw IllegalArgumentException("$string is not a supported type")
 
-fun convertStringToABITypeOrNull(string: String) = (convertStringToABITypeOrNullNoAliases(string)
-        ?: convertStringToABITypeOrNullNoAliases(TypeAliases[string]))
+fun convertStringToABITypeOrNull(string: String) = convertStringToABITypeOrNullNoAliases(TypeAliases[string] ?: string)
 
 private fun convertStringToABITypeOrNullNoAliases(string: String?) = when {
     string == null -> null
@@ -44,3 +44,26 @@ private fun String.extractPrefixedNumber(prefix: String, constraint: (Int) -> Un
         (removePrefix(prefix)
                 .toIntOrNull() ?: throw IllegalArgumentException("$this MUST have only a number after $prefix"))
                 .also(constraint)
+
+// yes the next part feels a bit WET - but any other method as far as I see would drag in kotlin-reflect which is very heavy - but if anyone knows a better way on how to do this in a DRY style without kotlin-reflect - I am all ears!
+fun getETHTypeInstance(typeString: String, valueString: String) = getETHTypeInstanceOrNull(typeString, valueString)
+        ?: throw IllegalArgumentException("$typeString is not a supported type")
+
+fun getETHTypeInstanceOrNull(typeString: String, valueString: String) =
+        getETHTypeInstanceOrNullNoAliases(TypeAliases[typeString] ?: typeString, valueString)
+
+fun getETHTypeInstanceOrNullNoAliases(typeString: String?, valueString: String): ETHType<*>? = when {
+    typeString == null -> null
+    typeString == "bool" -> BoolETHType.ofString(valueString)
+    typeString == "string" -> StringETHType.ofString(valueString)
+    typeString == "address" -> AddressETHType.ofString(valueString)
+    typeString == "bytes" -> DynamicSizedBytesETHType.ofString(valueString)
+    typeString.startsWith("int") -> IntETHType.ofSting(valueString,
+            BitsTypeParams(typeString.extractPrefixedNumber("int", INT_BITS_CONSTRAINT)).encodeToString()
+    )
+    typeString.startsWith("uint") -> UIntETHType.ofSting(valueString,
+            BitsTypeParams(typeString.extractPrefixedNumber("uint", INT_BITS_CONSTRAINT)).encodeToString()
+    )
+    typeString.startsWith("bytes") -> BytesETHType.ofString(valueString, BytesTypeParams(typeString.extractPrefixedNumber("bytes", BYTES_COUNT_CONSTRAINT)).encodeToString())
+    else -> null
+}

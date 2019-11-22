@@ -11,8 +11,7 @@ class TheContractABITypes {
 
     @Test
     fun canDealWithAllKnownTypes() {
-        // all currently used types as collected via 4byte directory
-        listOf("bool", "string", "bytes20", "uint256", "uint96", "int8", "uint192", "uint32", "uint16", "bytes15", "bytes14", "address", "bytes12", "bytes32", "bytes5", "uint80", "bytes3", "bytes4", "uint224", "int256", "uint128", "int32", "bytes", "bytes8", "uint88", "uint64", "bytes1", "uint8", "bytes2", "uint24", "bytes16").forEach {
+        listOf("bool", "string", "bytes20", "uint256", "uint96", "int8", "uint192", "uint32", "uint16", "bytes15", "bytes14", "address", "bytes12", "bytes32", "bytes5", "uint80", "bytes3", "bytes4", "uint224", "int256", "uint128", "int32", "bytes", "bytes8", "uint88", "uint64", "bytes1", "uint8", "bytes2", "uint24", "bytes16", "uint", "int", "byte").forEach {
             assertThat(convertStringToABIType(it)).isInstanceOf(ContractABITypeDefinition::class.java)
         }
     }
