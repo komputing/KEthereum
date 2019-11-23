@@ -8,22 +8,14 @@ fun BigInteger.toBytesPadded(length: Int): ByteArray {
     val result = ByteArray(length)
     val bytes = toByteArray()
 
-    val bytesLength: Int
-    val srcOffset: Int
-    if (bytes[0].toInt() == 0) {
-        bytesLength = bytes.size - 1
-        srcOffset = 1
-    } else {
-        bytesLength = bytes.size
-        srcOffset = 0
-    }
+    val offset = if (bytes[0].toInt() == 0) 1 else 0
 
-    if (bytesLength > length) {
+    if (bytes.size - offset > length) {
         throw RuntimeException("Input is too large to put in byte array of size $length")
     }
 
-    val destOffset = length - bytesLength
-    System.arraycopy(bytes, srcOffset, result, destOffset, bytesLength)
+    val destOffset = length - bytes.size + offset
+    System.arraycopy(bytes, offset, result, destOffset, bytes.size - offset)
     return result
 }
 
