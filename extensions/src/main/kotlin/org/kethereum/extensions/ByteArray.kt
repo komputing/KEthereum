@@ -1,8 +1,8 @@
 package org.kethereum.extensions
 
-fun ByteArray.toFixedLengthByteArray(fixedSize: Int) = if (size == fixedSize) {
+fun ByteArray.toFixedLengthByteArray(fixedSize: Int, fillByte: Byte = 0) = if (size == fixedSize) {
     this
 } else {
-    require(size < fixedSize) { "ByteArray too big - max size is $fixedSize" }
-    ByteArray(fixedSize) { it -> getOrNull(size - fixedSize + it) ?: 0 }
+    require(size < fixedSize) { "ByteArray too big - max size is $fixedSize but got $size" }
+    ByteArray(fixedSize) { getOrNull(size - fixedSize + it) ?: fillByte }
 }

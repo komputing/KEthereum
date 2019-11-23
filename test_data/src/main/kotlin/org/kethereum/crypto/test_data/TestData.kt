@@ -4,6 +4,7 @@ import org.kethereum.model.Address
 import org.kethereum.model.ECKeyPair
 import org.kethereum.model.PrivateKey
 import org.kethereum.model.PublicKey
+import java.math.BigInteger
 import java.math.BigInteger.*
 
 
@@ -30,5 +31,28 @@ val TEST_ADDRESSES = listOf(
         Address("0xfdf1210fc262c73d0436236a0e07be419babbbc4"),
         Address("0xfdf1210fc262c73d0436236a0e07be419babbbc7")
 )
+val TEST_BIGINTEGERS_POSITIVE_ONLY = listOf(
+        ZERO,
+        ONE,
+        TEN,
+        valueOf(42),
+        valueOf(420),
+        valueOf(Long.MAX_VALUE),
+        BigInteger("ff".repeat(32), 16)
+)
 
-val TEST_POSITIVE_BIGINTEGERS = listOf(ZERO, ONE, TEN, valueOf(42), valueOf(420), valueOf(Long.MAX_VALUE))
+val TEST_BIGINTEGERS_INCL_NEGATIVE = listOf(
+        ZERO,
+        ONE,
+        TEN,
+        valueOf(42),
+        valueOf(420),
+        valueOf(Long.MAX_VALUE),
+        BigInteger("ff".repeat(31), 16),
+        -ONE,
+        -TEN,
+        -valueOf(42),
+        -valueOf(420),
+        -valueOf(Long.MAX_VALUE),
+        -BigInteger("ff".repeat(31), 16)
+)

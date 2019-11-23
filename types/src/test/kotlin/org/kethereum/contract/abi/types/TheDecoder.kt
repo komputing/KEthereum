@@ -4,8 +4,12 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.kethereum.contract.abi.types.model.types.*
 import org.kethereum.crypto.test_data.TEST_ADDRESSES
-import org.kethereum.crypto.test_data.TEST_POSITIVE_BIGINTEGERS
+import org.kethereum.crypto.test_data.TEST_BIGINTEGERS_INCL_NEGATIVE
+import org.kethereum.crypto.test_data.TEST_BIGINTEGERS_POSITIVE_ONLY
 import org.walleth.khex.hexToByteArray
+import java.math.BigInteger
+import java.math.BigInteger.ONE
+import java.math.BigInteger.ZERO
 
 class TheDecoder {
 
@@ -49,8 +53,15 @@ class TheDecoder {
 
     @Test
     fun thatUIntRoundTripWorks() {
-        TEST_POSITIVE_BIGINTEGERS.forEach {
+        TEST_BIGINTEGERS_POSITIVE_ONLY.forEach {
             assertThat(UIntETHType.ofNativeKotlinType(it, "256").toKotlinType()).isEqualTo(it)
+        }
+    }
+
+    @Test
+    fun thatIntRoundTripWorks() {
+        TEST_BIGINTEGERS_INCL_NEGATIVE.forEach {
+            assertThat(IntETHType.ofNativeKotlinType(it, "256").toKotlinType()).isEqualTo(it)
         }
     }
 
@@ -72,5 +83,23 @@ class TheDecoder {
         val input = PaginatedByteArray("0x000000000000000000000000000000000000000000000000000000000000002000000000000000000000000000000000000000000000000000000000000000046c69676900000000000000000000000000000000000000000000000000000000")
         assertThat(StringETHType.ofPaginatedByteArray(input)?.toKotlinType()).isEqualTo("ligi")
 
+    }
+
+    @Test
+    fun testDecodeInt() {
+        val input0 = PaginatedByteArray("0x0000000000000000000000000000000000000000000000000000000000000000")
+        assertThat(IntETHType.ofPaginatedByteArray(input0, "8")?.toKotlinType()).isEqualTo(ZERO)
+
+        val input1 = PaginatedByteArray("0x0000000000000000000000000000000000000000000000000000000000000001")
+        assertThat(IntETHType.ofPaginatedByteArray(input1, "8")?.toKotlinType()).isEqualTo(ONE)
+
+        val input_1 = PaginatedByteArray("0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff")
+        assertThat(IntETHType.ofPaginatedByteArray(input_1, "8")?.toKotlinType()).isEqualTo(BigInteger.valueOf(-1))
+
+        val input127 = PaginatedByteArray("0x000000000000000000000000000000000000000000000000000000000000007f")
+        assertThat(IntETHType.ofPaginatedByteArray(input127, "8")?.toKotlinType()).isEqualTo(BigInteger.valueOf(127))
+
+        val input_128 = PaginatedByteArray("0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff80")
+        assertThat(IntETHType.ofPaginatedByteArray(input_128, "16")?.toKotlinType()).isEqualTo(BigInteger.valueOf(-128))
     }
 }
