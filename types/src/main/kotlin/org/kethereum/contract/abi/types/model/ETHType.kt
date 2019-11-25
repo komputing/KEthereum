@@ -3,9 +3,7 @@ package org.kethereum.contract.abi.types.model
 import org.kethereum.contract.abi.types.PaginatedByteArray
 import kotlin.reflect.KClass
 
-interface ETHTypeParams {
-    fun encodeToString(): String
-}
+interface ETHTypeParams
 
 data class ContractABITypeDefinition(
         val ethTypeKClass: KClass<out ETHType<*>>,

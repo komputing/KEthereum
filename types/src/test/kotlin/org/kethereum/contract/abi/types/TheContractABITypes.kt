@@ -4,6 +4,8 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Assertions.assertThrows
 import org.junit.jupiter.api.Test
 import org.kethereum.contract.abi.types.model.ContractABITypeDefinition
+import org.kethereum.contract.abi.types.model.type_params.BitsTypeParams
+import org.kethereum.contract.abi.types.model.type_params.BytesTypeParams
 import org.kethereum.contract.abi.types.model.types.*
 import org.walleth.khex.hexToByteArray
 
@@ -34,22 +36,22 @@ class TheContractABITypes {
 
     @Test
     fun bitsExtractedCorrectly() {
-        assertThat(convertStringToABIType("uint8").params?.encodeToString()).isEqualTo("8")
-        assertThat(convertStringToABIType("int8").params?.encodeToString()).isEqualTo("8")
-        assertThat(convertStringToABIType("uint16").params?.encodeToString()).isEqualTo("16")
-        assertThat(convertStringToABIType("int16").params?.encodeToString()).isEqualTo("16")
+        assertThat(convertStringToABIType("uint8").params).isEqualTo(BitsTypeParams(8))
+        assertThat(convertStringToABIType("int8").params).isEqualTo(BitsTypeParams(8))
+        assertThat(convertStringToABIType("uint16").params).isEqualTo(BitsTypeParams(16))
+        assertThat(convertStringToABIType("int16").params).isEqualTo(BitsTypeParams(16))
     }
 
     @Test
     fun bytesExtractedCorrectly() {
-        assertThat(convertStringToABIType("bytes23").params?.encodeToString()).isEqualTo("23")
+        assertThat(convertStringToABIType("bytes23").params).isEqualTo(BytesTypeParams(23))
     }
 
 
     @Test
     fun unsignedIntABITypeWillNotAcceptNegativeNumber() {
         assertThrows(IllegalArgumentException::class.java) {
-            UIntETHType.ofSting("-1", "8")
+            UIntETHType.ofSting("-1", BitsTypeParams(8))
         }
     }
 
@@ -109,7 +111,7 @@ class TheContractABITypes {
 
     @Test
     fun handlesBytes() {
-        assertThat(BytesETHType.ofString("0xFA", "1").paddedValue)
+        assertThat(BytesETHType.ofString("0xFA", BytesTypeParams(1)).paddedValue)
                 .isEqualTo(("0xFA" + "0".repeat(62)).hexToByteArray())
 
     }

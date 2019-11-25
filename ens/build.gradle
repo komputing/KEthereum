@@ -15,7 +15,7 @@ dependencies {
     implementation project(":erc181")
     implementation project(":erc634")
     implementation project(':method_signatures')
-    implementation project(':types')
+    implementation "com.github.komputing.kethereum:types:0.78.0"
 
     testImplementation project(':test_data')
 

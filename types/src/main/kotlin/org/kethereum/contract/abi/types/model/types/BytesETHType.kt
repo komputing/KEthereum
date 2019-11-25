@@ -7,9 +7,7 @@ import org.kethereum.contract.abi.types.model.type_params.BytesTypeParams
 import org.kethereum.contract.abi.types.rightPadToFixedSize
 import org.walleth.khex.hexToByteArray
 
-class BytesETHType(override val paddedValue: ByteArray, paramsString: String) : ETHType<ByteArray> {
-
-    private val params = BytesTypeParams.decodeFromString(paramsString)
+class BytesETHType(override val paddedValue: ByteArray, val params: BytesTypeParams) : ETHType<ByteArray> {
 
     init {
         require(params.bytes <= ETH_TYPE_PAGESIZE) { "Maximum size is $ETH_TYPE_PAGESIZE - but got ${params.bytes} " }
@@ -18,11 +16,11 @@ class BytesETHType(override val paddedValue: ByteArray, paramsString: String) : 
     override fun toKotlinType() = paddedValue.sliceArray(0 until params.bytes)
 
     companion object {
-        fun ofPaginatedByteArray(input: PaginatedByteArray, params: String) = input.nextPage()?.let { BytesETHType(it, params) }
+        fun ofPaginatedByteArray(input: PaginatedByteArray, params: BytesTypeParams) = input.nextPage()?.let { BytesETHType(it, params) }
 
-        fun ofNativeKotlinType(input: ByteArray, params: String) = BytesETHType(input.rightPadToFixedSize(ETH_TYPE_PAGESIZE), params)
+        fun ofNativeKotlinType(input: ByteArray, params: BytesTypeParams) = BytesETHType(input.rightPadToFixedSize(ETH_TYPE_PAGESIZE), params)
 
-        fun ofString(string: String, params: String) = ofNativeKotlinType(string.hexToByteArray(), params)
+        fun ofString(string: String, params: BytesTypeParams) = ofNativeKotlinType(string.hexToByteArray(), params)
     }
 
     override fun isDynamic() = false

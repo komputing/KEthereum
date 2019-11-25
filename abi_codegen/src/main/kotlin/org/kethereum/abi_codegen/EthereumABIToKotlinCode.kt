@@ -15,7 +15,6 @@ import org.kethereum.rpc.EthereumRPC
 fun EthereumABI.toKotlinCode(spec: GeneratorSpec): FileSpec {
 
     val fileSpec = FileSpec.builder(spec.packageName, spec.classPrefix)
-
     val transactionDetector = spec.txDecoderName?.let {
         TypeSpec.classBuilder(it).defaultConstructor(emptyList())
     }
@@ -133,6 +132,7 @@ fun EthereumABI.toKotlinCode(spec: GeneratorSpec): FileSpec {
         }
     }
 
+    fileSpec.addImport("org.kethereum.contract.abi.types.model.type_params", "BytesTypeParams", "BitsTypeParams")
     allClasses.filterNotNull().forEach { fileSpec.addType(it.build()) }
     return fileSpec.build()
 }

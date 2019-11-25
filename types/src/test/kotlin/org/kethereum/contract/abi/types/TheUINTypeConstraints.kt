@@ -1,6 +1,7 @@
 package org.kethereum.contract.abi.types
 
 import org.junit.jupiter.api.Test
+import org.kethereum.contract.abi.types.model.type_params.BitsTypeParams
 import org.kethereum.contract.abi.types.model.types.UIntETHType
 import java.math.BigInteger.ONE
 import java.math.BigInteger.valueOf
@@ -10,31 +11,28 @@ class TheUINTypeConstraints {
 
     @Test
     fun commonUINTBitLengthWorks() {
-        UIntETHType.ofNativeKotlinType(ONE, "8")
-        UIntETHType.ofNativeKotlinType(ONE, "24")
-        UIntETHType.ofNativeKotlinType(ONE, "32")
-        UIntETHType.ofNativeKotlinType(ONE, "64")
-        UIntETHType.ofNativeKotlinType(ONE, "256")
+        UIntETHType.ofNativeKotlinType(ONE, BitsTypeParams(8))
+        UIntETHType.ofNativeKotlinType(ONE, BitsTypeParams(24))
+        UIntETHType.ofNativeKotlinType(ONE, BitsTypeParams(32))
+        UIntETHType.ofNativeKotlinType(ONE, BitsTypeParams(64))
+        UIntETHType.ofNativeKotlinType(ONE, BitsTypeParams(256))
     }
 
     @Test
     fun invalidUINTBitLengthsFail() {
 
         assertFailsWith(IllegalArgumentException::class) {
-            UIntETHType.ofNativeKotlinType(ONE, "7")
+            UIntETHType.ofNativeKotlinType(ONE, BitsTypeParams(7))
         }
 
         assertFailsWith(IllegalArgumentException::class) {
-            UIntETHType.ofNativeKotlinType(ONE, "264")
+            UIntETHType.ofNativeKotlinType(ONE, BitsTypeParams(264))
         }
 
         assertFailsWith(IllegalArgumentException::class) {
-            UIntETHType.ofNativeKotlinType(ONE, "-1")
+            UIntETHType.ofNativeKotlinType(ONE, BitsTypeParams(-1))
         }
 
-        assertFailsWith(IllegalArgumentException::class) {
-            UIntETHType.ofNativeKotlinType(ONE, "yolo")
-        }
     }
 
 
@@ -42,7 +40,7 @@ class TheUINTypeConstraints {
     fun whenItDoesNotFitItFails() {
 
         assertFailsWith(IllegalArgumentException::class) {
-            UIntETHType.ofNativeKotlinType(valueOf(256), "8")
+            UIntETHType.ofNativeKotlinType(valueOf(256), BitsTypeParams(8))
         }
     }
 

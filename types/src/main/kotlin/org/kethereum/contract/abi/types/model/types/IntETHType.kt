@@ -9,14 +9,13 @@ import org.kethereum.extensions.toFixedLengthByteArray
 import java.math.BigInteger
 import java.math.BigInteger.ONE
 
-class IntETHType(override val paddedValue: ByteArray, params: String) : ETHType<BigInteger> {
+class IntETHType(override val paddedValue: ByteArray, params: BitsTypeParams) : ETHType<BigInteger> {
 
-    private val bits = BitsTypeParams.decodeFromString(params).bits
 
     init {
-        INT_BITS_CONSTRAINT(bits)
-        require(toKotlinType() < ONE.shiftLeft(bits-1)) { "value ${toKotlinType()} must fit in $bits bits" }
-        require(toKotlinType() > -ONE.shiftLeft(bits-1)) { "value ${toKotlinType()} must fit in $bits bits" }
+        INT_BITS_CONSTRAINT(params.bits)
+        require(toKotlinType() < ONE.shiftLeft(params.bits-1)) { "value ${toKotlinType()} must fit in ${params.bits} bits" }
+        require(toKotlinType() > -ONE.shiftLeft(params.bits-1)) { "value ${toKotlinType()} must fit in $params.bits} bits" }
     }
 
     override fun toKotlinType() = BigInteger(paddedValue)
@@ -24,11 +23,11 @@ class IntETHType(override val paddedValue: ByteArray, params: String) : ETHType<
     override fun isDynamic() = false
 
     companion object {
-        fun ofNativeKotlinType(input: BigInteger, params: String) =
+        fun ofNativeKotlinType(input: BigInteger, params: BitsTypeParams) =
                 IntETHType(input.toByteArray().toFixedLengthByteArray(ETH_TYPE_PAGESIZE, if (input.signum() < 0) 0xFF.toByte() else 0), params)
 
-        fun ofSting(string: String, params: String) = ofNativeKotlinType(BigInteger(string), params)
+        fun ofSting(string: String, params: BitsTypeParams) = ofNativeKotlinType(BigInteger(string), params)
 
-        fun ofPaginatedByteArray(input: PaginatedByteArray, params: String) = input.nextPage()?.let { IntETHType(it, params) }
+        fun ofPaginatedByteArray(input: PaginatedByteArray, params: BitsTypeParams) = input.nextPage()?.let { IntETHType(it, params) }
     }
 }

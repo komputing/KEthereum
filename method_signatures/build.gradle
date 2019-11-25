@@ -1,7 +1,7 @@
 dependencies {
     implementation project(':abi')
     implementation project(':keccak_shortcut')
-    implementation project(':types')
+    implementation "com.github.komputing.kethereum:types:0.78.0"
 
     implementation "com.github.komputing:khex:$khex_version"
 

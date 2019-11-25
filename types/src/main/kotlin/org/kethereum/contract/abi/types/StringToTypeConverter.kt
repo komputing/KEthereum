@@ -59,11 +59,11 @@ fun getETHTypeInstanceOrNullNoAliases(typeString: String?, valueString: String):
     typeString == "address" -> AddressETHType.ofString(valueString)
     typeString == "bytes" -> DynamicSizedBytesETHType.ofString(valueString)
     typeString.startsWith("int") -> IntETHType.ofSting(valueString,
-            BitsTypeParams(typeString.extractPrefixedNumber("int", INT_BITS_CONSTRAINT)).encodeToString()
+            BitsTypeParams(typeString.extractPrefixedNumber("int", INT_BITS_CONSTRAINT))
     )
     typeString.startsWith("uint") -> UIntETHType.ofSting(valueString,
-            BitsTypeParams(typeString.extractPrefixedNumber("uint", INT_BITS_CONSTRAINT)).encodeToString()
+            BitsTypeParams(typeString.extractPrefixedNumber("uint", INT_BITS_CONSTRAINT))
     )
-    typeString.startsWith("bytes") -> BytesETHType.ofString(valueString, BytesTypeParams(typeString.extractPrefixedNumber("bytes", BYTES_COUNT_CONSTRAINT)).encodeToString())
+    typeString.startsWith("bytes") -> BytesETHType.ofString(valueString, BytesTypeParams(typeString.extractPrefixedNumber("bytes", BYTES_COUNT_CONSTRAINT)))
     else -> null
 }

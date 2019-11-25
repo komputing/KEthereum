@@ -15,10 +15,11 @@ val rpc = HttpEthereumRPC("https://node3.web3api.com")
 val ens = ENS(rpc)
 
 fun main() {
+    /*
     demoERC55()
     demoEIP137()
-    demoENS()
-    //demoCodeGen()
+    demoENS() */
+    demoCodeGen()
 }
 
 fun demoENS() {
