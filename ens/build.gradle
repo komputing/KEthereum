@@ -1,23 +1,10 @@
 apply plugin: 'kethabi'
 
-sourceSets {
-    main {
-        java.srcDirs +=  "build/generated/kethabi"
-        kotlin.srcDirs +=  "build/generated/kethabi"
-    }
-}
 
 dependencies {
-    implementation project(":model")
-    implementation project(":extensions")
-    implementation project(":rpc")
     implementation project(":eip137")
     implementation project(":erc181")
     implementation project(":erc634")
-    implementation project(':method_signatures')
-    implementation "com.github.komputing.kethereum:types:0.78.0"
 
     testImplementation project(':test_data')
-
-    implementation "com.github.komputing:khex:$khex_version"
 }
