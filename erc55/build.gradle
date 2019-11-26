@@ -1,8 +1,0 @@
-dependencies {
-    implementation project(":model")
-    implementation project(":functions")
-    implementation project(":keccak_shortcut")
-    implementation "com.github.komputing:khex:$khex_version"
-
-    testImplementation project(":crypto_impl_spongycastle")
-}

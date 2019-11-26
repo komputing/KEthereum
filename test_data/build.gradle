@@ -1,4 +1,0 @@
-dependencies {
-    implementation project(":model")
-    implementation "com.github.komputing:khex:$khex_version"
-}
