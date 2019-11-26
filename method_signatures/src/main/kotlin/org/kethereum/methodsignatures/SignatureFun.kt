@@ -12,4 +12,4 @@ fun TextMethodSignature.toHexSignatureUnsafe() = HexMethodSignature(signature.ge
 
 fun TextMethodSignature.toHexSignature() = HexMethodSignature(normalizedSignature.getHexSignature())
 
-fun EthereumFunction.toTextMethodSignature() = TextMethodSignature(name + "(" + inputs?.joinToString(",") { it.type } + ")")
+fun EthereumFunction.toTextMethodSignature() = TextMethodSignature(name + "(" + inputs.joinToString(",") { it.type } + ")")
