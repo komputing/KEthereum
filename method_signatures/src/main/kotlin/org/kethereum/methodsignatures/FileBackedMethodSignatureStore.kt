@@ -4,7 +4,9 @@ import org.kethereum.methodsignatures.model.TextMethodSignature
 import java.io.File
 
 private fun toStringSet(file: File) = semicolonSeparatedStringArray(file).toHashSet()
-private fun toTextSignatureSet(file: File) = semicolonSeparatedStringArray(file).map { TextMethodSignature(it) }.toHashSet()
+private fun toTextSignatureSet(file: File) = semicolonSeparatedStringArray(file).map {
+    TextMethodSignature(it)
+}.toHashSet()
 
 private fun semicolonSeparatedStringArray(file: File) = file.readText().split(";")
 

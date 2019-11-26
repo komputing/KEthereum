@@ -3,9 +3,9 @@ package org.kethereum.wallet
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.Test
-import org.kethereum.model.PrivateKey
 import org.kethereum.crypto.toECKeyPair
 import org.kethereum.extensions.hexToBigInteger
+import org.kethereum.model.PrivateKey
 import org.kethereum.wallet.data.KEY_PAIR
 import org.kethereum.wallet.data.PASSWORD
 import java.io.File
@@ -17,7 +17,9 @@ class WalletUtilsTest {
 
     companion object {
 
-        private val tempDir by lazy { Files.createTempDirectory(WalletUtilsTest::class.java.simpleName + "-testkeys").toFile() }
+        private val tempDir by lazy {
+            Files.createTempDirectory(WalletUtilsTest::class.java.simpleName + "-testkeys").toFile()
+        }
 
         @AfterAll
         @JvmStatic
