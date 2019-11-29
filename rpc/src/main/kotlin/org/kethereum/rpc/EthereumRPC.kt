@@ -5,15 +5,16 @@ import org.kethereum.model.SignedTransaction
 import org.kethereum.model.Transaction
 import org.kethereum.rpc.model.BlockInformation
 import org.kethereum.rpc.model.StringResultResponse
+import java.math.BigInteger
 
 
 interface EthereumRPC {
 
-    fun getBlockByNumber(number: String): BlockInformation?
+    fun getBlockByNumber(number: BigInteger): BlockInformation?
     fun getTransactionByHash(hash: String): SignedTransaction?
 
     fun sendRawTransaction(data: String): StringResultResponse?
-    fun blockNumber(): StringResultResponse?
+    fun blockNumber(): BigInteger?
     fun call(transaction: Transaction, block: String = "latest"): StringResultResponse?
     fun gasPrice(): StringResultResponse?
     fun clientVersion(): StringResultResponse?

@@ -12,6 +12,7 @@ import org.kethereum.model.SignedTransaction
 import org.kethereum.rpc.model.BlockInformation
 import org.walleth.khex.hexToByteArray
 import java.math.BigInteger
+import java.math.BigInteger.TEN
 import java.math.BigInteger.ZERO
 
 class TheEthereumRPC {
@@ -65,7 +66,7 @@ class TheEthereumRPC {
         val response = "{\"jsonrpc\":\"2.0\",\"id\":83,\"result\":\"0x4299d\"}\n"
         server.enqueue(MockResponse().setBody(response))
 
-        assertThat(tested.blockNumber()?.result).isEqualTo("0x4299d")
+        assertThat(tested.blockNumber()).isEqualTo("0x4299d".hexToBigInteger())
     }
 
     @Test
@@ -130,7 +131,7 @@ class TheEthereumRPC {
       "0x5f1972f798964895bf29c82bd6d1117553d4222d609d07a8321eaadecf440f12"]}}"""
         server.enqueue(MockResponse().setBody(response))
 
-        val blockByNumber: BlockInformation? = tested.getBlockByNumber("0x1234")
+        val blockByNumber: BlockInformation? = tested.getBlockByNumber(TEN)
         assertThat(blockByNumber).isNotNull
         assertThat(blockByNumber!!.transactions.size).isEqualTo(1)
         val firstSignedTransaction = blockByNumber.transactions.first()

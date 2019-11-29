@@ -2,12 +2,15 @@ package org.kethereum.rpc
 
 import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Moshi
+import org.kethereum.extensions.hexToBigInteger
+import org.kethereum.extensions.toHexString
 import org.kethereum.model.Address
 import org.kethereum.model.Transaction
 import org.kethereum.rpc.model.BigIntegerAdapter
 import org.kethereum.rpc.model.BlockInformationResponse
 import org.kethereum.rpc.model.StringResultResponse
 import org.kethereum.rpc.model.TransactionResponse
+import java.math.BigInteger
 
 open class BaseEthereumRPC(private val transport: RPCTransport) : EthereumRPC {
 
@@ -23,13 +26,13 @@ open class BaseEthereumRPC(private val transport: RPCTransport) : EthereumRPC {
         return transport.call(function, params)?.let { string -> stringResultAdapter.fromJsonNoThrow(string) }
     }
 
-    override fun getBlockByNumber(number: String) = transport.call("eth_getBlockByNumber", "\"$number\", true")?.let { string ->
+    override fun getBlockByNumber(number: BigInteger) = transport.call("eth_getBlockByNumber", "\"${number.toHexString()}\", true")?.let { string ->
         blockInfoAdapter.fromJsonNoThrow(string)
     }?.result?.toBlockInformation()
 
     override fun sendRawTransaction(data: String) = stringCall("eth_sendRawTransaction", "\"$data\"")
 
-    override fun blockNumber() = stringCall("eth_blockNumber")
+    override fun blockNumber() = stringCall("eth_blockNumber")?.result?.hexToBigInteger()
 
     override fun call(transaction: Transaction, block: String) = stringCall("eth_call", "${transaction.toJSON()},\"$block\"")
 
