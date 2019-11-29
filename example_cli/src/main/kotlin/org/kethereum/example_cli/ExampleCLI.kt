@@ -1,5 +1,6 @@
 package org.kethereum.example_cli
 
+import kotlinx.coroutines.flow.collect
 import org.kethereum.abi.EthereumABI
 import org.kethereum.abi_codegen.model.GeneratorSpec
 import org.kethereum.abi_codegen.toKotlinCode
@@ -8,18 +9,49 @@ import org.kethereum.eip137.toHexString
 import org.kethereum.eip137.toNameHash
 import org.kethereum.ens.ENS
 import org.kethereum.erc55.withERC55Checksum
+import org.kethereum.flows.getBlockFlow
+import org.kethereum.flows.getTransactionFlow
 import org.kethereum.model.Address
 import org.kethereum.rpc.HttpEthereumRPC
+import kotlin.system.exitProcess
 
 val rpc = HttpEthereumRPC("https://node3.web3api.com")
 val ens = ENS(rpc)
 
-fun main() {
-    /*
-    demoERC55()
-    demoEIP137()
-    demoENS() */
-    demoCodeGen()
+suspend fun main() {
+    showUsageAndDemoSelect()
+}
+
+private suspend fun showUsageAndDemoSelect(appendix: String = "") {
+    println("""What should we demo$appendix?
+        |
+        |ERC555 (1)
+        |EIP137 (2)
+        |ENS (3)
+        |transactionFlow (4)
+        |blockFlow (5)
+        |CodeGeneration (6)
+        |Exit (x)
+        """.trimMargin())
+    when (readLine()?.toUpperCase()) {
+        "1", "ERC55" -> demoERC55()
+        "2", "EIP137" -> demoEIP137()
+        "3", "ENS" -> demoENS()
+        "4", "TRANSACTIONFLOW" -> {
+            getTransactionFlow(rpc).collect { tx ->
+                println(tx)
+            }
+        }
+        "5", "BLOCKFLOW" -> {
+            getBlockFlow(rpc).collect { block ->
+                println(block)
+            }
+        }
+        "6", "CODEGENERATION" -> demoCodeGen()
+        "X", "EXIT" -> exitProcess(0)
+        else -> println("input not understood")
+    }
+    showUsageAndDemoSelect(" next")
 }
 
 fun demoENS() {
