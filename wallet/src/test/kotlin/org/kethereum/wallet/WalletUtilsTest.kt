@@ -4,10 +4,10 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.Test
 import org.kethereum.crypto.toECKeyPair
-import org.kethereum.extensions.hexToBigInteger
 import org.kethereum.model.PrivateKey
 import org.kethereum.wallet.data.KEY_PAIR
 import org.kethereum.wallet.data.PASSWORD
+import org.komputing.khex.model.HexString
 import java.io.File
 import java.nio.file.Files
 
@@ -61,7 +61,7 @@ class WalletUtilsTest {
         val file = loadFile("UTC--2016-11-03T07-47-45.988Z--4f9c1a1efaa7d81ba1cabf07f2c3a5ac5cf4f818")
         val keyPair = file.loadKeysFromWalletFile(PASSWORD)
 
-        val privateKey = PrivateKey("6ca4203d715e693279d6cd9742ad2fb7a3f6f4abe27a64da92e0a70ae5d859c9".hexToBigInteger())
+        val privateKey = PrivateKey(HexString("6ca4203d715e693279d6cd9742ad2fb7a3f6f4abe27a64da92e0a70ae5d859c9"))
         assertThat(keyPair).isEqualTo(privateKey.toECKeyPair())
     }
 

@@ -1,12 +1,14 @@
 package org.kethereum.contract.abi.types
 
 import org.kethereum.contract.abi.types.model.ETH_TYPE_PAGESIZE
-import org.walleth.khex.hexToByteArray
+import org.komputing.khex.extensions.hexToByteArray
+import org.komputing.khex.model.HexString
 import java.util.*
 
 class PaginatedByteArray(val content: ByteArray, private val pageSize: Int = ETH_TYPE_PAGESIZE) {
 
-    constructor(input: String?) : this(input?.hexToByteArray() ?: ByteArray(0))
+    constructor(input: String?, pageSize: Int = ETH_TYPE_PAGESIZE)
+            : this(input?.let { HexString(it).hexToByteArray() } ?: ByteArray(0), pageSize)
 
     init {
         require(content.size % pageSize == 0) { "Input size (${content.size} must be a multiple of pageSize ($pageSize)" }
@@ -33,6 +35,6 @@ class PaginatedByteArray(val content: ByteArray, private val pageSize: Int = ETH
     } else null
 
     companion object {
-        fun ofHEX(input: String, pageSize: Int = 32) = PaginatedByteArray(input.hexToByteArray(), pageSize)
+        fun ofHEX(input: String, pageSize: Int = ETH_TYPE_PAGESIZE) = PaginatedByteArray(input, pageSize)
     }
 }

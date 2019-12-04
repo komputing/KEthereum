@@ -9,6 +9,5 @@ dependencies {
 
     "testImplementation"(project(":crypto_impl_spongycastle"))
     "testImplementation"("com.squareup.okhttp3:mockwebserver:${Versions.okhttp}")
-    "testImplementation"(project(":erc20"))
     "testImplementation"(project(":test_data"))
 }

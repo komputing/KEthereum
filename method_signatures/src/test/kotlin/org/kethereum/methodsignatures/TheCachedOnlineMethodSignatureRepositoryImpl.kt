@@ -6,10 +6,10 @@ import okhttp3.mockwebserver.MockWebServer
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Test
-import org.kethereum.crypto.test_data.TEST_ADDRESSES
 import org.kethereum.methodsignatures.model.TextMethodSignature
 import org.kethereum.model.createEmptyTransaction
-import org.komputing.kethereum.erc20.ERC20TransactionGenerator
+import org.komputing.khex.extensions.hexToByteArray
+import org.komputing.khex.model.HexString
 import java.nio.file.Files
 
 
@@ -32,7 +32,9 @@ class TheCachedOnlineMethodSignatureRepositoryImpl {
 
         mockWebServer.enqueue(MockResponse().setBody("goodResult()"))
 
-        assertThat(tested.getSignaturesFor(ERC20TransactionGenerator(TEST_ADDRESSES.first()).name())).containsExactly(TextMethodSignature("goodResult()"))
+        val tx = createEmptyTransaction().copy(input = HexString("06fdde03").hexToByteArray())
+        val signature = tested.getSignaturesFor(tx)
+        assertThat(signature).containsExactly(TextMethodSignature("goodResult()"))
 
         assertThat(mockWebServer.takeRequest().path).isEqualTo("/signatures/06fdde03")
     }
@@ -48,7 +50,10 @@ class TheCachedOnlineMethodSignatureRepositoryImpl {
 
         mockWebServer.enqueue(MockResponse().setBody("goodResult();anotherResult()"))
 
-        assertThat(tested.getSignaturesFor(ERC20TransactionGenerator(TEST_ADDRESSES.first()).decimals())).containsExactlyInAnyOrder(TextMethodSignature("goodResult()"), TextMethodSignature("anotherResult()"))
+        val tx = createEmptyTransaction().copy(input = HexString("313ce567").hexToByteArray())
+        val signature = tested.getSignaturesFor(tx)
+
+        assertThat(signature).containsExactlyInAnyOrder(TextMethodSignature("goodResult()"), TextMethodSignature("anotherResult()"))
 
         assertThat(mockWebServer.takeRequest().path).isEqualTo("/signatures/313ce567")
     }

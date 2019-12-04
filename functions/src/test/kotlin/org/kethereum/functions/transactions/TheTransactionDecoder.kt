@@ -9,7 +9,8 @@ import org.kethereum.functions.rlp.decodeRLP
 import org.kethereum.functions.toTransaction
 import org.kethereum.functions.toTransactionSignatureData
 import org.kethereum.model.Address
-import org.walleth.khex.hexToByteArray
+import org.komputing.khex.extensions.hexToByteArray
+import org.komputing.khex.model.HexString
 import transactionTestData
 import java.math.BigInteger
 
@@ -27,7 +28,7 @@ class TheTransactionDecoder {
 
                 try {
 
-                    val rlp = (current.map["rlp"] as String).hexToByteArray().decodeRLP() as RLPList
+                    val rlp = HexString(current.map["rlp"] as String).hexToByteArray().decodeRLP() as RLPList
                     val transaction = rlp.toTransaction()!!
 
                     val transactionMap = (current["transaction"] as JsonObject).map
@@ -36,7 +37,7 @@ class TheTransactionDecoder {
                     assertThat(transaction.value).isEqualTo(transactionMap["value"].getBigInteger())
                     assertThat(transaction.nonce).isEqualTo(transactionMap["nonce"].getBigInteger())
                     assertThat(transaction.to).isEqualTo(Address(transactionMap["to"] as String))
-                    assertThat(transaction.input).isEqualTo((transactionMap["data"] as String).hexToByteArray())
+                    assertThat(transaction.input).isEqualTo(HexString(transactionMap["data"] as String).hexToByteArray())
 
                     val signatureData = rlp.toTransactionSignatureData()
                     assertThat(signatureData.r).isEqualTo(transactionMap["r"].getBigInteger())

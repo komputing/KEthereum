@@ -6,13 +6,14 @@ import org.kethereum.functions.rlp.toRLP
 import org.kethereum.model.SignatureData
 import org.kethereum.model.SignedTransaction
 import org.kethereum.model.Transaction
-import org.walleth.khex.hexToByteArray
+import org.komputing.khex.extensions.hexToByteArray
+import org.komputing.khex.model.HexString
 
 fun Transaction.toRLPList(signature: SignatureData?) = RLPList(listOf(
         nonce!!.toRLP(),
         gasPrice!!.toRLP(),
         gasLimit!!.toRLP(),
-        (to?.hex?.let { it } ?: "0x").hexToByteArray().toRLP(),
+        HexString(to?.hex?.let { it } ?: "0x").hexToByteArray().toRLP(),
         value!!.toRLP(),
         input.toRLP()
 ).let {

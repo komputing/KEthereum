@@ -6,7 +6,7 @@ import org.kethereum.contract.abi.types.model.ETHType
 import org.kethereum.contract.abi.types.model.ETH_TYPE_PAGESIZE
 import org.kethereum.contract.abi.types.model.type_params.BitsTypeParams
 import org.kethereum.extensions.toBytesPadded
-import org.walleth.khex.toNoPrefixHexString
+import org.komputing.khex.extensions.toNoPrefixHexString
 import java.math.BigInteger
 import java.math.BigInteger.ONE
 

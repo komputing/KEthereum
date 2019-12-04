@@ -3,7 +3,7 @@ package org.kethereum.erc55
 import org.kethereum.functions.isValid
 import org.kethereum.keccakshortcut.keccak
 import org.kethereum.model.Address
-import org.walleth.khex.toNoPrefixHexString
+import org.komputing.khex.extensions.toNoPrefixHexString
 import java.util.*
 
 /*

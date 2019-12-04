@@ -7,8 +7,9 @@ import org.kethereum.functions.encodeRLP
 import org.kethereum.model.Address
 import org.kethereum.model.SignatureData
 import org.kethereum.model.createTransactionWithDefaults
-import org.walleth.khex.hexToByteArray
-import org.walleth.khex.toHexString
+import org.komputing.khex.extensions.hexToByteArray
+import org.komputing.khex.extensions.toHexString
+import org.komputing.khex.model.HexString
 import transactionTestData
 import java.math.BigInteger
 
@@ -36,7 +37,7 @@ class TheTransactionEncoder {
                         nonce = transactionMap["nonce"].getBigInteger(),
 
                         to = Address((transactionMap["to"] as String)),
-                        input = (transactionMap["data"] as String).hexToByteArray(),
+                        input = HexString(transactionMap["data"] as String).hexToByteArray(),
                         from = Address("0x0"))
                 val encodedRLPString = transaction.encodeRLP(signatureData).toHexString()
                 if (encodedRLPString != rlp) {

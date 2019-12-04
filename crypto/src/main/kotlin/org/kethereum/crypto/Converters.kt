@@ -4,14 +4,15 @@ import org.kethereum.crypto.api.ec.CurvePoint
 import org.kethereum.extensions.toHexStringZeroPadded
 import org.kethereum.keccakshortcut.keccak
 import org.kethereum.model.*
-import org.walleth.khex.hexToByteArray
-import org.walleth.khex.toHexString
+import org.komputing.khex.extensions.hexToByteArray
+import org.komputing.khex.extensions.toHexString
+import org.komputing.khex.model.HexString
 import java.math.BigInteger
 import java.util.*
 
 
 fun PublicKey.toAddress() : Address {
-    val publicKeyHexString = key.toHexStringZeroPadded(PUBLIC_KEY_LENGTH_IN_HEX, false)
+    val publicKeyHexString = HexString(key.toHexStringZeroPadded(PUBLIC_KEY_LENGTH_IN_HEX, false))
     val hexToByteArray = publicKeyHexString.hexToByteArray()
     val hash = hexToByteArray.keccak().toHexString()
 

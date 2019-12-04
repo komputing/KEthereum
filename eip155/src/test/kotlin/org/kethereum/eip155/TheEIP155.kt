@@ -9,12 +9,13 @@ import org.kethereum.functions.rlp.decodeRLP
 import org.kethereum.functions.toTransaction
 import org.kethereum.functions.toTransactionSignatureData
 import org.kethereum.model.*
-import org.walleth.khex.hexToByteArray
-import org.walleth.khex.toHexString
+import org.komputing.khex.extensions.hexToByteArray
+import org.komputing.khex.extensions.toHexString
+import org.komputing.khex.model.HexString
 import java.math.BigInteger
 
 
-val privateKey = PrivateKey("4646464646464646464646464646464646464646464646464646464646464646".hexToByteArray())
+val privateKey = PrivateKey(HexString("4646464646464646464646464646464646464646464646464646464646464646"))
 val KEY_PAIR = privateKey.toECKeyPair()
 
 class TheEIP155 {
@@ -50,7 +51,7 @@ class TheEIP155 {
 
     @Test
     fun extractFrom() {
-        val hex = "0xf86b0a8504a817c80082520894381e247bef0ebc21b6611786c665dd5514dcc31f87470de4df820000802ca0eb663a939118771638352a6fdbdf7287860b362135df51fde41da4303aac771ea05fa601badefb8982025d8b6826f6882efc07722ca9cba6a189b27eb84debbaab"
+        val hex = HexString("0xf86b0a8504a817c80082520894381e247bef0ebc21b6611786c665dd5514dcc31f87470de4df820000802ca0eb663a939118771638352a6fdbdf7287860b362135df51fde41da4303aac771ea05fa601badefb8982025d8b6826f6882efc07722ca9cba6a189b27eb84debbaab")
         val tx = (hex.hexToByteArray().decodeRLP() as RLPList).toTransaction()!!
         val sig = (hex.hexToByteArray().decodeRLP() as RLPList).toTransactionSignatureData()
 

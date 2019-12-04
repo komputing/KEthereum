@@ -16,7 +16,7 @@ import org.kethereum.ens.ENS_DEFAULT_CONTRACT_ADDRESS
 import org.kethereum.model.Transaction
 import org.kethereum.rpc.EthereumRPC
 import org.kethereum.rpc.model.StringResultResponse
-import org.walleth.khex.toHexString
+import org.komputing.khex.extensions.toHexString
 
 @ExtendWith(MockKExtension::class)
 class TheENS {

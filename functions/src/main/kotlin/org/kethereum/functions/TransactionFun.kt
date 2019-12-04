@@ -3,7 +3,7 @@ package org.kethereum.functions
 import org.kethereum.keccakshortcut.keccak
 import org.kethereum.model.Address
 import org.kethereum.model.Transaction
-import org.walleth.khex.toHexString
+import org.komputing.khex.extensions.toHexString
 import java.math.BigInteger
 
 fun Transaction.calculateHash() = encodeRLP().keccak()

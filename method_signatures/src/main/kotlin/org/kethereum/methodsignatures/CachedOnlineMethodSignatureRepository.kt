@@ -5,7 +5,7 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import org.kethereum.methodsignatures.model.TextMethodSignature
 import org.kethereum.model.Transaction
-import org.walleth.khex.toNoPrefixHexString
+import org.komputing.khex.extensions.toNoPrefixHexString
 import java.io.File
 import java.io.IOException
 

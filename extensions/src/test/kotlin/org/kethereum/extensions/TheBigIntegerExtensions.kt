@@ -3,6 +3,7 @@ package org.kethereum.extensions
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Assertions.assertThrows
 import org.junit.jupiter.api.Test
+import org.komputing.khex.model.HexString
 import java.math.BigInteger
 import java.math.BigInteger.*
 
@@ -15,22 +16,22 @@ class TheBigIntegerExtensions {
 
     @Test
     fun maybeHexToBigIntegerWorks() {
-        assertThat("0xa".maybeHexToBigInteger()).isEqualTo(TEN)
-        assertThat("10".maybeHexToBigInteger()).isEqualTo(TEN)
-        assertThat("0x0".maybeHexToBigInteger()).isEqualTo(ZERO)
-        assertThat("0".maybeHexToBigInteger()).isEqualTo(ZERO)
-        assertThat("0x1".maybeHexToBigInteger()).isEqualTo(ONE)
-        assertThat("1".maybeHexToBigInteger()).isEqualTo(ONE)
-        assertThat("1001".maybeHexToBigInteger()).isEqualTo(1001)
+        assertThat(HexString("0xa").maybeHexToBigInteger()).isEqualTo(TEN)
+        assertThat(HexString("10").maybeHexToBigInteger()).isEqualTo(TEN)
+        assertThat(HexString("0x0").maybeHexToBigInteger()).isEqualTo(ZERO)
+        assertThat(HexString("0").maybeHexToBigInteger()).isEqualTo(ZERO)
+        assertThat(HexString("0x1").maybeHexToBigInteger()).isEqualTo(ONE)
+        assertThat(HexString("1").maybeHexToBigInteger()).isEqualTo(ONE)
+        assertThat(HexString("1001").maybeHexToBigInteger()).isEqualTo(1001)
 
         assertThrows(NumberFormatException::class.java) {
-            "a".maybeHexToBigInteger()
+            HexString("a").maybeHexToBigInteger()
         }
         assertThrows(NumberFormatException::class.java) {
-            "0x?".maybeHexToBigInteger()
+            HexString("0x?").maybeHexToBigInteger()
         }
         assertThrows(NumberFormatException::class.java) {
-            "yolo".maybeHexToBigInteger()
+            HexString("yolo").maybeHexToBigInteger()
         }
     }
 }

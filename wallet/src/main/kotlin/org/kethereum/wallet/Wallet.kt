@@ -13,8 +13,9 @@ import org.kethereum.model.ECKeyPair
 import org.kethereum.model.PRIVATE_KEY_SIZE
 import org.kethereum.model.PrivateKey
 import org.kethereum.wallet.model.*
-import org.walleth.khex.hexToByteArray
-import org.walleth.khex.toNoPrefixHexString
+import org.komputing.khex.extensions.hexToByteArray
+import org.komputing.khex.extensions.toNoPrefixHexString
+import org.komputing.khex.model.HexString
 import java.nio.charset.Charset
 import java.util.*
 
@@ -74,7 +75,7 @@ private fun createWallet(ecKeyPair: ECKeyPair,
 )
 
 private fun generateDerivedScryptKey(password: ByteArray, kdfParams: ScryptKdfParams) =
-        CryptoAPI.scrypt.derive(password, kdfParams.salt?.hexToByteArray(), kdfParams.n, kdfParams.r, kdfParams.p, kdfParams.dklen)
+        CryptoAPI.scrypt.derive(password, kdfParams.salt?.let { HexString(it) }?.hexToByteArray(), kdfParams.n, kdfParams.r, kdfParams.p, kdfParams.dklen)
 
 @Throws(CipherException::class)
 private fun generateAes128CtrDerivedKey(password: ByteArray, kdfParams: Aes128CtrKdfParams): ByteArray {
@@ -86,7 +87,7 @@ private fun generateAes128CtrDerivedKey(password: ByteArray, kdfParams: Aes128Ct
     // Java 8 supports this, but you have to convert the password to a character array, see
     // http://stackoverflow.com/a/27928435/3211687
 
-    return CryptoAPI.pbkdf2.derive(password, kdfParams.salt?.hexToByteArray(), kdfParams.c, DigestParams.Sha256)
+    return CryptoAPI.pbkdf2.derive(password, kdfParams.salt?.let { HexString(it) }?.hexToByteArray(), kdfParams.c, DigestParams.Sha256)
 }
 
 @Throws(CipherException::class)
@@ -111,9 +112,9 @@ fun Wallet.decrypt(password: String): ECKeyPair {
 
     validate()
 
-    val mac = crypto.mac.hexToByteArray()
-    val iv = crypto.cipherparams.iv.hexToByteArray()
-    val cipherText = crypto.ciphertext.hexToByteArray()
+    val mac = HexString(crypto.mac).hexToByteArray()
+    val iv = HexString(crypto.cipherparams.iv).hexToByteArray()
+    val cipherText = HexString(crypto.ciphertext).hexToByteArray()
 
     val derivedKey = when (val kdfParams = crypto.kdfparams) {
         is ScryptKdfParams -> generateDerivedScryptKey(password.toByteArray(UTF_8), kdfParams)

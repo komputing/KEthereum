@@ -6,7 +6,8 @@ import org.junit.jupiter.api.Test
 import org.kethereum.bip32.model.Seed
 import org.kethereum.bip39.model.MnemonicWords
 import org.kethereum.bip39.wordlists.WORDLIST_ENGLISH
-import org.walleth.khex.hexToByteArray
+import org.komputing.khex.extensions.hexToByteArray
+import org.komputing.khex.model.HexString
 
 /**
  * Test batch for mnemonic phrases and the keys they generate.
@@ -61,7 +62,7 @@ class MnemonicTest {
     fun mnemonicToSeed() {
         testData.forEach {
 
-            val expectedSeed = Seed(it.seed.hexToByteArray())
+            val expectedSeed = Seed(HexString(it.seed).hexToByteArray())
             val actualSeed = MnemonicWords(it.phrase).toSeed("TREZOR")
 
             assertThat(expectedSeed.seed).isEqualTo(actualSeed.seed)
@@ -73,7 +74,7 @@ class MnemonicTest {
     fun mnemonicToEntropy() {
         testData.forEach {
 
-            val expectedEntropy = it.entropy.hexToByteArray()
+            val expectedEntropy = HexString(it.entropy).hexToByteArray()
             val actualEntropy = mnemonicToEntropy(it.phrase, WORDLIST_ENGLISH)
 
             assertThat(expectedEntropy).isEqualTo(actualEntropy)
@@ -83,7 +84,7 @@ class MnemonicTest {
     @Test
     fun entropyToMnemonic() {
         testData.forEach {
-            val entropy = it.entropy.hexToByteArray()
+            val entropy = HexString(it.entropy).hexToByteArray()
             val actualPhrase = entropyToMnemonic(entropy, WORDLIST_ENGLISH)
 
             assertThat(it.phrase).isEqualTo(actualPhrase)

@@ -4,8 +4,9 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.kethereum.extensions.toByteArray
 import org.kethereum.extensions.toMinimalByteArray
-import org.walleth.khex.hexToByteArray
-import org.walleth.khex.toNoPrefixHexString
+import org.komputing.khex.extensions.hexToByteArray
+import org.komputing.khex.extensions.toNoPrefixHexString
+import org.komputing.khex.model.HexString
 import java.util.*
 
 class TheRLPEncoder {
@@ -13,7 +14,7 @@ class TheRLPEncoder {
     @Test
     fun encodingWorks() {
 
-        rlpTestData.forEach { rlpElement, hex ->
+        rlpTestData.forEach { (rlpElement, hex) ->
             assertThat(rlpElement.encode().toNoPrefixHexString()).isEqualTo(hex)
         }
     }
@@ -43,21 +44,21 @@ class TheRLPEncoder {
 
     @Test
     fun toByteArrayWorks() {
-        assertThat(0.toByteArray()).isEqualTo("00000000".hexToByteArray())
-        assertThat(1.toByteArray()).isEqualTo("00000001".hexToByteArray())
-        assertThat(0xab.toByteArray()).isEqualTo("000000ab".hexToByteArray())
-        assertThat(0xaabb.toByteArray()).isEqualTo("0000aabb".hexToByteArray())
-        assertThat(0xaabbcd.toByteArray()).isEqualTo("00aabbcd".hexToByteArray())
-        assertThat(0xaabbcdef.toInt().toByteArray()).isEqualTo("aabbcdef".hexToByteArray())
+        assertThat(0.toByteArray()).isEqualTo(HexString("00000000").hexToByteArray())
+        assertThat(1.toByteArray()).isEqualTo(HexString("00000001").hexToByteArray())
+        assertThat(0xab.toByteArray()).isEqualTo(HexString("000000ab").hexToByteArray())
+        assertThat(0xaabb.toByteArray()).isEqualTo(HexString("0000aabb").hexToByteArray())
+        assertThat(0xaabbcd.toByteArray()).isEqualTo(HexString("00aabbcd").hexToByteArray())
+        assertThat(0xaabbcdef.toInt().toByteArray()).isEqualTo(HexString("aabbcdef").hexToByteArray())
     }
 
     @Test
     fun toMinimalByteArrayWorks() {
-        assertThat(1.toMinimalByteArray()).isEqualTo("01".hexToByteArray())
-        assertThat(0xab.toMinimalByteArray()).isEqualTo("ab".hexToByteArray())
-        assertThat(0xaabb.toMinimalByteArray()).isEqualTo("aabb".hexToByteArray())
-        assertThat(0xaabbcd.toMinimalByteArray()).isEqualTo("aabbcd".hexToByteArray())
-        assertThat(0xaabbcdef.toInt().toMinimalByteArray()).isEqualTo("aabbcdef".hexToByteArray())
+        assertThat(1.toMinimalByteArray()).isEqualTo(HexString("01").hexToByteArray())
+        assertThat(0xab.toMinimalByteArray()).isEqualTo(HexString("ab").hexToByteArray())
+        assertThat(0xaabb.toMinimalByteArray()).isEqualTo(HexString("aabb").hexToByteArray())
+        assertThat(0xaabbcd.toMinimalByteArray()).isEqualTo(HexString("aabbcd").hexToByteArray())
+        assertThat(0xaabbcdef.toInt().toMinimalByteArray()).isEqualTo(HexString("aabbcdef").hexToByteArray())
     }
 
     @Test

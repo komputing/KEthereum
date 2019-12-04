@@ -4,8 +4,8 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.kethereum.bip32.model.Seed
 import org.kethereum.bip32.model.XPriv
-import org.walleth.khex.hexToByteArray
-
+import org.komputing.khex.extensions.hexToByteArray
+import org.komputing.khex.model.HexString
 
 /**
  * Test batch for key derivation from seed given a path.
@@ -23,8 +23,8 @@ class DerivationTest {
     @Test
     fun generateKeysFromSeed() {
         testData.forEach {
-            val derivedKey = Seed(it.seed.hexToByteArray()).toKey(it.path)
-            val testnetDerivedKey = Seed(it.seed.hexToByteArray()).toKey(it.path, testnet = true)
+            val derivedKey = Seed(HexString(it.seed).hexToByteArray()).toKey(it.path)
+            val testnetDerivedKey = Seed(HexString(it.seed).hexToByteArray()).toKey(it.path, testnet = true)
 
             val obtainedPub = derivedKey.serialize(true)
             assertThat(it.expectedPublicKey).isEqualTo(obtainedPub)

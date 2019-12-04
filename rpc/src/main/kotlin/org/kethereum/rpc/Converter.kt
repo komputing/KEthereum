@@ -6,23 +6,27 @@ import org.kethereum.model.*
 import org.kethereum.rpc.model.BlockInformation
 import org.kethereum.rpc.model.rpc.BlockInformationRPC
 import org.kethereum.rpc.model.rpc.TransactionRPC
-import org.walleth.khex.hexToByteArray
-import org.walleth.khex.toHexString
+import org.komputing.khex.extensions.hexToByteArray
+import org.komputing.khex.extensions.toHexString
+import org.komputing.khex.model.HexString
 
 internal fun TransactionRPC.toKethereumTransaction() = SignedTransaction(
         createTransactionWithDefaults(
-                value = value.hexToBigInteger(),
+                value = HexString(value).hexToBigInteger(),
                 from = Address(from),
                 to = to?.let { Address(it) },
-                chain = chainId?.hexToBigInteger()?.let { ChainId(it) },
+                chain = chainId?.let { HexString(it).hexToBigInteger() }?.let { ChainId(it) },
 
-                nonce = nonce.hexToBigInteger(),
-                gasPrice = gasPrice.hexToBigInteger(),
-                gasLimit = gas.hexToBigInteger(),
+                nonce = HexString(nonce).hexToBigInteger(),
+                gasPrice = HexString(gasPrice).hexToBigInteger(),
+                gasLimit = HexString(gas).hexToBigInteger(),
                 txHash = hash,
-                input = input.hexToByteArray()
+                input = HexString(input).hexToByteArray()
 
-        ), signatureData = SignatureData(r = r.hexToBigInteger(), s = s.hexToBigInteger(), v = v.hexToBigInteger())
+        ), signatureData = SignatureData(
+        r = HexString(r).hexToBigInteger(),
+        s = HexString(s).hexToBigInteger(),
+        v = HexString(v).hexToBigInteger())
 )
 
 internal fun BlockInformationRPC.toBlockInformation() = BlockInformation(transactions.map { it.toKethereumTransaction() })

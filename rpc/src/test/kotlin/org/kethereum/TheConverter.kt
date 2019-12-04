@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test
 import org.kethereum.model.Address
 import org.kethereum.rpc.model.rpc.TransactionRPC
 import org.kethereum.rpc.toKethereumTransaction
-import org.walleth.khex.toHexString
+import org.komputing.khex.extensions.toHexString
 import java.math.BigInteger
 
 class TheConverter {

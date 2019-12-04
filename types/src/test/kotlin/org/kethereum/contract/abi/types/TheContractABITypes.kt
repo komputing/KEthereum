@@ -7,7 +7,8 @@ import org.kethereum.contract.abi.types.model.ContractABITypeDefinition
 import org.kethereum.contract.abi.types.model.type_params.BitsTypeParams
 import org.kethereum.contract.abi.types.model.type_params.BytesTypeParams
 import org.kethereum.contract.abi.types.model.types.*
-import org.walleth.khex.hexToByteArray
+import org.komputing.khex.extensions.hexToByteArray
+import org.komputing.khex.model.HexString
 
 class TheContractABITypes {
 
@@ -61,7 +62,7 @@ class TheContractABITypes {
 
         val myAddress = AddressETHType.ofString(address)
 
-        assertThat(myAddress.paddedValue).isEqualTo(ByteArray(12) + address.hexToByteArray())
+        assertThat(myAddress.paddedValue).isEqualTo(ByteArray(12) + HexString(address).hexToByteArray())
     }
 
     @Test
@@ -97,22 +98,22 @@ class TheContractABITypes {
     @Test
     fun handlesValidBools() {
         assertThat(BoolETHType.ofString("true").paddedValue)
-                .isEqualTo(("0x" + "0".repeat(63) + "1").hexToByteArray())
+                .isEqualTo(HexString("0x" + "0".repeat(63) + "1").hexToByteArray())
 
         assertThat(BoolETHType.ofString("TRUE").paddedValue)
-                .isEqualTo(("0x" + "0".repeat(63) + "1").hexToByteArray())
+                .isEqualTo(HexString("0x" + "0".repeat(63) + "1").hexToByteArray())
 
         assertThat(BoolETHType.ofString("false").paddedValue)
-                .isEqualTo(("0x" + "0".repeat(64)).hexToByteArray())
+                .isEqualTo(HexString("0x" + "0".repeat(64)).hexToByteArray())
 
         assertThat(BoolETHType.ofString("FALSE").paddedValue)
-                .isEqualTo(("0x" + "0".repeat(64)).hexToByteArray())
+                .isEqualTo(HexString("0x" + "0".repeat(64)).hexToByteArray())
     }
 
     @Test
     fun handlesBytes() {
         assertThat(BytesETHType.ofString("0xFA", BytesTypeParams(1)).paddedValue)
-                .isEqualTo(("0xFA" + "0".repeat(62)).hexToByteArray())
+                .isEqualTo(HexString("0xFA" + "0".repeat(62)).hexToByteArray())
 
     }
 }

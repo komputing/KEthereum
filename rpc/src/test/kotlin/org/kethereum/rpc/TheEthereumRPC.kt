@@ -10,7 +10,8 @@ import org.kethereum.extensions.hexToBigInteger
 import org.kethereum.model.Address
 import org.kethereum.model.SignedTransaction
 import org.kethereum.rpc.model.BlockInformation
-import org.walleth.khex.hexToByteArray
+import org.komputing.khex.extensions.hexToByteArray
+import org.komputing.khex.model.HexString
 import java.math.BigInteger
 import java.math.BigInteger.TEN
 import java.math.BigInteger.ZERO
@@ -37,7 +38,7 @@ class TheEthereumRPC {
         val response = "{\"jsonrpc\":\"2.0\",\"id\":83,\"result\":\"0x0234c8a3397aab58\"}\n"
         server.enqueue(MockResponse().setBody(response))
 
-        assertThat(tested.getBalance(Address("0x0"), "latest")).isEqualTo("0x0234c8a3397aab58".hexToBigInteger())
+        assertThat(tested.getBalance(Address("0x0"), "latest")).isEqualTo(HexString("0x0234c8a3397aab58").hexToBigInteger())
     }
 
     @Test
@@ -55,10 +56,10 @@ class TheEthereumRPC {
     @Test
     fun sendRawTransactionWorks() {
         //language=JSON
-        val response = "{\"jsonrpc\":\"2.0\",\"id\":83,\"result\":\"0xe670ec64341771606e55d6b4ca35a1a6b75ee3d5145a99d05921026d1527331\"}\n"
+        val response = "{\"jsonrpc\":\"2.0\",\"id\":83,\"result\":\"0xe670ec64341771606e55d6b4ca35a1a6b75ee3d5145a99d05921026d15273311\"}\n"
         server.enqueue(MockResponse().setBody(response))
 
-        assertThat(tested.sendRawTransaction("0x00")).isEqualTo("0xe670ec64341771606e55d6b4ca35a1a6b75ee3d5145a99d05921026d1527331".hexToByteArray())
+        assertThat(tested.sendRawTransaction("0x00")).isEqualTo("0xe670ec64341771606e55d6b4ca35a1a6b75ee3d5145a99d05921026d15273311")
     }
 
     @Test
@@ -67,7 +68,7 @@ class TheEthereumRPC {
         val response = "{\"jsonrpc\":\"2.0\",\"id\":83,\"result\":\"0x4299d\"}\n"
         server.enqueue(MockResponse().setBody(response))
 
-        assertThat(tested.blockNumber()).isEqualTo("0x4299d".hexToBigInteger())
+        assertThat(tested.blockNumber()).isEqualTo(HexString("0x4299d").hexToBigInteger())
     }
 
     @Test
@@ -139,22 +140,22 @@ class TheEthereumRPC {
         val firstTransaction = firstSignedTransaction.transaction
         val firstSignature = firstSignedTransaction.signatureData
         assertThat(firstTransaction.from).isEqualTo(Address("0x867a5221564160c128f2b0ec6b22216c380ddc76"))
-        assertThat(firstTransaction.gasLimit).isEqualTo("0x5208".hexToBigInteger())
-        assertThat(firstTransaction.gasPrice).isEqualTo("0xd4fc47cf6".hexToBigInteger())
+        assertThat(firstTransaction.gasLimit).isEqualTo(HexString("0x5208").hexToBigInteger())
+        assertThat(firstTransaction.gasPrice).isEqualTo(HexString("0xd4fc47cf6").hexToBigInteger())
         assertThat(firstTransaction.txHash).isEqualTo("0xceebdef59ab3cdde152672014b451f75bb7974b9dca4b30e545b6864d9ffca9d")
-        assertThat(firstTransaction.input).isEqualTo("0x".hexToByteArray())
+        assertThat(firstTransaction.input).isEqualTo(HexString("0x").hexToByteArray())
         assertThat(firstTransaction.nonce).isEqualTo(BigInteger.valueOf(16))
         assertThat(firstTransaction.to).isEqualTo(Address("0x32be343b94f860124dc4fee278fdcbd38c102d88"))
-        assertThat(firstTransaction.value).isEqualTo("0x596c90f09f547400".hexToBigInteger())
+        assertThat(firstTransaction.value).isEqualTo(HexString("0x596c90f09f547400").hexToBigInteger())
 
         assertThat(firstSignature.v)
-                .isEqualTo("0x1c".hexToBigInteger())
+                .isEqualTo(HexString("0x1c").hexToBigInteger())
 
         assertThat(firstSignature.r)
-                .isEqualTo("0xdcd183c34a1ceb7934b7fb32f3169b8f3fff43da936553e4d92ae97bb0a9a765".hexToBigInteger())
+                .isEqualTo(HexString("0xdcd183c34a1ceb7934b7fb32f3169b8f3fff43da936553e4d92ae97bb0a9a765").hexToBigInteger())
 
         assertThat(firstSignature.s)
-                .isEqualTo("0x76d4be3d62b9e6e6bb8c494c3228f4df31b5c20d8f892fe1d9d35f07afab3d73".hexToBigInteger())
+                .isEqualTo(HexString("0x76d4be3d62b9e6e6bb8c494c3228f4df31b5c20d8f892fe1d9d35f07afab3d73").hexToBigInteger())
     }
 
 

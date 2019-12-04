@@ -4,7 +4,7 @@ import org.kethereum.abi.model.EthereumFunction
 import org.kethereum.keccakshortcut.keccak
 import org.kethereum.methodsignatures.model.HexMethodSignature
 import org.kethereum.methodsignatures.model.TextMethodSignature
-import org.walleth.khex.toNoPrefixHexString
+import org.komputing.khex.extensions.toNoPrefixHexString
 
 private fun String.getHexSignature() = toByteArray().keccak().toNoPrefixHexString().substring(0, 8)
 

@@ -6,7 +6,7 @@ import org.kethereum.functions.rlp.toUnsignedBigIntegerFromRLP
 import org.kethereum.model.Address
 import org.kethereum.model.SignatureData
 import org.kethereum.model.Transaction
-import org.walleth.khex.toHexString
+import org.komputing.khex.extensions.toHexString
 
 fun RLPList.toTransaction(): Transaction? {
     require(!(element.size != 6 && element.size != 9)) { "RLPList for transaction must have 6(unsigned) or 9(signed) elements - but has " + element.size }
