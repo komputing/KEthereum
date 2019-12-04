@@ -1,6 +1,6 @@
 package org.kethereum.rpc.model
 
-data class Error(
+internal data class Error(
         val message: String,
         val code: Int
 )

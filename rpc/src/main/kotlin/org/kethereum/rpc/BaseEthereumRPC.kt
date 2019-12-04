@@ -5,12 +5,17 @@ import com.squareup.moshi.Moshi
 import org.kethereum.extensions.hexToBigInteger
 import org.kethereum.extensions.toHexString
 import org.kethereum.model.Address
+import org.kethereum.model.ChainId
 import org.kethereum.model.Transaction
 import org.kethereum.rpc.model.BigIntegerAdapter
 import org.kethereum.rpc.model.BlockInformationResponse
 import org.kethereum.rpc.model.StringResultResponse
 import org.kethereum.rpc.model.TransactionResponse
+import org.walleth.khex.hexToByteArray
+import java.io.IOException
 import java.math.BigInteger
+
+class EthereumRPCException(override val message: String) : IOException(message)
 
 open class BaseEthereumRPC(private val transport: RPCTransport) : EthereumRPC {
 
@@ -30,29 +35,50 @@ open class BaseEthereumRPC(private val transport: RPCTransport) : EthereumRPC {
         blockInfoAdapter.fromJsonNoThrow(string)
     }?.result?.toBlockInformation()
 
-    override fun sendRawTransaction(data: String) = stringCall("eth_sendRawTransaction", "\"$data\"")
+    @Throws(EthereumRPCException::class)
+    override fun sendRawTransaction(data: String) = stringCall("eth_sendRawTransaction", "\"$data\"")?.throwOrString()
 
-    override fun blockNumber() = stringCall("eth_blockNumber")?.result?.hexToBigInteger()
+    @Throws(EthereumRPCException::class)
+    override fun blockNumber() = stringCall("eth_blockNumber")?.getBigIntegerFromStringResult()
 
-    override fun call(transaction: Transaction, block: String) = stringCall("eth_call", "${transaction.toJSON()},\"$block\"")
+    @Throws(EthereumRPCException::class)
+    override fun call(transaction: Transaction, block: String) = stringCall("eth_call", "${transaction.toJSON()},\"$block\"")?.throwOrString()?.hexToByteArray()
 
-    override fun gasPrice() = stringCall("eth_gasPrice")
+    @Throws(EthereumRPCException::class)
+    override fun gasPrice() = stringCall("eth_gasPrice")?.getBigIntegerFromStringResult()
 
-    override fun clientVersion() = stringCall("web3_clientVersion")
+    @Throws(EthereumRPCException::class)
+    override fun clientVersion() = stringCall("web3_clientVersion")?.throwOrString()
 
-    override fun chainId() = stringCall("eth_chainId")
+    @Throws(EthereumRPCException::class)
+    override fun chainId() = stringCall("eth_chainId")?.getBigIntegerFromStringResult()?.let { ChainId(it) }
 
-    override fun getStorageAt(address: String, position: String, block: String) = stringCall("eth_getStorageAt", "\"$address\",\"$position\",\"$block\"")
+    @Throws(EthereumRPCException::class)
+    override fun getStorageAt(address: String, position: String, block: String) = stringCall("eth_getStorageAt", "\"$address\",\"$position\",\"$block\"")?.throwOrString()?.hexToByteArray()
 
-    override fun getTransactionCount(address: String, block: String) = stringCall("eth_getTransactionCount", "\"$address\",\"$block\"")
+    @Throws(EthereumRPCException::class)
+    override fun getTransactionCount(address: String, block: String) = stringCall("eth_getTransactionCount", "\"$address\",\"$block\"")?.getBigIntegerFromStringResult()
 
-    override fun getCode(address: String, block: String) = stringCall("eth_getCode", "\"$address\",\"$block\"")
+    @Throws(EthereumRPCException::class)
+    override fun getCode(address: String, block: String) = stringCall("eth_getCode", "\"$address\",\"$block\"")?.throwOrString()?.hexToByteArray()
 
-    override fun estimateGas(transaction: Transaction) = stringCall("eth_estimateGas", transaction.toJSON())
+    @Throws(EthereumRPCException::class)
+    override fun estimateGas(transaction: Transaction) = stringCall("eth_estimateGas", transaction.toJSON())?.getBigIntegerFromStringResult()
 
-    override fun getBalance(address: Address, block: String) = stringCall("eth_getBalance", "\"${address.hex}\",\"$block\"")
+    @Throws(EthereumRPCException::class)
+    override fun getBalance(address: Address, block: String) = stringCall("eth_getBalance", "\"${address.hex}\",\"$block\"")?.getBigIntegerFromStringResult()
 
+    @Throws(EthereumRPCException::class)
     override fun getTransactionByHash(hash: String) = transport.call("eth_getTransactionByHash", "\"$hash\"")?.let { string ->
         transactionAdapter.fromJsonNoThrow(string)
     }?.result?.toKethereumTransaction()
 }
+
+@Throws(EthereumRPCException::class)
+private fun StringResultResponse.throwOrString() = if (error != null)
+    throw (EthereumRPCException(error.message))
+else
+    result
+
+@Throws(EthereumRPCException::class)
+private fun StringResultResponse.getBigIntegerFromStringResult() = throwOrString().hexToBigInteger()
