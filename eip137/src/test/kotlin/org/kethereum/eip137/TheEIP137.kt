@@ -28,4 +28,10 @@ class TheEIP137 {
 
     }
 
+    @Test
+    fun nameHashWithEmojiWorks() {
+        // 💩💩💩.eth
+        assertThat(ENSName("\uD83D\uDCA9\uD83D\uDCA9\uD83D\uDCA9.eth").toNameHash().toHexString()).isEqualTo("0xa74feb0e5fa5606d3e650275e3bb3873b006a10d558389d3ce2abbe681fcfc8e")
+    }
+
 }
