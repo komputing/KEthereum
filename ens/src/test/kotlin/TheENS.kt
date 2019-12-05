@@ -1,9 +1,7 @@
-
 import io.mockk.confirmVerified
-import io.mockk.every
-import io.mockk.impl.annotations.MockK
 import io.mockk.junit5.MockKExtension
 import io.mockk.slot
+import io.mockk.spyk
 import io.mockk.verify
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -15,20 +13,18 @@ import org.kethereum.ens.ENS
 import org.kethereum.ens.ENS_DEFAULT_CONTRACT_ADDRESS
 import org.kethereum.model.Transaction
 import org.kethereum.rpc.EthereumRPC
-import org.kethereum.rpc.model.StringResultResponse
 import org.komputing.khex.extensions.toHexString
+import org.komputing.khex.model.HexString
 
 @ExtendWith(MockKExtension::class)
 class TheENS {
 
-    @MockK
-    lateinit var mockRPC: EthereumRPC
-
     @Test
     fun testGetResolver() {
-        every {
-            mockRPC.call(any())
-        } returns StringResultResponse(AddressETHType.ofNativeKotlinType(TEST_ADDRESSES.first()).paddedValue.toHexString())
+        val mockRPC = spyk<EthereumRPC>(object : EthereumRPCScaffold() {
+            override fun call(transaction: Transaction, block: String) =
+                    HexString(AddressETHType.ofNativeKotlinType(TEST_ADDRESSES.first()).paddedValue.toHexString())
+        })
 
         val ens = ENS(mockRPC, ENS_DEFAULT_CONTRACT_ADDRESS)
 
@@ -43,12 +39,12 @@ class TheENS {
         assertThat(slot.captured.to).isEqualTo(ENS_DEFAULT_CONTRACT_ADDRESS)
     }
 
-
     @Test
     fun testGetAddress() {
-        every {
-            mockRPC.call(any())
-        } returns StringResultResponse(AddressETHType.ofNativeKotlinType(TEST_ADDRESSES.last()).paddedValue.toHexString())
+        val mockRPC = spyk<EthereumRPC>(object : EthereumRPCScaffold() {
+            override fun call(transaction: Transaction, block: String) =
+                    HexString(AddressETHType.ofNativeKotlinType(TEST_ADDRESSES.last()).paddedValue.toHexString())
+        })
 
         val ens = ENS(mockRPC, ENS_DEFAULT_CONTRACT_ADDRESS)
 
