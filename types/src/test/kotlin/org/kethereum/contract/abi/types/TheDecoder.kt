@@ -83,26 +83,26 @@ class TheDecoder {
 
     @Test
     fun testDecodeString() {
-        val input = PaginatedByteArray("0x000000000000000000000000000000000000000000000000000000000000002000000000000000000000000000000000000000000000000000000000000000046c69676900000000000000000000000000000000000000000000000000000000")
+        val input = PaginatedByteArray(HexString("0x000000000000000000000000000000000000000000000000000000000000002000000000000000000000000000000000000000000000000000000000000000046c69676900000000000000000000000000000000000000000000000000000000"))
         assertThat(StringETHType.ofPaginatedByteArray(input)?.toKotlinType()).isEqualTo("ligi")
 
     }
 
     @Test
     fun testDecodeInt() {
-        val input0 = PaginatedByteArray("0x0000000000000000000000000000000000000000000000000000000000000000")
+        val input0 = PaginatedByteArray(HexString("0x0000000000000000000000000000000000000000000000000000000000000000"))
         assertThat(IntETHType.ofPaginatedByteArray(input0, BitsTypeParams(8))?.toKotlinType()).isEqualTo(ZERO)
 
-        val input1 = PaginatedByteArray("0x0000000000000000000000000000000000000000000000000000000000000001")
+        val input1 = PaginatedByteArray(HexString("0x0000000000000000000000000000000000000000000000000000000000000001"))
         assertThat(IntETHType.ofPaginatedByteArray(input1, BitsTypeParams(8))?.toKotlinType()).isEqualTo(ONE)
 
-        val input_1 = PaginatedByteArray("0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff")
+        val input_1 = PaginatedByteArray(HexString("0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"))
         assertThat(IntETHType.ofPaginatedByteArray(input_1, BitsTypeParams(8))?.toKotlinType()).isEqualTo(BigInteger.valueOf(-1))
 
-        val input127 = PaginatedByteArray("0x000000000000000000000000000000000000000000000000000000000000007f")
+        val input127 = PaginatedByteArray(HexString("0x000000000000000000000000000000000000000000000000000000000000007f"))
         assertThat(IntETHType.ofPaginatedByteArray(input127, BitsTypeParams(8))?.toKotlinType()).isEqualTo(BigInteger.valueOf(127))
 
-        val input_128 = PaginatedByteArray("0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff80")
+        val input_128 = PaginatedByteArray(HexString(("0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff80")))
         assertThat(IntETHType.ofPaginatedByteArray(input_128, BitsTypeParams(16))?.toKotlinType()).isEqualTo(BigInteger.valueOf(-128))
     }
 }

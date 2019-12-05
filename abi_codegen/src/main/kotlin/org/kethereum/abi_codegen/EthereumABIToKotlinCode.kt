@@ -106,7 +106,7 @@ fun EthereumABI.toKotlinCode(spec: GeneratorSpec): FileSpec {
                     kotlinTypesFunBuilder.returns(typeDefinition.kotlinTypeKClass.asTypeName().copy(nullable = true))
 
                     ethTypeFunBuilder.addStatement(
-                            "return %T.ofPaginatedByteArray(%T($rpcCall?.result)${typeDefinition.params.toParamIfExist()})",
+                            "return %T.ofPaginatedByteArray(%T($rpcCall)${typeDefinition.params.toParamIfExist()})",
                             typeDefinition.ethTypeKClass, PaginatedByteArray::class
                     )
 
