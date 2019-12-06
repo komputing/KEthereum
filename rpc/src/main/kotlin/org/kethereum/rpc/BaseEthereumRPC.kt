@@ -15,7 +15,7 @@ import org.komputing.khex.model.HexString
 import java.io.IOException
 import java.math.BigInteger
 
-class EthereumRPCException(override val message: String) : IOException(message)
+class EthereumRPCException(override val message: String, val code: Int) : IOException(message)
 
 open class BaseEthereumRPC(private val transport: RPCTransport) : EthereumRPC {
 
@@ -76,7 +76,7 @@ open class BaseEthereumRPC(private val transport: RPCTransport) : EthereumRPC {
 
 @Throws(EthereumRPCException::class)
 private fun StringResultResponse.throwOrString() = if (error != null)
-    throw (EthereumRPCException(error.message))
+    throw (EthereumRPCException(error.message, error.code))
 else
     result
 

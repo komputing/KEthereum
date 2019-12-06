@@ -52,6 +52,22 @@ class TheEthereumRPC {
         }
     }
 
+    @Test
+    fun errorCodeIsCapturedCorrectly() {
+        //language=JSON
+        val response = "{\"jsonrpc\":\"2.0\",\"error\":{\"code\":-32010,\"message\":\"Transaction with the same hash was already imported.\"},\"id\":1,\"in3\":{\"lastValidatorChange\":68593,\"lastNodeList\":21988,\"execTime\":76}}\n"
+        server.enqueue(MockResponse().setBody(response))
+
+        try {
+            tested.sendRawTransaction("0x0")
+            throw(IllegalStateException("Exception was not thrown - but it should have"))
+        } catch (rpcException: EthereumRPCException) {
+            if (rpcException.code != -32010) {
+                throw(IllegalArgumentException("The wrong code was captured - expecting -32010 - but got ${rpcException.code}"))
+            }
+        }
+
+    }
 
     @Test
     fun sendRawTransactionWorks() {
