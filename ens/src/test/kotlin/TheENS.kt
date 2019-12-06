@@ -6,7 +6,9 @@ import io.mockk.verify
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
+import org.kethereum.contract.abi.types.encodeTypes
 import org.kethereum.contract.abi.types.model.types.AddressETHType
+import org.kethereum.contract.abi.types.model.types.StringETHType
 import org.kethereum.crypto.test_data.TEST_ADDRESSES
 import org.kethereum.eip137.ENSName
 import org.kethereum.ens.ENS
@@ -58,5 +60,21 @@ class TheENS {
         confirmVerified(mockRPC)
         assertThat(slot.captured.to).isEqualTo(TEST_ADDRESSES.last())
 
+    }
+
+    @Test
+    fun testGetTextRecord() {
+        val mockRPC = spyk<EthereumRPC>(object : EthereumRPCScaffold() {
+            override fun call(transaction: Transaction, block: String) =
+                    HexString(encodeTypes(StringETHType.ofNativeKotlinType("my_result")).toHexString())
+        })
+
+        val ens = ENS(mockRPC, ENS_DEFAULT_CONTRACT_ADDRESS)
+
+        assertThat(ens.getTextRecord(ENSName("foo.eth"),"test")).isEqualTo("my_result")
+
+        verify(exactly = 2) {
+            mockRPC.call(any())
+        }
     }
 }

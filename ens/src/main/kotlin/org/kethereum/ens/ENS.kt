@@ -14,6 +14,15 @@ class ENS(private val rpc: EthereumRPC,
 
     private val ens by lazy { ENSRPCConnector(ensAddress, rpc) }
 
+    private fun <T> getFromResolver(nameHash: ByteArray, action: (resolver: Address) -> T): T? {
+        val resolver = ens.resolver(nameHash)
+        return if (resolver != null && resolver != ENS_ADDRESS_NOT_FOUND) {
+            return action.invoke(resolver)
+        } else {
+            null
+        }
+    }
+
     /**
      * get the resolver Address for this ENSName
      */
@@ -22,13 +31,9 @@ class ENS(private val rpc: EthereumRPC,
     /**
      * get an Ethereum Address associated with this ENSName
      */
-    fun getAddress(name: ENSName): Address? {
-        val bytes32 = name.toNameHashByteArray()
-        val resolver = ens.resolver(bytes32)
-        return if (resolver != null && resolver != ENS_ADDRESS_NOT_FOUND) {
-            return ResolverRPCConnector(resolver, rpc).addr(bytes32)
-        } else {
-            null
+    fun getAddress(name: ENSName) = name.toNameHashByteArray().let {
+        getFromResolver(it) { resolver ->
+            ResolverRPCConnector(resolver, rpc).addr(it)
         }
     }
 
@@ -36,13 +41,9 @@ class ENS(private val rpc: EthereumRPC,
      * get a text record as defined in ERC-634
      * https://github.com/ethereum/EIPs/blob/master/EIPS/eip-634.md
      */
-    fun getTextRecord(name: ENSName, key: String): String? {
-        val bytes32 = name.toNameHashByteArray()
-        val resolver = ens.resolver(bytes32)
-        return if (resolver != null && resolver != ENS_ADDRESS_NOT_FOUND) {
-            return ERC634RPCConnector(resolver, rpc).text(bytes32, key)
-        } else {
-            null
+    fun getTextRecord(name: ENSName, key: String) = name.toNameHashByteArray().let {
+        getFromResolver(it) { resolver ->
+            ERC634RPCConnector(resolver, rpc).text(it, key)
         }
     }
 
@@ -95,12 +96,11 @@ class ENS(private val rpc: EthereumRPC,
      */
     fun getTwitterUserName(name: ENSName) = getTextRecord(name, "vnd.twitter")
 
-
-    fun reverseResolve(address: Address): String? {
-        val ensName = ENSName(address.cleanHex.toLowerCase() + ".addr.reverse")
-        val reverseResolver = getResolver(ensName)
-        return if (reverseResolver != null) {
-            ENSReverseResolverRPCConnector(reverseResolver, rpc).name(ensName.toNameHashByteArray())
-        } else null
+    private fun reverseResolve(name: ENSName) = name.toNameHashByteArray().let {
+        getFromResolver(it) { resolver ->
+            ENSReverseResolverRPCConnector(resolver, rpc).name(it)
+        }
     }
+
+    fun reverseResolve(address: Address) = reverseResolve(ENSName(address.cleanHex.toLowerCase() + ".addr.reverse"))
 }
