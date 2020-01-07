@@ -3,6 +3,8 @@ package org.kethereum.methodsignatures
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Test
+import org.kethereum.abi.model.EthereumFunction
+import org.kethereum.abi.model.EthereumNamedType
 import org.kethereum.methodsignatures.model.TextMethodSignature
 import java.nio.file.Files
 
@@ -28,6 +30,19 @@ class TheFileBackedMethodSignatureStore {
         tested.upsert("fababbcc", "yolo")
         assertThat(tested.has("fababbcc")).isTrue()
         assertThat(tested.get("fababbcc")).containsExactly(TextMethodSignature("yolo"))
+
+    }
+
+    @Test
+    fun canInsertOneSignatureViaABI() {
+        val function = EthereumFunction("yolo", listOf(EthereumNamedType("foo", "bool")), emptyList())
+        val fourByteSignature = function.toTextMethodSignature().toHexSignature().hex
+
+        assertThat(tested.has(fourByteSignature)).isFalse()
+
+        tested.upsert(function)
+        assertThat(tested.has(fourByteSignature)).isTrue()
+        assertThat(tested.get(fourByteSignature)).containsExactly(TextMethodSignature("yolo(bool)"))
 
     }
 

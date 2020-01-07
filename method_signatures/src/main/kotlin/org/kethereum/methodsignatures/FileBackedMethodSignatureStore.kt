@@ -1,5 +1,7 @@
 package org.kethereum.methodsignatures
 
+import org.kethereum.abi.model.EthereumFunction
+import org.kethereum.methodsignatures.model.HexMethodSignature
 import org.kethereum.methodsignatures.model.TextMethodSignature
 import java.io.File
 
@@ -25,6 +27,9 @@ class FileBackedMethodSignatureStore(private val storeDir: File) {
             file.writeText(res.joinToString(";"))
         }
     }
+
+    fun upsert(signatureHash: HexMethodSignature, signatureText: TextMethodSignature) = upsert(signatureHash.hex, signatureText.normalizedSignature)
+    fun upsert(function: EthereumFunction) = function.toTextMethodSignature().let { foo -> upsert(foo.toHexSignature(), foo) }
 
     fun get(signatureHash: String) = toTextSignatureSet(toFile(signatureHash))
     fun has(signatureHash: String) = toFile(signatureHash).exists()
