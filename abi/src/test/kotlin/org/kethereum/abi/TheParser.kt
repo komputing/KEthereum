@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test
 class TheParser {
 
     @Test
-    fun convertingTransactionRPC2KethereumTransactionWorks() {
+    fun canParseABI() {
         val parsed = EthereumABI(javaClass.getResource("/peepeth.abi").readText())
         assertThat(parsed.methodList.size).isEqualTo(31)
     }
