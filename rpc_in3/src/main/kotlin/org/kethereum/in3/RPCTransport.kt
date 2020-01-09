@@ -20,4 +20,8 @@ class IN3Transport : RPCTransport {
     }
 }
 
-class IN3RPC(val transport: RPCTransport = IN3Transport()) : BaseEthereumRPC(transport)
+class IN3RPC(chainId: ChainId? = null, val transport: IN3Transport = IN3Transport()) : BaseEthereumRPC(transport) {
+    init {
+        chainId?.let { transport.setChain(it) }
+    }
+}
