@@ -1,4 +1,5 @@
 include(":abi")
+include(":abi_filter")
 include(":abi_codegen")
 include(":bip32")
 include(":bip39")

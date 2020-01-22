@@ -1,5 +1,6 @@
 dependencies {
     "implementation"(project(":abi"))
+    "implementation"(project(":abi_filter"))
     "implementation"(project(":rpc"))
     "implementation"(project(":model"))
     "implementation"(project(":method_signatures"))

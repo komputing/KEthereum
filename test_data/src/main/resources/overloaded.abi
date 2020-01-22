@@ -1,0 +1,40 @@
+[
+  {
+    "constant": false,
+    "inputs": [
+      {
+        "name": "param1",
+        "type": "address"
+      }
+    ],
+    "name": "fuName",
+    "outputs": [
+      {
+        "name": "firstFunOut",
+        "type": "bool"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      {
+        "name": "param1",
+        "type": "bool"
+      }
+    ],
+    "name": "fuName",
+    "outputs": [
+      {
+        "name": "secondFunOut",
+        "type": "bool"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  }
+]
