@@ -1,0 +1,243 @@
+{
+  "id": 1,
+  "result": {
+    "nodes": [
+      {
+        "url": "https://in3-v2.slock.it/mainnet/nd-1",
+        "address": "0x45d45e6ff99e6c34a235d263965910298985fcfe",
+        "index": 0,
+        "deposit": "0xe043da617250000",
+        "props": "0x6000001dd",
+        "timeout": 3456000,
+        "registerTime": 1576224418,
+        "weight": 2000
+      },
+      {
+        "url": "https://in3-v2.slock.it/mainnet/nd-2,",
+        "address": "0x45d45e6ff99e6c34a235d263965910298985fcfe",
+        "index": 0,
+        "deposit": "0xe043da617250000",
+        "props": "0x6000001dd",
+        "timeout": 3456000,
+        "registerTime": 1576224418,
+        "weight": 2000,
+        "address": "0x1fe2e9bf29aa1938859af64c413361227d04059a",
+        "index": 1,
+        "deposit": "0x1be4f459be890000",
+        "props": "0x6000001dd",
+        "timeout": 3456000,
+        "registerTime": 1576224531,
+        "weight": 2000
+      },
+      {
+        "url": "https://in3-v2.slock.it/mainnet/nd-3",
+        "address": "0x945f75c0408c0026a3cd204d36f5e47745182fd4",
+        "index": 2,
+        "deposit": "0x45871874b4b50000",
+        "props": "0x6000001dd",
+        "timeout": 3456000,
+        "registerTime": 1576224604,
+        "weight": 2000
+      },
+      {
+        "url": "https://in3-v2.slock.it/mainnet/nd-4",
+        "address": "0xc513a534de5a9d3f413152c41b09bd8116237fc8",
+        "index": 3,
+        "deposit": "0x8aeaa9f6f9a90000",
+        "props": "0x6000001dd",
+        "timeout": 3456000,
+        "registerTime": 1576224650,
+        "weight": 2000
+      },
+      {
+        "url": "https://in3-v2.slock.it/mainnet/nd-5",
+        "address": "0xbcdf4e3e90cc7288b578329efd7bcc90655148d2",
+        "index": 4,
+        "deposit": "0x115b1ccfb83910000",
+        "props": "0x6000001dd",
+        "timeout": 3456000,
+        "registerTime": 1576224948,
+        "weight": 2000
+      },
+      {
+        "url": "http://eth-mainnet-01.incubed-node.de:8500",
+        "address": "0xe9a1f583c6591566b0cda30dd2a647126d1ce0c2",
+        "index": 5,
+        "deposit": "0x3782dace9d90000",
+        "props": "0x6000001dd",
+        "timeout": 3456000,
+        "registerTime": 1578987329,
+        "weight": 2000
+      },
+      {
+        "url": "https://in3-node-1.keil-connect.com",
+        "address": "0xcff39dbe511bcf14b65e4030b3d8700e0ed67cea",
+        "index": 6,
+        "deposit": "0x16345785d8a0000",
+        "props": "0x1f0e0000000a",
+        "timeout": 3456000,
+        "registerTime": 1578988306,
+        "weight": 1
+      },
+      {
+        "url": "https://in3-node-from.space",
+        "address": "0x792cc04f89b012ac1f98c19b7281fbda8a3e1a92",
+        "index": 7,
+        "deposit": "0x2386f26fc10000",
+        "props": "0xa000001d9",
+        "timeout": 3456000,
+        "registerTime": 1579088618,
+        "weight": 1
+      },
+      {
+        "url": "https://in3.iotenabler.com",
+        "address": "0xb8cf3f02c24ca897b157a34019711679c6e556a8",
+        "index": 8,
+        "deposit": "0x2386f26fc10000",
+        "props": "0xa000001d1",
+        "timeout": 3456000,
+        "registerTime": 1579092616,
+        "weight": 1
+      },
+      {
+        "url": "https://incubed.online",
+        "address": "0x77a4a0e80d7786dec85e3087cc1c6ac3802af9cd",
+        "index": 9,
+        "deposit": "0x2386f26fc10000",
+        "props": "0xf000001d9",
+        "timeout": 3456000,
+        "registerTime": 1579247282,
+        "weight": 2000
+      },
+      {
+        "url": "https://in3.indenwolken.tech",
+        "address": "0x591761898ba2dfcf3b230bd3ab7d0de0c4ef168f",
+        "index": 10,
+        "deposit": "0x2386f26fc10000",
+        "props": "0xf000001d9",
+        "timeout": 3456000,
+        "registerTime": 1579252398,
+        "weight": 2000
+      },
+      {
+        "url": "https://in3-g.open-dna.de",
+        "address": "0x0cea2ff03adcfa047e8f54f98d41d9147c3ccd4d",
+        "index": 11,
+        "deposit": "0x2386f26fc10000",
+        "props": "0xf000001d9",
+        "timeout": 3456000,
+        "registerTime": 1579267585,
+        "weight": 2000
+      },
+      {
+        "url": "https://in3.fri3dman.com",
+        "address": "0xb451c4b6bdfbc4123fdd7cf61fd9dc0a88021f65",
+        "index": 12,
+        "deposit": "0x2386f26fc10000",
+        "props": "0xa000001f9",
+        "timeout": 3456000,
+        "registerTime": 1579352283,
+        "weight": 1
+      },
+      {
+        "url": "https://in3-parity.iotenabler.com/",
+        "address": "0x4323d321a39ed4a197524c6acd18c072f753c1b0",
+        "index": 13,
+        "deposit": "0x2386f26fc10000",
+        "props": "0xa000001d1",
+        "timeout": 3456000,
+        "registerTime": 1579525922,
+        "weight": 1
+      },
+      {
+        "url": "https://in3-geth.iotenabler.com/",
+        "address": "0x8db016dbdc03e76990adda627aab64db8106be4b",
+        "index": 14,
+        "deposit": "0x2386f26fc10000",
+        "props": "0xa000001d1",
+        "timeout": 3456000,
+        "registerTime": 1579526954,
+        "weight": 1
+      },
+      {
+        "url": "https://in3-infura.iotenabler.com/",
+        "address": "0x19580b648bb23163136b583ff5f56657fffb6610",
+        "index": 15,
+        "deposit": "0x2386f26fc10000",
+        "props": "0xa000001d1",
+        "timeout": 3456000,
+        "registerTime": 1579530461,
+        "weight": 1
+      },
+      {
+        "url": "https://in3no.de",
+        "address": "0x65b9464bc41dc35534f8b6ea5108f4905161efd2",
+        "index": 16,
+        "deposit": "0x2386f26fc10000",
+        "props": "0x6000001d9",
+        "timeout": 3456000,
+        "registerTime": 1579538640,
+        "weight": 1
+      },
+      {
+        "url": "https://letsincubed.com",
+        "address": "0x1389e3b68bbef358e4ee6fabf94d3c884deda376",
+        "index": 17,
+        "deposit": "0x2386f26fc10000",
+        "props": "0x6000001d9",
+        "timeout": 3456000,
+        "registerTime": 1579539143,
+        "weight": 1
+      },
+      {
+        "url": "https://in3node.com",
+        "address": "0x00a329c0648769a73afac7f9381e08fb43dbea72",
+        "index": 18,
+        "deposit": "0x2386f26fc10000",
+        "props": "0xf000001d9",
+        "timeout": 3456000,
+        "registerTime": 1579600645,
+        "weight": 2000
+      },
+      {
+        "url": "https://chaind.de/eth/mainnet1",
+        "address": "0xccd12a2222995e62eca64426989c2688d828aa47",
+        "index": 19,
+        "deposit": "0x2386f26fc10000",
+        "props": "0x6000001d9",
+        "timeout": 3456000,
+        "registerTime": 1579646966,
+        "weight": 1
+      },
+      {
+        "url": "https://in3.tuc47.xyz",
+        "address": "0x6d172460c0303736c2fd4a329664fe03c2f09512",
+        "index": 20,
+        "deposit": "0x2386f26fc10000",
+        "props": "0xa000001d1",
+        "timeout": 3456000,
+        "registerTime": 1579717924,
+        "weight": 1
+      },
+      {
+        "url": "https://in3.ahnenposter.de",
+        "address": "0x6e314c4c7b5ae5c6f49aea2d90a1d083abab045d",
+        "index": 21,
+        "deposit": "0x2386f26fc10000",
+        "props": "0x6000001d9",
+        "timeout": 3456000,
+        "registerTime": 1579764858,
+        "weight": 2000
+      }
+    ],
+    "contract": "0xac1b824795e1eb1f6e609fe0da9b9af8beaab60f",
+    "registryId": "0x23d5345c5c13180a8080bd5ddbe7cde64683755dcce6e734d95b7b573845facb",
+    "lastBlockNumber": 9343450,
+    "totalServers": 22
+  },
+  "jsonrpc": "2.0",
+  "in3": {
+    "execTime": 0,
+    "lastValidatorChange": 0
+  }
+}
