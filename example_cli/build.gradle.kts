@@ -16,6 +16,7 @@ dependencies {
     "implementation"(project(":erc55"))
     "implementation"(project(":eip137"))
     "implementation"(project(":rpc"))
+    "implementation"(project(":rpc_min3"))
     "implementation"(project(":ens"))
     "implementation"(project(":test_data"))
     "implementation"(project(":abi"))

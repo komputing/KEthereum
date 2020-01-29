@@ -12,10 +12,11 @@ import org.kethereum.erc55.withERC55Checksum
 import org.kethereum.flows.getBlockFlow
 import org.kethereum.flows.getTransactionFlow
 import org.kethereum.model.Address
-import org.kethereum.rpc.HttpEthereumRPC
+import org.kethereum.rpc.EthereumRPC
+import org.kethereum.rpc.min3.MIN3RPC
 import kotlin.system.exitProcess
 
-val rpc = HttpEthereumRPC("https://node3.web3api.com")
+val rpc : EthereumRPC = MIN3RPC()
 val ens = ENS(rpc)
 
 suspend fun main() {
