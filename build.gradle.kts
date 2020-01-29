@@ -41,7 +41,7 @@ subprojects {
         dependencies {
             "implementation"("org.jetbrains.kotlin:kotlin-stdlib:${Versions.kotlin}")
 
-            "testImplementation"("org.assertj:assertj-core:3.14.0")
+            "testImplementation"("org.assertj:assertj-core:3.15.0")
             "testImplementation"("org.junit.jupiter:junit-jupiter-api:${Versions.jupiter}")
             "testRuntime"("org.junit.jupiter:junit-jupiter-engine:${Versions.jupiter}")
 
