@@ -6,7 +6,7 @@ This module provides support for the [Ethereum Name Service (ENS)](https://ens.d
 How to use it?
 ==============
 
-The only mandatory constructor parameter is the rpc that is used to connect to the Ethereum chain. By default the contract at 0x314159265dd8dbb310642f98f50c066173c1259b on them main chain will be used. So make sure your RPC is on the same chain.
+The only mandatory constructor parameter is the rpc that is used to connect to the Ethereum chain. By default the contract at 0x00000000000C2E074eC69A0dFb2997BA6C7d2e1e on them main chain will be used. So make sure your RPC is on the same chain.
 
 ```kotlin
 val ens = ENS(rpc)
@@ -15,7 +15,7 @@ val ens = ENS(rpc)
 If you want to use another contract you can pass it in like this:
 
 ```kotlin
-val ens = ENS(rpc ,Address("0x112234455c3a32fd11230c42e7bccd4a84e02010"))
+val ens = ENS(rpc ,Address("0x00000000000C2E074eC69A0dFb2997BA6C7d2e1e"))
 ```
 
 to use the contract deployed on görli.
