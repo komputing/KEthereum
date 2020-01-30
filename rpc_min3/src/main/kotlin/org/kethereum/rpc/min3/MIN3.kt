@@ -53,7 +53,8 @@ class MIN3Transport(private val bootNodes: List<String>,
     private fun maybeUpdateNodeList() {
         if (bootNodes.size == nodes.size) {
             val nodeListRequest = buildRequest("""{"jsonrpc":"2.0","method":"in3_nodeList","params":[],"id":1}""")
-            val newNodeURLs = okHttpClient.newCall(nodeListRequest).execute().body()?.string()?.let { json ->
+            val newNodeURLs = okHttpClient.newCall(nodeListRequest).execute().body()?.use { body ->
+                val json = body.string()
                 in3nodeListResponseAdapter.fromJson(json)?.result?.nodes
             }?.map { it.url }
 
