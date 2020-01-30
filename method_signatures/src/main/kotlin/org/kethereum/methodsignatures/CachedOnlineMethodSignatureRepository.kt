@@ -8,14 +8,15 @@ import org.kethereum.model.Transaction
 import org.komputing.khex.extensions.toNoPrefixHexString
 import java.io.File
 import java.io.IOException
+import java.nio.file.Files
 
 interface CachedOnlineMethodSignatureRepository {
     fun getSignaturesFor(tx: Transaction): Iterable<TextMethodSignature>
 }
 
 class CachedOnlineMethodSignatureRepositoryImpl(
-        private val okHttpClient: OkHttpClient,
-        storeDir: File,
+        private val okHttpClient: OkHttpClient = OkHttpClient.Builder().build(),
+        storeDir: File = Files.createTempDirectory("4byte_signatures").toFile(),
         private val baseURL: String = "https://raw.githubusercontent.com/ethereum-lists/4bytes/master/signatures/"
 ) : CachedOnlineMethodSignatureRepository {
 
