@@ -16,7 +16,7 @@ fun String.toRLP() = RLPElement(toByteArray())
 fun Int.toRLP() = RLPElement(toMinimalByteArray())
 fun BigInteger.toRLP() = RLPElement(toByteArray().removeLeadingZero())
 fun ByteArray.toRLP() = RLPElement(this)
-fun Byte.toRLP() = RLPElement(kotlin.ByteArray(1) { this })
+fun Byte.toRLP() = RLPElement(ByteArray(1) { this })
 
 // from RLP
 
