@@ -8,8 +8,6 @@ import org.komputing.khex.extensions.hexToByteArray
 import org.komputing.khex.extensions.toHexString
 import org.komputing.khex.model.HexString
 import java.math.BigInteger
-import java.util.*
-
 
 fun PublicKey.toAddress() : Address {
     val publicKeyHexString = HexString(key.toHexStringZeroPadded(PUBLIC_KEY_LENGTH_IN_HEX, false))
@@ -30,5 +28,5 @@ fun PrivateKey.toECKeyPair() = ECKeyPair(this, publicKeyFromPrivate(this))
  * Decodes an uncompressed public key (without 0x04 prefix) given an ECPoint
  */
 fun CurvePoint.toPublicKey() = encoded().let { encoded ->
-    PublicKey(BigInteger(1, Arrays.copyOfRange(encoded, 1, encoded.size)))
+    PublicKey(BigInteger(1, encoded.copyOfRange(1, encoded.size)))
 }
