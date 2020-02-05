@@ -33,7 +33,7 @@ class FileBackedMethodSignatureStore(private val storeDir: File) {
 
     fun get(signatureHash: String) = toTextSignatureSet(toFile(signatureHash))
     fun has(signatureHash: String) = toFile(signatureHash).exists()
-    fun all() = storeDir.list().toList()
+    fun all() = storeDir.list()?.toList()?: emptyList()
     private fun toFile(signatureHash: String) = File(storeDir, signatureHash)
 
 }
