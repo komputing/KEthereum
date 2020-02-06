@@ -1,6 +1,6 @@
 package org.kethereum.ens
 
-import org.kethereum.eip137.ENSName
+import org.kethereum.eip137.model.ENSName
 import org.kethereum.eip137.toNameHashByteArray
 import org.kethereum.ens.generated.ENSRPCConnector
 import org.kethereum.ens.generated.ResolverRPCConnector

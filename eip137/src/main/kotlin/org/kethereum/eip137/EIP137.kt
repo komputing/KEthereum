@@ -1,10 +1,9 @@
 package org.kethereum.eip137
 
+import org.kethereum.eip137.model.ENSName
+import org.kethereum.eip137.model.ENSNameHash
 import org.kethereum.keccakshortcut.keccak
 import org.komputing.khex.extensions.toHexString
-
-inline class ENSName(val string: String)
-inline class ENSNameHash(val byteArray: ByteArray)
 
 /**
  * NameHash as defined here.

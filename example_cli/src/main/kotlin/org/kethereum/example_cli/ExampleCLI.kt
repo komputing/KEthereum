@@ -4,7 +4,7 @@ import kotlinx.coroutines.flow.collect
 import org.kethereum.abi.EthereumABI
 import org.kethereum.abi_codegen.model.GeneratorSpec
 import org.kethereum.abi_codegen.toKotlinCode
-import org.kethereum.eip137.ENSName
+import org.kethereum.eip137.model.ENSName
 import org.kethereum.eip137.toHexString
 import org.kethereum.eip137.toNameHash
 import org.kethereum.ens.ENS

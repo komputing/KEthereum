@@ -2,6 +2,7 @@ package org.kethereum.eip137
 
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
+import org.kethereum.eip137.model.ENSName
 
 /**
  * test-vectors are from here:

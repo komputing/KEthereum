@@ -1,5 +1,5 @@
 import org.junit.jupiter.api.Test
-import org.kethereum.eip137.ENSName
+import org.kethereum.eip137.model.ENSName
 import org.kethereum.ens.isPotentialENSDomain
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue

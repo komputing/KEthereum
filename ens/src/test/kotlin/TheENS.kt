@@ -10,7 +10,7 @@ import org.kethereum.contract.abi.types.encodeTypes
 import org.kethereum.contract.abi.types.model.types.AddressETHType
 import org.kethereum.contract.abi.types.model.types.StringETHType
 import org.kethereum.crypto.test_data.TEST_ADDRESSES
-import org.kethereum.eip137.ENSName
+import org.kethereum.eip137.model.ENSName
 import org.kethereum.ens.ENS
 import org.kethereum.ens.ENS_DEFAULT_CONTRACT_ADDRESS
 import org.kethereum.model.Transaction
