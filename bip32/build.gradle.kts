@@ -1,7 +1,7 @@
 dependencies {
     "implementation"(project(":crypto"))
     "implementation"(project(":crypto_api"))
-    "implementation"(project(":extensions"))
+    "implementation"(project(":extensions_kotlin"))
     "implementation"(project(":model"))
 
     "implementation"("com.github.komputing:kbip44:0.1")

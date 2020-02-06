@@ -3,7 +3,7 @@ package org.kethereum.eip155
 import org.kethereum.crypto.signMessage
 import org.kethereum.crypto.signedMessageToKey
 import org.kethereum.crypto.toAddress
-import org.kethereum.functions.encodeRLP
+import org.kethereum.extensions.transactions.encodeRLP
 import org.kethereum.model.ChainId
 import org.kethereum.model.ECKeyPair
 import org.kethereum.model.SignatureData

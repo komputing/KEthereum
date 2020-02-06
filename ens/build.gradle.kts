@@ -8,7 +8,7 @@ dependencies {
     "implementation"(project(":erc634"))
 
     "implementation"(project(":model"))
-    "implementation"(project(":extensions"))
+    "implementation"(project(":extensions_kotlin"))
 
     "testImplementation"(project(":test_data"))
 }

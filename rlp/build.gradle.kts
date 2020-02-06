@@ -1,6 +1,5 @@
 dependencies {
-    "implementation"(project(":extensions"))
+    "implementation"(project(":extensions_kotlin"))
 
-    "testImplementation"(project(":functions"))
     "testImplementation"("com.github.komputing:khex:${Versions.khex}")
 }

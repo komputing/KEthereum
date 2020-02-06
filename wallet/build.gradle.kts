@@ -2,7 +2,7 @@ dependencies {
     "implementation"(project(":crypto"))
     "implementation"(project(":crypto_api"))
     "implementation"(project(":keccak_shortcut"))
-    "implementation"(project(":extensions"))
+    "implementation"(project(":extensions_kotlin"))
     "implementation"(project(":model"))
 
     "implementation"("com.github.komputing:khex:${Versions.khex}")

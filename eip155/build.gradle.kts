@@ -2,7 +2,8 @@ dependencies {
     "implementation"(project(":model"))
     "implementation"(project(":crypto"))
     "implementation"(project(":crypto_api"))
-    "implementation"(project(":functions"))
+    "implementation"(project(":extensions_kotlin"))
+    "implementation"(project(":extensions_transactions"))
     "implementation"(project(":rlp"))
 
     "testImplementation"("com.github.komputing:khex:${Versions.khex}")

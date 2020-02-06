@@ -1,4 +1,4 @@
 dependencies {
     "implementation"(project(":model"))
-    "implementation"(project(":extensions"))
+    "implementation"(project(":extensions_kotlin"))
 }

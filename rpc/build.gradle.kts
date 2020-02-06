@@ -1,7 +1,6 @@
 dependencies {
     "implementation"(project(":model"))
-    "implementation"(project(":functions"))
-    "implementation"(project(":extensions"))
+    "implementation"(project(":extensions_kotlin"))
 
     "implementation"("com.squareup.okhttp3:okhttp:${Versions.okhttp}")
     "implementation"("com.squareup.moshi:moshi:${Versions.moshi}")

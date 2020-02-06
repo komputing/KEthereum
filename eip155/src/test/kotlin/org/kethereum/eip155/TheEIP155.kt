@@ -3,12 +3,12 @@ package org.kethereum.eip155
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.kethereum.crypto.toECKeyPair
-import org.kethereum.functions.encodeRLP
-import org.kethereum.functions.rlp.RLPList
-import org.kethereum.functions.rlp.decodeRLP
-import org.kethereum.functions.toTransaction
-import org.kethereum.functions.toTransactionSignatureData
+import org.kethereum.extensions.transactions.encodeRLP
+import org.kethereum.extensions.transactions.toTransaction
+import org.kethereum.extensions.transactions.toTransactionSignatureData
 import org.kethereum.model.*
+import org.kethereum.rlp.RLPList
+import org.kethereum.rlp.decodeRLP
 import org.komputing.khex.extensions.hexToByteArray
 import org.komputing.khex.extensions.toHexString
 import org.komputing.khex.model.HexString

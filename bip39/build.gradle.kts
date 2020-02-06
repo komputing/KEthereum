@@ -1,6 +1,6 @@
 dependencies {
     "implementation"(project(":bip32"))
-    "implementation"(project(":extensions"))
+    "implementation"(project(":extensions_kotlin"))
     "implementation"(project(":crypto"))
     "implementation"(project(":crypto_api"))
 
