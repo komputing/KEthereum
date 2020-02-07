@@ -3,7 +3,8 @@
 Mission statement
 =================
 
-This is a Kotlin library for [Ethereum](https://ethereum.org). Trying to strive to 100% Kotlin to enable multi platform support in the future. Currently mainly used in JVM projects but could this way also target e.g. JavaScript and WebAssembly that are broadly used in the web3 space.
+This is a [Kotlin](https://kotlinlang.org) library for [Ethereum](https://ethereum.org). It is striving towards being 100% Kotlin (the code in the lib is Kotlin anyway - but also trying to not to drag in JVM dependencies). This is done in order to enable multi-platform support in the future. Currently this library is mainly used in JVM projects but could this way also target e.g. JavaScript and WebAssembly that are broadly used in the web3 space.
+Another core principle of this library is to be as modular as possible. Ethereum has a wide range of use-cases and should not be supported by huge monolithic libraries. With KEthereum you can pick and choose the modules you need and keep the footprint of the library small this way. 
 
 Module overview
 ===============
