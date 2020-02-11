@@ -1,6 +1,6 @@
 package org.walleth.kethereum.etherscan
 
-import org.kethereum.model.ChainDefinition
+import org.kethereum.model.ChainId
 import java.math.BigInteger
 
 
@@ -14,9 +14,9 @@ private val ETHERSCAN_PREFIX_MAP = mapOf(
 
 val ALL_ETHERSCAN_SUPPORTED_NETWORKS = ETHERSCAN_PREFIX_MAP.map { it.key }.toSet()
 
-private fun getPrefix(chain: ChainDefinition) = ETHERSCAN_PREFIX_MAP[chain.id.value]
+private fun getPrefix(chain: ChainId) = ETHERSCAN_PREFIX_MAP[chain.value]
 
-private fun getAPIPrefix(chain: ChainDefinition) = getPrefix(chain)?.let { "-$it" } ?: ""
-fun getEtherScanAPIBaseURL(chain: ChainDefinition) = "https://api" + getAPIPrefix(chain) + ".etherscan.io"
+private fun getAPIPrefix(chain: ChainId) = getPrefix(chain)?.let { "-$it" } ?: ""
+fun getEtherScanAPIBaseURL(chain: ChainId) = "https://api" + getAPIPrefix(chain) + ".etherscan.io"
 
-fun getEtherScanBlockExplorer(chain: ChainDefinition) = EtherScanBlockExplorer(getPrefix(chain))
+fun getEtherScanBlockExplorer(chain: ChainId) = EtherScanBlockExplorer(getPrefix(chain))
