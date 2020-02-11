@@ -10,12 +10,6 @@ class TheBlockScoutBlockExplorer {
     private val address = Address("0x1234567890123456789012345678901234567890")
 
     @Test
-    fun rinkebyAddressWorks() {
-        assertThat(getBlockScoutBlockExplorer(ChainId(4))?.getAddressURL(address))
-                .isEqualTo("https://blockscout.com/eth/rinkeby/address/0x1234567890123456789012345678901234567890")
-    }
-
-    @Test
     fun mainAddressWorks() {
         assertThat(getBlockScoutBlockExplorer(ChainId(1))?.getAddressURL(address))
                 .isEqualTo("https://blockscout.com/eth/mainnet/address/0x1234567890123456789012345678901234567890")
@@ -28,12 +22,6 @@ class TheBlockScoutBlockExplorer {
     }
 
     @Test
-    fun baseAPIRopstenWorks() {
-        assertThat(getBlockscoutBaseURL(ChainId(3)))
-                .isEqualTo("https://blockscout.com/eth/ropsten")
-    }
-
-    @Test
     fun baseAPIAthereumWorks() {
         assertThat(getBlockscoutBaseURL(ChainId(43110)))
                 .isEqualTo("http://athexplorer.ava.network")
@@ -43,7 +31,7 @@ class TheBlockScoutBlockExplorer {
     @Test
     fun support10Networks() {
         assertThat(ALL_BLOCKSCOUT_SUPPORTED_NETWORKS.size)
-                .isEqualTo(10)
+                .isEqualTo(7)
     }
 
     @Test

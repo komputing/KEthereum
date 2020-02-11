@@ -6,14 +6,11 @@ private const val BLOCKSCOUTCOM_BASE_URL = "https://blockscout.com"
 
 private val BLOCKSCOUT_URLS = mapOf(
         1L.toBigInteger() to "$BLOCKSCOUTCOM_BASE_URL/eth/mainnet",
-        3L.toBigInteger() to "$BLOCKSCOUTCOM_BASE_URL/eth/ropsten",
-        4L.toBigInteger() to "$BLOCKSCOUTCOM_BASE_URL/eth/rinkeby",
-        5L.toBigInteger() to "$BLOCKSCOUTCOM_BASE_URL/eth/goerli",
         42L.toBigInteger() to "$BLOCKSCOUTCOM_BASE_URL/eth/kovan",
         61L.toBigInteger() to "$BLOCKSCOUTCOM_BASE_URL/etc/mainnet",
         77L.toBigInteger() to "$BLOCKSCOUTCOM_BASE_URL/poa/sokol",
         99L.toBigInteger() to "$BLOCKSCOUTCOM_BASE_URL/poa/core",
-        100L.toBigInteger() to "$BLOCKSCOUTCOM_BASE_URL/poa/dai",
+        100L.toBigInteger() to "$BLOCKSCOUTCOM_BASE_URL/poa/xdai",
 
         43110L.toBigInteger() to "http://athexplorer.ava.network"
 )
