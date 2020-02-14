@@ -21,8 +21,9 @@ internal fun TransactionRPC.toKethereumTransaction() = SignedTransaction(
                 gasPrice = HexString(gasPrice).hexToBigInteger(),
                 gasLimit = HexString(gas).hexToBigInteger(),
                 txHash = hash,
-                input = HexString(input).hexToByteArray()
-
+                input = HexString(input).hexToByteArray(),
+                blockHash = blockHash,
+                blockNumber = HexString(blockNumber).hexToBigInteger()
         ), signatureData = SignatureData(
         r = HexString(r).hexToBigInteger(),
         s = HexString(s).hexToBigInteger(),

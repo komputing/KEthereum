@@ -14,7 +14,9 @@ data class Transaction(
         var nonce: BigInteger?,
         var to: Address?,
         var txHash: String?,
-        var value: BigInteger?
+        var value: BigInteger?,
+        var blockHash: String?,
+        var blockNumber: BigInteger?
 ) {
     constructor() : this(
             chain = null,
@@ -26,6 +28,8 @@ data class Transaction(
             nonce = null,
             to = null,
             txHash = null,
+            blockHash = null,
+            blockNumber = null,
             value = BigInteger.ZERO
     )
 
@@ -75,8 +79,10 @@ fun createTransactionWithDefaults(
         nonce: BigInteger? = null,
         to: Address?,
         txHash: String? = null,
-        value: BigInteger
-) = Transaction(chain?.value, creationEpochSecond, from, gasLimit, gasPrice, input, nonce, to, txHash, value)
+        value: BigInteger,
+        blockHash: String? = null,
+        blockNumber: BigInteger? = null
+) = Transaction(chain?.value, creationEpochSecond, from, gasLimit, gasPrice, input, nonce, to, txHash, value,blockHash, blockNumber)
 
 
-fun createEmptyTransaction() = Transaction(null, null, null, null, null, ByteArray(0), null, null, null, null)
+fun createEmptyTransaction() = Transaction(null, null, null, null, null, ByteArray(0), null, null, null, null, null, null)

@@ -1,11 +1,11 @@
 package org.kethereum.extensions.transactions
 
-import org.kethereum.rlp.RLPElement
-import org.kethereum.rlp.RLPList
-import org.kethereum.rlp.toUnsignedBigIntegerFromRLP
 import org.kethereum.model.Address
 import org.kethereum.model.SignatureData
 import org.kethereum.model.Transaction
+import org.kethereum.rlp.RLPElement
+import org.kethereum.rlp.RLPList
+import org.kethereum.rlp.toUnsignedBigIntegerFromRLP
 import org.komputing.khex.extensions.toHexString
 
 fun RLPList.toTransaction(): Transaction? {
@@ -24,7 +24,9 @@ fun RLPList.toTransaction(): Transaction? {
             to = Address(elements[3].bytes.toHexString()),
             value = elements[4].toUnsignedBigIntegerFromRLP(),
             input = elements[5].bytes,
-            txHash = null
+            txHash = null,
+            blockNumber = null,
+            blockHash = null
     )
 }
 
