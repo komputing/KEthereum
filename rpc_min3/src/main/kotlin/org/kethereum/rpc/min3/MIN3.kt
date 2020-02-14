@@ -36,10 +36,19 @@ class MIN3Transport(private val bootNodes: List<String>,
 
     override fun call(payload: String): String? {
         maybeUpdateNodeList()
+        return callWithRepeat(payload)
+    }
 
-        repeat(3) {
+    private fun callWithRepeat(payload: String): String? {
+        val request = buildRequest(payload)
+        return requestWithRepeat(request)
+    }
+
+    private fun requestWithRepeat(request: Request): String? {
+
+        repeat(5) {
             val maybeResult = try {
-                okHttpClient.newCall(buildRequest(payload)).execute().body()?.string()
+                okHttpClient.newCall(request).execute().body()?.use { it.string() }
             } catch (e: Exception) {
                 null
             }
@@ -53,8 +62,7 @@ class MIN3Transport(private val bootNodes: List<String>,
     private fun maybeUpdateNodeList() {
         if (bootNodes.size == nodes.size) {
             val nodeListRequest = buildRequest("""{"jsonrpc":"2.0","method":"in3_nodeList","params":[],"id":1}""")
-            val newNodeURLs = okHttpClient.newCall(nodeListRequest).execute().body()?.use { body ->
-                val json = body.string()
+            val newNodeURLs = requestWithRepeat(nodeListRequest)?.let { json ->
                 in3nodeListResponseAdapter.fromJson(json)?.result?.nodes
             }?.map { it.url }
 
@@ -69,5 +77,4 @@ class MIN3Transport(private val bootNodes: List<String>,
             .build()
 
     private fun buildRequest(payload: String) = buildRequest(RequestBody.create(JSONMediaType, payload))
-
 }
