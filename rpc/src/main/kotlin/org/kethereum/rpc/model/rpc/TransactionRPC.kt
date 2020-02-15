@@ -5,12 +5,14 @@ internal data class TransactionRPC(val value: String,
                                    val to: String?,
 
                                    val chainId: String?,
-                                   val blockNumber: String,
+
+                                   val blockNumber: String?,
+                                   val blockHash: String?,
+
                                    val nonce: String,
                                    val gasPrice: String,
                                    val gas: String,
                                    val hash: String,
-                                   val blockHash: String,
                                    val input: String,
                                    val transactionIndex: String,
                                    val v: String,
