@@ -1,5 +1,6 @@
 dependencies {
     "implementation"(project(":rpc"))
+    "implementation"(project(":model"))
     "api"("com.squareup.okhttp3:okhttp:${Versions.okhttp}")
     "api"("com.squareup.moshi:moshi:${Versions.moshi}")
 

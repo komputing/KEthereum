@@ -4,6 +4,7 @@ import com.squareup.moshi.Moshi
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody
+import org.kethereum.model.ChainId
 import org.kethereum.rpc.BaseEthereumRPC
 import org.kethereum.rpc.JSONMediaType
 import org.kethereum.rpc.RPCTransport
@@ -20,9 +21,23 @@ val GOERLI_BOOTNODES = listOf(
         "https://in3-v2.slock.it/goerli/nd-2"
 )
 
+fun getMin3BootnNdesByChainId(chainId: ChainId) = when (chainId.value.toLong()) {
+    1L -> MAINNET_BOOTNODES
+    5L -> GOERLI_BOOTNODES
+    else -> null
+}
+
 internal val in3nodeListResponseAdapter = Moshi.Builder().build().adapter<IN3NodeListResponse>(IN3NodeListResponse::class.java)
 
-class MIN3RPC(bootNodes: List<String> = MAINNET_BOOTNODES) : BaseEthereumRPC(MIN3Transport(bootNodes))
+fun getMin3RPC(bootNodes: List<String> = MAINNET_BOOTNODES,
+               okHttpClient: OkHttpClient = OkHttpClient.Builder().build()
+) = BaseEthereumRPC(MIN3Transport(bootNodes, okHttpClient))
+
+fun getMin3RPC(chainId: ChainId,
+               okHttpClient: OkHttpClient = OkHttpClient.Builder().build()
+) = getMin3BootnNdesByChainId(chainId)?.let { nodes ->
+    getMin3RPC(nodes, okHttpClient)
+}
 
 class MIN3Transport(private val bootNodes: List<String>,
                     private val okHttpClient: OkHttpClient = OkHttpClient.Builder().build()

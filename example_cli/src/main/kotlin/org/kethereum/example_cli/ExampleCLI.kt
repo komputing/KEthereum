@@ -13,10 +13,10 @@ import org.kethereum.flows.getBlockFlow
 import org.kethereum.flows.getTransactionFlow
 import org.kethereum.model.Address
 import org.kethereum.rpc.EthereumRPC
-import org.kethereum.rpc.min3.MIN3RPC
+import org.kethereum.rpc.min3.getMin3RPC
 import kotlin.system.exitProcess
 
-val rpc : EthereumRPC = MIN3RPC()
+val rpc : EthereumRPC = getMin3RPC()
 val ens = ENS(rpc)
 
 suspend fun main() {
