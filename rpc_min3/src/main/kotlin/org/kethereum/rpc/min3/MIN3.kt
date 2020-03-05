@@ -11,9 +11,9 @@ import org.kethereum.rpc.RPCTransport
 import org.kethereum.rpc.min3.model.IN3NodeListResponse
 
 val MAINNET_BOOTNODES = listOf(
-        "https://in3-node-1.keil-connect.com",
-        "https://in3-node-from.space",
-        "https://in3-v2.slock.it/mainnet/nd-1"
+        "https://in3-v2.slock.it/mainnet/nd-1",
+        "https://in3-v2.slock.it/mainnet/nd-2",
+        "https://in3-v2.slock.it/mainnet/nd-3"
 )
 
 val GOERLI_BOOTNODES = listOf(
