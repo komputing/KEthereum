@@ -34,4 +34,10 @@ class TheParser {
         val tested = EthereumMetadataString(testMetaDataJSONWithConstructor).parse()
         assertThat(tested?.output?.userdoc?.methods?.get("constructor") as String).isEqualTo("Create a new ballot with \$(_numProposals) different proposals.")
     }
+
+    @Test
+    fun returnsNullForBadJson() {
+        val tested = EthereumMetadataString("yolo").parse()
+        assertThat(tested).isNull()
+    }
 }
