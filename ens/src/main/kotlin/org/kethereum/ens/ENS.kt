@@ -2,8 +2,11 @@ package org.kethereum.ens
 
 import org.kethereum.eip137.model.ENSName
 import org.kethereum.eip137.toNameHashByteArray
+import org.kethereum.ens.generated.ContentHashResolverRPCConnector
+import org.kethereum.ens.generated.ContentHashResolverTransactionGenerator
 import org.kethereum.ens.generated.ENSRPCConnector
 import org.kethereum.ens.generated.ResolverRPCConnector
+import org.kethereum.erc1577.model.ContentHash
 import org.kethereum.model.Address
 import org.kethereum.rpc.EthereumRPC
 import org.komputing.kethereum.erc181.resolver.ENSReverseResolverRPCConnector
@@ -103,4 +106,27 @@ class ENS(private val rpc: EthereumRPC,
     }
 
     fun reverseResolve(address: Address) = reverseResolve(ENSName(address.cleanHex.toLowerCase() + ".addr.reverse"))
+
+    /**
+     * get a content hash as defined in ERC-1577
+     * https://github.com/ethereum/EIPs/blob/master/EIPS/eip-1577.md
+     */
+    fun getContentHash(name: ENSName) = name.toNameHashByteArray().let { nameHash ->
+        getFromResolver(nameHash) { resolver ->
+            ContentHashResolverRPCConnector(resolver, rpc).contenthash(nameHash)?.let {
+                ContentHash(it)
+            }
+        }
+    }
+
+    /**
+     * get the transaction to set content hash as defined in ERC-1577
+     * https://github.com/ethereum/EIPs/blob/master/EIPS/eip-1577.md
+     */
+    fun getTransactionForSetContentHash(name: ENSName, contentHash: ContentHash) = name.toNameHashByteArray().let { nameHash ->
+        getFromResolver(nameHash) { resolver ->
+            ContentHashResolverTransactionGenerator(resolver).setContenthash(nameHash, contentHash.byteArray)
+        }
+    }
+
 }

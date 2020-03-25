@@ -1,0 +1,42 @@
+[
+  {
+    "constant": false,
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "node",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "bytes",
+        "name": "hash",
+        "type": "bytes"
+      }
+    ],
+    "name": "setContenthash",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  }, {
+     "constant": true,
+     "inputs": [
+       {
+         "internalType": "bytes32",
+         "name": "node",
+         "type": "bytes32"
+       }
+     ],
+     "name": "contenthash",
+     "outputs": [
+       {
+         "internalType": "bytes",
+         "name": "",
+         "type": "bytes"
+       }
+     ],
+     "payable": false,
+     "stateMutability": "view",
+     "type": "function"
+   }
+]

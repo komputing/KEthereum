@@ -43,6 +43,7 @@ subprojects {
 
             "testImplementation"("org.assertj:assertj-core:3.15.0")
             "testImplementation"("org.junit.jupiter:junit-jupiter-api:${Versions.jupiter}")
+            "testImplementation"("org.junit.jupiter:junit-jupiter-params:${Versions.jupiter}")
             "testRuntime"("org.junit.jupiter:junit-jupiter-engine:${Versions.jupiter}")
 
             "testImplementation"("org.jetbrains.kotlin:kotlin-test")
@@ -50,5 +51,8 @@ subprojects {
         }
 
 
+    }
+    val compileTestKotlin by tasks.getting(org.jetbrains.kotlin.gradle.tasks.KotlinCompile::class) {
+        kotlinOptions.jvmTarget = "1.8"
     }
 }

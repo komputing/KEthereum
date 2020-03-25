@@ -10,4 +10,6 @@ object Versions {
     const val okhttp = "3.12.1"
     const val coroutines = "1.3.4"
     const val threetenbp = "1.4.2"
+    const val okio = "2.4.0"
+    const val base58 = "0.1"
 }
