@@ -1,6 +1,6 @@
 package org.kethereum.erc1577
 
-import io.ipfs.multihash.Multihash
+import io.ipfs.multiformats.multihash.Multihash
 import okio.Buffer
 import org.kethereum.erc1577.model.ContentHash
 import org.kethereum.erc1577.model.InvalidSchemeToURIError
@@ -16,7 +16,7 @@ fun getResult(byteArray: ByteArray) = SuccessfulToContentHashResult(ContentHash(
 fun URI.toContentHash() = when (scheme) {
     "ipfs" -> {
         val buffer = Buffer()
-        val hash: ByteArray = Multihash.fromBase58(host).hash
+        val hash: ByteArray = Multihash.decode(Multihash.fromBase58String(host).raw).digest
 
         buffer.writeVarUInt(0xe3U) // storageByte
         buffer.writeVarUInt(0x1U) // CID

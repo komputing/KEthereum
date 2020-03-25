@@ -1,10 +1,14 @@
+@file:Suppress("TYPE_INFERENCE_ONLY_INPUT_TYPES_WARNING")
+
 package org.kethereum.erc1577
 
-import io.ipfs.multihash.Multihash
+import io.ipfs.multiformats.multihash.Multihash
+import io.ipfs.multiformats.multihash.Type
 import okio.BufferedSource
 import okio.buffer
 import okio.source
 import org.kethereum.erc1577.model.*
+import org.komputing.kbase58.encodeToBase58String
 import org.komputing.khex.extensions.toNoPrefixHexString
 import org.komputing.kvarint.readVarUInt
 
@@ -24,14 +28,16 @@ fun ContentHash.toURI(): ToURIResult {
     return when (storageByte) {
         0xe3U -> {
             val contentType = buffer.readVarUInt()
-            val hashFunction = buffer.readVarUInt()
+            val hashFunction: UInt = buffer.readVarUInt()
             val hashLength = buffer.readVarUInt().toInt()
             val content = buffer.readByteArray()
 
             when {
                 hashLength != content.size -> HashLengthError(hashLength, content.size)
                 contentType != 0x70U -> ContentTypeError(contentType, 0x70U)
-                else -> SuccessfulToURIResult("ipfs://" + Multihash(Multihash.Type.lookup(hashFunction.toInt()), content).toBase58())
+                else -> {
+                    SuccessfulToURIResult("ipfs://" + Multihash.encode(content, hashFunction).encodeToBase58String())
+                }
             }
         }
 
