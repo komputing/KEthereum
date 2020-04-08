@@ -3,12 +3,8 @@ package org.kethereum.erc55
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.kethereum.model.Address
-import org.kethereum.model.ChainId
 
 class TheERC55 {
-
-    val rskMainnet = ChainId(30)
-    val rskTestnet = ChainId(31)
 
     @Test
     fun returnsTrueForValidChecksum() {
@@ -56,28 +52,6 @@ class TheERC55 {
         assertThat(Address("5aAeb6053F3E94C9b9A09f33669435E7Ef1BeAed".toLowerCase())
                 .hasValidERC55ChecksumOrNoChecksum()).isTrue()
 
-    }
-
-    @Test
-    fun returnsTrueForValidEIP1191(){
-        assertThat(Address("0x27b1fdb04752bbc536007a920d24acb045561c26")
-                .hasValidERC55Checksum(null)).isTrue()
-        assertThat(Address("0x27b1FdB04752BBc536007A920D24ACB045561c26")
-                .hasValidERC55Checksum(rskMainnet)).isTrue()
-        assertThat(Address("0x27B1FdB04752BbC536007a920D24acB045561C26")
-                .hasValidERC55Checksum(rskTestnet)).isTrue()
-    }
-
-    @Test
-    fun returnsFalseForInvalidEIP1191(){
-        assertThat(Address("0x27b1fdb04752bbc536007a920d24acb045561c26")
-                .hasValidERC55Checksum(rskTestnet)).isFalse()
-        assertThat(Address("0x27b1fdb04752bbc536007a920d24acb045561c26")
-                .hasValidERC55Checksum(rskMainnet)).isFalse()
-        assertThat(Address("0x27b1FdB04752BBc536007A920D24ACB045561c26")
-                .hasValidERC55Checksum(rskTestnet)).isFalse()
-        assertThat(Address("0x27B1FdB04752BbC536007a920D24acB045561C26")
-                .hasValidERC55Checksum(rskMainnet)).isFalse()
     }
 
 
