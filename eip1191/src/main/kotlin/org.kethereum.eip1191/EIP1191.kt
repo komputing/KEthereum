@@ -11,14 +11,7 @@ import java.util.*
 EIP-1191 Checksum as in https://github.com/ethereum/EIPs/blob/master/EIPS/eip-1191.md
  */
 
-private fun Address.cleanHexWithPrefix(chainId: ChainId?) =
-        if (chainId != null) {
-            "${chainId.value}0x${cleanHex}"
-        } else {
-            cleanHex
-        }
-
-fun Address.withEIP1191Checksum(chainId: ChainId? = null) = cleanHexWithPrefix(chainId).toLowerCase(Locale.ROOT).toByteArray().keccak().toNoPrefixHexString().let { hexHash ->
+fun Address.withEIP1191Checksum(chainId: ChainId) = "${chainId.value}${hex}".toLowerCase(Locale.ROOT).toByteArray().keccak().toNoPrefixHexString().let { hexHash ->
     Address(cleanHex.mapIndexed { index, hexChar ->
         when {
             hexChar in '0'..'9' -> hexChar
@@ -28,10 +21,10 @@ fun Address.withEIP1191Checksum(chainId: ChainId? = null) = cleanHexWithPrefix(c
     }.joinToString(""))
 }
 
-private fun Address.hasValidEIP1191ChecksumAssumingValidAddress(chainId: ChainId? = null) = withEIP1191Checksum(chainId).hex == hex
+private fun Address.hasValidEIP1191ChecksumAssumingValidAddress(chainId: ChainId) = withEIP1191Checksum(chainId).hex == hex
 
-fun Address.hasValidEIP1191Checksum(chainId: ChainId? = null) = isValid() && hasValidEIP1191ChecksumAssumingValidAddress(chainId)
-fun Address.hasValidEIP1191ChecksumOrNoChecksum(chainId: ChainId? = null) = isValid() &&
+fun Address.hasValidEIP1191Checksum(chainId: ChainId) = isValid() && hasValidEIP1191ChecksumAssumingValidAddress(chainId)
+fun Address.hasValidEIP1191ChecksumOrNoChecksum(chainId: ChainId) = isValid() &&
         (hasValidEIP1191ChecksumAssumingValidAddress(chainId) ||
                 cleanHex.toLowerCase() == cleanHex ||
                 cleanHex.toUpperCase() == cleanHex)

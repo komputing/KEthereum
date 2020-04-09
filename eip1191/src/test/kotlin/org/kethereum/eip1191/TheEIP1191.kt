@@ -12,8 +12,6 @@ class TheEIP1191 {
 
     @Test
     fun returnsTrueForValidEIP1191(){
-        assertThat(Address("0x27b1fdb04752bbc536007a920d24acb045561c26")
-                .hasValidEIP1191Checksum(null)).isTrue()
         assertThat(Address("0x27b1FdB04752BBc536007A920D24ACB045561c26")
                 .hasValidEIP1191Checksum(rskMainnet)).isTrue()
         assertThat(Address("0x27B1FdB04752BbC536007a920D24acB045561C26")
