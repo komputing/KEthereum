@@ -15,7 +15,7 @@ import org.kethereum.model.ChainId
 
 
 private val DEFAULT_METADATA_REPO_URLS = listOf(
-        "https://contractrepo.komputing.org/contract/byChainId"
+        "https://contractrepo.komputing.org/contract/byChainId/"
 )
 
 suspend fun TextMethodSignature.resolveFunctionUserDoc(
