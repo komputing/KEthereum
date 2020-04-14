@@ -30,7 +30,27 @@ internal fun TransactionRPC.toKethereumTransaction() = SignedTransaction(
         v = HexString(v).hexToBigInteger())
 )
 
-internal fun BlockInformationRPC.toBlockInformation() = BlockInformation(transactions.map { it.toKethereumTransaction() })
+internal fun BlockInformationRPC.toBlockInformation() = BlockInformation(
+        number = HexString(number).hexToBigInteger(),
+        hash = HexString(hash),
+        parentHash = HexString(parentHash),
+        nonce = HexString(nonce).hexToBigInteger(),
+        sha3Uncles = HexString(sha3Uncles),
+        logsBloom = HexString(logsBloom),
+        transactionsRoot = HexString(transactionsRoot),
+        stateRoot = HexString(stateRoot),
+        miner = HexString(miner),
+        difficulty = HexString(difficulty).hexToBigInteger(),
+        totalDifficulty = HexString(totalDifficulty).hexToBigInteger(),
+        extraData = HexString(extraData),
+        size = HexString(size).hexToBigInteger(),
+        gasLimit = HexString(gasLimit).hexToBigInteger(),
+        gasUsed = HexString(gasUsed).hexToBigInteger(),
+        timestamp = HexString(timestamp).hexToBigInteger(),
+        uncles = uncles.map { HexString(it) },
+        transactions = transactions.map { it.toKethereumTransaction() }
+
+)
 
 internal fun Transaction.toJSON(): String {
 
