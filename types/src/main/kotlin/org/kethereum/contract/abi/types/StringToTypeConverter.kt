@@ -67,3 +67,22 @@ fun getETHTypeInstanceOrNullNoAliases(typeString: String?, valueString: String):
     typeString.startsWith("bytes") -> BytesETHType.ofString(valueString, BytesTypeParams(typeString.extractPrefixedNumber("bytes", BYTES_COUNT_CONSTRAINT)))
     else -> null
 }
+
+fun getETHTypeInstanceOrNull(typeString: String, input: PaginatedByteArray) =
+        getETHTypeInstanceOrNullNoAliases(TypeAliases[typeString] ?: typeString, input)
+
+fun getETHTypeInstanceOrNullNoAliases(typeString: String?, input: PaginatedByteArray): ETHType<*>? = when {
+    typeString == null -> null
+    typeString == "bool" -> BoolETHType.ofPaginatedByteArray(input)
+    typeString == "string" -> StringETHType.ofPaginatedByteArray(input)
+    typeString == "address" -> AddressETHType.ofPaginatedByteArray(input)
+    typeString == "bytes" -> DynamicSizedBytesETHType.ofPaginatedByteArray(input)
+    typeString.startsWith("int") -> IntETHType.ofPaginatedByteArray(input,
+            BitsTypeParams(typeString.extractPrefixedNumber("int", INT_BITS_CONSTRAINT))
+    )
+    typeString.startsWith("uint") -> UIntETHType.ofPaginatedByteArray(input,
+            BitsTypeParams(typeString.extractPrefixedNumber("uint", INT_BITS_CONSTRAINT))
+    )
+    typeString.startsWith("bytes") -> BytesETHType.ofPaginatedByteArray(input, BytesTypeParams(typeString.extractPrefixedNumber("bytes", BYTES_COUNT_CONSTRAINT)))
+    else -> null
+}

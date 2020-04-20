@@ -7,12 +7,17 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.After
 import org.junit.Before
 import org.junit.jupiter.api.Test
+import org.kethereum.crypto.test_data.TEST_ADDRESSES
 import org.kethereum.erc681.toERC681
 import org.kethereum.metadata.model.NoMatchingUserDocFound
 import org.kethereum.metadata.model.ResolvedUserDocResult
 import org.kethereum.metadata.resolveFunctionUserDoc
 import org.kethereum.model.ChainId
 import org.kethereum.model.EthereumURI
+import org.kethereum.model.createEmptyTransaction
+import org.komputing.khex.extensions.hexToByteArray
+import org.komputing.khex.model.HexString
+import java.math.BigInteger
 
 class TheUserdocResolver {
 
@@ -46,6 +51,20 @@ class TheUserdocResolver {
         }
     }
 
+    @Test
+    fun canLoadForTransaction() {
+        runBlocking {
+            server.enqueue(MockResponse().setBody(SampleContractResponse))
+            val tested = createEmptyTransaction().copy(
+                    input = HexString("0x40c10f190000000000000000000000004ceaf85436b449d565f24d8a43b5c0efad50437a000000000000000000000000000000000000000000000016c4abbebea0100000").hexToByteArray(),
+                    chain = BigInteger.ONE,
+                    to = TEST_ADDRESSES.first()
+            ).resolveFunctionUserDoc(baseURL = listOf(server.url("").toString()))
+
+            assertThat(tested).isInstanceOf(ResolvedUserDocResult::class.java)
+            assertThat((tested as ResolvedUserDocResult).userDoc).isEqualTo("Mints 420000000000000000000 tokens for 0x4ceaf85436b449d565f24d8a43b5c0efad50437a")
+        }
+    }
     @Test
     fun returnsNullWhenServerRespondsWithNonJSON() {
         runBlocking {

@@ -2,6 +2,7 @@ dependencies {
 
     implementation(project(":abi_filter"))
     implementation(project(":model"))
+    implementation(project(":types"))
     implementation(project(":metadata"))
     implementation(project(":erc55"))
     implementation(project(":erc681"))
@@ -14,6 +15,7 @@ dependencies {
     implementation(project(":abi"))
 
 
+    testImplementation("com.github.komputing:khex:${Versions.khex}")
     testImplementation("com.squareup.okhttp3:mockwebserver:${Versions.okhttp}")
     testImplementation(project(":test_data"))
 }
