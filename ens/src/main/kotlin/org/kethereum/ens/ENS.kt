@@ -54,7 +54,7 @@ class ENS(private val rpc: EthereumRPC,
      * get an e-mail address
      * from EIP-634 text record
      */
-    fun getEmail(name: ENSName) = getTextRecord(name, "github")
+    fun getEmail(name: ENSName) = getTextRecord(name, "email")
 
     /**
      * get an URL
@@ -98,6 +98,13 @@ class ENS(private val rpc: EthereumRPC,
      * from EIP-634 text record
      */
     fun getTwitterUserName(name: ENSName) = getTextRecord(name, "vnd.twitter")
+
+    /**
+     * get an peepeth username
+     * from EIP-634 text record
+     */
+    fun getPeepethUserName(name: ENSName) = getTextRecord(name, "vnd.peepeth")
+
 
     private fun reverseResolve(name: ENSName) = name.toNameHashByteArray().let {
         getFromResolver(it) { resolver ->
