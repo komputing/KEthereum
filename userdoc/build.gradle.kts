@@ -4,6 +4,8 @@ dependencies {
     implementation(project(":model"))
     implementation(project(":types"))
     implementation(project(":metadata"))
+    implementation(project(":metadata_repo"))
+
     implementation(project(":erc55"))
     implementation(project(":erc681"))
     api("org.jetbrains.kotlinx:kotlinx-coroutines-core:${Versions.coroutines}")
