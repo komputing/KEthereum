@@ -2,6 +2,9 @@ package org.kethereum.abi
 
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
+import org.kethereum.abi.model.EthereumABIElement
+import org.kethereum.abi.model.StateMutability
+import org.kethereum.abi.model.StateMutability.*
 
 class TheParser {
 
@@ -17,4 +20,17 @@ class TheParser {
             assertThat(parsed.methodList.size).isEqualTo(it.second)
         }
     }
+
+
+    @Test
+    fun canResolveStateMutability() {
+        val peepethABI = EthereumABI(javaClass.getResource("/peepeth.abi").readText())
+
+        assertThat(peepethABI.methodList.first { it.name == "updateAccount" }.stateMutability == nonpayable)
+        assertThat(peepethABI.methodList.first { it.name == "isValidName" }.stateMutability == pure)
+        assertThat(peepethABI.methodList.first { it.name == "owner" }.stateMutability == view)
+        assertThat(peepethABI.methodList.first { it.name == "tip" }.stateMutability == payable)
+
+    }
+
 }

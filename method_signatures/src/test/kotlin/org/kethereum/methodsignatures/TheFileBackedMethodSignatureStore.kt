@@ -35,7 +35,7 @@ class TheFileBackedMethodSignatureStore {
 
     @Test
     fun canInsertOneSignatureViaABI() {
-        val function = EthereumFunction("yolo", listOf(EthereumNamedType("foo", "bool")), emptyList())
+        val function = createEthereumFun(name = "yolo", inputs = listOf(EthereumNamedType("foo", "bool")))
         val fourByteSignature = function.toTextMethodSignature().toHexSignature().hex
 
         assertThat(tested.has(fourByteSignature)).isFalse()

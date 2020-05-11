@@ -2,6 +2,7 @@ package org.kethereum.abi
 
 import org.kethereum.abi.model.EthereumABIElement
 import org.kethereum.abi.model.EthereumFunction
+import org.kethereum.abi.model.StateMutability
 import org.kethereum.methodsignatures.model.HexMethodSignature
 import org.kethereum.methodsignatures.model.TextMethodSignature
 import org.kethereum.methodsignatures.toHexSignature
@@ -17,6 +18,8 @@ fun Iterable<EthereumABIElement>.getAllFunctions(): List<EthereumFunction> = fil
     EthereumFunction(
             name = it.name ?: throw IllegalArgumentException("A function MUST have a name"),
             inputs = it.inputs ?: emptyList(),
-            outputs = it.outputs ?: emptyList()
+            outputs = it.outputs ?: emptyList(),
+            payable = it.payable ?: false,
+            stateMutability = it.stateMutability?: StateMutability.pure
     )
 }
