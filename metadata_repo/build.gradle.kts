@@ -1,5 +1,5 @@
 dependencies {
-    implementation(project(":metadata"))
+    implementation(project(":metadata_model"))
     implementation(project(":model"))
     implementation(project(":erc55"))
     implementation("com.squareup.okhttp3:okhttp:${Versions.okhttp}")
