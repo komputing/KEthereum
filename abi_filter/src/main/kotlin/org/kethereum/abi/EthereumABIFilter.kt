@@ -27,3 +27,6 @@ fun EthereumABIElement.toEthereumFunction() = EthereumFunction(
         payable = payable ?: false,
         stateMutability = stateMutability?: StateMutability.pure
 )
+
+fun List<EthereumFunction>.findByTransaction(tx: Transaction) =
+        firstOrNull { it.toTextMethodSignature().toHexSignature() == tx.getHexSignature() }
