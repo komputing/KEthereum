@@ -11,7 +11,7 @@ import org.kethereum.model.ChainId
 import java.io.File
 
 private val DEFAULT_METADATA_REPO_URLS = listOf(
-        "https://contractrepo.komputing.org/contract/byChainId"
+        "https://contractrepo.komputing.org/contract"
 )
 
 class MetaDataRepoHttpWithCacheImpl(private val repoURLs: List<String> = DEFAULT_METADATA_REPO_URLS,
