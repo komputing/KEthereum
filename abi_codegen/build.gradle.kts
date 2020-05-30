@@ -9,7 +9,7 @@ dependencies {
     "implementation"("org.jetbrains.kotlin:kotlin-reflect:${Versions.kotlin}")
 
     "api"("com.squareup.moshi:moshi:${Versions.moshi}")
-    "api"("com.squareup:kotlinpoet:1.5.0")
+    "api"("com.squareup:kotlinpoet:1.6.0")
 
     "testImplementation"(project(":test_data"))
 }
