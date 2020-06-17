@@ -13,7 +13,6 @@ import org.kethereum.metadata.repo.model.getMetaDataForTransaction
 import org.kethereum.model.ChainId
 import org.kethereum.model.createEmptyTransaction
 import java.io.File
-import java.math.BigInteger
 import java.math.BigInteger.valueOf
 
 class TheMetaDataRepo {
@@ -56,7 +55,7 @@ class TheMetaDataRepo {
     fun returnsDataFromWebServer() {
         val mockWebServer = MockWebServer()
 
-        val tested = MetaDataRepoHttpWithCacheImpl(repoURLs = listOf( mockWebServer.url("").toString()))
+        val tested = MetaDataRepoHttpWithCacheImpl(repoURL = mockWebServer.url("").toString())
         mockWebServer.enqueue(MockResponse().setBody(testMetaDataJSON))
 
         assertThat(tested.getMetaDataForAddressOnChain(TEST_ADDRESSES.first(), ChainId(5))).isInstanceOf(MetaDataResolveResultOK::class.java)
@@ -68,7 +67,7 @@ class TheMetaDataRepo {
         val mockWebServer = MockWebServer()
 
         mockWebServer.enqueue(MockResponse().setResponseCode(404))
-        val tested = MetaDataRepoHttpWithCacheImpl(repoURLs = listOf( mockWebServer.url("").toString()))
+        val tested = MetaDataRepoHttpWithCacheImpl(repoURL = mockWebServer.url("").toString())
 
         assertThat(tested.getMetaDataForAddressOnChain(TEST_ADDRESSES.first(), ChainId(5))).isInstanceOf(MetaDataNotAvailable::class.java)
     }
@@ -78,7 +77,7 @@ class TheMetaDataRepo {
         val mockWebServer = MockWebServer()
 
         mockWebServer.enqueue(MockResponse().setResponseCode(500))
-        val tested = MetaDataRepoHttpWithCacheImpl(repoURLs = listOf( mockWebServer.url("").toString()))
+        val tested = MetaDataRepoHttpWithCacheImpl(repoURL = mockWebServer.url("").toString())
 
         assertThat(tested.getMetaDataForAddressOnChain(TEST_ADDRESSES.first(), ChainId(5))).isInstanceOf(MetaDataResolveFail::class.java)
     }
@@ -88,7 +87,7 @@ class TheMetaDataRepo {
     fun returnsFailForBadTransaction() {
         val mockWebServer = MockWebServer()
 
-        val tested = MetaDataRepoHttpWithCacheImpl(repoURLs = listOf( mockWebServer.url("").toString()))
+        val tested = MetaDataRepoHttpWithCacheImpl(repoURL = mockWebServer.url("").toString())
         mockWebServer.enqueue(MockResponse().setBody(testMetaDataJSON))
 
         assertThat(tested.getMetaDataForTransaction(createEmptyTransaction())).isInstanceOf(MetaDataResolveFail::class.java)
@@ -98,7 +97,7 @@ class TheMetaDataRepo {
     fun returnsOKForGoodTransaction() {
         val mockWebServer = MockWebServer()
 
-        val tested = MetaDataRepoHttpWithCacheImpl(repoURLs = listOf( mockWebServer.url("").toString()))
+        val tested = MetaDataRepoHttpWithCacheImpl(repoURL = mockWebServer.url("").toString())
         mockWebServer.enqueue(MockResponse().setBody(testMetaDataJSON))
 
         val tx = createEmptyTransaction().copy(to = TEST_ADDRESSES.first(), chain = valueOf(5L))

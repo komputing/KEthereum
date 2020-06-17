@@ -10,11 +10,7 @@ import org.kethereum.model.Address
 import org.kethereum.model.ChainId
 import java.io.File
 
-private val DEFAULT_METADATA_REPO_URLS = listOf(
-        "https://contractrepo.komputing.org/contract"
-)
-
-class MetaDataRepoHttpWithCacheImpl(private val repoURLs: List<String> = DEFAULT_METADATA_REPO_URLS,
+class MetaDataRepoHttpWithCacheImpl(private val repoURL: String = "https://contractrepo.komputing.org/contract",
                                     private val cacheDir: File? = null,
                                     private val okHttpClient: OkHttpClient = OkHttpClient().newBuilder().build()
 ) : MetaDataRepo {
@@ -29,7 +25,7 @@ class MetaDataRepoHttpWithCacheImpl(private val repoURLs: List<String> = DEFAULT
             }
 
         }
-        val url = repoURLs.first() + "/" + chain.value + "/" + address.withERC55Checksum() + "/metadata.json"
+        val url = repoURL + "/" + chain.value + "/" + address.withERC55Checksum() + "/metadata.json"
         return try {
             val response = okHttpClient.newCall(Request.Builder().url(url).build()).execute()
             when (response.code()) {
