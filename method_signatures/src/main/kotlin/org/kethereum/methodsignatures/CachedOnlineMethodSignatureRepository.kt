@@ -39,13 +39,15 @@ class CachedOnlineMethodSignatureRepositoryImpl(
     private fun fetchAndStore(hex: String): Iterable<TextMethodSignature> {
         val signatures = ArrayList<TextMethodSignature>()
         val cleanHex = hex.replace("0x", "")
-        val url = Request.Builder().url("$baseURL$cleanHex").build()
-        val newCall: Call = okHttpClient.newCall(url)
+        val request = Request.Builder().url("$baseURL$cleanHex").build()
+        val newCall: Call = okHttpClient.newCall(request)
 
         try {
             val executedCall = newCall.execute()
             if (executedCall.code() == 200) {
-                val resultString = executedCall.body().use { it?.string() }
+                val resultString = executedCall?.use { call ->
+                    call.body().use { it?.string() }
+                }
                 resultString?.split(";")?.forEach {
                     signatures.add(TextMethodSignature(it))
                     signatureStore.upsert(hex, it)
