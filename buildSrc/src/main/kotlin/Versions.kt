@@ -11,5 +11,5 @@ object Versions {
     const val coroutines = "1.3.7"
     const val threetenbp = "1.4.4"
     const val okio = "2.4.0"
-    const val base58 = "0.1"
+    const val base58 = "0.2"
 }
