@@ -40,7 +40,8 @@ fun getMin3RPC(chainId: ChainId,
 }
 
 class MIN3Transport(private val bootNodes: List<String>,
-                    private val okHttpClient: OkHttpClient = OkHttpClient.Builder().build()
+                    private val okHttpClient: OkHttpClient = OkHttpClient.Builder().build(),
+                    private val max_retries: Int = 42
 ) : RPCTransport {
 
     private val nodes = mutableSetOf<String>()
@@ -51,19 +52,21 @@ class MIN3Transport(private val bootNodes: List<String>,
 
     override fun call(payload: String): String? {
         maybeUpdateNodeList()
-        return callWithRepeat(payload)
+        return requestWithRepeat(payload)
     }
 
-    private fun callWithRepeat(payload: String): String? {
-        val request = buildRequest(payload)
-        return requestWithRepeat(request)
-    }
+    private fun requestWithRepeat(payload: String): String? {
 
-    private fun requestWithRepeat(request: Request): String? {
-
-        repeat(5) {
+        repeat(max_retries) {
+            val request = buildRequest(payload)
             val maybeResult = try {
-                okHttpClient.newCall(request).execute().body()?.use { it.string() }
+                val execute = okHttpClient.newCall(request).execute()
+                val responseString = execute.body()?.use { it.string() }
+                if (execute.code() == 200 && responseString?.startsWith("{") == true) {
+                    responseString
+                } else {
+                    null
+                }
             } catch (e: Exception) {
                 null
             }
@@ -71,13 +74,12 @@ class MIN3Transport(private val bootNodes: List<String>,
                 return maybeResult
             }
         }
-        return null // no result after 3 attempts
+        return null // no result after 5 attempts
     }
 
     private fun maybeUpdateNodeList() {
         if (bootNodes.size == nodes.size) {
-            val nodeListRequest = buildRequest("""{"jsonrpc":"2.0","method":"in3_nodeList","params":[],"id":1}""")
-            val newNodeURLs = requestWithRepeat(nodeListRequest)?.let { json ->
+            val newNodeURLs = requestWithRepeat("""{"jsonrpc":"2.0","method":"in3_nodeList","params":[],"id":1}""")?.let { json ->
                 in3nodeListResponseAdapter.fromJson(json)?.result?.nodes
             }?.map { it.url }
 
