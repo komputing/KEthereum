@@ -3,7 +3,6 @@
 package org.kethereum.erc1577
 
 import io.ipfs.multiformats.multihash.Multihash
-import io.ipfs.multiformats.multihash.Type
 import okio.BufferedSource
 import okio.buffer
 import okio.source
@@ -36,7 +35,7 @@ fun ContentHash.toURI(): ToURIResult {
                 hashLength != content.size -> HashLengthError(hashLength, content.size)
                 contentType != 0x70U -> ContentTypeError(contentType, 0x70U)
                 else -> {
-                    SuccessfulToURIResult("ipfs://" + Multihash.encode(content, hashFunction).encodeToBase58String())
+                    SuccessfulToURIResult("ipfs://" + encodeToMultiHashString(content, hashFunction))
                 }
             }
         }
@@ -54,6 +53,28 @@ fun ContentHash.toURI(): ToURIResult {
                 else -> SuccessfulToURIResult("bzz://" + content.toNoPrefixHexString())
             }
         }
+
+        0xe5U -> {
+            val contentType = buffer.readVarUInt()
+            val hashFunction: UInt = buffer.readVarUInt()
+            val hashLength = buffer.readVarUInt().toInt()
+            val content = buffer.readByteArray()
+
+            when {
+                hashLength != content.size -> HashLengthError(hashLength, content.size)
+                contentType != 0x70U -> ContentTypeError(contentType, 0x70U)
+                else -> {
+                    SuccessfulToURIResult("ipns://" + encodeToMultiHashString(content, hashFunction))
+                }
+            }
+        }
+
         else -> InvalidStorageSystem(storageByte)
     }
+}
+
+private fun encodeToMultiHashString(content: ByteArray, hashFunction: UInt) = if (hashFunction==0U) {
+    String(content)
+} else {
+    Multihash.encode(content, hashFunction).encodeToBase58String()
 }

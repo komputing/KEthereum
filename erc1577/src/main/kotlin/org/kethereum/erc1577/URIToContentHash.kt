@@ -26,6 +26,18 @@ fun URI.toContentHash() = when (scheme) {
         buffer.write(hash)
         getResult(buffer.readByteArray())
     }
+    "ipns" -> {
+        val buffer = Buffer()
+        val hash: ByteArray = host.toByteArray()
+
+        buffer.writeVarUInt(0xe5U) // storageByte
+        buffer.writeVarUInt(0x1U) // CID
+        buffer.writeVarUInt(0x70U) // contentType
+        buffer.writeVarUInt(0x0U) // hashFunction
+        buffer.writeVarUInt(hash.size.toUInt())
+        buffer.write(hash)
+        getResult(buffer.readByteArray())
+    }
     "bzz" -> {
         val hash = try {
             HexString(host).hexToByteArray()
