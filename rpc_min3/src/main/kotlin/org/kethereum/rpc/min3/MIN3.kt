@@ -44,10 +44,10 @@ class MIN3Transport(private val bootNodes: List<String>,
                     private val max_retries: Int = 42
 ) : RPCTransport {
 
-    private val nodes = mutableSetOf<String>()
+    private val nodes = mutableMapOf<String, Int>()
 
     init {
-        nodes.addAll(bootNodes)
+        nodes.putAll(bootNodes.associateWith { 0 })
     }
 
     override fun call(payload: String): String? {
@@ -58,7 +58,8 @@ class MIN3Transport(private val bootNodes: List<String>,
     private fun requestWithRepeat(payload: String): String? {
 
         repeat(max_retries) {
-            val request = buildRequest(payload)
+            val url = nodes.maxBy { it.value }?.key!!
+            val request = buildRequest(payload, url)
             val maybeResult = try {
                 val execute = okHttpClient.newCall(request).execute()
                 val responseString = execute.body()?.use { it.string() }
@@ -71,8 +72,10 @@ class MIN3Transport(private val bootNodes: List<String>,
                 null
             }
             if (maybeResult != null) {
+                nodes[url] = (nodes[url] ?: 0) + 1
                 return maybeResult
             }
+            nodes[url] = (nodes[url] ?: 0) - 1
         }
         return null // no result after 5 attempts
     }
@@ -81,17 +84,17 @@ class MIN3Transport(private val bootNodes: List<String>,
         if (bootNodes.size == nodes.size) {
             val newNodeURLs = requestWithRepeat("""{"jsonrpc":"2.0","method":"in3_nodeList","params":[],"id":1}""")?.let { json ->
                 in3nodeListResponseAdapter.fromJson(json)?.result?.nodes
-            }?.map { it.url }
+            }?.map { it.url }?.filter { !nodes.containsKey(it) }
 
             if (newNodeURLs != null) {
-                nodes.addAll(newNodeURLs)
+                nodes.putAll(newNodeURLs.associateWith { 0 })
             }
         }
     }
 
-    private fun buildRequest(body: RequestBody) = Request.Builder().url(nodes.random())
+    private fun buildRequest(body: RequestBody, url: String) = Request.Builder().url(url)
             .method("POST", body)
             .build()
 
-    private fun buildRequest(payload: String) = buildRequest(RequestBody.create(JSONMediaType, payload))
+    private fun buildRequest(payload: String, url: String) = buildRequest(RequestBody.create(JSONMediaType, payload), url)
 }
