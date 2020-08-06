@@ -10,16 +10,24 @@ import java.security.GeneralSecurityException
 
 val JSONMediaType: MediaType = MediaType.parse("application/json")!!
 
-
 class HttpEthereumRPC(val baseURL: String, okhttp: OkHttpClient = OkHttpClient().newBuilder().build())
     : BaseEthereumRPC(HttpTransport(baseURL, okhttp))
 
-class HttpTransport(private val baseURL: String, private val okhttp: OkHttpClient = OkHttpClient().newBuilder().build()) : RPCTransport {
+class HttpTransport(private val baseURL: String,
+                    private val okhttp: OkHttpClient = OkHttpClient().newBuilder().build(),
+                    private val debug: Boolean = false) : RPCTransport {
 
     override fun call(payload: String) = try {
-        okhttp.newCall(buildRequest(payload)).execute().body().use { body ->
+        val result = okhttp.newCall(buildRequest(payload)).execute().body().use { body ->
             body?.string()
         }
+
+        if (debug) {
+            println("HttpTransport> via $baseURL payload: $payload")
+            println("HttpTransport> got $result")
+
+        }
+        result
     } catch (e: IOException) {
         null
     } catch (e: GeneralSecurityException) {

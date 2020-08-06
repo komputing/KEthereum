@@ -41,7 +41,8 @@ fun getMin3RPC(chainId: ChainId,
 
 class MIN3Transport(private val bootNodes: List<String>,
                     private val okHttpClient: OkHttpClient = OkHttpClient.Builder().build(),
-                    private val max_retries: Int = 42
+                    private val max_retries: Int = 42,
+                    private val debug: Boolean = false
 ) : RPCTransport {
 
     private val nodes = mutableMapOf<String, Int>()
@@ -57,18 +58,31 @@ class MIN3Transport(private val bootNodes: List<String>,
 
     private fun requestWithRepeat(payload: String): String? {
 
-        repeat(max_retries) {
+        repeat(max_retries) { retry ->
             val url = nodes.maxBy { it.value }?.key!!
+            if (debug) {
+                println("MIN3Transport> request payload $payload - retry $retry")
+                println("MIN3Transport> trying to fetch from $url")
+            }
             val request = buildRequest(payload, url)
             val maybeResult = try {
                 val execute = okHttpClient.newCall(request).execute()
                 val responseString = execute.body()?.use { it.string() }
+
+                if (debug) {
+                    println("MIN3Transport> response code: ${execute.code()} - body: $responseString")
+                }
+
                 if (execute.code() == 200 && responseString?.startsWith("{") == true) {
                     responseString
                 } else {
                     null
                 }
             } catch (e: Exception) {
+                if (debug) {
+                    println("MIN3Transport> exception code: ${e.message}")
+                    e.printStackTrace()
+                }
                 null
             }
             if (maybeResult != null) {
