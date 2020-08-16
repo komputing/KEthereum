@@ -63,7 +63,7 @@ class TheERC681Parsing {
 
     @Test
     fun weCanParseScientificNotationForGas() {
-        Assertions.assertThat(parseERC681("ethereum:0x00AB42@23?gas=42e1").gas).isEqualTo(BigInteger("420"))
+        Assertions.assertThat(parseERC681("ethereum:0x00AB42@23?gas=42e1").gasLimit).isEqualTo(BigInteger("420"))
     }
 
     @Test
@@ -122,17 +122,20 @@ class TheERC681Parsing {
 
     @Test
     fun parsingERC681WithGasValueWorks() {
-        Assertions.assertThat(parseERC681("ethereum:0x00AB42?gas=2").gas).isEqualTo("2")
-        Assertions.assertThat(parseERC681("ethereum:0x00AB42?gas=42&value=3").gas).isEqualTo("42")
+        Assertions.assertThat(parseERC681("ethereum:0x00AB42?gas=2").gasLimit).isEqualTo("2")
+        Assertions.assertThat(parseERC681("ethereum:0x00AB42?gasLimit=4").gasLimit).isEqualTo("4")
+        Assertions.assertThat(parseERC681("ethereum:0x00AB42?gas=42&value=3").gasLimit).isEqualTo("42")
         Assertions.assertThat(parseERC681("ethereum:0x00AB42?value=1&gas=2").value).isEqualTo("1")
-        Assertions.assertThat(parseERC681("ethereum:0x00AB42?gas=2&value=1").gas).isEqualTo("2")
+        Assertions.assertThat(parseERC681("ethereum:0x00AB42?gas=2&value=1").gasLimit).isEqualTo("2")
+        Assertions.assertThat(parseERC681("ethereum:0x00AB42?gasLimit=4").gasPrice).isNull()
+        Assertions.assertThat(parseERC681("ethereum:0x00AB42?gasPrice=42").gasPrice).isEqualTo("42")
     }
 
     @Test
     fun canParseFullyFeaturedERC681URL() {
         Assertions.assertThat(parseERC681("ethereum:pay-0x00AB42@23?value=42&gas=3").prefix).isEqualTo("pay")
         Assertions.assertThat(parseERC681("ethereum:pay-0x00AB42@23?value=42&gas=3").value).isEqualTo("42")
-        Assertions.assertThat(parseERC681("ethereum:pay-0x00AB42@23?value=42&gas=3").gas).isEqualTo("3")
+        Assertions.assertThat(parseERC681("ethereum:pay-0x00AB42@23?value=42&gas=3").gasLimit).isEqualTo("3")
     }
 
     @Test

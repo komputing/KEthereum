@@ -13,5 +13,6 @@ data class ERC681(
         var chainId: ChainId? = null,
 
         var value: BigInteger? = null,
-        var gas: BigInteger? = null
+        var gasPrice: BigInteger? = null,
+        var gasLimit: BigInteger? = null
 )
