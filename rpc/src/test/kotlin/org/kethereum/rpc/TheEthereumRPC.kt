@@ -177,23 +177,23 @@ class TheEthereumRPC {
         assertThat(blockByNumber?.number).isEqualTo(BigInteger.valueOf(170263L))
         assertThat(blockByNumber?.difficulty).isEqualTo(HexString("0x6cea8018718").hexToBigInteger())
 
-        assertThat(blockByNumber?.extraData).isEqualTo(HexString("0xd783010100844765746887676f312e342e32856c696e7578"))
+        assertThat(blockByNumber?.extraData).isEqualTo(("0xd783010100844765746887676f312e342e32856c696e7578"))
 
         assertThat(blockByNumber?.gasLimit).isEqualTo(HexString("0x2fefd8").hexToBigInteger())
         assertThat(blockByNumber?.gasUsed).isEqualTo(HexString("0x5208").hexToBigInteger())
 
-        assertThat(blockByNumber?.hash).isEqualTo(HexString("0x3a72d7691cd720cbb4fffb8145044d3ff5b3c24ef02affaf09d88d0b62c6ba1a"))
+        assertThat(blockByNumber?.hash).isEqualTo("0x3a72d7691cd720cbb4fffb8145044d3ff5b3c24ef02affaf09d88d0b62c6ba1a")
 
-        assertThat(blockByNumber?.logsBloom).isEqualTo(HexString("0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"))
+        assertThat(blockByNumber?.logsBloom).isEqualTo("0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000")
 
-        assertThat(blockByNumber?.miner).isEqualTo(HexString("0x8d8dfbd04db0942d79bb1bb038e8876bb67ff825"))
+        assertThat(blockByNumber?.miner).isEqualTo(("0x8d8dfbd04db0942d79bb1bb038e8876bb67ff825"))
         assertThat(blockByNumber?.nonce).isEqualTo(HexString("0x2e22b4166a4ced0c").hexToBigInteger())
 
-        assertThat(blockByNumber?.parentHash).isEqualTo(HexString("0x7b4f7d83c09f26e8b696aac112b9ba6eea745487725e649431d06f475f81b728"))
-        assertThat(blockByNumber?.sha3Uncles).isEqualTo(HexString("0xd7fa711cd3c10f3875fe59be3bd2dbf2d3d071cb2d07a5ef2760b6720b59ebbd"))
+        assertThat(blockByNumber?.parentHash).isEqualTo(("0x7b4f7d83c09f26e8b696aac112b9ba6eea745487725e649431d06f475f81b728"))
+        assertThat(blockByNumber?.sha3Uncles).isEqualTo(("0xd7fa711cd3c10f3875fe59be3bd2dbf2d3d071cb2d07a5ef2760b6720b59ebbd"))
 
         assertThat(blockByNumber?.size).isEqualTo(HexString("0x4ab").hexToBigInteger())
-        assertThat(blockByNumber?.stateRoot).isEqualTo(HexString("0x378f69f272e62e09661613cc29873a7875547d3799faf2d83f45898639d23760"))
+        assertThat(blockByNumber?.stateRoot).isEqualTo(("0x378f69f272e62e09661613cc29873a7875547d3799faf2d83f45898639d23760"))
         assertThat(blockByNumber?.timestamp).isEqualTo(HexString("0x55e4df39").hexToBigInteger())
         assertThat(blockByNumber?.totalDifficulty).isEqualTo(HexString("0x78c0d6f07ec9017").hexToBigInteger())
 
