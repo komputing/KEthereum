@@ -1,13 +1,14 @@
-package org.kethereum.erc681
+package org.kethereum.extensions.transactions
 
 import org.kethereum.contract.abi.types.encodeTypes
 import org.kethereum.contract.abi.types.getETHTypeInstance
 import org.kethereum.methodsignatures.model.TextMethodSignature
 import org.kethereum.methodsignatures.toHexSignature
+import org.kethereum.model.EthereumFunctionCall
 import org.komputing.khex.extensions.hexToByteArray
 import org.komputing.khex.model.HexString
 
-fun ERC681.toTransactionInput(): ByteArray {
+fun EthereumFunctionCall.toTransactionInput(): ByteArray {
     val parameterSignature = functionParams.joinToString(",") { it.first }
     val functionSignature = TextMethodSignature("$function($parameterSignature)")
 

@@ -1,7 +1,8 @@
-package org.kethereum.erc681
+package org.kethereum.extensions.transactions
 
 import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.Test
+import org.kethereum.erc681.parseERC681
 import org.komputing.khex.extensions.hexToByteArray
 import org.komputing.khex.model.HexString
 
