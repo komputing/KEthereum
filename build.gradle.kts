@@ -11,7 +11,7 @@ buildscript {
     dependencies {
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:${Versions.kotlin}")
         classpath("com.github.ben-manes:gradle-versions-plugin:${Versions.versions_plugin}")
-        classpath("com.github.komputing:kethabi:0.1.7")
+        classpath("com.github.komputing:kethabi:0.1.8")
     }
 }
 
@@ -47,7 +47,7 @@ subprojects {
             "testRuntime"("org.junit.jupiter:junit-jupiter-engine:${Versions.jupiter}")
 
             "testImplementation"("org.jetbrains.kotlin:kotlin-test")
-            "testImplementation"("io.mockk:mockk:1.10.0")
+            "testImplementation"("io.mockk:mockk:1.10.3")
         }
 
 

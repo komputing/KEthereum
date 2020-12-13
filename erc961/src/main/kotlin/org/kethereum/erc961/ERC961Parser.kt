@@ -1,6 +1,5 @@
 package org.kethereum.erc961
 
-import com.sun.xml.internal.fastinfoset.vocab.Vocabulary.PREFIX
 import org.kethereum.model.Address
 import org.kethereum.model.ChainId
 import org.kethereum.model.EthereumURI
@@ -18,18 +17,17 @@ fun parseTokenFromEthereumURI(uri: String): Token {
     val commonEthereumURI = EthereumURI(uri).parseCommonURI()
     val queryMap = commonEthereumURI.query.toMap()
 
-    if (uri.startsWith("ethereum:$PREFIX")
-            || !commonEthereumURI.valid) {
+    if (!isEthereumTokenURI(uri) || !commonEthereumURI.valid) {
         throw InvalidTokenURIException()
     }
 
     return Token(
-            symbol = queryMap["symbol"] ?: "SYM",
-            address = Address(commonEthereumURI.address ?: ""),
-            chain = commonEthereumURI.chainId ?: ChainId(1),
-            name = queryMap["name"],
-            decimals = queryMap["decimals"]?.toInt() ?: 18,
-            type = queryMap["type"]
+        symbol = queryMap["symbol"] ?: "SYM",
+        address = Address(commonEthereumURI.address ?: ""),
+        chain = commonEthereumURI.chainId ?: ChainId(1),
+        name = queryMap["name"],
+        decimals = queryMap["decimals"]?.toInt() ?: 18,
+        type = queryMap["type"]
     )
 }
 

@@ -13,4 +13,5 @@ dependencies {
     implementation(project(":extensions_kotlin"))
 
     testImplementation(project(":test_data"))
+    testImplementation("org.jetbrains.kotlin:kotlin-reflect:${Versions.kotlin}")
 }

@@ -57,3 +57,7 @@ val TEST_BIGINTEGERS_INCL_NEGATIVE = listOf(
         -valueOf(Long.MAX_VALUE),
         -BigInteger("ff".repeat(31), 16)
 )
+
+fun getABIString(name: String) : String {
+        return object {}.javaClass.getResource("/$name.abi").readText()
+}

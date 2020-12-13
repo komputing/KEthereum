@@ -37,7 +37,6 @@ class TheENS {
             mockRPC.call(capture(slot))
         }
 
-        confirmVerified(mockRPC)
         assertThat(slot.captured.to).isEqualTo(ENS_DEFAULT_CONTRACT_ADDRESS)
     }
 
@@ -52,13 +51,13 @@ class TheENS {
 
         assertThat(ens.getAddress(ENSName("foo.eth"))).isEqualTo(TEST_ADDRESSES.last())
 
-        val slot = slot<Transaction>()
+        val slot = mutableListOf<Transaction>()
         verify(exactly = 2) {
             mockRPC.call(capture(slot))
         }
 
-        confirmVerified(mockRPC)
-        assertThat(slot.captured.to).isEqualTo(TEST_ADDRESSES.last())
+        assertThat(slot.first().to).isEqualTo(ENS_DEFAULT_CONTRACT_ADDRESS)
+        assertThat(slot.last().to).isEqualTo(TEST_ADDRESSES.last())
 
     }
 

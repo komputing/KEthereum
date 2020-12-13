@@ -4,6 +4,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.kethereum.abi.EthereumABI
 import org.kethereum.abi_codegen.model.GeneratorSpec
+import org.kethereum.crypto.test_data.getABIString
 import kotlin.test.assertFails
 
 class TheCodeGenerator {
@@ -75,7 +76,7 @@ class TheCodeGenerator {
     }
 
     private fun getABI(name: String, spec: GeneratorSpec) = StringBuilder().apply {
-        EthereumABI(javaClass.getResource("/$name.abi").readText()).toKotlinCode(spec).writeTo(this)
+        val abiString = getABIString(name)
+        EthereumABI(abiString).toKotlinCode(spec).writeTo(this)
     }.toString()
-
 }
