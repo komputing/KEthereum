@@ -17,7 +17,7 @@ import org.kethereum.rpc.HttpEthereumRPC
 import org.kethereum.rpc.min3.getMin3RPC
 import kotlin.system.exitProcess
 
-val rpc : EthereumRPC = HttpEthereumRPC("https://goerli.optimism.io")
+val rpc =  getMin3RPC()
 val ens = ENS(rpc)
 
 suspend fun main() {
