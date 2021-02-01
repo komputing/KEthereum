@@ -60,7 +60,9 @@ internal fun Transaction.toJSON(): String {
         elements.add(""""from":"$from"""")
     }
 
-    elements.add(""""to":"$to"""")
+    if (to != null) {
+        elements.add(""""to":"$to"""")
+    }
 
     if (input.isNotEmpty()) {
         elements.add(""""data":"${input.toHexString()}"""")
