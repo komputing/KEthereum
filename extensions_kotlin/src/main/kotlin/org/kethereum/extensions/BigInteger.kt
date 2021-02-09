@@ -1,9 +1,10 @@
 package org.kethereum.extensions
 
+import com.ionspin.kotlin.bignum.integer.BigInteger
+import com.ionspin.kotlin.bignum.integer.Sign
 import org.komputing.khex.extensions.clean0xPrefix
 import org.komputing.khex.extensions.has0xPrefix
 import org.komputing.khex.model.HexString
-import java.math.BigInteger
 
 fun BigInteger.toBytesPadded(length: Int): ByteArray {
     val result = ByteArray(length)
@@ -44,14 +45,14 @@ fun BigInteger.toHexStringZeroPadded(size: Int, withPrefix: Boolean = true): Str
     }
 }
 
-fun HexString.hexToBigInteger() = BigInteger(clean0xPrefix().string, 16)
+fun HexString.hexToBigInteger() = BigInteger.parseString(clean0xPrefix().string, 16)
 
 fun HexString.maybeHexToBigInteger() = if (has0xPrefix()) {
-    BigInteger(clean0xPrefix().string, 16)
+    BigInteger.parseString(clean0xPrefix().string, 16)
 } else {
-    BigInteger(string)
+    BigInteger.parseString(string)
 }
 
-fun ByteArray.toBigInteger(offset: Int, length: Int) = BigInteger(1, copyOfRange(offset, offset + length))
-fun ByteArray.toBigInteger() = BigInteger(1, this)
+fun ByteArray.toBigInteger(offset: Int, length: Int) = BigInteger.fromByteArray(copyOfRange(offset, offset + length), Sign.POSITIVE)
+fun ByteArray.toBigInteger() = BigInteger.fromByteArray(this, Sign.POSITIVE)
 

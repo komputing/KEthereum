@@ -1,10 +1,10 @@
 package org.kethereum.erc681
 
+import com.ionspin.kotlin.bignum.integer.BigInteger
 import org.assertj.core.api.Assertions
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.kethereum.model.ChainId
-import java.math.BigInteger
 
 class TheERC681Parsing {
 
@@ -53,17 +53,17 @@ class TheERC681Parsing {
 
     @Test
     fun weCanParseScientificNotationForValue() {
-        Assertions.assertThat(parseERC681("ethereum:0x00AB42@23?value=42e18").value).isEqualTo(BigInteger("42000000000000000000"))
+        Assertions.assertThat(parseERC681("ethereum:0x00AB42@23?value=42e18").value).isEqualTo(BigInteger.parseString("42000000000000000000"))
     }
 
     @Test
     fun weCanParseScientificNotationWithDecimalsForValue() {
-        Assertions.assertThat(parseERC681("ethereum:0x00AB42@23?value=42.123e18").value).isEqualTo(BigInteger("42123000000000000000"))
+        Assertions.assertThat(parseERC681("ethereum:0x00AB42@23?value=42.123e18").value).isEqualTo(BigInteger.parseString("42123000000000000000"))
     }
 
     @Test
     fun weCanParseScientificNotationForGas() {
-        Assertions.assertThat(parseERC681("ethereum:0x00AB42@23?gas=42e1").gasLimit).isEqualTo(BigInteger("420"))
+        Assertions.assertThat(parseERC681("ethereum:0x00AB42@23?gas=42e1").gasLimit).isEqualTo(BigInteger.parseString("420"))
     }
 
     @Test
@@ -111,31 +111,31 @@ class TheERC681Parsing {
         Assertions.assertThat(parseERC681("ethereum:0x00AB42").value).isNull()
 
         Assertions.assertThat(parseERC681("ethereum:0x00AB42?value=1").valid).isEqualTo(true)
-        Assertions.assertThat(parseERC681("ethereum:0x00AB42?value=1").value).isEqualTo("1")
+        Assertions.assertThat(parseERC681("ethereum:0x00AB42?value=1").value).isEqualTo(BigInteger.ONE)
 
         (0..10).forEach {
-            val erC681 = ERC681(address = "0xAABB", value = BigInteger.valueOf(it.toLong()))
+            val erC681 = ERC681(address = "0xAABB", value = BigInteger(it.toLong()))
             val probe = parseERC681(erC681.generateURL())
-            Assertions.assertThat(probe.value).isEqualTo(it.toString())
+            Assertions.assertThat(probe.value).isEqualTo(BigInteger(it))
         }
     }
 
     @Test
     fun parsingERC681WithGasValueWorks() {
-        Assertions.assertThat(parseERC681("ethereum:0x00AB42?gas=2").gasLimit).isEqualTo("2")
-        Assertions.assertThat(parseERC681("ethereum:0x00AB42?gasLimit=4").gasLimit).isEqualTo("4")
-        Assertions.assertThat(parseERC681("ethereum:0x00AB42?gas=42&value=3").gasLimit).isEqualTo("42")
-        Assertions.assertThat(parseERC681("ethereum:0x00AB42?value=1&gas=2").value).isEqualTo("1")
-        Assertions.assertThat(parseERC681("ethereum:0x00AB42?gas=2&value=1").gasLimit).isEqualTo("2")
+        Assertions.assertThat(parseERC681("ethereum:0x00AB42?gas=2").gasLimit).isEqualTo(BigInteger(2))
+        Assertions.assertThat(parseERC681("ethereum:0x00AB42?gasLimit=4").gasLimit).isEqualTo(BigInteger(4))
+        Assertions.assertThat(parseERC681("ethereum:0x00AB42?gas=42&value=3").gasLimit).isEqualTo(BigInteger(42))
+        Assertions.assertThat(parseERC681("ethereum:0x00AB42?value=1&gas=2").value).isEqualTo(BigInteger.ONE)
+        Assertions.assertThat(parseERC681("ethereum:0x00AB42?gas=2&value=1").gasLimit).isEqualTo(BigInteger(2))
         Assertions.assertThat(parseERC681("ethereum:0x00AB42?gasLimit=4").gasPrice).isNull()
-        Assertions.assertThat(parseERC681("ethereum:0x00AB42?gasPrice=42").gasPrice).isEqualTo("42")
+        Assertions.assertThat(parseERC681("ethereum:0x00AB42?gasPrice=42").gasPrice).isEqualTo(BigInteger(42))
     }
 
     @Test
     fun canParseFullyFeaturedERC681URL() {
         Assertions.assertThat(parseERC681("ethereum:pay-0x00AB42@23?value=42&gas=3").prefix).isEqualTo("pay")
-        Assertions.assertThat(parseERC681("ethereum:pay-0x00AB42@23?value=42&gas=3").value).isEqualTo("42")
-        Assertions.assertThat(parseERC681("ethereum:pay-0x00AB42@23?value=42&gas=3").gasLimit).isEqualTo("3")
+        Assertions.assertThat(parseERC681("ethereum:pay-0x00AB42@23?value=42&gas=3").value).isEqualTo(BigInteger(42))
+        Assertions.assertThat(parseERC681("ethereum:pay-0x00AB42@23?value=42&gas=3").gasLimit).isEqualTo(BigInteger(3))
     }
 
     @Test

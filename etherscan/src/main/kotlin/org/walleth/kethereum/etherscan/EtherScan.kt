@@ -1,15 +1,15 @@
 package org.walleth.kethereum.etherscan
 
+import com.ionspin.kotlin.bignum.integer.BigInteger
 import org.kethereum.model.ChainId
-import java.math.BigInteger
 
 
 private val ETHERSCAN_PREFIX_MAP = mapOf(
-        BigInteger.valueOf(1L) to "",
-        BigInteger.valueOf(3L) to "ropsten",
-        BigInteger.valueOf(4L) to "rinkeby",
-        BigInteger.valueOf(5L) to "goerli",
-        BigInteger.valueOf(42L) to "kovan"
+        BigInteger(1L) to "",
+        BigInteger(3L) to "ropsten",
+        BigInteger(4L) to "rinkeby",
+        BigInteger(5L) to "goerli",
+        BigInteger(42L) to "kovan"
 )
 
 val ALL_ETHERSCAN_SUPPORTED_NETWORKS = ETHERSCAN_PREFIX_MAP.map { it.key }.toSet()

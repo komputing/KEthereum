@@ -1,9 +1,10 @@
 package org.kethereum.rlp
 
+import com.ionspin.kotlin.bignum.integer.BigInteger
+import com.ionspin.kotlin.bignum.integer.BigInteger.Companion.ZERO
+import com.ionspin.kotlin.bignum.integer.Sign
 import org.kethereum.extensions.removeLeadingZero
 import org.kethereum.extensions.toMinimalByteArray
-import java.math.BigInteger
-import java.math.BigInteger.ZERO
 
 /**
 RLP as of Appendix B. Recursive Length Prefix at https://github.com/ethereum/yellowpaper
@@ -27,7 +28,7 @@ fun RLPElement.toIntFromRLP() = if (bytes.isEmpty()) {
             .reduce { acc, i -> acc + i }
 }
 
-fun RLPElement.toUnsignedBigIntegerFromRLP(): BigInteger = if (bytes.isEmpty()) ZERO else BigInteger(1, bytes)
+fun RLPElement.toUnsignedBigIntegerFromRLP(): BigInteger = if (bytes.isEmpty()) ZERO else BigInteger.fromByteArray(bytes, Sign.POSITIVE)
 fun RLPElement.toByteFromRLP(): Byte {
     require(bytes.size == 1) { "trying to convert RLP with != 1 byte to Byte" }
     return bytes.first()

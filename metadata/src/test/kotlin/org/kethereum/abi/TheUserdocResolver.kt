@@ -1,5 +1,6 @@
 package org.kethereum.abi
 
+import com.ionspin.kotlin.bignum.integer.BigInteger
 import kotlinx.coroutines.runBlocking
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
@@ -20,7 +21,6 @@ import org.kethereum.model.EthereumURI
 import org.kethereum.model.createEmptyTransaction
 import org.komputing.khex.extensions.hexToByteArray
 import org.komputing.khex.model.HexString
-import java.math.BigInteger
 
 class TheUserdocResolver {
 

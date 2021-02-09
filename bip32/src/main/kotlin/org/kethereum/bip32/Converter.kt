@@ -1,5 +1,7 @@
 package org.kethereum.bip32
 
+import com.ionspin.kotlin.bignum.integer.BigInteger
+import com.ionspin.kotlin.bignum.integer.Sign
 import org.kethereum.bip32.model.*
 import org.kethereum.crypto.CURVE
 import org.kethereum.crypto.CryptoAPI
@@ -10,7 +12,6 @@ import org.kethereum.model.PRIVATE_KEY_SIZE
 import org.kethereum.model.PrivateKey
 import org.kethereum.model.PublicKey
 import org.komputing.kbase58.decodeBase58WithChecksum
-import java.math.BigInteger
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
 import java.security.InvalidKeyException
@@ -23,7 +24,7 @@ fun Seed.toExtendedKey(publicKeyOnly: Boolean = false, testnet: Boolean = false)
         val lr = CryptoAPI.hmac.init(BITCOIN_SEED).generate(seed)
         val l = lr.copyOfRange(0, PRIVATE_KEY_SIZE)
         val r = lr.copyOfRange(PRIVATE_KEY_SIZE, PRIVATE_KEY_SIZE + CHAINCODE_SIZE)
-        val m = BigInteger(1, l)
+        val m = BigInteger.fromByteArray(l, Sign.POSITIVE)
         if (m >= CURVE.n) {
             throw KeyException("Master key creation resulted in a key with higher modulus. Suggest deriving the next increment.")
         }
@@ -83,7 +84,7 @@ fun XPriv.toExtendedKey(): ExtendedKey {
         val uncompressedPublicBytes = decompressKey(compressedPublicBytes)
         ECKeyPair(
                 PrivateKey(BigInteger.ZERO),
-                PublicKey(BigInteger(1, uncompressedPublicBytes))
+                PublicKey(BigInteger.fromByteArray(uncompressedPublicBytes, Sign.POSITIVE))
         )
     }
     return ExtendedKey(keyPair, chainCode, depth, parent, sequence, versionBytes)

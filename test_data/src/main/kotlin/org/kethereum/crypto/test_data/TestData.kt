@@ -1,12 +1,14 @@
 package org.kethereum.crypto.test_data
 
+import com.ionspin.kotlin.bignum.integer.BigInteger
+import com.ionspin.kotlin.bignum.integer.BigInteger.Companion.ZERO
+import com.ionspin.kotlin.bignum.integer.BigInteger.Companion.ONE
+import com.ionspin.kotlin.bignum.integer.BigInteger.Companion.TEN
 import org.kethereum.model.Address
 import org.kethereum.model.ECKeyPair
 import org.kethereum.model.PrivateKey
 import org.kethereum.model.PublicKey
 import org.komputing.khex.model.HexString
-import java.math.BigInteger
-import java.math.BigInteger.*
 
 
 /**
@@ -36,26 +38,26 @@ val TEST_BIGINTEGERS_POSITIVE_ONLY = listOf(
         ZERO,
         ONE,
         TEN,
-        valueOf(42),
-        valueOf(420),
-        valueOf(Long.MAX_VALUE),
-        BigInteger("ff".repeat(32), 16)
+        BigInteger(42),
+        BigInteger(420),
+        BigInteger(Long.MAX_VALUE),
+        BigInteger.parseString("ff".repeat(32), 16)
 )
 
 val TEST_BIGINTEGERS_INCL_NEGATIVE = listOf(
         ZERO,
         ONE,
         TEN,
-        valueOf(42),
-        valueOf(420),
-        valueOf(Long.MAX_VALUE),
-        BigInteger("ff".repeat(31), 16),
+        BigInteger(42),
+        BigInteger(420),
+        BigInteger(Long.MAX_VALUE),
+        BigInteger.parseString("ff".repeat(31), 16),
         -ONE,
         -TEN,
-        -valueOf(42),
-        -valueOf(420),
-        -valueOf(Long.MAX_VALUE),
-        -BigInteger("ff".repeat(31), 16)
+        -BigInteger(42),
+        -BigInteger(420),
+        -BigInteger(Long.MAX_VALUE),
+        -BigInteger.parseString("ff".repeat(31), 16)
 )
 
 fun getABIString(name: String) : String {

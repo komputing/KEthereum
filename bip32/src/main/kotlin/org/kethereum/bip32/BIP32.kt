@@ -2,6 +2,8 @@
 
 package org.kethereum.bip32
 
+import com.ionspin.kotlin.bignum.integer.BigInteger
+import com.ionspin.kotlin.bignum.integer.Sign
 import org.kethereum.bip32.model.CHAINCODE_SIZE
 import org.kethereum.bip32.model.ExtendedKey
 import org.kethereum.bip32.model.Seed
@@ -14,7 +16,6 @@ import org.komputing.kbip44.BIP44
 import org.komputing.kbip44.BIP44Element
 import org.komputing.khash.ripemd160.extensions.digestRipemd160
 import org.komputing.khash.sha256.extensions.sha256
-import java.math.BigInteger
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
 import java.security.InvalidKeyException
@@ -76,7 +77,7 @@ fun ExtendedKey.generateChildKey(element: BIP44Element): ExtendedKey {
         val l = lr.copyOfRange(0, PRIVATE_KEY_SIZE)
         val r = lr.copyOfRange(PRIVATE_KEY_SIZE, PRIVATE_KEY_SIZE + CHAINCODE_SIZE)
 
-        val m = BigInteger(1, l)
+        val m = BigInteger.fromByteArray(l, Sign.POSITIVE)
         if (m >= CURVE.n) {
             throw KeyException("Child key derivation resulted in a key with higher modulus. Suggest deriving the next increment.")
         }

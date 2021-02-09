@@ -1,17 +1,19 @@
 package org.kethereum.rlp
 
+import com.ionspin.kotlin.bignum.integer.BigInteger
+import com.ionspin.kotlin.bignum.integer.BigInteger.Companion.ONE
+import com.ionspin.kotlin.bignum.integer.BigInteger.Companion.TEN
+import com.ionspin.kotlin.bignum.integer.BigInteger.Companion.ZERO
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
-import java.math.BigInteger
-import java.math.BigInteger.*
 
 val bigIntegerTestVectors = arrayOf(
         ZERO,
         ONE,
         TEN,
-        BigInteger.valueOf(70_000),
-        BigInteger.valueOf(Long.MAX_VALUE),
-        BigInteger.valueOf(54408193066555392L)
+        BigInteger(70_000),
+        BigInteger(Long.MAX_VALUE),
+        BigInteger(54408193066555392L)
 )
 
 val integerTestVectors = arrayOf(

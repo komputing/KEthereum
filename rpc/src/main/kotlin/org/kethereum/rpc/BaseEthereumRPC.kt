@@ -1,5 +1,6 @@
 package org.kethereum.rpc
 
+import com.ionspin.kotlin.bignum.integer.BigInteger
 import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Moshi
 import org.kethereum.extensions.hexToBigInteger
@@ -13,7 +14,6 @@ import org.kethereum.rpc.model.StringResultResponse
 import org.kethereum.rpc.model.TransactionResponse
 import org.komputing.khex.model.HexString
 import java.io.IOException
-import java.math.BigInteger
 
 class EthereumRPCException(override val message: String, val code: Int) : IOException(message)
 

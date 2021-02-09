@@ -1,11 +1,11 @@
 package org.kethereum.erc681
 
+import com.ionspin.kotlin.bignum.decimal.BigDecimal
+import com.ionspin.kotlin.bignum.integer.BigInteger
 import org.kethereum.erc831.ERC831
 import org.kethereum.model.EthereumURI
 import org.kethereum.uri.common.CommonEthereumURIData
 import org.kethereum.uri.common.parseCommonURI
-import java.math.BigDecimal
-import java.math.BigInteger
 
 private val scientificNumberRegEx = Regex("^[0-9]+(\\.[0-9]+)?(e[0-9]+)?$")
 
@@ -36,13 +36,13 @@ fun CommonEthereumURIData.toERC681() = let { commonURI ->
             return when {
                 contains("e") -> {
                     val split = split("e")
-                    BigDecimal(split.first()).multiply(BigDecimal.TEN.pow(split[1].toIntOrNull() ?: 1)).toBigInteger()
+                    BigDecimal.parseString(split.first()).multiply(BigDecimal.TEN.pow(split[1].toIntOrNull() ?: 1)).toBigInteger()
                 }
                 contains(".") -> {
                     valid = false
                     null
                 }
-                else -> BigInteger(this)
+                else -> BigInteger.parseString(this)
             }
         }
 

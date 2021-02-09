@@ -1,5 +1,6 @@
 package org.kethereum.crypto
 
+import com.ionspin.kotlin.bignum.integer.BigInteger
 import org.kethereum.crypto.api.ec.Curve
 import org.kethereum.crypto.api.ec.ECDSASignature
 import org.kethereum.keccakshortcut.keccak
@@ -47,7 +48,7 @@ fun signMessageHash(messageHash: ByteArray, keyPair: ECKeyPair, toCanonical: Boo
 
     val headerByte = recId + 27
 
-    return SignatureData(signature.r, signature.s, headerByte.toBigInteger())
+    return SignatureData(signature.r, signature.s, BigInteger(headerByte))
 }
 
 fun ECDSASignature.determineRecId(messageHash: ByteArray, publicKey: PublicKey): Int {

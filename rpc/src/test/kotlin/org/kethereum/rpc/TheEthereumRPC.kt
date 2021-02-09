@@ -1,5 +1,8 @@
 package org.kethereum.rpc
 
+import com.ionspin.kotlin.bignum.integer.BigInteger
+import com.ionspin.kotlin.bignum.integer.BigInteger.Companion.TEN
+import com.ionspin.kotlin.bignum.integer.BigInteger.Companion.ZERO
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
 import org.assertj.core.api.Assertions.assertThat
@@ -12,9 +15,6 @@ import org.kethereum.model.SignedTransaction
 import org.kethereum.rpc.model.BlockInformation
 import org.komputing.khex.extensions.hexToByteArray
 import org.komputing.khex.model.HexString
-import java.math.BigInteger
-import java.math.BigInteger.TEN
-import java.math.BigInteger.ZERO
 import kotlin.test.assertFails
 
 class TheEthereumRPC {
@@ -174,7 +174,7 @@ class TheEthereumRPC {
         val blockByNumber: BlockInformation? = tested.getBlockByNumber(TEN)
         assertThat(blockByNumber).isNotNull
 
-        assertThat(blockByNumber?.number).isEqualTo(BigInteger.valueOf(170263L))
+        assertThat(blockByNumber?.number).isEqualTo(BigInteger(170263L))
         assertThat(blockByNumber?.difficulty).isEqualTo(HexString("0x6cea8018718").hexToBigInteger())
 
         assertThat(blockByNumber?.extraData).isEqualTo(HexString("0xd783010100844765746887676f312e342e32856c696e7578"))
@@ -206,7 +206,7 @@ class TheEthereumRPC {
         assertThat(firstTransaction.gasPrice).isEqualTo(HexString("0xd4fc47cf6").hexToBigInteger())
         assertThat(firstTransaction.txHash).isEqualTo("0xceebdef59ab3cdde152672014b451f75bb7974b9dca4b30e545b6864d9ffca9d")
         assertThat(firstTransaction.input).isEqualTo(HexString("0x").hexToByteArray())
-        assertThat(firstTransaction.nonce).isEqualTo(BigInteger.valueOf(16))
+        assertThat(firstTransaction.nonce).isEqualTo(BigInteger(16))
         assertThat(firstTransaction.to).isEqualTo(Address("0x32be343b94f860124dc4fee278fdcbd38c102d88"))
         assertThat(firstTransaction.value).isEqualTo(HexString("0x596c90f09f547400").hexToBigInteger())
 

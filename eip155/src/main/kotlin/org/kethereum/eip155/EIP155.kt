@@ -1,5 +1,7 @@
 package org.kethereum.eip155
 
+import com.ionspin.kotlin.bignum.integer.BigInteger
+import com.ionspin.kotlin.bignum.integer.BigInteger.Companion.ZERO
 import org.kethereum.crypto.signMessage
 import org.kethereum.crypto.signedMessageToKey
 import org.kethereum.crypto.toAddress
@@ -8,9 +10,6 @@ import org.kethereum.model.ChainId
 import org.kethereum.model.ECKeyPair
 import org.kethereum.model.SignatureData
 import org.kethereum.model.Transaction
-import java.math.BigInteger
-import java.math.BigInteger.ZERO
-import java.math.BigInteger.valueOf
 
 /*
 *
@@ -27,7 +26,7 @@ import java.math.BigInteger.valueOf
 
 fun Transaction.signViaEIP155(key: ECKeyPair, chainId: ChainId): SignatureData {
     val signatureData = key.signMessage(encodeRLP(SignatureData().apply { v = chainId.value }))
-    return signatureData.copy(v = (signatureData.v.plus(chainId.value.shl(1)).plus(valueOf(8))))
+    return signatureData.copy(v = signatureData.v + (chainId.value shl 1) + BigInteger(8))
 }
 
 /**
@@ -36,11 +35,12 @@ fun Transaction.signViaEIP155(key: ECKeyPair, chainId: ChainId): SignatureData {
  * @return ChainID or null when not EIP155 signed
  *
  */
-fun SignatureData.extractChainID() = if (v < BigInteger.valueOf(37)) { // not EIP 155 signed
+fun SignatureData.extractChainID() = if (v < BigInteger(37)) { // not EIP 155 signed
     null
 } else {
-    (v - valueOf(35)).shr(1)
+    (v - BigInteger(35)).shr(1)
 }
 
 fun Transaction.extractFrom(eip155signatureData: SignatureData, chainId: ChainId) =
-        signedMessageToKey(encodeRLP(SignatureData(ZERO, ZERO, chainId.value)), eip155signatureData.copy(v = (eip155signatureData.v - valueOf(8) - (chainId.value * valueOf(2))))).toAddress()
+        signedMessageToKey(encodeRLP(SignatureData(ZERO, ZERO, chainId.value)),
+            eip155signatureData.copy(v = (eip155signatureData.v - BigInteger(8) - (chainId.value * BigInteger(2))))).toAddress()

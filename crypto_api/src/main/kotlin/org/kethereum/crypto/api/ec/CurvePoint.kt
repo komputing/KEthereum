@@ -1,6 +1,6 @@
 package org.kethereum.crypto.api.ec
 
-import java.math.BigInteger
+import com.ionspin.kotlin.bignum.integer.BigInteger
 
 interface CurvePoint {
     val x: BigInteger

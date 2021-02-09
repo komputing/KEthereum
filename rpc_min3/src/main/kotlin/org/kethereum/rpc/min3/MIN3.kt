@@ -21,7 +21,7 @@ val GOERLI_BOOTNODES = listOf(
         "https://in3-v2.slock.it/goerli/nd-2"
 )
 
-fun getMin3BootnNdesByChainId(chainId: ChainId) = when (chainId.value.toLong()) {
+fun getMin3BootnNdesByChainId(chainId: ChainId) = when (chainId.value.longValue()) {
     1L -> MAINNET_BOOTNODES
     5L -> GOERLI_BOOTNODES
     else -> null

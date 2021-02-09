@@ -1,5 +1,6 @@
 package org.kethereum.eip155
 
+import com.ionspin.kotlin.bignum.integer.BigInteger
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.kethereum.crypto.toECKeyPair
@@ -12,7 +13,6 @@ import org.kethereum.rlp.decodeRLP
 import org.komputing.khex.extensions.hexToByteArray
 import org.komputing.khex.extensions.toHexString
 import org.komputing.khex.model.HexString
-import java.math.BigInteger
 
 
 val privateKey = PrivateKey(HexString("4646464646464646464646464646464646464646464646464646464646464646"))
@@ -22,21 +22,21 @@ class TheEIP155 {
 
     @Test
     fun canExtractChainIDs() {
-        assertThat(SignatureData().copy(v = BigInteger.valueOf(37)).extractChainID()).isEqualTo(1)
-        assertThat(SignatureData().copy(v = BigInteger.valueOf(38)).extractChainID()).isEqualTo(1)
-        assertThat(SignatureData().copy(v = BigInteger.valueOf(39)).extractChainID()).isEqualTo(2)
-        assertThat(SignatureData().copy(v = BigInteger.valueOf(40)).extractChainID()).isEqualTo(2)
+        assertThat(SignatureData().copy(v = BigInteger(37)).extractChainID()).isEqualTo(1)
+        assertThat(SignatureData().copy(v = BigInteger(38)).extractChainID()).isEqualTo(1)
+        assertThat(SignatureData().copy(v = BigInteger(39)).extractChainID()).isEqualTo(2)
+        assertThat(SignatureData().copy(v = BigInteger(40)).extractChainID()).isEqualTo(2)
     }
 
 
     @Test
     fun signTransaction() {
         val transaction = Transaction().apply {
-            nonce = BigInteger.valueOf(9)
-            gasPrice = BigInteger.valueOf(20000000000L)
-            gasLimit = BigInteger.valueOf(21000)
+            nonce = BigInteger(9)
+            gasPrice = BigInteger(20000000000L)
+            gasLimit = BigInteger(21000)
             to = Address("0x3535353535353535353535353535353535353535")
-            value = BigInteger.valueOf(1000000000000000000L)
+            value = BigInteger(1000000000000000000L)
         }
         val signatureData = transaction.signViaEIP155(KEY_PAIR, ChainId(1))
 
@@ -56,7 +56,5 @@ class TheEIP155 {
         val sig = (hex.hexToByteArray().decodeRLP() as RLPList).toTransactionSignatureData()
 
         assertThat(tx.extractFrom(sig, ChainId(4))).isEqualTo(Address("8a681d2b7400d67966eef4f585b31a7458f96dba"))
-
-
     }
 }

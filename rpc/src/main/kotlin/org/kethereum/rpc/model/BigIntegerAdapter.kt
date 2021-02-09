@@ -1,8 +1,8 @@
 package org.kethereum.rpc.model
 
+import com.ionspin.kotlin.bignum.integer.BigInteger
 import com.squareup.moshi.FromJson
 import com.squareup.moshi.ToJson
-import java.math.BigInteger
 
 
 internal class BigIntegerAdapter {
@@ -11,6 +11,6 @@ internal class BigIntegerAdapter {
     fun toJson(card: BigInteger) = card.toString()
 
     @FromJson
-    fun fromJson(card: String) = BigInteger(card)
+    fun fromJson(card: String) = BigInteger.parseString(card)
 
 }

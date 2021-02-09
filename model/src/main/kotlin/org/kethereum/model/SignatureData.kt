@@ -1,7 +1,7 @@
 package org.kethereum.model
 
-import java.math.BigInteger
-import java.math.BigInteger.ZERO
+import com.ionspin.kotlin.bignum.integer.BigInteger
+import com.ionspin.kotlin.bignum.integer.BigInteger.Companion.ZERO
 
 data class SignatureData(var r: BigInteger = ZERO,
                          var s: BigInteger = ZERO,

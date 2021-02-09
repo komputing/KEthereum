@@ -1,5 +1,6 @@
 package org.kethereum
 
+import com.ionspin.kotlin.bignum.integer.BigInteger
 import com.squareup.moshi.Moshi
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -7,7 +8,6 @@ import org.kethereum.model.Address
 import org.kethereum.rpc.model.rpc.TransactionRPC
 import org.kethereum.rpc.toKethereumTransaction
 import org.komputing.khex.extensions.toHexString
-import java.math.BigInteger
 
 class TheConverter {
     private val transactionRPCAdapter = Moshi.Builder().build().adapter(TransactionRPC::class.java)
@@ -20,13 +20,13 @@ class TheConverter {
 
         val tested = transactionRPC.toKethereumTransaction().transaction
 
-        assertThat(tested.value).isEqualTo(BigInteger("11"))
+        assertThat(tested.value).isEqualTo(BigInteger.parseString("11"))
         assertThat(tested.input.toHexString()).isEqualTo("0x82ab890a00000000000000000000000000000000000000000000000000000000000027c1")
         assertThat(tested.from).isEqualTo(Address("0x9e3d69305da51f34ee29bfb52721e3a824d59e69"))
         assertThat(tested.to).isEqualTo(Address("0xaca0cc3a6bf9552f2866ccc67801d4e6aa6a70f2"))
-        assertThat(tested.gasLimit).isEqualTo(BigInteger("3d0900",16))
-        assertThat(tested.gasPrice).isEqualTo(BigInteger("4a817c800",16))
-        assertThat(tested.nonce).isEqualTo(BigInteger("4327",16))
+        assertThat(tested.gasLimit).isEqualTo(BigInteger.parseString("3d0900",16))
+        assertThat(tested.gasPrice).isEqualTo(BigInteger.parseString("4a817c800",16))
+        assertThat(tested.nonce).isEqualTo(BigInteger.parseString("4327",16))
         assertThat(tested.txHash).isEqualTo("0xc7af6af264b8dcc49c321af3dd38f99a8c4afd3b9bab50d24c6d5d1b6dcc160c")
     }
 
