@@ -40,6 +40,7 @@ subprojects {
 
         dependencies {
             "implementation"("org.jetbrains.kotlin:kotlin-stdlib:${Versions.kotlin}")
+            "implementation"("com.ionspin.kotlin:bignum-jvm:${Versions.bignum}")
 
             "testImplementation"("org.assertj:assertj-core:3.19.0")
             "testImplementation"("org.junit.jupiter:junit-jupiter-api:${Versions.jupiter}")
