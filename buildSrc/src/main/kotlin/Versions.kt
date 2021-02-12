@@ -12,5 +12,5 @@ object Versions {
     const val threetenbp = "1.5.0"
     const val okio = "2.4.0"
     const val base58 = "0.2"
-    const val bignum = "0.2.7"
+    const val bignum = "0.2.8-SNAPSHOT" // TODO: use next stable release once available
 }
