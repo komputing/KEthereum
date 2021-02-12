@@ -21,6 +21,8 @@ fun BigInteger.toBytesPadded(length: Int): ByteArray {
     return result
 }
 
+fun BigInteger.toMinimalByteArray() = toByteArray().removeLeadingZeros()
+
 fun BigInteger.toHexStringNoPrefix(): String = toString(16)
 fun BigInteger.toHexString(): String = "0x" + toString(16)
 

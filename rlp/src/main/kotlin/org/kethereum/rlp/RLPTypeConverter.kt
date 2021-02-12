@@ -3,7 +3,6 @@ package org.kethereum.rlp
 import com.ionspin.kotlin.bignum.integer.BigInteger
 import com.ionspin.kotlin.bignum.integer.BigInteger.Companion.ZERO
 import com.ionspin.kotlin.bignum.integer.Sign
-import org.kethereum.extensions.removeLeadingZero
 import org.kethereum.extensions.toMinimalByteArray
 
 /**
@@ -15,7 +14,7 @@ RLP as of Appendix B. Recursive Length Prefix at https://github.com/ethereum/yel
 fun String.toRLP() = RLPElement(toByteArray())
 
 fun Int.toRLP() = RLPElement(toMinimalByteArray())
-fun BigInteger.toRLP() = RLPElement(toByteArray().removeLeadingZero())
+fun BigInteger.toRLP() = RLPElement(toMinimalByteArray())
 fun ByteArray.toRLP() = RLPElement(this)
 fun Byte.toRLP() = RLPElement(ByteArray(1) { this })
 
