@@ -14,7 +14,7 @@ fun convertStringToABIType(string: String) = convertStringToABITypeOrNull(string
 
 fun convertStringToABITypeOrNull(string: String) = convertStringToABITypeOrNullNoAliases(TypeAliases[string] ?: string)
 
-private fun convertStringToABITypeOrNullNoAliases(string: String?) = when {
+internal fun convertStringToABITypeOrNullNoAliases(string: String?) = when {
     string == null -> null
     string == "bool" -> ContractABITypeDefinition(BoolETHType::class, Boolean::class)
     string == "string" -> ContractABITypeDefinition(StringETHType::class, String::class)
@@ -40,7 +40,7 @@ private fun convertStringToABITypeOrNullNoAliases(string: String?) = when {
     else -> null
 }
 
-private fun String.extractPrefixedNumber(prefix: String, constraint: (Int) -> Unit) =
+fun String.extractPrefixedNumber(prefix: String, constraint: (Int) -> Unit) =
         (removePrefix(prefix)
                 .toIntOrNull() ?: throw IllegalArgumentException("$this MUST have only a number after $prefix"))
                 .also(constraint)

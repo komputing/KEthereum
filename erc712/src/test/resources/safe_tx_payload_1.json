@@ -1,0 +1,68 @@
+{
+  "types": {
+    "EIP712Domain": [
+      {
+        "name": "verifyingContract",
+        "type": "address"
+      }
+    ],
+    "SafeTx": [
+      {
+        "name": "to",
+        "type": "address"
+      },
+      {
+        "name": "value",
+        "type": "uint256"
+      },
+      {
+        "name": "data",
+        "type": "bytes"
+      },
+      {
+        "name": "operation",
+        "type": "uint8"
+      },
+      {
+        "name": "safeTxGas",
+        "type": "uint256"
+      },
+      {
+        "name": "dataGas",
+        "type": "uint256"
+      },
+      {
+        "name": "gasPrice",
+        "type": "uint256"
+      },
+      {
+        "name": "gasToken",
+        "type": "address"
+      },
+      {
+        "name": "refundReceiver",
+        "type": "address"
+      },
+      {
+        "name": "nonce",
+        "type": "uint256"
+      }
+    ]
+  },
+  "primaryType": "SafeTx",
+  "domain": {
+    "verifyingContract": "0x692a70d2e424a56d2c6c27aa97d1a86395877b3a"
+  },
+  "message": {
+    "to":"0x5AC255889882aaB35A2aa939679E3F3d4Cea221E",
+    "value": 5000000,
+    "data": "0x00",
+    "operation": 0,
+    "safeTxGas": 50000,
+    "dataGas": 100,
+    "gasPrice": 10000,
+    "gasToken": "0x0000000000000000000000000000000000000000",
+    "refundReceiver": "0x0000000000000000000000000000000000000000",
+    "nonce": 67
+  }
+}

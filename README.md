@@ -19,6 +19,7 @@ Module overview
 | eip137                    | Model and functions for ENS NameHash                     | beta           |               |
 | eip155                    | TX signing with Simple replay attack protection          | production     | [example code](https://github.com/goerli/goerli_pusher/blob/master/src/main/kotlin/net/goerli/pusher/Main.kt)                         |
 | eip191                    | Functions to sign data via signed data standard          | beta           |               |
+| eip712                    | Ethereum typed structured data hashing and signing       | experimental   |               |
 | ens                       | ENS (Ethereum Name Service) functionality                | beta           | [README](https://github.com/komputing/KEthereum/blob/master/ens/README.md)                                                      |
 | erc1328                   | WalletConnect Standard URI Format                        | beta           |               |
 | erc1450                   | ERC-20 extension - e.g. including token minting          | beta           | [example code](https://github.com/goerli/goerli_pusher/blob/master/src/main/kotlin/net/goerli/pusher/Main.kt)                         |

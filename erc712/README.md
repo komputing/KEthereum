@@ -1,0 +1,1 @@
+This is the implementation from https://github.com/gnosis/svalinn-kotlin/tree/master/eip712/src/main adapted to Kethereum ETH types
