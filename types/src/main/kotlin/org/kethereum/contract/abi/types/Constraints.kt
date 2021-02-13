@@ -8,7 +8,7 @@ internal val BYTES_COUNT_CONSTRAINT: (Int) -> Unit = {
 }
 
 internal val INT_BITS_CONSTRAINT: (Int) -> Unit = {
-    require(it % BYTE_IN_BITS <= 0) { "bits%$BYTE_IN_BITS MUST be 0 but ist not for $it" }
+    require(it % BYTE_IN_BITS <= 0) { "bits%$BYTE_IN_BITS MUST be 0 but is not for $it" }
 
     require(it >= 8) { "cannot have less than 8 bit - but got $it" }
 
