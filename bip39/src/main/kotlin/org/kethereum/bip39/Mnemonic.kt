@@ -94,9 +94,8 @@ fun entropyToMnemonic(entropy: ByteArray, wordList: List<String>): String {
     val checksumLengthBits = entropyBits.size / 32
 
     val concatBits = BooleanArray(entropyBits.size + checksumLengthBits)
-    System.arraycopy(entropyBits, 0, concatBits, 0, entropyBits.size)
-    System.arraycopy(hashBits, 0, concatBits, entropyBits.size, checksumLengthBits)
-
+    entropyBits.copyInto(concatBits)
+    hashBits.copyInto(concatBits, destinationOffset = entropyBits.size, endIndex = checksumLengthBits)
 
     val words = ArrayList<String>().toMutableList()
     val numWords = concatBits.size / 11
