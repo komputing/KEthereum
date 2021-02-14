@@ -16,8 +16,7 @@ fun BigInteger.toBytesPadded(length: Int): ByteArray {
     }
 
     val destOffset = length - bytes.size + offset
-    System.arraycopy(bytes, offset, result, destOffset, bytes.size - offset)
-    return result
+    return bytes.copyInto(result, destinationOffset = destOffset, startIndex = offset)
 }
 
 fun BigInteger.toHexStringNoPrefix(): String = toString(16)

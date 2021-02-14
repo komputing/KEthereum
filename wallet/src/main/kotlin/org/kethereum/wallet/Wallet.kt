@@ -101,8 +101,8 @@ private fun performCipherOperation(operation: AESCipher.Operation, iv: ByteArray
 private fun generateMac(derivedKey: ByteArray, cipherText: ByteArray): ByteArray {
     val result = ByteArray(16 + cipherText.size)
 
-    System.arraycopy(derivedKey, 16, result, 0, 16)
-    System.arraycopy(cipherText, 0, result, 16, cipherText.size)
+    derivedKey.copyInto(result, startIndex = 16)
+    cipherText.copyInto(result, destinationOffset = 16)
 
     return result.keccak()
 }
