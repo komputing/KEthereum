@@ -1,11 +1,11 @@
 package org.kethereum.uri.common
 
+import com.ionspin.kotlin.bignum.integer.BigInteger
 import org.kethereum.erc831.ERC831
 import org.kethereum.erc831.toERC831
 import org.kethereum.model.ChainId
 import org.kethereum.model.EthereumURI
 import org.kethereum.uri.common.ParseState.*
-import java.math.BigInteger
 
 private enum class ParseState {
     ADDRESS,
@@ -30,7 +30,7 @@ fun ERC831.parseCommonURI() = let { erc831 ->
         fun stateTransition(newState: ParseState) {
             when (currentState) {
                 CHAIN -> chainId = try {
-                    ChainId(BigInteger(currentSegment))
+                    ChainId(BigInteger.parseString(currentSegment))
                 } catch (e: NumberFormatException) {
                     valid = false
                     null

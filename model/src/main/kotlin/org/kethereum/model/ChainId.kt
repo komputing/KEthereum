@@ -1,7 +1,7 @@
 package org.kethereum.model
 
-import java.math.BigInteger
+import com.ionspin.kotlin.bignum.integer.BigInteger
 
 inline class ChainId(val value: BigInteger) {
-    constructor(longValue: Long) : this(BigInteger.valueOf(longValue))
+    constructor(longValue: Long) : this(BigInteger(longValue))
 }

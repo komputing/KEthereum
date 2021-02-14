@@ -1,8 +1,8 @@
 package org.kethereum.rpc.model
 
+import com.ionspin.kotlin.bignum.integer.BigInteger
 import org.kethereum.model.SignedTransaction
 import org.komputing.khex.model.HexString
-import java.math.BigInteger
 
 data class BlockInformation(
         val number: BigInteger,

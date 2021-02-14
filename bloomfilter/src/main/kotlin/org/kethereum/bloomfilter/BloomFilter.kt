@@ -1,7 +1,8 @@
 package org.kethereum.bloomfilter
 
+import com.ionspin.kotlin.bignum.integer.BigInteger
+import com.ionspin.kotlin.bignum.integer.Sign
 import org.komputing.khash.sha256.extensions.sha256
-import java.math.BigInteger
 import java.util.*
 import java.util.concurrent.locks.ReentrantReadWriteLock
 import kotlin.concurrent.read
@@ -31,7 +32,7 @@ class BloomFilter(private val size: Int) {
     }
 
     private fun hashing(filterSize: Int, seed: Int, value: ByteArray) =
-            BigInteger(1, value.plus(seed.toByte()).sha256())
-                    .remainder(BigInteger.valueOf(filterSize.toLong()))
-                    .toInt()
+            BigInteger.fromByteArray(value.plus(seed.toByte()).sha256(), Sign.POSITIVE)
+                    .remainder(BigInteger(filterSize.toLong()))
+                    .intValue()
 }

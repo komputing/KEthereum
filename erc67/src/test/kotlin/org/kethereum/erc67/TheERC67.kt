@@ -1,10 +1,10 @@
 package org.kethereum.erc67
 
+import com.ionspin.kotlin.bignum.decimal.BigDecimal
+import com.ionspin.kotlin.bignum.integer.BigInteger
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.kethereum.model.Address
-import java.math.BigDecimal
-import java.math.BigInteger
 
 class TheERC67 {
 
@@ -15,10 +15,10 @@ class TheERC67 {
 
     @Test
     fun toERC67WithValueWorks() {
-        assertThat(Address("0x00AB42").toERC67String(valueInWei = BigInteger("1"))).isEqualTo("ethereum:0x00AB42?value=1")
-        assertThat(Address("0x00AB42").toERC67String(valueInWei = BigInteger("2"))).isEqualTo("ethereum:0x00AB42?value=2")
+        assertThat(Address("0x00AB42").toERC67String(valueInWei = BigInteger.parseString("1"))).isEqualTo("ethereum:0x00AB42?value=1")
+        assertThat(Address("0x00AB42").toERC67String(valueInWei = BigInteger.parseString("2"))).isEqualTo("ethereum:0x00AB42?value=2")
 
-        assertThat(Address("0x00AB42").toERC67String(valueInEther = BigDecimal("0.42"))).isEqualTo("ethereum:0x00AB42?value=420000000000000000")
+        assertThat(Address("0x00AB42").toERC67String(valueInEther = BigDecimal.parseString("0.42"))).isEqualTo("ethereum:0x00AB42?value=420000000000000000")
     }
 
     @Test
@@ -38,7 +38,7 @@ class TheERC67 {
         assertThat(ERC67("ethereum:0x00AB42?value=1").value).isEqualTo("1")
 
         (0..10).forEach {
-            val probe = ERC67(Address("0xAABB").toERC67String(valueInWei = BigInteger.valueOf(it.toLong())))
+            val probe = ERC67(Address("0xAABB").toERC67String(valueInWei = BigInteger(it.toLong())))
             assertThat(probe.value).isEqualTo(it.toString())
         }
     }

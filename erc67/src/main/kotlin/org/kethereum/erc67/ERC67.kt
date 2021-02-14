@@ -1,15 +1,15 @@
 package org.kethereum.erc67
 
+import com.ionspin.kotlin.bignum.decimal.BigDecimal
+import com.ionspin.kotlin.bignum.integer.BigInteger
 import org.kethereum.ETH_IN_WEI
 import org.kethereum.model.Address
-import java.math.BigDecimal
-import java.math.BigInteger
 
 // https://github.com/ethereum/EIPs/issues/67
 
 fun Address.toERC67String() = "ethereum:$hex"
 fun Address.toERC67String(valueInWei: BigInteger) = "ethereum:$hex?value=$valueInWei"
-fun Address.toERC67String(valueInEther: BigDecimal) = toERC67String((valueInEther * BigDecimal(ETH_IN_WEI)).toBigInteger())
+fun Address.toERC67String(valueInEther: BigDecimal) = toERC67String((valueInEther * BigDecimal.fromBigInteger(ETH_IN_WEI)).toBigInteger())
 
 fun String.isERC67String() = startsWith("ethereum:")
 

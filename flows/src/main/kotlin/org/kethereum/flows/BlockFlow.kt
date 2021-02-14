@@ -1,10 +1,10 @@
 package org.kethereum.flows
 
+import com.ionspin.kotlin.bignum.integer.BigInteger
+import com.ionspin.kotlin.bignum.integer.BigInteger.Companion.ONE
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.flow
 import org.kethereum.rpc.EthereumRPC
-import java.math.BigInteger
-import java.math.BigInteger.ONE
 
 fun getBlockFlow(rpc: EthereumRPC, delay_between_fetches: Long = 4200) = flow {
     var lastBlock: BigInteger? = null

@@ -1,8 +1,9 @@
 package org.kethereum.crypto.impl.ec
 
 import org.kethereum.crypto.api.ec.ECDSASignature
+import org.kethereum.crypto.impl.toKotlinBigInteger
 
-private val HALF_CURVE_ORDER = CURVE_PARAMS.n.shiftRight(1)
+private val HALF_CURVE_ORDER = CURVE_PARAMS.n.shiftRight(1).toKotlinBigInteger()
 /**
  * Returns true if the S component is "low", that means it is below
  * [HALF_CURVE_ORDER]. See
@@ -27,5 +28,5 @@ fun ECDSASignature.canonicalise() = if (isCanonical()) {
     //    N = 10
     //    s = 8, so (-8 % 10 == 2) thus both (r, 8) and (r, 2) are valid solutions.
     //    10 - 8 == 2, giving us always the latter solution, which is canonical.
-    ECDSASignature(r, CURVE_PARAMS.n.subtract(s))
+    ECDSASignature(r, CURVE_PARAMS.n.toKotlinBigInteger().subtract(s))
 }

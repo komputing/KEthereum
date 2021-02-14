@@ -2,6 +2,7 @@ package org.kethereum.extensions.transactions
 
 import com.beust.klaxon.JsonObject
 import com.beust.klaxon.Klaxon
+import com.ionspin.kotlin.bignum.integer.BigInteger
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.kethereum.rlp.RLPList
@@ -10,9 +11,8 @@ import org.kethereum.model.Address
 import org.komputing.khex.extensions.hexToByteArray
 import org.komputing.khex.model.HexString
 import transactionTestData
-import java.math.BigInteger
 
-private fun Any?.getBigInteger() = BigInteger((this as String).replace("0x", ""), 16)
+private fun Any?.getBigInteger() = BigInteger.parseString((this as String).replace("0x", ""), 16)
 
 class TheTransactionDecoder {
 

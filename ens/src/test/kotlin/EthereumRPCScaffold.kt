@@ -1,3 +1,4 @@
+import com.ionspin.kotlin.bignum.integer.BigInteger
 import org.kethereum.model.Address
 import org.kethereum.model.ChainId
 import org.kethereum.model.SignedTransaction
@@ -5,7 +6,6 @@ import org.kethereum.model.Transaction
 import org.kethereum.rpc.EthereumRPC
 import org.kethereum.rpc.model.BlockInformation
 import org.komputing.khex.model.HexString
-import java.math.BigInteger
 
 open class EthereumRPCScaffold : EthereumRPC {
     override fun getBlockByNumber(number: BigInteger): BlockInformation? {

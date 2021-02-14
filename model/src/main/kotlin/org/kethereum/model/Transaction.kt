@@ -1,8 +1,8 @@
 package org.kethereum.model
 
+import com.ionspin.kotlin.bignum.integer.BigInteger
 import org.kethereum.DEFAULT_GAS_LIMIT
 import org.kethereum.DEFAULT_GAS_PRICE
-import java.math.BigInteger
 
 data class Transaction(
         var chain: BigInteger?,

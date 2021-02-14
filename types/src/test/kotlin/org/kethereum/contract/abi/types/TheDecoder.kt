@@ -1,5 +1,8 @@
 package org.kethereum.contract.abi.types
 
+import com.ionspin.kotlin.bignum.integer.BigInteger
+import com.ionspin.kotlin.bignum.integer.BigInteger.Companion.ONE
+import com.ionspin.kotlin.bignum.integer.BigInteger.Companion.ZERO
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.kethereum.contract.abi.types.model.type_params.BitsTypeParams
@@ -10,9 +13,6 @@ import org.kethereum.crypto.test_data.TEST_BIGINTEGERS_INCL_NEGATIVE
 import org.kethereum.crypto.test_data.TEST_BIGINTEGERS_POSITIVE_ONLY
 import org.komputing.khex.extensions.hexToByteArray
 import org.komputing.khex.model.HexString
-import java.math.BigInteger
-import java.math.BigInteger.ONE
-import java.math.BigInteger.ZERO
 
 class TheDecoder {
 
@@ -97,12 +97,12 @@ class TheDecoder {
         assertThat(IntETHType.ofPaginatedByteArray(input1, BitsTypeParams(8))?.toKotlinType()).isEqualTo(ONE)
 
         val input_1 = PaginatedByteArray(HexString("0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"))
-        assertThat(IntETHType.ofPaginatedByteArray(input_1, BitsTypeParams(8))?.toKotlinType()).isEqualTo(BigInteger.valueOf(-1))
+        assertThat(IntETHType.ofPaginatedByteArray(input_1, BitsTypeParams(8))?.toKotlinType()).isEqualTo(BigInteger(-1))
 
         val input127 = PaginatedByteArray(HexString("0x000000000000000000000000000000000000000000000000000000000000007f"))
-        assertThat(IntETHType.ofPaginatedByteArray(input127, BitsTypeParams(8))?.toKotlinType()).isEqualTo(BigInteger.valueOf(127))
+        assertThat(IntETHType.ofPaginatedByteArray(input127, BitsTypeParams(8))?.toKotlinType()).isEqualTo(BigInteger(127))
 
         val input_128 = PaginatedByteArray(HexString(("0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff80")))
-        assertThat(IntETHType.ofPaginatedByteArray(input_128, BitsTypeParams(16))?.toKotlinType()).isEqualTo(BigInteger.valueOf(-128))
+        assertThat(IntETHType.ofPaginatedByteArray(input_128, BitsTypeParams(16))?.toKotlinType()).isEqualTo(BigInteger(-128))
     }
 }

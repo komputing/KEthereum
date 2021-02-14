@@ -1,5 +1,6 @@
 package org.kethereum.abi
 
+import com.ionspin.kotlin.bignum.integer.BigInteger
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
 import org.assertj.core.api.Assertions.assertThat
@@ -13,7 +14,6 @@ import org.kethereum.metadata.repo.model.getMetaDataForTransaction
 import org.kethereum.model.ChainId
 import org.kethereum.model.createEmptyTransaction
 import java.io.File
-import java.math.BigInteger.valueOf
 
 class TheMetaDataRepo {
 
@@ -100,7 +100,7 @@ class TheMetaDataRepo {
         val tested = MetaDataRepoHttpWithCacheImpl(repoURL = mockWebServer.url("").toString())
         mockWebServer.enqueue(MockResponse().setBody(testMetaDataJSON))
 
-        val tx = createEmptyTransaction().copy(to = TEST_ADDRESSES.first(), chain = valueOf(5L))
+        val tx = createEmptyTransaction().copy(to = TEST_ADDRESSES.first(), chain = BigInteger(5L))
         assertThat(tested.getMetaDataForTransaction(tx)).isInstanceOf(MetaDataResolveResultOK::class.java)
     }
 

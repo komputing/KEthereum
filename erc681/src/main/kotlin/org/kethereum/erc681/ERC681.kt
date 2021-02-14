@@ -1,8 +1,8 @@
 package org.kethereum.erc681
 
+import com.ionspin.kotlin.bignum.integer.BigInteger
 import org.kethereum.model.ChainId
 import org.kethereum.model.EthereumFunctionCall
-import java.math.BigInteger
 
 data class ERC681(
         var valid: Boolean = true,

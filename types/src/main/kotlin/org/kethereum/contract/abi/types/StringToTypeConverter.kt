@@ -1,5 +1,6 @@
 package org.kethereum.contract.abi.types
 
+import com.ionspin.kotlin.bignum.integer.BigInteger
 import org.kethereum.contract.abi.types.model.ContractABITypeDefinition
 import org.kethereum.contract.abi.types.model.ETHType
 import org.kethereum.contract.abi.types.model.TypeAliases
@@ -7,7 +8,6 @@ import org.kethereum.contract.abi.types.model.type_params.BitsTypeParams
 import org.kethereum.contract.abi.types.model.type_params.BytesTypeParams
 import org.kethereum.contract.abi.types.model.types.*
 import org.kethereum.model.Address
-import java.math.BigInteger
 
 fun convertStringToABIType(string: String) = convertStringToABITypeOrNull(string)
         ?: throw IllegalArgumentException("$string is not a supported type")

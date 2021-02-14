@@ -1,10 +1,10 @@
 package org.kethereum.contract.abi.types
 
+import com.ionspin.kotlin.bignum.integer.BigInteger
+import com.ionspin.kotlin.bignum.integer.BigInteger.Companion.ONE
 import org.junit.jupiter.api.Test
 import org.kethereum.contract.abi.types.model.type_params.BitsTypeParams
 import org.kethereum.contract.abi.types.model.types.UIntETHType
-import java.math.BigInteger.ONE
-import java.math.BigInteger.valueOf
 import kotlin.test.assertFailsWith
 
 class TheUINTypeConstraints {
@@ -40,7 +40,7 @@ class TheUINTypeConstraints {
     fun whenItDoesNotFitItFails() {
 
         assertFailsWith(IllegalArgumentException::class) {
-            UIntETHType.ofNativeKotlinType(valueOf(256), BitsTypeParams(8))
+            UIntETHType.ofNativeKotlinType(BigInteger(256), BitsTypeParams(8))
         }
     }
 

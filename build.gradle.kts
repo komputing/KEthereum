@@ -4,6 +4,9 @@ apply {
 
 buildscript {
     repositories {
+        maven {
+            url = uri("https://oss.sonatype.org/content/repositories/snapshots")
+        }
         jcenter()
         maven("https://jitpack.io")
     }
@@ -11,13 +14,21 @@ buildscript {
     dependencies {
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:${Versions.kotlin}")
         classpath("com.github.ben-manes:gradle-versions-plugin:${Versions.versions_plugin}")
-        classpath("com.github.komputing:kethabi:0.1.8")
+        classpath("com.github.fullkomnun:kethabi:${Versions.kethabi_plugin}") {
+            isChanging = true
+        }
+    }
+
+    configurations.all {
+        resolutionStrategy.cacheChangingModulesFor(0, TimeUnit.SECONDS)
     }
 }
 
-
 subprojects {
     repositories {
+        maven {
+            url = uri("https://oss.sonatype.org/content/repositories/snapshots")
+        }
         jcenter()
         maven("https://jitpack.io")
         maven("https://kotlin.bintray.com/kotlinx")
@@ -40,6 +51,7 @@ subprojects {
 
         dependencies {
             "implementation"("org.jetbrains.kotlin:kotlin-stdlib:${Versions.kotlin}")
+            "implementation"("com.ionspin.kotlin:bignum-jvm:${Versions.bignum}")
 
             "testImplementation"("org.assertj:assertj-core:3.19.0")
             "testImplementation"("org.junit.jupiter:junit-jupiter-api:${Versions.jupiter}")

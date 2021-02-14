@@ -1,7 +1,11 @@
 package org.kethereum.crypto.impl.ec
 
+import com.ionspin.kotlin.bignum.integer.BigInteger
+import com.ionspin.kotlin.bignum.integer.Sign
 import org.kethereum.crypto.api.ec.ECDSASignature
 import org.kethereum.crypto.api.ec.Signer
+import org.kethereum.crypto.impl.toJavaBigInteger
+import org.kethereum.crypto.impl.toKotlinBigInteger
 import org.spongycastle.asn1.x9.X9IntegerConverter
 import org.spongycastle.crypto.digests.SHA256Digest
 import org.spongycastle.crypto.params.ECPrivateKeyParameters
@@ -11,19 +15,19 @@ import org.spongycastle.math.ec.ECAlgorithms
 import org.spongycastle.math.ec.ECPoint
 import org.spongycastle.math.ec.FixedPointCombMultiplier
 import org.spongycastle.math.ec.custom.sec.SecP256K1Curve
-import java.math.BigInteger
 import java.util.*
+import java.math.BigInteger as JavaBigInteger
 
 class EllipticCurveSigner : Signer {
 
     override fun sign(transactionHash: ByteArray, privateKey: BigInteger, canonical: Boolean): ECDSASignature {
         val signer = ECDSASigner(HMacDSAKCalculator(SHA256Digest()))
 
-        val ecPrivateKeyParameters = ECPrivateKeyParameters(privateKey, DOMAIN_PARAMS)
+        val ecPrivateKeyParameters = ECPrivateKeyParameters(privateKey.toJavaBigInteger(), DOMAIN_PARAMS)
         signer.init(true, ecPrivateKeyParameters)
         val components = signer.generateSignature(transactionHash)
 
-        return ECDSASignature(components[0], components[1]).let {
+        return ECDSASignature(components[0].toKotlinBigInteger(), components[1].toKotlinBigInteger()).let {
             if (canonical) {
                 it.canonicalise()
             } else {
@@ -68,8 +72,8 @@ class EllipticCurveSigner : Signer {
         // 1.0 For j from 0 to h   (h == recId here and the loop is outside this function)
         //   1.1 Let x = r + jn
         val n = CURVE_PARAMS.n  // Curve order.
-        val i = BigInteger.valueOf(recId.toLong() / 2)
-        val x = sig.r.add(i.multiply(n))
+        val i = JavaBigInteger.valueOf(recId.toLong() / 2)
+        val x = sig.r.toJavaBigInteger().add(i.multiply(n))
         //   1.2. Convert the integer x to an octet string X of length mlen using the conversion
         //        routine specified in Section 2.3.7, where mlen = ⌈(log2 p)/8⌉ or mlen = ⌈m/8⌉.
         //   1.3. Convert the octet string (16 set binary digits)||X to an elliptic curve point R
@@ -91,7 +95,7 @@ class EllipticCurveSigner : Signer {
             return null
         }
         //   1.5. Compute e from M using Steps 2 and 3 of ECDSA signature verification.
-        val e = BigInteger(1, message)
+        val e = JavaBigInteger(1, message)
         //   1.6. For k from 1 to 2 do the following.   (loop is outside this function via
         //        iterating recId)
         //   1.6.1. Compute a candidate public key as:
@@ -106,19 +110,19 @@ class EllipticCurveSigner : Signer {
         // We can find the additive inverse by subtracting e from zero then taking the mod. For
         // example the additive inverse of 3 modulo 11 is 8 because 3 + 8 mod 11 = 0, and
         // -3 mod 11 = 8.
-        val eInv = BigInteger.ZERO.subtract(e).mod(n)
-        val rInv = sig.r.modInverse(n)
-        val srInv = rInv.multiply(sig.s).mod(n)
+        val eInv = JavaBigInteger.ZERO.subtract(e).mod(n)
+        val rInv = sig.r.toJavaBigInteger().modInverse(n)
+        val srInv = rInv.multiply(sig.s.toJavaBigInteger()).mod(n)
         val eInvrInv = rInv.multiply(eInv).mod(n)
         val q = ECAlgorithms.sumOfTwoMultiplies(CURVE_PARAMS.g, eInvrInv, r, srInv)
 
         val qBytes = q.getEncoded(false)
         // We remove the prefix
-        return BigInteger(1, Arrays.copyOfRange(qBytes, 1, qBytes.size))
+        return BigInteger.fromByteArray(Arrays.copyOfRange(qBytes, 1, qBytes.size), Sign.POSITIVE)
     }
 
     /** Decompress a compressed public key (x co-ord and low-bit of y-coord).  */
-    private fun decompressKey(xBN: BigInteger, yBit: Boolean): ECPoint {
+    private fun decompressKey(xBN: JavaBigInteger, yBit: Boolean): ECPoint {
         val x9 = X9IntegerConverter()
         val compEnc = x9.integerToBytes(xBN, 1 + x9.getByteLength(CURVE_PARAMS.curve))
         compEnc[0] = (if (yBit) 0x03 else 0x02).toByte()
@@ -127,16 +131,16 @@ class EllipticCurveSigner : Signer {
 
     override fun publicFromPrivate(privateKey: BigInteger): BigInteger {
 
-        val point = publicPointFromPrivate(privateKey)
+        val point = publicPointFromPrivate(privateKey.toJavaBigInteger())
 
         val encoded = point.getEncoded(false)
-        return BigInteger(1, Arrays.copyOfRange(encoded, 1, encoded.size))
+        return BigInteger.fromByteArray(Arrays.copyOfRange(encoded, 1, encoded.size), Sign.POSITIVE)
     }
 
     /**
      * Returns public key point from the given private key.
      */
-    private fun publicPointFromPrivate(privateKey: BigInteger): ECPoint {
+    private fun publicPointFromPrivate(privateKey: JavaBigInteger): ECPoint {
         /*
          * TODO: FixedPointCombMultiplier currently doesn't support scalars longer than the group
          * order, but that could change in future versions.

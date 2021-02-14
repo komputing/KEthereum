@@ -1,12 +1,12 @@
 package org.kethereum.bip32.model
 
+import com.ionspin.kotlin.bignum.integer.BigInteger
 import org.kethereum.crypto.getCompressedPublicKey
 import org.kethereum.extensions.toBytesPadded
 import org.kethereum.model.ECKeyPair
 import org.kethereum.model.PRIVATE_KEY_SIZE
 import org.komputing.kbase58.encodeToBase58WithChecksum
 import java.io.IOException
-import java.math.BigInteger
 import java.nio.ByteBuffer
 import java.security.KeyException
 

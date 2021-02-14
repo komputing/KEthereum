@@ -1,5 +1,6 @@
 package org.kethereum.methodsignatures
 
+import com.ionspin.kotlin.bignum.integer.BigInteger
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.kethereum.crypto.test_data.TEST_ADDRESSES
@@ -7,7 +8,6 @@ import org.kethereum.methodsignatures.model.TextMethodSignature
 import org.kethereum.model.createTransactionWithDefaults
 import org.komputing.khex.extensions.hexToByteArray
 import org.komputing.khex.model.HexString
-import java.math.BigInteger
 
 class TheSignatureFun {
 
