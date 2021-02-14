@@ -13,16 +13,16 @@ class DynamicSizedBytesETHType(override val paddedValue: ByteArray) : ETHType<By
     override fun toKotlinType(): ByteArray {
         val input = PaginatedByteArray(paddedValue)
         val len = UIntETHType.ofPaginatedByteArray(input, BitsTypeParams(256))
-        return input.getBytes(len!!.toKotlinType().intValueExact())
+        return input.getBytes(len!!.toKotlinType().toInt())
     }
 
     companion object {
         fun ofPaginatedByteArray(input: PaginatedByteArray): DynamicSizedBytesETHType? {
             val pos = UIntETHType.ofPaginatedByteArray(input, BitsTypeParams(256))?.toKotlinType() ?: return null
-            input.jumpTo(pos.intValueExact())
+            input.jumpTo(pos.toInt())
             val len = UIntETHType.ofPaginatedByteArray(input, BitsTypeParams(256)) ?: return null
 
-            val array = len.toPaged().content + input.getBytes(len.toKotlinType().intValueExact()).rightPadToFixedPageSize(ETH_TYPE_PAGESIZE)
+            val array = len.toPaged().content + input.getBytes(len.toKotlinType().toInt()).rightPadToFixedPageSize(ETH_TYPE_PAGESIZE)
             input.endJump()
             return DynamicSizedBytesETHType(array)
         }
