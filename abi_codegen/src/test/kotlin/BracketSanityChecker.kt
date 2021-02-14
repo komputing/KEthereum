@@ -1,6 +1,8 @@
 package org.kethereum.abi_codegen
 
-import java.util.*
+import org.kethereum.extensions.newStack
+import org.kethereum.extensions.pop
+import org.kethereum.extensions.push
 
 fun String.checkForBracketSanity() {
     val bracketMap = mapOf(
@@ -10,7 +12,7 @@ fun String.checkForBracketSanity() {
             '<' to '>'
     )
     val reverseBracketMap = bracketMap.map { map -> map.value to map.key }.toMap()
-    val bracketStack = Stack<Char>()
+    val bracketStack = newStack<Char>()
     chars().mapToObj { charInt -> charInt.toChar() }.forEach { char ->
         bracketMap[char]?.let {
             bracketStack.push(char)
@@ -22,7 +24,7 @@ fun String.checkForBracketSanity() {
             }
         }
     }
-    if (!bracketStack.isEmpty()) {
+    if (bracketStack.isNotEmpty()) {
         throw IllegalArgumentException("Not all brackets where closed $bracketStack")
     }
 }

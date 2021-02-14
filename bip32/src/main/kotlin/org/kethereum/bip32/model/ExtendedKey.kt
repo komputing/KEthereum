@@ -9,7 +9,6 @@ import org.komputing.kbase58.encodeToBase58WithChecksum
 import java.io.IOException
 import java.nio.ByteBuffer
 import java.security.KeyException
-import java.util.*
 
 
 data class ExtendedKey(val keyPair: ECKeyPair,
@@ -49,13 +48,13 @@ data class ExtendedKey(val keyPair: ECKeyPair,
         val out = ByteBuffer.allocate(EXTENDED_KEY_SIZE)
         try {
 
-            if (!publicKeyOnly && !Arrays.equals(versionBytes, xprv) && !Arrays.equals(versionBytes, tprv))
+            if (!publicKeyOnly && !(versionBytes contentEquals xprv) && !(versionBytes contentEquals tprv))
                 throw KeyException("The extended version bytes dedicated to public keys. Suggest using publicKeyOnly mode")
 
             if (!publicKeyOnly && keyPair.privateKey.key == BigInteger.ZERO)
                 throw KeyException("The extended key doesn't provide any private key. Suggest using publicKeyOnly mode")
 
-            out.put(if (publicKeyOnly && Arrays.equals(versionBytes, xprv)) xpub else if (publicKeyOnly && Arrays.equals(versionBytes, tprv)) tpub else versionBytes)
+            out.put(if (publicKeyOnly && versionBytes contentEquals xprv) xpub else if (publicKeyOnly && versionBytes contentEquals tprv) tpub else versionBytes)
             out.put(depth)
             out.putInt(parentFingerprint)
             out.putInt(sequence)

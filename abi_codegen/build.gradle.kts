@@ -12,4 +12,5 @@ dependencies {
     "api"("com.squareup:kotlinpoet:1.7.2")
 
     "testImplementation"(project(":test_data"))
+    "testImplementation"(project(":extensions_kotlin"))
 }

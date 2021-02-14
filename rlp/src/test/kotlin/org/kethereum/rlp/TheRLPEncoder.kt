@@ -7,7 +7,6 @@ import org.kethereum.extensions.toMinimalByteArray
 import org.komputing.khex.extensions.hexToByteArray
 import org.komputing.khex.extensions.toNoPrefixHexString
 import org.komputing.khex.model.HexString
-import java.util.*
 
 class TheRLPEncoder {
 
@@ -27,7 +26,7 @@ class TheRLPEncoder {
     }
 
     private fun testByteArrayHashCode(arr: ByteArray) {
-        assertThat(arr.toRLP().hashCode()).isEqualTo(Arrays.hashCode(arr))
+        assertThat(arr.toRLP().hashCode()).isEqualTo(arr.contentHashCode())
     }
 
     @Test
