@@ -4,9 +4,6 @@ apply {
 
 buildscript {
     repositories {
-        maven {
-            url = uri("https://oss.sonatype.org/content/repositories/snapshots")
-        }
         jcenter()
         maven("https://jitpack.io")
     }
@@ -26,9 +23,6 @@ buildscript {
 
 subprojects {
     repositories {
-        maven {
-            url = uri("https://oss.sonatype.org/content/repositories/snapshots")
-        }
         jcenter()
         maven("https://jitpack.io")
         maven("https://kotlin.bintray.com/kotlinx")
