@@ -8,7 +8,8 @@ import org.kethereum.extensions.toBitArray
 import org.kethereum.extensions.toByteArray
 import org.komputing.khash.sha256.extensions.sha256
 import java.security.SecureRandom
-import java.util.*
+import kotlin.collections.ArrayList
+
 
 fun dirtyPhraseToMnemonicWords(string: String) = MnemonicWords(
         string.trim().toLowerCase().split(" ")
@@ -49,7 +50,7 @@ fun MnemonicWords.mnemonicToEntropy(wordList: List<String>): ByteArray {
 
     for ((phraseIndex, word) in words.withIndex()) {
 
-        val dictIndex = Collections.binarySearch(wordList, word)
+        val dictIndex = wordList.binarySearch(word)
         require(dictIndex >= 0) { "word($word) not in known word list" }
 
         // Set the next 11 bits to the value of the index.

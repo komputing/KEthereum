@@ -1,9 +1,12 @@
 package org.kethereum.contract.abi.types
 
 import org.kethereum.contract.abi.types.model.ETH_TYPE_PAGESIZE
+import org.kethereum.extensions.newStack
+import org.kethereum.extensions.pop
+import org.kethereum.extensions.push
 import org.komputing.khex.extensions.hexToByteArray
 import org.komputing.khex.model.HexString
-import java.util.*
+
 
 class PaginatedByteArray(val content: ByteArray, private val pageSize: Int = ETH_TYPE_PAGESIZE) {
 
@@ -15,15 +18,15 @@ class PaginatedByteArray(val content: ByteArray, private val pageSize: Int = ETH
     }
 
     private var currentOffset = 0
-    private var jumStack = Stack<Int>()
+    private var jumStack = newStack<Int>()
 
     fun jumpTo(pos: Int) {
-        jumStack.add(currentOffset)
+        jumStack.push(currentOffset)
         currentOffset = pos
     }
 
     fun endJump() {
-        currentOffset = jumStack.pop()
+        currentOffset = jumStack.pop()!!
     }
 
     fun getBytes(count: Int) = content.sliceArray(currentOffset until currentOffset + count)
