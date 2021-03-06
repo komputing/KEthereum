@@ -1,9 +1,14 @@
 package org.kethereum.eip712
 
+/**
+ *
+ * This is pm.gnosis.eip712 adapted to kethereum types
+ *
+ */
+
 import com.squareup.moshi.Moshi
 import okio.buffer
 import okio.source
-import pm.gnosis.eip712.EIP712JsonAdapter
 import java.io.InputStream
 
 class MoshiAdapter : EIP712JsonAdapter {

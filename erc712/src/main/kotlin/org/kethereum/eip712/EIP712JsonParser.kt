@@ -1,5 +1,10 @@
-package pm.gnosis.eip712
+package org.kethereum.eip712
 
+/**
+ *
+ * This is pm.gnosis.eip712 adapted to kethereum types
+ *
+ */
 
 import org.kethereum.contract.abi.types.BYTES_COUNT_CONSTRAINT
 import org.kethereum.contract.abi.types.INT_BITS_CONSTRAINT

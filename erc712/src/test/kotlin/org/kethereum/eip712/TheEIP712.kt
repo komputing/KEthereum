@@ -4,25 +4,17 @@ import org.junit.jupiter.api.Test
 import org.assertj.core.api.Assertions.assertThat
 import org.kethereum.contract.abi.types.model.type_params.BitsTypeParams
 import org.kethereum.contract.abi.types.model.types.*
-import org.kethereum.crypto.api.ec.ECDSASignature
-import org.kethereum.crypto.impl.ec.EllipticCurveSigner
-import org.kethereum.crypto.signMessage
 import org.kethereum.crypto.signMessageHash
 import org.kethereum.crypto.toAddress
 import org.kethereum.crypto.toECKeyPair
 import org.kethereum.extensions.hexToBigInteger
-import org.kethereum.extensions.toBigInteger
 import org.kethereum.keccakshortcut.keccak
 import org.kethereum.model.Address
 import org.kethereum.model.PrivateKey
 import org.komputing.khex.extensions.hexToByteArray
-import org.komputing.khex.extensions.toHexString
 import org.komputing.khex.extensions.toNoPrefixHexString
 import org.komputing.khex.model.HexString
-import pm.gnosis.eip712.*
-import java.math.BigDecimal.ONE
 import java.math.BigInteger
-import java.security.KeyPair
 import kotlin.test.assertEquals
 
 

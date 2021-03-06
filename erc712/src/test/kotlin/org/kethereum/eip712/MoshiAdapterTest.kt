@@ -1,10 +1,7 @@
 package org.kethereum.eip712
 
 import org.junit.jupiter.api.Test
-import org.komputing.khex.extensions.toHexString
 import org.komputing.khex.extensions.toNoPrefixHexString
-import pm.gnosis.eip712.EIP712JsonParser
-import pm.gnosis.eip712.typedDataHash
 import kotlin.test.assertEquals
 
 const val PAYLOAD_JSON_FILE_NAME = "mail_json_payload.json"

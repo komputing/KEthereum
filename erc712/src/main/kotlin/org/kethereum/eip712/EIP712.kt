@@ -1,8 +1,12 @@
-package pm.gnosis.eip712
+package org.kethereum.eip712
 
+/**
+ *
+ * This is pm.gnosis.eip712 adapted to kethereum types
+ *
+ */
 import org.kethereum.contract.abi.types.allETHTypes
 import org.kethereum.contract.abi.types.model.ETHType
-import org.kethereum.contract.abi.types.model.types.AddressETHType
 import org.kethereum.contract.abi.types.model.types.BytesETHType
 import org.kethereum.contract.abi.types.model.types.DynamicSizedBytesETHType
 import org.kethereum.contract.abi.types.model.types.StringETHType
