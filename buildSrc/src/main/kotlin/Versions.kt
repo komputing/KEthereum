@@ -3,7 +3,7 @@ object Versions {
     const val versions_plugin = "0.36.0"
     const val jupiter = "5.7.1"
     const val moshi = "1.8.0"
-    const val khex = "1.0.0"
+    const val khex = "1.1.0"
     const val khash = "1.0.0-RC5"
     const val slf4j = "1.7.30"
     const val klaxon = "5.4"
