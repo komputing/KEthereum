@@ -48,7 +48,7 @@ class MultiHostHttpTransport(urls: List<String>, private val okhttp: OkHttpClien
     private val successMap = urls.associateWith { 0 }.toMutableMap()
 
     override fun call(payload: String): String? {
-        val url: String? = successMap.maxBy { it.value }?.key
+        val url: String? = successMap.maxByOrNull { it.value }?.key
         try {
             val executedCall = okhttp.newCall(buildRequest(url!!, payload)).execute()
             val result = executedCall.body().use { body ->

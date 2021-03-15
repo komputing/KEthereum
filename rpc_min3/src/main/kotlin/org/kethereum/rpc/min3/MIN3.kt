@@ -59,7 +59,7 @@ class MIN3Transport(private val bootNodes: List<String>,
     private fun requestWithRepeat(payload: String): String? {
 
         repeat(max_retries) { retry ->
-            val url = nodes.maxBy { it.value }?.key!!
+            val url = nodes.maxByOrNull { it.value }?.key!!
             if (debug) {
                 println("MIN3Transport> request payload $payload - retry $retry")
                 println("MIN3Transport> trying to fetch from $url")
