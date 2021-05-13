@@ -10,7 +10,7 @@ import org.kethereum.model.Address
 import org.kethereum.model.ChainId
 import java.io.File
 
-class MetaDataRepoHttpWithCacheImpl(private val repoURL: String = "https://contractrepo.komputing.org/contract",
+class MetaDataRepoHttpWithCacheImpl(private val repoURL: String = "https://repo.sourcify.dev/contract",
                                     private val cacheDir: File? = null,
                                     private val okHttpClient: OkHttpClient = OkHttpClient().newBuilder().build()
 ) : MetaDataRepo {
