@@ -42,7 +42,7 @@ fun ContentHash.toURI(): ToURIResult {
 
         0xe4U -> {
             val contentType = buffer.readVarUInt()
-            val hashFunction = buffer.readVarUInt()
+            buffer.readVarUInt() // hashFunction
             val hashLength = buffer.readVarUInt().toInt()
             val content = buffer.readByteArray()
 
