@@ -12,6 +12,6 @@ class CredentialsTest {
         val credentials = KEY_PAIR.toCredentials()
 
         assertThat(credentials.address).isEqualTo(ADDRESS)
-        assertThat(credentials.ecKeyPair).isEqualToComparingFieldByField(KEY_PAIR)
+        assertThat(credentials.ecKeyPair).usingRecursiveComparison().isEqualTo(KEY_PAIR)
    }
 }
