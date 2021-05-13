@@ -45,7 +45,7 @@ class CachedOnlineMethodSignatureRepositoryImpl(
         try {
             val executedCall = newCall.execute()
             if (executedCall.code() == 200) {
-                val resultString = executedCall?.use { call ->
+                val resultString = executedCall.use { call ->
                     call.body().use { it?.string() }
                 }
                 resultString?.split(";")?.forEach {
