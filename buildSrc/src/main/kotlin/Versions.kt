@@ -9,7 +9,7 @@ object Versions {
     const val klaxon = "5.4"
     const val okhttp = "3.12.1"
     const val coroutines = "1.4.2"
-    const val threetenbp = "1.5.0"
+    const val threetenbp = "1.5.1"
     const val okio = "2.4.0"
     const val base58 = "0.3"
 }
