@@ -10,7 +10,7 @@ data class Address(private val input: String) {
     override fun toString() = hex
 
     override fun equals(other: Any?)
-            = other is Address && other.cleanHex.toUpperCase() == cleanHex.toUpperCase()
+            = other is Address && other.cleanHex.equals(cleanHex, ignoreCase = true)
 
     override fun hashCode() = cleanHex.toUpperCase().hashCode()
 }
