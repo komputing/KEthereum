@@ -16,7 +16,7 @@ class BoolETHType(override val paddedValue: ByteArray) : ETHType<Boolean> {
             if (input && it == 31) 1 else 0
         })
 
-        fun ofString(input: String) = ofNativeKotlinType(when (input.toLowerCase()) {
+        fun ofString(input: String) = ofNativeKotlinType(when (input.lowercase()) {
             "true" -> true
             "false" -> false
             else -> throw IllegalArgumentException("boolean must be true or false")

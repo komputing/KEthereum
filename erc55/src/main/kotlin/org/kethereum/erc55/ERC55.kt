@@ -9,12 +9,12 @@ import java.util.*
 ERC-55 Checksum as in https://github.com/ethereum/EIPs/blob/master/EIPS/eip-55.md
  */
 
-fun Address.withERC55Checksum() = cleanHex.toLowerCase(Locale.ROOT).toByteArray().keccak().toNoPrefixHexString().let { hexHash ->
+fun Address.withERC55Checksum() = cleanHex.lowercase().toByteArray().keccak().toNoPrefixHexString().let { hexHash ->
     Address(cleanHex.mapIndexed { index, hexChar ->
         when {
             hexChar in '0'..'9' -> hexChar
-            hexHash[index] in '0'..'7' -> hexChar.toLowerCase()
-            else -> hexChar.toUpperCase()
+            hexHash[index] in '0'..'7' -> hexChar.lowercase()
+            else -> hexChar.uppercase()
         }
     }.joinToString(""))
 }
@@ -24,5 +24,5 @@ private fun Address.hasValidERC55ChecksumAssumingValidAddress() = withERC55Check
 fun Address.hasValidERC55Checksum() = isValid() && hasValidERC55ChecksumAssumingValidAddress()
 fun Address.hasValidERC55ChecksumOrNoChecksum() = isValid() &&
         (hasValidERC55ChecksumAssumingValidAddress() ||
-                cleanHex.toLowerCase() == cleanHex ||
-                cleanHex.toUpperCase() == cleanHex)
+                cleanHex.lowercase() == cleanHex ||
+                cleanHex.uppercase() == cleanHex)

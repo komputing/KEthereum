@@ -1,3 +1,4 @@
 package org.kethereum.metadata.model
 
-inline class EthereumMetadataString(val json: String)
+@JvmInline
+value class EthereumMetadataString(val json: String)

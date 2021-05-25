@@ -112,7 +112,7 @@ class ENS(private val rpc: EthereumRPC,
         }
     }
 
-    fun reverseResolve(address: Address) = reverseResolve(ENSName(address.cleanHex.toLowerCase() + ".addr.reverse"))
+    fun reverseResolve(address: Address) = reverseResolve(ENSName(address.cleanHex.lowercase() + ".addr.reverse"))
 
     /**
      * get a content hash as defined in ERC-1577

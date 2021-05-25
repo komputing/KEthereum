@@ -17,7 +17,7 @@ class Function(
         val params: List<Params>,
         var skipReason: String? = "",
         var nameUsedMoreThanOnce: Boolean,
-        val maybeExtendedFunctionName: String = functionName.capitalize() + if (nameUsedMoreThanOnce) params.joinToString("") { it.parameterName.capitalize() } else "",
+        val maybeExtendedFunctionName: String = functionName.replaceFirstChar { char -> char.uppercase() } + if (nameUsedMoreThanOnce) params.joinToString("") { it.parameterName.replaceFirstChar { char -> char.uppercase() } } else "",
         val fourByteName: String = "FourByte$maybeExtendedFunctionName",
         val ethTypeArray: Array<KClass<out ETHType<*>>?> = params.map { it.typeDefinition?.ethTypeKClass }.toTypedArray()
 )

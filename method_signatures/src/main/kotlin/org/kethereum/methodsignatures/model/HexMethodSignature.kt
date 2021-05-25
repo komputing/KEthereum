@@ -1,3 +1,4 @@
 package org.kethereum.methodsignatures.model
 
-inline class HexMethodSignature(val hex: String)
+@JvmInline
+value class HexMethodSignature(val hex: String)

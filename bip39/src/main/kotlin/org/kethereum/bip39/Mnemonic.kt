@@ -12,7 +12,7 @@ import kotlin.collections.ArrayList
 
 
 fun dirtyPhraseToMnemonicWords(string: String) = MnemonicWords(
-        string.trim().toLowerCase().split(" ")
+        string.trim().lowercase().split(" ")
                 .asSequence()
                 .map { it.trim() }
                 .filter { it.isNotEmpty() }

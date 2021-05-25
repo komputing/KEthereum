@@ -1,3 +1,4 @@
 package org.kethereum.bip32.model
 
-inline class Seed(val seed: ByteArray)
+@JvmInline
+value class Seed(val seed: ByteArray)

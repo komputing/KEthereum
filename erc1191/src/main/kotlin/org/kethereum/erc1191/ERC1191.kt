@@ -11,12 +11,12 @@ import java.util.*
 EIP-1191 Checksum as in https://github.com/ethereum/EIPs/blob/master/EIPS/eip-1191.md
  */
 
-fun Address.withERC1191Checksum(chainId: ChainId) = "${chainId.value}${hex}".toLowerCase(Locale.ROOT).toByteArray().keccak().toNoPrefixHexString().let { hexHash ->
+fun Address.withERC1191Checksum(chainId: ChainId) = "${chainId.value}${hex}".lowercase().toByteArray().keccak().toNoPrefixHexString().let { hexHash ->
     Address(cleanHex.mapIndexed { index, hexChar ->
         when {
             hexChar in '0'..'9' -> hexChar
-            hexHash[index] in '0'..'7' -> hexChar.toLowerCase()
-            else -> hexChar.toUpperCase()
+            hexHash[index] in '0'..'7' -> hexChar.lowercaseChar()
+            else -> hexChar.uppercaseChar()
         }
     }.joinToString(""))
 }
@@ -26,6 +26,6 @@ private fun Address.hasValidERC1191ChecksumAssumingValidAddress(chainId: ChainId
 fun Address.hasValidERC1191Checksum(chainId: ChainId) = isValid() && hasValidERC1191ChecksumAssumingValidAddress(chainId)
 fun Address.hasValidERC1191ChecksumOrNoChecksum(chainId: ChainId) = isValid() &&
         (hasValidERC1191ChecksumAssumingValidAddress(chainId) ||
-                cleanHex.toLowerCase() == cleanHex ||
-                cleanHex.toUpperCase() == cleanHex)
+                cleanHex.lowercase() == cleanHex ||
+                cleanHex.uppercase() == cleanHex)
 
