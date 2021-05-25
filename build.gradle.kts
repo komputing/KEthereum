@@ -52,7 +52,7 @@ subprojects {
             "testImplementation"("org.assertj:assertj-core:3.19.0")
             "testImplementation"("org.junit.jupiter:junit-jupiter-api:${Versions.jupiter}")
             "testImplementation"("org.junit.jupiter:junit-jupiter-params:${Versions.jupiter}")
-            "testRuntime"("org.junit.jupiter:junit-jupiter-engine:${Versions.jupiter}")
+            "testRuntimeOnly"("org.junit.jupiter:junit-jupiter-engine:${Versions.jupiter}")
 
             "testImplementation"("org.jetbrains.kotlin:kotlin-test")
             "testImplementation"("io.mockk:mockk:1.11.0")
