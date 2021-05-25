@@ -24,7 +24,7 @@ subprojects {
     }
 
     apply(plugin = "jacoco")
-    apply(plugin = "maven")
+    apply(plugin = "maven-publish")
     apply(plugin = "kotlin")
 
     tasks.withType<Test> {
@@ -34,6 +34,14 @@ subprojects {
     configure<JavaPluginExtension> {
         withSourcesJar()
         withJavadocJar()
+    }
+
+    configure<PublishingExtension> {
+        publications {
+            create<MavenPublication>("maven") {
+                from(components["java"])
+            }
+        }
     }
 
     afterEvaluate {
