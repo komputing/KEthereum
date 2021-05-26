@@ -11,7 +11,7 @@ buildscript {
     dependencies {
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:${Versions.kotlin}")
         classpath("com.github.ben-manes:gradle-versions-plugin:${Versions.versions_plugin}")
-        classpath("com.github.komputing:kethabi:0.1.8")
+        classpath("com.github.komputing:kethabi:0.2.0")
     }
 }
 
