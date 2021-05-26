@@ -4,7 +4,7 @@ object Versions {
     const val jupiter = "5.7.2"
     const val moshi = "1.8.0"
     const val khex = "1.1.1"
-    const val khash = "1.1.0"
+    const val khash = "1.1.1"
     const val slf4j = "1.7.30"
     const val klaxon = "5.4"
     const val okhttp = "3.12.1"
