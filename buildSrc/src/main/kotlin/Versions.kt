@@ -6,7 +6,7 @@ object Versions {
     const val khex = "1.1.1"
     const val khash = "1.1.1"
     const val slf4j = "1.7.30"
-    const val klaxon = "5.4"
+    const val klaxon = "5.5"
     const val okhttp = "3.12.1"
     const val coroutines = "1.5.0"
     const val threetenbp = "1.5.1"
