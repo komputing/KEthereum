@@ -8,7 +8,7 @@ import org.komputing.khex.extensions.toHexString
 import org.komputing.khex.extensions.toNoPrefixHexString
 import java.math.BigInteger
 
-fun Transaction.calculateHash() = encodeRLP().keccak()
+fun Transaction.calculateHash() = encodeLegacyTxRLP().keccak()
 
 val tokenTransferSignature = listOf(0xa9.toByte(), 0x05.toByte(), 0x9c.toByte(), 0xbb.toByte())
 

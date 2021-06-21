@@ -38,7 +38,7 @@ class TheTransactionEncoder {
                         to = Address((transactionMap["to"] as String)),
                         input = HexString(transactionMap["data"] as String).hexToByteArray(),
                         from = Address("0x0"))
-                val encodedRLPString = transaction.encodeRLP(signatureData).toHexString()
+                val encodedRLPString = transaction.encodeLegacyTxRLP(signatureData).toHexString()
                 if (encodedRLPString != rlp) {
                     throw (Exception("error in " + it + "\n" + rlp + "\n" + encodedRLPString))
                 }

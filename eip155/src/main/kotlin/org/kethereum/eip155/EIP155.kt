@@ -3,7 +3,7 @@ package org.kethereum.eip155
 import org.kethereum.crypto.signMessage
 import org.kethereum.crypto.signedMessageToKey
 import org.kethereum.crypto.toAddress
-import org.kethereum.extensions.transactions.encodeRLP
+import org.kethereum.extensions.transactions.encodeLegacyTxRLP
 import org.kethereum.model.ChainId
 import org.kethereum.model.ECKeyPair
 import org.kethereum.model.SignatureData
@@ -26,7 +26,7 @@ import java.math.BigInteger.valueOf
  */
 
 fun Transaction.signViaEIP155(key: ECKeyPair, chainId: ChainId): SignatureData {
-    val signatureData = key.signMessage(encodeRLP(SignatureData().apply { v = chainId.value }))
+    val signatureData = key.signMessage(encodeLegacyTxRLP(SignatureData().apply { v = chainId.value }))
     return signatureData.copy(v = (signatureData.v.plus(chainId.value.shl(1)).plus(valueOf(8))))
 }
 
@@ -43,4 +43,4 @@ fun SignatureData.extractChainID() = if (v < BigInteger.valueOf(37)) { // not EI
 }
 
 fun Transaction.extractFrom(eip155signatureData: SignatureData, chainId: ChainId) =
-        signedMessageToKey(encodeRLP(SignatureData(ZERO, ZERO, chainId.value)), eip155signatureData.copy(v = (eip155signatureData.v - valueOf(8) - (chainId.value * valueOf(2))))).toAddress()
+        signedMessageToKey(encodeLegacyTxRLP(SignatureData(ZERO, ZERO, chainId.value)), eip155signatureData.copy(v = (eip155signatureData.v - valueOf(8) - (chainId.value * valueOf(2))))).toAddress()

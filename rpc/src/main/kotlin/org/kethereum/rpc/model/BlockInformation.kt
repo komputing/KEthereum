@@ -22,5 +22,6 @@ data class BlockInformation(
         val gasUsed: BigInteger,
         val timestamp: BigInteger,
         val uncles: List<HexString>,
-        val transactions: List<SignedTransaction>
+        val transactions: List<SignedTransaction>,
+        val baseFeePerGas: BigInteger?
 )

@@ -3,7 +3,7 @@ package org.kethereum.eip155
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.kethereum.crypto.toECKeyPair
-import org.kethereum.extensions.transactions.encodeRLP
+import org.kethereum.extensions.transactions.encodeLegacyTxRLP
 import org.kethereum.extensions.transactions.toTransaction
 import org.kethereum.extensions.transactions.toTransactionSignatureData
 import org.kethereum.model.*
@@ -40,7 +40,7 @@ class TheEIP155 {
         }
         val signatureData = transaction.signViaEIP155(KEY_PAIR, ChainId(1))
 
-        val result = transaction.encodeRLP(signatureData).toHexString()
+        val result = transaction.encodeLegacyTxRLP(signatureData).toHexString()
         val expected = "0xf86c098504a817c800825208943535353535353535353535353535353535353535880" +
                 "de0b6b3a76400008025a028ef61340bd939bc2195fe537567866003e1a15d" +
                 "3c71ff63e1590620aa636276a067cbe9d8997f761aecb703304b3800ccf55" +

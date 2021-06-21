@@ -11,45 +11,46 @@ import org.komputing.khex.extensions.toHexString
 import org.komputing.khex.model.HexString
 
 internal fun TransactionRPC.toKethereumTransaction() = SignedTransaction(
-        createTransactionWithDefaults(
-                value = HexString(value).hexToBigInteger(),
-                from = Address(from),
-                to = to?.let { Address(it) },
-                chain = chainId?.let { HexString(it).hexToBigInteger() }?.let { ChainId(it) },
+    createTransactionWithDefaults(
+        value = HexString(value).hexToBigInteger(),
+        from = Address(from),
+        to = to?.let { Address(it) },
+        chain = chainId?.let { HexString(it).hexToBigInteger() }?.let { ChainId(it) },
 
-                nonce = HexString(nonce).hexToBigInteger(),
-                gasPrice = HexString(gasPrice).hexToBigInteger(),
-                gasLimit = HexString(gas).hexToBigInteger(),
-                txHash = hash,
-                input = HexString(input).hexToByteArray(),
-                blockHash = blockHash,
-                blockNumber = blockNumber?.let { HexString(blockNumber).hexToBigInteger() }
-        ), signatureData = SignatureData(
+        nonce = HexString(nonce).hexToBigInteger(),
+        gasPrice = HexString(gasPrice).hexToBigInteger(),
+        gasLimit = HexString(gas).hexToBigInteger(),
+        txHash = hash,
+        input = HexString(input).hexToByteArray(),
+        blockHash = blockHash,
+        blockNumber = blockNumber?.let { HexString(blockNumber).hexToBigInteger() }
+    ), signatureData = SignatureData(
         r = HexString(r).hexToBigInteger(),
         s = HexString(s).hexToBigInteger(),
-        v = HexString(v).hexToBigInteger())
+        v = HexString(v).hexToBigInteger()
+    )
 )
 
 internal fun BlockInformationRPC.toBlockInformation() = BlockInformation(
-        number = HexString(number).hexToBigInteger(),
-        hash = HexString(hash),
-        parentHash = HexString(parentHash),
-        nonce = HexString(nonce).hexToBigInteger(),
-        sha3Uncles = HexString(sha3Uncles),
-        logsBloom = HexString(logsBloom),
-        transactionsRoot = HexString(transactionsRoot),
-        stateRoot = HexString(stateRoot),
-        miner = HexString(miner),
-        difficulty = HexString(difficulty).hexToBigInteger(),
-        totalDifficulty = HexString(totalDifficulty).hexToBigInteger(),
-        extraData = HexString(extraData),
-        size = HexString(size).hexToBigInteger(),
-        gasLimit = HexString(gasLimit).hexToBigInteger(),
-        gasUsed = HexString(gasUsed).hexToBigInteger(),
-        timestamp = HexString(timestamp).hexToBigInteger(),
-        uncles = uncles.map { HexString(it) },
-        transactions = transactions.map { it.toKethereumTransaction() }
-
+    number = HexString(number).hexToBigInteger(),
+    hash = HexString(hash),
+    parentHash = HexString(parentHash),
+    nonce = HexString(nonce).hexToBigInteger(),
+    sha3Uncles = HexString(sha3Uncles),
+    logsBloom = HexString(logsBloom),
+    transactionsRoot = HexString(transactionsRoot),
+    stateRoot = HexString(stateRoot),
+    miner = HexString(miner),
+    difficulty = HexString(difficulty).hexToBigInteger(),
+    totalDifficulty = HexString(totalDifficulty).hexToBigInteger(),
+    extraData = HexString(extraData),
+    size = HexString(size).hexToBigInteger(),
+    gasLimit = HexString(gasLimit).hexToBigInteger(),
+    gasUsed = HexString(gasUsed).hexToBigInteger(),
+    timestamp = HexString(timestamp).hexToBigInteger(),
+    uncles = uncles.map { HexString(it) },
+    transactions = transactions.map { it.toKethereumTransaction() },
+    baseFeePerGas = baseFeePerGas?.let { HexString(it).hexToBigInteger() }
 )
 
 internal fun Transaction.toJSON(): String {
