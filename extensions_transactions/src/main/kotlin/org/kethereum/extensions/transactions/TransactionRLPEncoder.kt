@@ -48,3 +48,4 @@ fun Transaction.encodeLegacyTxRLP(signature: SignatureData? = null) = toRLPList(
 fun Transaction.encode(signature: SignatureData? = null) = if (isEIP1559()) encodeAsEIP1559Tx(signature) else encodeLegacyTxRLP(signature)
 
 fun SignedTransaction.encodeLegacyTxRLP() = transaction.toRLPList(signatureData).encode()
+fun SignedTransaction.encode() = transaction.encode(signatureData)
