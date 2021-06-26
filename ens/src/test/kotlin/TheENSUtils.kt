@@ -12,8 +12,9 @@ class TheENSUtils {
         assertTrue(ENSName("foo.xyz").isPotentialENSDomain())
         assertTrue(ENSName("foo.luxe").isPotentialENSDomain())
 
-        assertFalse(ENSName("foo.lux").isPotentialENSDomain())
-        assertFalse(ENSName("yolo.eh").isPotentialENSDomain())
-        assertFalse(ENSName("yolo.x.yz").isPotentialENSDomain())
+        assertFalse(ENSName(".").isPotentialENSDomain())
+        assertFalse(ENSName("..").isPotentialENSDomain())
+        assertFalse(ENSName("a.").isPotentialENSDomain())
+        assertFalse(ENSName(".a").isPotentialENSDomain())
     }
 }
