@@ -35,7 +35,7 @@ private suspend fun showUsageAndDemoSelect(appendix: String = "") {
         |CodeGeneration (6)
         |Exit (x)
         """.trimMargin())
-    when (readLine()?.toUpperCase()) {
+    when (readLine()?.uppercase()) {
         "1", "ERC55" -> demoERC55()
         "2", "EIP137" -> demoEIP137()
         "3", "ENS" -> demoENS()
