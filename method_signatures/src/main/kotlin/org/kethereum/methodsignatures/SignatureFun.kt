@@ -1,6 +1,7 @@
 package org.kethereum.methodsignatures
 
 import org.kethereum.abi.model.EthereumFunction
+import org.kethereum.abi.model.EthereumNamedType
 import org.kethereum.keccakshortcut.keccak
 import org.kethereum.methodsignatures.model.HexMethodSignature
 import org.kethereum.methodsignatures.model.TextMethodSignature
@@ -14,5 +15,13 @@ fun TextMethodSignature.toHexSignatureUnsafe() = HexMethodSignature(signature.ge
 fun TextMethodSignature.toHexSignature() = HexMethodSignature(normalizedSignature.getHexSignature())
 
 fun Transaction.getHexSignature() = HexMethodSignature(input.slice(0..3).toNoPrefixHexString())
-fun EthereumFunction.toTextMethodSignature() = TextMethodSignature(name + "(" + inputs.joinToString(",") { it.type } + ")")
-fun EthereumFunction.toHexMethodSignature() = TextMethodSignature(name + "(" + inputs.joinToString(",") { it.type } + ")").toHexSignature()
+
+fun List<EthereumNamedType>.toParameterList(): String = "(" + joinToString(",") {
+    if (it.type == "tuple")
+        (it.components ?: throw java.lang.IllegalArgumentException("tuple must have components")).toParameterList()
+    else
+        it.type
+} + ")"
+
+fun EthereumFunction.toTextMethodSignature() = TextMethodSignature(name + inputs.toParameterList())
+fun EthereumFunction.toHexMethodSignature() = toTextMethodSignature().toHexSignature()
