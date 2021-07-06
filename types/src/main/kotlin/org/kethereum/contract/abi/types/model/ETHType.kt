@@ -17,3 +17,4 @@ interface ETHType<T> {
     fun isDynamic(): Boolean
     fun toPaged() = PaginatedByteArray(paddedValue)
 }
+

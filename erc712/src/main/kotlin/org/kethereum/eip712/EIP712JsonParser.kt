@@ -1,10 +1,8 @@
 package pm.gnosis.eip712
 
 
-import org.kethereum.contract.abi.types.BYTES_COUNT_CONSTRAINT
-import org.kethereum.contract.abi.types.INT_BITS_CONSTRAINT
-import org.kethereum.contract.abi.types.allETHTypes
-import org.kethereum.contract.abi.types.extractPrefixedNumber
+import org.kethereum.contract.abi.types.*
+import org.kethereum.contract.abi.types.model.NamedETHType
 import org.kethereum.contract.abi.types.model.type_params.BitsTypeParams
 import org.kethereum.contract.abi.types.model.type_params.BytesTypeParams
 import org.kethereum.contract.abi.types.model.types.*
@@ -55,7 +53,8 @@ class EIP712JsonParser(private val jsonAdapter: EIP712JsonAdapter) {
             } else {
                 // Literal
                 val rawValue = values[typeParam.name] ?: throw IllegalArgumentException("Could not get value for property ${typeParam.name}")
-                if (!allETHTypes.contains(typeParam.type)) throw IllegalArgumentException("Property with name ${typeParam.name} has invalid Solidity type ${typeParam.type}")
+                if (!NamedETHType(typeParam.type).isETHType()) throw IllegalArgumentException("Property with name ${typeParam.name} has invalid Solidity type ${typeParam.type}")
+                if (!NamedETHType(typeParam.type).isSupportedETHType()) throw IllegalArgumentException("Property with name ${typeParam.name} has unsupported Solidity type ${typeParam.type}")
                 val ethereumType = when {
                     typeParam.type.startsWith(prefix = "uint") -> readNumber(rawNumber = rawValue, creator = { UIntETHType.ofNativeKotlinType(it,
                         BitsTypeParams(typeParam.type.extractPrefixedNumber("uint", INT_BITS_CONSTRAINT))

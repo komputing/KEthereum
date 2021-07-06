@@ -32,14 +32,12 @@ class Struct712(override val typeName: String, val parameters: List<Struct712Par
         (encodeType().joinToString(separator = "").toByteArray(charset = Charsets.UTF_8)).keccak()
     }
 
-    fun encodeParameters(): ByteArray =
+    private fun encodeParameters(): ByteArray =
         parameters.map { (_, type) ->
             when (type) {
                 is Struct712 -> type.hashStruct()
                 is Literal712 -> {
-                    val encodeSolidityType = encodeSolidityType(type.value)
-                    encodeSolidityType
-
+                    encodeSolidityType(type.value)
                 }
             }
         }.reduce { acc, bytes -> acc + bytes }
@@ -47,14 +45,14 @@ class Struct712(override val typeName: String, val parameters: List<Struct712Par
     private fun encodeType(): List<String> {
         val encodedStruct = parameters.joinToString(separator = ",", prefix = "$typeName(", postfix = ")",
             transform = { (name, type) -> "${type.typeName} $name" })
-        val structParams = parameters.asSequence().filter { (_, type) -> !allETHTypes.contains(type.typeName) }
+        val structParams = parameters.asSequence()
             .mapNotNull { (_, type) -> (type as? Struct712)?.encodeType() }
             .flatten().distinct().sorted().toList()
         return listOf(encodedStruct) + structParams
     }
 }
 
-fun encodeSolidityType(value: ETHType<out Any>): ByteArray = when (value) {
+private fun encodeSolidityType(value: ETHType<out Any>): ByteArray = when (value) {
     is StringETHType -> value.toKotlinType().toByteArray().keccak()
     is BytesETHType -> value.toKotlinType().keccak()
     is DynamicSizedBytesETHType -> value.toKotlinType().keccak()

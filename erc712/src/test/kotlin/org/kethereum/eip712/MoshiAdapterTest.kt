@@ -1,10 +1,12 @@
 package org.kethereum.eip712
 
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 import org.komputing.khex.extensions.toHexString
 import org.komputing.khex.extensions.toNoPrefixHexString
 import pm.gnosis.eip712.EIP712JsonParser
 import pm.gnosis.eip712.typedDataHash
+import java.lang.IllegalArgumentException
 import kotlin.test.assertEquals
 
 const val PAYLOAD_JSON_FILE_NAME = "mail_json_payload.json"
@@ -166,6 +168,16 @@ class MoshiAdapterTest {
             "e0c6798c794ee4f3a346f98b5be5225aec4b159e586271004b0a7b34653b0657",
             typedDataHash(domainWithMessage.message, domainWithMessage.domain).toNoPrefixHexString()
         )
+    }
+
+    @Test
+    fun shouldFailForInvalidType() {
+        val inputSource = javaClass.classLoader.getResourceAsStream("invalid_type.json")
+            ?: throw IllegalStateException("Could not read file")
+
+        assertThrows<IllegalArgumentException> {
+            EIP712JsonParser(MoshiAdapter()).parseMessage(inputSource)
+        }
     }
 
 }
