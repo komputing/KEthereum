@@ -4,6 +4,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.kethereum.metadata.model.EthereumMetadataString
 import org.kethereum.metadata.parse
+import kotlin.test.assertNotNull
 
 class TheParser {
 
@@ -33,6 +34,12 @@ class TheParser {
     fun canParseWithConstructor() {
         val tested = EthereumMetadataString(testMetaDataJSONWithConstructor).parse()
         assertThat(tested?.output?.userdoc?.methods?.get("constructor") as String).isEqualTo("Create a new ballot with \$(_numProposals) different proposals.")
+    }
+
+    @Test
+    fun canParseDevDocsNoDetails() {
+        val tested = EthereumMetadataString(testDataDevDocNoDetails).parse()
+        assertNotNull(tested)
     }
 
     @Test

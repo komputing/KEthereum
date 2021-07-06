@@ -5,6 +5,6 @@ data class Doc(
 )
 
 data class Docs(
-        val details: String,
+        val details: String?,
         val methods: Map<String, Any>
 )
