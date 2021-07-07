@@ -8,7 +8,7 @@ data class OptimizerSettings(
 
 data class Settings(
         val compilationTarget: Map<String, String>,
-        val evmVersion: String,
+        val evmVersion: String?,
         // TODO add libraries and remappings
         val optimizer: OptimizerSettings
 
