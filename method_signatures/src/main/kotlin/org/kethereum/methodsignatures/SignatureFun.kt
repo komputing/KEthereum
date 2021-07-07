@@ -17,8 +17,8 @@ fun TextMethodSignature.toHexSignature() = HexMethodSignature(normalizedSignatur
 fun Transaction.getHexSignature() = HexMethodSignature(input.slice(0..3).toNoPrefixHexString())
 
 fun List<EthereumNamedType>.toParameterList(): String = "(" + joinToString(",") {
-    if (it.type == "tuple")
-        (it.components ?: throw java.lang.IllegalArgumentException("tuple must have components")).toParameterList()
+    if (it.type.startsWith("tuple"))
+        (it.components ?: throw IllegalArgumentException("tuple must have components")).toParameterList() + it.type.removePrefix("tuple")
     else
         it.type
 } + ")"
