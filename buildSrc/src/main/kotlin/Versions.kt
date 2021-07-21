@@ -8,7 +8,7 @@ object Versions {
     const val slf4j = "1.7.31"
     const val klaxon = "5.5"
     const val okhttp = "3.12.1"
-    const val coroutines = "1.5.0"
+    const val coroutines = "1.5.1"
     const val threetenbp = "1.5.1"
     const val okio = "2.4.0"
     const val base58 = "0.4"
