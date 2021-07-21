@@ -4,7 +4,7 @@ apply {
 
 buildscript {
     repositories {
-        jcenter()
+        gradlePluginPortal()
         maven("https://jitpack.io")
     }
 
@@ -18,7 +18,7 @@ buildscript {
 
 subprojects {
     repositories {
-        jcenter()
+        mavenCentral()
         maven("https://jitpack.io")
         maven("https://kotlin.bintray.com/kotlinx")
     }
