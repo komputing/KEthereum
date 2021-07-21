@@ -89,10 +89,10 @@ fun createTransactionWithDefaults(
     value: BigInteger,
     blockHash: String? = null,
     blockNumber: BigInteger? = null,
-    gasPremium: BigInteger? = null,
-    feeCap: BigInteger? = null,
+    maxPriorityFeePerGas: BigInteger? = null,
+    maxFeePerGasp: BigInteger? = null,
 
-) = Transaction(chain?.value, creationEpochSecond, from, gasLimit, gasPrice, input, nonce, to, txHash, value, blockHash, blockNumber, gasPremium, feeCap)
+) = Transaction(chain?.value, creationEpochSecond, from, gasLimit, gasPrice, input, nonce, to, txHash, value, blockHash, blockNumber, maxPriorityFeePerGas, maxFeePerGasp)
 
 
 fun createEmptyTransaction() = Transaction(null, null, null, null, null, ByteArray(0), null, null, null, null, null, null, null, null)
