@@ -5,7 +5,7 @@ object Versions {
     const val moshi = "1.8.0"
     const val khex = "1.1.2"
     const val khash = "1.1.1"
-    const val slf4j = "1.7.31"
+    const val slf4j = "1.7.32"
     const val klaxon = "5.5"
     const val okhttp = "3.12.1"
     const val coroutines = "1.5.1"
