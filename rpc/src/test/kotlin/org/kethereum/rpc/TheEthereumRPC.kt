@@ -33,6 +33,21 @@ class TheEthereumRPC {
     }
 
     @Test
+    fun get1559TxByHashWorks() {
+        val response =
+            """{"jsonrpc":"2.0","id":1,"result":{"blockHash":null,"blockNumber":null,"from":"0x694b63b2e053a0c93074795a1025869576389b70","gas":"0x5208","gasPrice":null,"maxFeePerGas":"0x7","maxPriorityFeePerGas":"0x8","hash":"0xcf18a201cfa5452556ad2735430a01de2238b3c15d8c2851d769afd74239fe9b","input":"0x","nonce":"0x0","to":"0x381e247bef0ebc21b6611786c665dd5514dcc31f","transactionIndex":null,"value":"0x0","type":"0x2","accessList":[],"chainId":"0x5","v":"0x1","r":"0x4feeb323bc4e5092f560e5d483203e22d3370eb8ebd1945739eb31fe8e61a21","s":"0x3ceab6d1e6dc551bbeb04f11d62d94cf4c2d792c40a96e82ed5bc9f37391614d"}}"""
+        server.enqueue(MockResponse().setBody(response))
+
+        val tx = tested.getTransactionByHash("0x0")
+        assertThat(tx).isNotNull
+        assertThat(tx!!.transaction.from).isEqualTo(Address("0x694b63b2e053a0c93074795a1025869576389b70"))
+        assertThat(tx.signatureData.s).isEqualTo(HexString("0x3ceab6d1e6dc551bbeb04f11d62d94cf4c2d792c40a96e82ed5bc9f37391614d").hexToBigInteger())
+        assertThat(tx.transaction.maxFeePerGas).isEqualTo(BigInteger.valueOf(7L))
+        assertThat(tx.transaction.maxPriorityFeePerGas).isEqualTo(BigInteger.valueOf(8L))
+//        assertThat(tx.transaction.type).isEqualTo(2)
+    }
+
+    @Test
     fun getBalanceWorks() {
         //language=JSON
         val response = "{\"jsonrpc\":\"2.0\",\"id\":83,\"result\":\"0x0234c8a3397aab58\"}\n"
@@ -44,7 +59,8 @@ class TheEthereumRPC {
     @Test
     fun sendTxErrorWorks() {
         //language=JSON
-        val response = "{\"jsonrpc\":\"2.0\",\"error\":{\"code\":-32010,\"message\":\"Transaction with the same hash was already imported.\"},\"id\":1,\"in3\":{\"lastValidatorChange\":68593,\"lastNodeList\":21988,\"execTime\":76}}\n"
+        val response =
+            "{\"jsonrpc\":\"2.0\",\"error\":{\"code\":-32010,\"message\":\"Transaction with the same hash was already imported.\"},\"id\":1,\"in3\":{\"lastValidatorChange\":68593,\"lastNodeList\":21988,\"execTime\":76}}\n"
         server.enqueue(MockResponse().setBody(response))
 
         assertFails("Transaction with the same hash was already imported.") {
@@ -55,7 +71,8 @@ class TheEthereumRPC {
     @Test
     fun errorCodeIsCapturedCorrectly() {
         //language=JSON
-        val response = "{\"jsonrpc\":\"2.0\",\"error\":{\"code\":-32010,\"message\":\"Transaction with the same hash was already imported.\"},\"id\":1,\"in3\":{\"lastValidatorChange\":68593,\"lastNodeList\":21988,\"execTime\":76}}\n"
+        val response =
+            "{\"jsonrpc\":\"2.0\",\"error\":{\"code\":-32010,\"message\":\"Transaction with the same hash was already imported.\"},\"id\":1,\"in3\":{\"lastValidatorChange\":68593,\"lastNodeList\":21988,\"execTime\":76}}\n"
         server.enqueue(MockResponse().setBody(response))
 
         try {
@@ -89,7 +106,8 @@ class TheEthereumRPC {
 
     @Test
     fun getTransactionByHashWorks() {
-        val response = """{"jsonrpc":"2.0","result":{"blockHash":"0x636ee9bcf20f702a89978881af48bcd34a8d1a00d704d7d1248e46238c2ca084","blockNumber":"0x3ef57","chainId":"0x5","condition":null,"creates":null,"from":"0x03e0ffece04d779388b7a1d5c5102ac54bd479ee","gas":"0x186a0","gasPrice":"0x4a817c800","hash":"0x6fead4befd1d2b69f1aa39a0f43ff9c3d4c5f3953ae1071127209d5608fe3fb7","input":"0x40c10f1900000000000000000000000063ce9f57e2e4b41d3451dec20ddb89143fd755bb000000000000000000000000000000000000000000000016c4abbebea0100000","nonce":"0x15a","publicKey":"0x6116a22e4e11ee8aed33dd03eacc2eea3d0cab7a2f5be1b792b8c1d0669d13d8642d29c8d2a6efb13f659045593c05bb430776e956bb24a29d7b6f07365724fd","r":"0x59b07e76905fc752ffc1c61c75085bd8c788dbf982ad31e7fc2f27bc3241e0eb","raw":"0xf8ac82015a8504a817c800830186a0947af963cf6d228e564e2a0aa0ddbf06210b38615d80b84440c10f1900000000000000000000000063ce9f57e2e4b41d3451dec20ddb89143fd755bb000000000000000000000000000000000000000000000016c4abbebea01000002ea059b07e76905fc752ffc1c61c75085bd8c788dbf982ad31e7fc2f27bc3241e0eba011993e81098e5983f6408d2baad340bab97355f83c42a6d71f811d50e3e1f1e9","s":"0x11993e81098e5983f6408d2baad340bab97355f83c42a6d71f811d50e3e1f1e9","standardV":"0x1","to":"0x7af963cf6d228e564e2a0aa0ddbf06210b38615d","transactionIndex":"0x0","v":"0x2e","value":"0x0"},"id":1}
+        val response =
+            """{"jsonrpc":"2.0","result":{"blockHash":"0x636ee9bcf20f702a89978881af48bcd34a8d1a00d704d7d1248e46238c2ca084","blockNumber":"0x3ef57","chainId":"0x5","condition":null,"creates":null,"from":"0x03e0ffece04d779388b7a1d5c5102ac54bd479ee","gas":"0x186a0","gasPrice":"0x4a817c800","hash":"0x6fead4befd1d2b69f1aa39a0f43ff9c3d4c5f3953ae1071127209d5608fe3fb7","input":"0x40c10f1900000000000000000000000063ce9f57e2e4b41d3451dec20ddb89143fd755bb000000000000000000000000000000000000000000000016c4abbebea0100000","nonce":"0x15a","publicKey":"0x6116a22e4e11ee8aed33dd03eacc2eea3d0cab7a2f5be1b792b8c1d0669d13d8642d29c8d2a6efb13f659045593c05bb430776e956bb24a29d7b6f07365724fd","r":"0x59b07e76905fc752ffc1c61c75085bd8c788dbf982ad31e7fc2f27bc3241e0eb","raw":"0xf8ac82015a8504a817c800830186a0947af963cf6d228e564e2a0aa0ddbf06210b38615d80b84440c10f1900000000000000000000000063ce9f57e2e4b41d3451dec20ddb89143fd755bb000000000000000000000000000000000000000000000016c4abbebea01000002ea059b07e76905fc752ffc1c61c75085bd8c788dbf982ad31e7fc2f27bc3241e0eba011993e81098e5983f6408d2baad340bab97355f83c42a6d71f811d50e3e1f1e9","s":"0x11993e81098e5983f6408d2baad340bab97355f83c42a6d71f811d50e3e1f1e9","standardV":"0x1","to":"0x7af963cf6d228e564e2a0aa0ddbf06210b38615d","transactionIndex":"0x0","v":"0x2e","value":"0x0"},"id":1}
 """
         server.enqueue(MockResponse().setBody(response))
 
@@ -105,7 +123,8 @@ class TheEthereumRPC {
 
     @Test
     fun getTransactionByHashWorksWhenBlockNumberIsNull() {
-        val response = """{"jsonrpc":"2.0","result":{"blockHash":"0x636ee9bcf20f702a89978881af48bcd34a8d1a00d704d7d1248e46238c2ca084","blockNumber":null,"chainId":"0x5","condition":null,"creates":null,"from":"0x03e0ffece04d779388b7a1d5c5102ac54bd479ee","gas":"0x186a0","gasPrice":"0x4a817c800","hash":"0x6fead4befd1d2b69f1aa39a0f43ff9c3d4c5f3953ae1071127209d5608fe3fb7","input":"0x40c10f1900000000000000000000000063ce9f57e2e4b41d3451dec20ddb89143fd755bb000000000000000000000000000000000000000000000016c4abbebea0100000","nonce":"0x15a","publicKey":"0x6116a22e4e11ee8aed33dd03eacc2eea3d0cab7a2f5be1b792b8c1d0669d13d8642d29c8d2a6efb13f659045593c05bb430776e956bb24a29d7b6f07365724fd","r":"0x59b07e76905fc752ffc1c61c75085bd8c788dbf982ad31e7fc2f27bc3241e0eb","raw":"0xf8ac82015a8504a817c800830186a0947af963cf6d228e564e2a0aa0ddbf06210b38615d80b84440c10f1900000000000000000000000063ce9f57e2e4b41d3451dec20ddb89143fd755bb000000000000000000000000000000000000000000000016c4abbebea01000002ea059b07e76905fc752ffc1c61c75085bd8c788dbf982ad31e7fc2f27bc3241e0eba011993e81098e5983f6408d2baad340bab97355f83c42a6d71f811d50e3e1f1e9","s":"0x11993e81098e5983f6408d2baad340bab97355f83c42a6d71f811d50e3e1f1e9","standardV":"0x1","to":"0x7af963cf6d228e564e2a0aa0ddbf06210b38615d","transactionIndex":"0x0","v":"0x2e","value":"0x0"},"id":1}
+        val response =
+            """{"jsonrpc":"2.0","result":{"blockHash":"0x636ee9bcf20f702a89978881af48bcd34a8d1a00d704d7d1248e46238c2ca084","blockNumber":null,"chainId":"0x5","condition":null,"creates":null,"from":"0x03e0ffece04d779388b7a1d5c5102ac54bd479ee","gas":"0x186a0","gasPrice":"0x4a817c800","hash":"0x6fead4befd1d2b69f1aa39a0f43ff9c3d4c5f3953ae1071127209d5608fe3fb7","input":"0x40c10f1900000000000000000000000063ce9f57e2e4b41d3451dec20ddb89143fd755bb000000000000000000000000000000000000000000000016c4abbebea0100000","nonce":"0x15a","publicKey":"0x6116a22e4e11ee8aed33dd03eacc2eea3d0cab7a2f5be1b792b8c1d0669d13d8642d29c8d2a6efb13f659045593c05bb430776e956bb24a29d7b6f07365724fd","r":"0x59b07e76905fc752ffc1c61c75085bd8c788dbf982ad31e7fc2f27bc3241e0eb","raw":"0xf8ac82015a8504a817c800830186a0947af963cf6d228e564e2a0aa0ddbf06210b38615d80b84440c10f1900000000000000000000000063ce9f57e2e4b41d3451dec20ddb89143fd755bb000000000000000000000000000000000000000000000016c4abbebea01000002ea059b07e76905fc752ffc1c61c75085bd8c788dbf982ad31e7fc2f27bc3241e0eba011993e81098e5983f6408d2baad340bab97355f83c42a6d71f811d50e3e1f1e9","s":"0x11993e81098e5983f6408d2baad340bab97355f83c42a6d71f811d50e3e1f1e9","standardV":"0x1","to":"0x7af963cf6d228e564e2a0aa0ddbf06210b38615d","transactionIndex":"0x0","v":"0x2e","value":"0x0"},"id":1}
 """
         server.enqueue(MockResponse().setBody(response))
 
@@ -116,7 +135,8 @@ class TheEthereumRPC {
 
     @Test
     fun getTransactionByHashWorksWhenBlockHashIsNull() {
-        val response = """{"jsonrpc":"2.0","result":{"blockHash":null,"blockNumber":null,"chainId":"0x5","condition":null,"creates":null,"from":"0x03e0ffece04d779388b7a1d5c5102ac54bd479ee","gas":"0x186a0","gasPrice":"0x4a817c800","hash":"0x6fead4befd1d2b69f1aa39a0f43ff9c3d4c5f3953ae1071127209d5608fe3fb7","input":"0x40c10f1900000000000000000000000063ce9f57e2e4b41d3451dec20ddb89143fd755bb000000000000000000000000000000000000000000000016c4abbebea0100000","nonce":"0x15a","publicKey":"0x6116a22e4e11ee8aed33dd03eacc2eea3d0cab7a2f5be1b792b8c1d0669d13d8642d29c8d2a6efb13f659045593c05bb430776e956bb24a29d7b6f07365724fd","r":"0x59b07e76905fc752ffc1c61c75085bd8c788dbf982ad31e7fc2f27bc3241e0eb","raw":"0xf8ac82015a8504a817c800830186a0947af963cf6d228e564e2a0aa0ddbf06210b38615d80b84440c10f1900000000000000000000000063ce9f57e2e4b41d3451dec20ddb89143fd755bb000000000000000000000000000000000000000000000016c4abbebea01000002ea059b07e76905fc752ffc1c61c75085bd8c788dbf982ad31e7fc2f27bc3241e0eba011993e81098e5983f6408d2baad340bab97355f83c42a6d71f811d50e3e1f1e9","s":"0x11993e81098e5983f6408d2baad340bab97355f83c42a6d71f811d50e3e1f1e9","standardV":"0x1","to":"0x7af963cf6d228e564e2a0aa0ddbf06210b38615d","transactionIndex":"0x0","v":"0x2e","value":"0x0"},"id":1}
+        val response =
+            """{"jsonrpc":"2.0","result":{"blockHash":null,"blockNumber":null,"chainId":"0x5","condition":null,"creates":null,"from":"0x03e0ffece04d779388b7a1d5c5102ac54bd479ee","gas":"0x186a0","gasPrice":"0x4a817c800","hash":"0x6fead4befd1d2b69f1aa39a0f43ff9c3d4c5f3953ae1071127209d5608fe3fb7","input":"0x40c10f1900000000000000000000000063ce9f57e2e4b41d3451dec20ddb89143fd755bb000000000000000000000000000000000000000000000016c4abbebea0100000","nonce":"0x15a","publicKey":"0x6116a22e4e11ee8aed33dd03eacc2eea3d0cab7a2f5be1b792b8c1d0669d13d8642d29c8d2a6efb13f659045593c05bb430776e956bb24a29d7b6f07365724fd","r":"0x59b07e76905fc752ffc1c61c75085bd8c788dbf982ad31e7fc2f27bc3241e0eb","raw":"0xf8ac82015a8504a817c800830186a0947af963cf6d228e564e2a0aa0ddbf06210b38615d80b84440c10f1900000000000000000000000063ce9f57e2e4b41d3451dec20ddb89143fd755bb000000000000000000000000000000000000000000000016c4abbebea01000002ea059b07e76905fc752ffc1c61c75085bd8c788dbf982ad31e7fc2f27bc3241e0eba011993e81098e5983f6408d2baad340bab97355f83c42a6d71f811d50e3e1f1e9","s":"0x11993e81098e5983f6408d2baad340bab97355f83c42a6d71f811d50e3e1f1e9","standardV":"0x1","to":"0x7af963cf6d228e564e2a0aa0ddbf06210b38615d","transactionIndex":"0x0","v":"0x2e","value":"0x0"},"id":1}
 """
         server.enqueue(MockResponse().setBody(response))
 
@@ -211,13 +231,13 @@ class TheEthereumRPC {
         assertThat(firstTransaction.value).isEqualTo(HexString("0x596c90f09f547400").hexToBigInteger())
 
         assertThat(firstSignature.v)
-                .isEqualTo(HexString("0x1c").hexToBigInteger())
+            .isEqualTo(HexString("0x1c").hexToBigInteger())
 
         assertThat(firstSignature.r)
-                .isEqualTo(HexString("0xdcd183c34a1ceb7934b7fb32f3169b8f3fff43da936553e4d92ae97bb0a9a765").hexToBigInteger())
+            .isEqualTo(HexString("0xdcd183c34a1ceb7934b7fb32f3169b8f3fff43da936553e4d92ae97bb0a9a765").hexToBigInteger())
 
         assertThat(firstSignature.s)
-                .isEqualTo(HexString("0x76d4be3d62b9e6e6bb8c494c3228f4df31b5c20d8f892fe1d9d35f07afab3d73").hexToBigInteger())
+            .isEqualTo(HexString("0x76d4be3d62b9e6e6bb8c494c3228f4df31b5c20d8f892fe1d9d35f07afab3d73").hexToBigInteger())
     }
 
 

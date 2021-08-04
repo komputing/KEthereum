@@ -6,6 +6,7 @@ import org.kethereum.model.*
 import org.kethereum.rpc.model.BlockInformation
 import org.kethereum.rpc.model.rpc.BlockInformationRPC
 import org.kethereum.rpc.model.rpc.TransactionRPC
+import org.komputing.khex.extensions.clean0xPrefix
 import org.komputing.khex.extensions.hexToByteArray
 import org.komputing.khex.extensions.toHexString
 import org.komputing.khex.model.HexString
@@ -18,12 +19,15 @@ internal fun TransactionRPC.toKethereumTransaction() = SignedTransaction(
         chain = chainId?.let { HexString(it).hexToBigInteger() }?.let { ChainId(it) },
 
         nonce = HexString(nonce).hexToBigInteger(),
-        gasPrice = HexString(gasPrice).hexToBigInteger(),
+        gasPrice = gasPrice?.let { HexString(it).hexToBigInteger() },
         gasLimit = HexString(gas).hexToBigInteger(),
         txHash = hash,
         input = HexString(input).hexToByteArray(),
         blockHash = blockHash,
-        blockNumber = blockNumber?.let { HexString(blockNumber).hexToBigInteger() }
+        blockNumber = blockNumber?.let { HexString(blockNumber).hexToBigInteger() },
+        maxFeePerGas = maxFeePerGas?.let { HexString(maxFeePerGas).hexToBigInteger() },
+        maxPriorityFeePerGas = maxPriorityFeePerGas?.let { HexString(maxPriorityFeePerGas).hexToBigInteger() },
+        type = type?.let { HexString(type).clean0xPrefix().string.toInt(16) },
     ), signatureData = SignatureData(
         r = HexString(r).hexToBigInteger(),
         s = HexString(s).hexToBigInteger(),

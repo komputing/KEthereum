@@ -28,8 +28,9 @@ fun RLPList.toTransaction(): Transaction? {
         txHash = null,
         blockNumber = null,
         blockHash = null,
-        maxPriorityFeePerGas = elements[6].toUnsignedBigIntegerFromRLP(),
-        maxFeePerGas = elements[7].toUnsignedBigIntegerFromRLP(),
+        maxPriorityFeePerGas = null,
+        maxFeePerGas = null,
+        type = null
     )
 }
 
