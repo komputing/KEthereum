@@ -18,8 +18,7 @@ data class Transaction(
     var blockHash: String?,
     var blockNumber: BigInteger?,
     var maxPriorityFeePerGas: BigInteger?,
-    var maxFeePerGas: BigInteger?,
-    var type: Int?
+    var maxFeePerGas: BigInteger?
 ) {
     constructor() : this(
         chain = null,
@@ -35,8 +34,7 @@ data class Transaction(
         blockNumber = null,
         value = BigInteger.ZERO,
         maxPriorityFeePerGas = null,
-        maxFeePerGas = null,
-        type = null
+        maxFeePerGas = null
         )
 
     override fun equals(other: Any?): Boolean {
@@ -93,9 +91,8 @@ fun createTransactionWithDefaults(
     blockNumber: BigInteger? = null,
     maxPriorityFeePerGas: BigInteger? = null,
     maxFeePerGas: BigInteger? = null,
-    type: Int? = null,
 
-) = Transaction(chain?.value, creationEpochSecond, from, gasLimit, gasPrice, input, nonce, to, txHash, value, blockHash, blockNumber, maxPriorityFeePerGas, maxFeePerGas,type)
+) = Transaction(chain?.value, creationEpochSecond, from, gasLimit, gasPrice, input, nonce, to, txHash, value, blockHash, blockNumber, maxPriorityFeePerGas, maxFeePerGas)
 
 
-fun createEmptyTransaction() = Transaction(null, null, null, null, null, ByteArray(0), null, null, null, null, null, null, null, null, null)
+fun createEmptyTransaction() = Transaction(null, null, null, null, null, ByteArray(0), null, null, null, null, null, null, null, null)

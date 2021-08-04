@@ -29,8 +29,7 @@ fun RLPList.toTransaction(): Transaction? {
         blockNumber = null,
         blockHash = null,
         maxPriorityFeePerGas = null,
-        maxFeePerGas = null,
-        type = null
+        maxFeePerGas = null
     )
 }
 
