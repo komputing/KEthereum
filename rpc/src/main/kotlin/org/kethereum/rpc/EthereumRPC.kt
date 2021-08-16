@@ -26,7 +26,7 @@ interface EthereumRPC {
     fun getCode(address: String, block: String): HexString?
     fun estimateGas(transaction: Transaction): BigInteger?
     fun getBalance(address: Address, block: String = "latest"): BigInteger?
-    fun getFeeHistory(blocks: Int, lastBlock: String = "latest"): FeeHistory?
+    fun getFeeHistory(blocks: Int, lastBlock: String = "latest", percentiles : String = ""): FeeHistory?
 }
 
 

@@ -75,9 +75,10 @@ open class BaseEthereumRPC(private val transport: RPCTransport) : EthereumRPC {
     override fun getBalance(address: Address, block: String) = stringCall("eth_getBalance", "\"${address.hex}\",\"$block\"")?.getBigIntegerFromStringResult()
 
     @Throws(EthereumRPCException::class)
-    override fun getFeeHistory(blocks: Int, lastBlock: String) = transport.call("eth_feeHistory", "\"0x${blocks.toString(16)}\",\"$lastBlock\",[]")?.let { string ->
-        feeHistoryAdapter.fromJsonNoThrow(string)
-    }?.result
+    override fun getFeeHistory(blocks: Int, lastBlock: String, percentiles: String) =
+        transport.call("eth_feeHistory", "\"0x${blocks.toString(16)}\",\"$lastBlock\",[$percentiles]")?.let { string ->
+            feeHistoryAdapter.fromJsonNoThrow(string)
+        }?.result
 
     @Throws(EthereumRPCException::class)
     override fun getTransactionByHash(hash: String) = transport.call("eth_getTransactionByHash", "\"$hash\"")?.let { string ->
