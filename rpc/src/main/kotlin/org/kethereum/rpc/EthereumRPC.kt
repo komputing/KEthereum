@@ -21,12 +21,12 @@ interface EthereumRPC {
     fun gasPrice(): BigInteger?
     fun clientVersion(): String?
     fun chainId(): ChainId?
-    fun getStorageAt(address: String, position: String, block: String = "latest"): HexString?
-    fun getTransactionCount(address: String, block: String = "latest"): BigInteger?
-    fun getCode(address: String, block: String): HexString?
+    fun getStorageAt(address: Address, position: String, block: String = "latest"): HexString?
+    fun getTransactionCount(address: Address, block: String = "latest"): BigInteger?
+    fun getCode(address: Address, block: String = "latest"): HexString?
     fun estimateGas(transaction: Transaction): BigInteger?
     fun getBalance(address: Address, block: String = "latest"): BigInteger?
-    fun getFeeHistory(blocks: Int, lastBlock: String = "latest", percentiles : String = ""): FeeHistory?
+    fun getFeeHistory(blocks: Int, lastBlock: String = "latest", percentiles: String = ""): FeeHistory?
 }
 
 

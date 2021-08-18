@@ -58,15 +58,15 @@ open class BaseEthereumRPC(private val transport: RPCTransport) : EthereumRPC {
     override fun chainId() = stringCall("eth_chainId")?.getBigIntegerFromStringResult()?.let { ChainId(it) }
 
     @Throws(EthereumRPCException::class)
-    override fun getStorageAt(address: String, position: String, block: String) =
-        stringCall("eth_getStorageAt", "\"$address\",\"$position\",\"$block\"")?.throwOrString()?.let { HexString(it) }
+    override fun getStorageAt(address: Address, position: String, block: String) =
+        stringCall("eth_getStorageAt", "\"${address.hex}\",\"$position\",\"$block\"")?.throwOrString()?.let { HexString(it) }
 
     @Throws(EthereumRPCException::class)
-    override fun getTransactionCount(address: String, block: String) =
-        stringCall("eth_getTransactionCount", "\"$address\",\"$block\"")?.getBigIntegerFromStringResult()
+    override fun getTransactionCount(address: Address, block: String) =
+        stringCall("eth_getTransactionCount", "\"${address.hex}\",\"$block\"")?.getBigIntegerFromStringResult()
 
     @Throws(EthereumRPCException::class)
-    override fun getCode(address: String, block: String) = stringCall("eth_getCode", "\"$address\",\"$block\"")?.throwOrString()?.let { HexString(it) }
+    override fun getCode(address: Address, block: String) = stringCall("eth_getCode", "\"${address.hex}\",\"$block\"")?.throwOrString()?.let { HexString(it) }
 
     @Throws(EthereumRPCException::class)
     override fun estimateGas(transaction: Transaction) = stringCall("eth_estimateGas", transaction.toJSON())?.getBigIntegerFromStringResult()
