@@ -1,9 +1,6 @@
 package org.kethereum.rpc
 
-import org.kethereum.model.Address
-import org.kethereum.model.ChainId
-import org.kethereum.model.SignedTransaction
-import org.kethereum.model.Transaction
+import org.kethereum.model.*
 import org.kethereum.rpc.model.BlockInformation
 import org.kethereum.rpc.model.FeeHistory
 import org.komputing.khex.model.HexString
@@ -23,7 +20,7 @@ interface EthereumRPC {
     fun chainId(): ChainId?
     fun getStorageAt(address: Address, position: String, block: String = "latest"): HexString?
     fun getTransactionCount(address: Address, block: String = "latest"): BigInteger?
-    fun getCode(address: Address, block: String = "latest"): HexString?
+    fun getCode(address: Address, block: String = "latest"): ByteCode?
     fun estimateGas(transaction: Transaction): BigInteger?
     fun getBalance(address: Address, block: String = "latest"): BigInteger?
     fun getFeeHistory(blocks: Int, lastBlock: String = "latest", percentiles: String = ""): FeeHistory?

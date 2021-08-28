@@ -5,6 +5,7 @@ import com.squareup.moshi.Moshi
 import org.kethereum.extensions.hexToBigInteger
 import org.kethereum.extensions.toHexString
 import org.kethereum.model.Address
+import org.kethereum.model.ByteCode
 import org.kethereum.model.ChainId
 import org.kethereum.model.Transaction
 import org.kethereum.rpc.model.BigIntegerAdapter
@@ -12,6 +13,7 @@ import org.kethereum.rpc.model.BlockInformationResponse
 import org.kethereum.rpc.model.FeeHistoryResponse
 import org.kethereum.rpc.model.StringResultResponse
 import org.kethereum.rpc.model.TransactionResponse
+import org.komputing.khex.extensions.hexToByteArray
 import org.komputing.khex.model.HexString
 import java.io.IOException
 import java.math.BigInteger
@@ -66,7 +68,9 @@ open class BaseEthereumRPC(private val transport: RPCTransport) : EthereumRPC {
         stringCall("eth_getTransactionCount", "\"${address.hex}\",\"$block\"")?.getBigIntegerFromStringResult()
 
     @Throws(EthereumRPCException::class)
-    override fun getCode(address: Address, block: String) = stringCall("eth_getCode", "\"${address.hex}\",\"$block\"")?.throwOrString()?.let { HexString(it) }
+    override fun getCode(address: Address, block: String) = stringCall("eth_getCode", "\"${address.hex}\",\"$block\"")?.throwOrString()?.let {
+        ByteCode(HexString(it).hexToByteArray())
+    }
 
     @Throws(EthereumRPCException::class)
     override fun estimateGas(transaction: Transaction) = stringCall("eth_estimateGas", transaction.toJSON())?.getBigIntegerFromStringResult()

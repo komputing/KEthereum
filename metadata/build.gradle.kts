@@ -1,3 +1,7 @@
+plugins {
+    kotlin("plugin.serialization") version "1.5.21"
+}
+
 dependencies {
 
     implementation(project(":abi_filter"))
@@ -16,6 +20,9 @@ dependencies {
     api("com.squareup.moshi:moshi:${Versions.moshi}")
     implementation(project(":abi"))
 
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-cbor:1.2.2")
+    implementation("com.github.komputing:kotlin-multihash:0.3")
+    implementation("com.github.komputing:khex:${Versions.khex}")
 
     testImplementation("com.github.komputing:khex:${Versions.khex}")
     testImplementation("com.squareup.okhttp3:mockwebserver:${Versions.okhttp}")
