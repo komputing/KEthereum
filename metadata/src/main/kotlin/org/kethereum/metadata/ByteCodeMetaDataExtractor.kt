@@ -13,7 +13,6 @@ import java.math.BigInteger
 fun ByteCode.getMetaDataCBOR(): MetaDataInByteCodeCBOR {
     val length = BigInteger(byteCode.sliceArray((byteCode.size - 2) until byteCode.size))
     val cbor = byteCode.sliceArray((byteCode.size - 2 - length.toInt()) until (byteCode.size - 2))
-    MetaDataInByteCodeCBOR.serializer()
     return Cbor.decodeFromByteArray(MetaDataInByteCodeCBOR.serializer(), cbor)
 }
 
