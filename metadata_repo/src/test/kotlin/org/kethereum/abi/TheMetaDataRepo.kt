@@ -19,8 +19,10 @@ class TheMetaDataRepo {
 
     @Test
     fun returnsFailForNoRepos() {
+        val mockWebServer = MockWebServer()
+        mockWebServer.enqueue(MockResponse().setResponseCode(404))
 
-        val tested = MetaDataRepoHttpWithCacheImpl()
+        val tested = MetaDataRepoHttpWithCacheImpl(repoURL = mockWebServer.url("").toString())
         assertThat(tested.getMetaDataForAddressOnChain(TEST_ADDRESSES.first(), ChainId(5))).isInstanceOf(MetaDataNotAvailable::class.java)
     }
 
@@ -40,13 +42,15 @@ class TheMetaDataRepo {
 
     @Test
     fun returnsNotAvailableWithCacheButWrongContent() {
+        val mockWebServer = MockWebServer()
+        mockWebServer.enqueue(MockResponse().setResponseCode(404))
 
         val cache = createTempDir()
         File(cache, TEST_ADDRESSES.last().toString() + 5).apply {
             createNewFile()
             writer().use { writeText(testMetaDataJSON) }
         }
-        val tested = MetaDataRepoHttpWithCacheImpl(cacheDir = cache)
+        val tested = MetaDataRepoHttpWithCacheImpl(cacheDir = cache, repoURL = mockWebServer.url("").toString())
 
         assertThat(tested.getMetaDataForAddressOnChain(TEST_ADDRESSES.first(), ChainId(5))).isInstanceOf(MetaDataNotAvailable::class.java)
     }
