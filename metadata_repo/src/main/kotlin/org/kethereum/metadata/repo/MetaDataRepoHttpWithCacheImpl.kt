@@ -28,10 +28,10 @@ class MetaDataRepoHttpWithCacheImpl(private val repoURL: String = "https://repo.
         val url = repoURL + "/" + chain.value + "/" + address.withERC55Checksum() + "/metadata.json"
         return try {
             val response = okHttpClient.newCall(Request.Builder().url(url).build()).execute()
-            when (response.code()) {
+            when (response.code) {
                 404 -> MetaDataNotAvailable
                 200 -> {
-                    val metaDataString = response.body()?.use {
+                    val metaDataString = response.body?.use {
                         val result = it.string()
                         EthereumMetadataString(result)
                     }
@@ -49,7 +49,7 @@ class MetaDataRepoHttpWithCacheImpl(private val repoURL: String = "https://repo.
                         MetaDataResolveFail("Cannot parse metadata from $url")
                     }
                 }
-                else -> MetaDataResolveFail("Cannot get MetaData " + response.message() + " ( code " + response.code() + ")")
+                else -> MetaDataResolveFail("Cannot get MetaData " + response.message + " ( code " + response.code + ")")
             }
         } catch (e: Exception) {
             MetaDataResolveFail("Cannot get MetaData " + e.message)

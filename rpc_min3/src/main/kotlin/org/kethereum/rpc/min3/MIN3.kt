@@ -4,6 +4,7 @@ import com.squareup.moshi.Moshi
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
 import org.kethereum.model.ChainId
 import org.kethereum.rpc.BaseEthereumRPC
 import org.kethereum.rpc.JSONMediaType
@@ -67,13 +68,13 @@ class MIN3Transport(private val bootNodes: List<String>,
             val request = buildRequest(payload, url)
             val maybeResult = try {
                 val execute = okHttpClient.newCall(request).execute()
-                val responseString = execute.body()?.use { it.string() }
+                val responseString = execute.body?.use { it.string() }
 
                 if (debug) {
-                    println("MIN3Transport> response code: ${execute.code()} - body: $responseString")
+                    println("MIN3Transport> response code: ${execute.code} - body: $responseString")
                 }
 
-                if (execute.code() == 200 && responseString?.startsWith("{") == true) {
+                if (execute.code == 200 && responseString?.startsWith("{") == true) {
                     responseString
                 } else {
                     null
@@ -110,5 +111,5 @@ class MIN3Transport(private val bootNodes: List<String>,
             .method("POST", body)
             .build()
 
-    private fun buildRequest(payload: String, url: String) = buildRequest(RequestBody.create(JSONMediaType, payload), url)
+    private fun buildRequest(payload: String, url: String) = buildRequest(payload.toRequestBody(JSONMediaType), url)
 }
