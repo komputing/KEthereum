@@ -23,5 +23,5 @@ dependencies {
     "implementation"(project(":abi_codegen"))
 
     "implementation"("com.squareup.okhttp3:okhttp:${Versions.okhttp}")
-    "implementation"("com.squareup.okio:okio:2.4.0")
+    "implementation"("com.squareup.okio:okio:${Versions.okio}")
 }
