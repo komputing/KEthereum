@@ -43,6 +43,12 @@ class TheParser {
     }
 
     @Test
+    fun canParseNoOptimizerEnabledField() {
+        val tested = EthereumMetadataString(testDataOptimizerSettingsNoEnabledField).parse()
+        assertNotNull(tested)
+    }
+
+    @Test
     fun returnsNullForBadJson() {
         val tested = EthereumMetadataString("yolo").parse()
         assertThat(tested).isNull()

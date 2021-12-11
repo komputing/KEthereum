@@ -4,9 +4,8 @@ import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
 data class OptimizerSettings(
-        val enabled: Boolean,
+        val enabled: Boolean?,
         val runs: Int
-
 )
 
 @JsonClass(generateAdapter = true)
