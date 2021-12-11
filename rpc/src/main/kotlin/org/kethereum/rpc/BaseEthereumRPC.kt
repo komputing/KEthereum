@@ -2,13 +2,13 @@ package org.kethereum.rpc
 
 import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Moshi
+import org.kethereum.extensions.BigIntegerAdapter
 import org.kethereum.extensions.hexToBigInteger
 import org.kethereum.extensions.toHexString
 import org.kethereum.model.Address
 import org.kethereum.model.ByteCode
 import org.kethereum.model.ChainId
 import org.kethereum.model.Transaction
-import org.kethereum.rpc.model.BigIntegerAdapter
 import org.kethereum.rpc.model.BlockInformationResponse
 import org.kethereum.rpc.model.FeeHistoryResponse
 import org.kethereum.rpc.model.StringResultResponse

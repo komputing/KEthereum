@@ -1,5 +1,7 @@
 package org.kethereum.extensions
 
+import com.squareup.moshi.FromJson
+import com.squareup.moshi.ToJson
 import org.komputing.khex.extensions.clean0xPrefix
 import org.komputing.khex.extensions.has0xPrefix
 import org.komputing.khex.model.HexString
@@ -54,3 +56,12 @@ fun HexString.maybeHexToBigInteger() = if (has0xPrefix()) {
 fun ByteArray.toBigInteger(offset: Int, length: Int) = BigInteger(1, copyOfRange(offset, offset + length))
 fun ByteArray.toBigInteger() = BigInteger(1, this)
 
+class BigIntegerAdapter {
+
+    @ToJson
+    fun toJson(bigInteger: BigInteger) = bigInteger.toString()
+
+    @FromJson
+    fun fromJson(string: String) = BigInteger(string)
+
+}

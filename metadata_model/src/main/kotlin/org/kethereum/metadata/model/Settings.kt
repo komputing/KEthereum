@@ -1,11 +1,12 @@
 package org.kethereum.metadata.model
 
 import com.squareup.moshi.JsonClass
+import java.math.BigInteger
 
 @JsonClass(generateAdapter = true)
 data class OptimizerSettings(
         val enabled: Boolean?,
-        val runs: Int
+        val runs: BigInteger
 )
 
 @JsonClass(generateAdapter = true)

@@ -49,6 +49,12 @@ class TheParser {
     }
 
     @Test
+    fun canParseWithLargeOptimizerRunsValue() {
+        val tested = EthereumMetadataString(testDataLargeOptimizerRunsValue).parse()
+        assertNotNull(tested)
+    }
+
+    @Test
     fun returnsNullForBadJson() {
         val tested = EthereumMetadataString("yolo").parse()
         assertThat(tested).isNull()
