@@ -1,5 +1,8 @@
 package org.kethereum.abi.model
 
+import com.squareup.moshi.JsonClass
+
+@JsonClass(generateAdapter = true)
 data class EthereumFunction(
         val name: String,
         val payable: Boolean,

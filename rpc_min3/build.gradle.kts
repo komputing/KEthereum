@@ -1,4 +1,9 @@
+plugins {
+    kotlin("kapt")
+}
+
 dependencies {
+    kapt("com.squareup.moshi:moshi-kotlin-codegen:${Versions.moshi}")
     implementation(project(":rpc"))
     implementation(project(":model"))
     api("com.squareup.okhttp3:okhttp:${Versions.okhttp}")

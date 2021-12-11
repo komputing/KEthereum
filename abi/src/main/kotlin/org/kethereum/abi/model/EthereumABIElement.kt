@@ -1,5 +1,7 @@
 package org.kethereum.abi.model
 
+import com.squareup.moshi.JsonClass
+
 enum class StateMutability {
     pure,
     view,
@@ -7,6 +9,7 @@ enum class StateMutability {
     nonpayable
 }
 
+@JsonClass(generateAdapter = true)
 data class EthereumABIElement(
         val name: String?,
         val id: String?,

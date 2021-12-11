@@ -1,4 +1,9 @@
+plugins {
+    kotlin("kapt")
+}
+
 dependencies {
+    kapt("com.squareup.moshi:moshi-kotlin-codegen:${Versions.moshi}")
     "implementation"(project(":crypto"))
     "implementation"(project(":crypto_api"))
     "implementation"(project(":keccak_shortcut"))

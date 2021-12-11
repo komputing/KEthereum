@@ -1,7 +1,10 @@
 package org.kethereum.rpc.model
 
+import com.squareup.moshi.JsonClass
+
+@JsonClass(generateAdapter = true)
 internal open class BaseResponse(
-        val jsonrpc: String = "",
-        val id: String = "",
-        val error: Error? = null
+        var jsonrpc: String = "",
+        var id: String = "",
+        var error: Error? = null
 )

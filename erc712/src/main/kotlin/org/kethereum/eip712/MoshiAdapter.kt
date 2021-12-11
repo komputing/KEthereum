@@ -1,5 +1,6 @@
 package org.kethereum.eip712
 
+import com.squareup.moshi.JsonClass
 import com.squareup.moshi.Moshi
 import okio.buffer
 import okio.source
@@ -29,6 +30,7 @@ class MoshiAdapter : EIP712JsonAdapter {
         )
     }
 
+    @JsonClass(generateAdapter = true)
     data class TypedData(
         val types: Map<String, List<TypeParam>>,
         val primaryType: String,
@@ -36,6 +38,7 @@ class MoshiAdapter : EIP712JsonAdapter {
         val message: Map<String, Any>
     )
 
+    @JsonClass(generateAdapter = true)
     data class TypeParam(
         val name: String,
         val type: String

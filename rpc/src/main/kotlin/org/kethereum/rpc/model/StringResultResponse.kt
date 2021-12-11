@@ -1,3 +1,6 @@
 package org.kethereum.rpc.model
 
-internal data class StringResultResponse(val result: String) : BaseResponse()
+import com.squareup.moshi.JsonClass
+
+@JsonClass(generateAdapter = true)
+internal data class StringResultResponse(val result: String?) : BaseResponse()

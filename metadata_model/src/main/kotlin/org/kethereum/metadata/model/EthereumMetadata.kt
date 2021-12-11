@@ -1,5 +1,8 @@
 package org.kethereum.metadata.model
 
+import com.squareup.moshi.JsonClass
+
+@JsonClass(generateAdapter = true)
 data class EthereumMetaData(
         val version: Int,
         val compiler: EthereumCompiler,

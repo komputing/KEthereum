@@ -1,9 +1,11 @@
 package org.kethereum.rpc.model
 
+import com.squareup.moshi.JsonClass
 import org.kethereum.model.SignedTransaction
 import org.komputing.khex.model.HexString
 import java.math.BigInteger
 
+@JsonClass(generateAdapter = true)
 data class BlockInformation(
         val number: BigInteger,
         val hash: HexString,

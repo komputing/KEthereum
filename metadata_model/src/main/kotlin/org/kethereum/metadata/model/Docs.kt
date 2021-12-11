@@ -1,9 +1,8 @@
 package org.kethereum.metadata.model
 
-data class Doc(
-        val details: String
-)
+import com.squareup.moshi.JsonClass
 
+@JsonClass(generateAdapter = true)
 data class Docs(
         val details: String?,
         val methods: Map<String, Any>

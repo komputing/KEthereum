@@ -1,4 +1,9 @@
+plugins {
+    kotlin("kapt")
+}
+
 dependencies {
+    kapt("com.squareup.moshi:moshi-kotlin-codegen:${Versions.moshi}")
     implementation(project(":model"))
     implementation(project(":extensions_kotlin"))
 

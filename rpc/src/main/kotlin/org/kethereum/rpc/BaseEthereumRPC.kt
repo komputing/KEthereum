@@ -92,9 +92,9 @@ open class BaseEthereumRPC(private val transport: RPCTransport) : EthereumRPC {
 
 @Throws(EthereumRPCException::class)
 private fun StringResultResponse.throwOrString() = if (error != null)
-    throw (EthereumRPCException(error.message, error.code))
+    throw (EthereumRPCException(error!!.message, error!!.code))
 else
-    result
+    result!!
 
 @Throws(EthereumRPCException::class)
 private fun StringResultResponse.getBigIntegerFromStringResult() = HexString(throwOrString()).hexToBigInteger()
