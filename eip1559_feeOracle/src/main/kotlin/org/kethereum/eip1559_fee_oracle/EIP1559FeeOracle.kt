@@ -97,10 +97,11 @@ internal fun suggestPriorityFee(firstBlock: Int, gasUsedRatio: List<Float>, rpc:
             // feeHistory API call with reward percentile specified is expensive and therefore is only requested for a few non-full recent blocks.
             val feeHistory = rpc.getFeeHistory(blockCount, "0x" + (firstBlock + ptr).toString(16), rewardPercentile.toString())
 
-            (0 until feeHistory!!.reward.size).forEach {
-                rewards.add(HexString(feeHistory.reward[it].first().removePrefix("0x")).hexToBigInteger())
+            val rewardSize = feeHistory?.reward?.size ?: 0
+            (0 until rewardSize).forEach {
+                rewards.add(HexString(feeHistory!!.reward!![it].first().removePrefix("0x")).hexToBigInteger())
             }
-            if (feeHistory.reward.size < blockCount) break
+            if (rewardSize < blockCount) break
             needBlocks -= blockCount
         }
         ptr -= blockCount + 1

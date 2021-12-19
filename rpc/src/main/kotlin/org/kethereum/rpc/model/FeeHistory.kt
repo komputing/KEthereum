@@ -6,4 +6,4 @@ import com.squareup.moshi.JsonClass
 data class FeeHistory(val oldestBlock: String,
                       val baseFeePerGas: List<String>,
                       val gasUsedRatio: List<Float>,
-                      val reward: List<List<String>>)
+                      val reward: List<List<String>>?)
