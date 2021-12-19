@@ -1,5 +1,5 @@
 object Versions {
-    const val kotlin = "1.5.30"
+    const val kotlin = "1.6.10"
     const val versions_plugin = "0.39.0"
     const val jupiter = "5.8.2"
     const val moshi = "1.13.0"
