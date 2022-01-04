@@ -60,6 +60,18 @@ class TheEthereumRPC {
     fun sendTxErrorWorks() {
         //language=JSON
         val response =
+            "{\"jsonrpc\":\"2.0\",\"error\":{\"code\":-32010,\"message\":\"the method eth_feeHistory does not exist/is not available\"},\"id\":1,\"in3\":{\"lastValidatorChange\":68593,\"lastNodeList\":21988,\"execTime\":76}}\n"
+        server.enqueue(MockResponse().setBody(response))
+
+        assertFails("Transaction with the same hash was already imported.") {
+            tested.getFeeHistory(10)
+        }
+    }
+
+    @Test
+    fun feeHistoryErrorThrows() {
+        //language=JSON
+        val response =
             "{\"jsonrpc\":\"2.0\",\"error\":{\"code\":-32010,\"message\":\"Transaction with the same hash was already imported.\"},\"id\":1,\"in3\":{\"lastValidatorChange\":68593,\"lastNodeList\":21988,\"execTime\":76}}\n"
         server.enqueue(MockResponse().setBody(response))
 

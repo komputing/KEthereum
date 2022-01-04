@@ -9,6 +9,8 @@ import org.kethereum.model.Address
 import org.kethereum.model.ByteCode
 import org.kethereum.model.ChainId
 import org.kethereum.model.Transaction
+import org.kethereum.rpc.model.*
+import org.kethereum.rpc.model.BaseResponse
 import org.kethereum.rpc.model.BlockInformationResponse
 import org.kethereum.rpc.model.FeeHistoryResponse
 import org.kethereum.rpc.model.StringResultResponse
@@ -82,7 +84,7 @@ open class BaseEthereumRPC(private val transport: RPCTransport) : EthereumRPC {
     override fun getFeeHistory(blocks: Int, lastBlock: String, percentiles: String) =
         transport.call("eth_feeHistory", "\"0x${blocks.toString(16)}\",\"$lastBlock\",[$percentiles]")?.let { string ->
             feeHistoryAdapter.fromJsonNoThrow(string)
-        }?.result
+        }?.throwOnError()?.result
 
     @Throws(EthereumRPCException::class)
     override fun getTransactionByHash(hash: String) = transport.call("eth_getTransactionByHash", "\"$hash\"")?.let { string ->
@@ -91,10 +93,11 @@ open class BaseEthereumRPC(private val transport: RPCTransport) : EthereumRPC {
 }
 
 @Throws(EthereumRPCException::class)
-private fun StringResultResponse.throwOrString() = if (error != null)
-    throw (EthereumRPCException(error!!.message, error!!.code))
-else
-    result!!
+private fun StringResultResponse.throwOrString() = throwOnError().result!!
+
+@Throws(EthereumRPCException::class)
+private fun <T : BaseResponse> T.throwOnError() = error?.let { throw EthereumRPCException(it.message, it.code) } ?: this
+
 
 @Throws(EthereumRPCException::class)
 private fun StringResultResponse.getBigIntegerFromStringResult() = HexString(throwOrString()).hexToBigInteger()
