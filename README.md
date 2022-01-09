@@ -53,6 +53,7 @@ Projects that use KEthereum
 ===========================
 
  * [WallETH](https://walleth.org)
+ * [FaucETH](https://fauceth.komputing.org)
  * [goerli pusher](https://github.com/walleth/goerli_pusher) (pushes out TST tokens - good example on how to use KEthereum)
  * [Gnosis Safe Android App](https://github.com/gnosis/safe-android)
  * [kmnid](https://github.com/uport-project/kmnid)
