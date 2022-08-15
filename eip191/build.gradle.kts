@@ -7,6 +7,5 @@ dependencies {
 
     "implementation"("com.github.komputing:khex:${Versions.khex}")
 
-    "testImplementation"("com.github.komputing:khex:${Versions.khex}")
     "testImplementation"(project(":crypto_impl_spongycastle"))
 }
