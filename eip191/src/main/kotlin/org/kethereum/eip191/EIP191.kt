@@ -2,11 +2,9 @@ package org.kethereum.eip191
 
 import org.kethereum.crypto.signMessage
 import org.kethereum.crypto.signedMessageToKey
-import org.kethereum.crypto.toSignatureData
 import org.kethereum.model.ECKeyPair
 import org.kethereum.model.PublicKey
 import org.kethereum.model.SignatureData
-import org.komputing.khex.model.HexString
 
 /*
 *
@@ -23,10 +21,7 @@ fun ECKeyPair.signWithEIP191(version: Byte, versionSpecificData: ByteArray, mess
 fun ECKeyPair.signWithEIP191PersonalSign(message: ByteArray) =
     signWithEIP191(PERSONAL_SIGN_VERSION, personalSignVersionData(message), message)
 
-fun personallySignedMessageToKey(message: ByteArray, signature: String): PublicKey =
-    personallySignedMessageToKey(message, HexString(signature).toSignatureData())
-
-fun personallySignedMessageToKey(message: ByteArray, signature: SignatureData): PublicKey =
+fun personalSignedMessageToPublicKey(message: ByteArray, signature: SignatureData): PublicKey =
     signedMessageToKey(
         fullMessage(PERSONAL_SIGN_VERSION, personalSignVersionData(message), message),
         signature

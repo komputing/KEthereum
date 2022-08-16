@@ -27,8 +27,11 @@ class TheSignatures {
 
     @Test
     fun parsesHexToCorrectSignature() {
-        val signature = HexString(SIGNATURE)
+        assertThat(SignatureData.fromHex(SIGNATURE)).isEqualTo(signatureData)
+    }
 
-        assertThat(signature.toSignatureData()).isEqualTo(signatureData)
+    @Test
+    fun parsesHexWithPrefixToCorrectSignature() {
+        assertThat(SignatureData.fromHex("0x$SIGNATURE")).isEqualTo(signatureData)
     }
 }
