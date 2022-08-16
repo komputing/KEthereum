@@ -28,7 +28,7 @@ data class SignatureData(
             }
             val cleanedHex = HexString(hexSignature).clean0xPrefix().string
             if (cleanedHex.length <= 128) {
-                throw SignatureException("Signature hex too short, expected more then 128 digits")
+                throw SignatureException("Signature hex too short, expected more than 128 digits")
             }
             val r = HexString(cleanedHex.substring(0, 64)).hexToBigInteger()
             val s = HexString(cleanedHex.substring(64, 128)).hexToBigInteger()
