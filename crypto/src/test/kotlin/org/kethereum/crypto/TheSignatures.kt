@@ -1,10 +1,12 @@
 package org.kethereum.crypto
 
 import org.assertj.core.api.Assertions.assertThat
+import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Test
 import org.kethereum.extensions.hexToBigInteger
 import org.kethereum.model.SignatureData
 import org.komputing.khex.model.HexString
+import java.security.SignatureException
 
 private const val R = "0x0031f6d21dec448a213585a4a41a28ef3d4337548aa34734478b563036163786"
 private const val S = "0x2ff816ee6bbb82719e983ecd8a33a4b45d32a4b58377ef1381163d75eedc900b"
@@ -33,5 +35,19 @@ class TheSignatures {
     @Test
     fun parsesHexWithPrefixToCorrectSignature() {
         assertThat(SignatureData.fromHex("0x$SIGNATURE")).isEqualTo(signatureData)
+    }
+
+    @Test
+    fun throwsForInvalidHex() {
+        assertThatThrownBy { SignatureData.fromHex("${SIGNATURE}w") }
+            .isInstanceOf(SignatureException::class.java)
+            .hasMessageContaining("Invalid hex string")
+    }
+
+    @Test
+    fun throwsForShorterSignature() {
+        assertThatThrownBy { SignatureData.fromHex(SIGNATURE.substring(5)) }
+            .isInstanceOf(SignatureException::class.java)
+            .hasMessageContaining("Signature hex too short")
     }
 }
