@@ -4,7 +4,6 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.kethereum.crypto.createEthereumKeyPair
 import org.kethereum.crypto.signMessage
-import org.kethereum.crypto.toHex
 import org.kethereum.model.ECKeyPair
 import org.kethereum.model.SignatureData
 import java.util.UUID
@@ -26,18 +25,7 @@ class TheSignatures {
         val message = UUID.randomUUID().toString().toByteArray()
         val signature = keyPair.personallySign(message)
 
-        val actualKey = personallySignedMessageToKey(message, signature)
-
-        assertThat(actualKey).isEqualTo(keyPair.publicKey)
-    }
-
-    @Test
-    fun retrievesCorrectPublicKeyFromPersonalHexSignature() {
-        val keyPair = createEthereumKeyPair()
-        val message = UUID.randomUUID().toString().toByteArray()
-        val signature = keyPair.personallySign(message).toHex()
-
-        val actualKey = personallySignedMessageToKey(message, signature)
+        val actualKey = personalSignedMessageToPublicKey(message, signature)
 
         assertThat(actualKey).isEqualTo(keyPair.publicKey)
     }
