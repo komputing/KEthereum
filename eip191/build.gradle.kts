@@ -5,6 +5,5 @@ dependencies {
     "implementation"(project(":extensions_kotlin"))
     "implementation"(project(":rlp"))
 
-    "testImplementation"("com.github.komputing:khex:${Versions.khex}")
     "testImplementation"(project(":crypto_impl_spongycastle"))
 }
