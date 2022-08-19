@@ -20,7 +20,7 @@ dependencies {
     api("com.squareup.moshi:moshi:${Versions.moshi}")
     implementation(project(":abi"))
 
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-cbor:1.3.2")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-cbor:1.4.0")
     implementation("com.github.komputing:kotlin-multihash:0.3")
     implementation("com.github.komputing:khex:${Versions.khex}")
 
