@@ -41,42 +41,70 @@ class EIP712JsonParser(private val jsonAdapter: EIP712JsonAdapter) {
         values: Map<String, Any>,
         typeSpec: Map<String, List<EIP712JsonAdapter.Parameter>>
     ): Struct712 {
-        val params = typeSpec[typeName] ?: throw IllegalArgumentException("TypedDate does not contain type $typeName")
+        val params = typeSpec[typeName.withoutBrackets()] ?: throw IllegalArgumentException("TypedDate does not contain type $typeName")
         val innerParams = params.map { typeParam ->
-            val type712 = if (typeSpec.contains(typeParam.type)) {
-                // Struct
-                buildStruct712(
-                    typeName = typeParam.type,
-                    values = values[typeParam.name] as Map<String, Any>,
-                    typeSpec = typeSpec
-                )
-            } else {
-                // Literal
-                val rawValue = values[typeParam.name] ?: throw IllegalArgumentException("Could not get value for property ${typeParam.name}")
-                if (!NamedETHType(typeParam.type).isETHType()) throw IllegalArgumentException("Property with name ${typeParam.name} has invalid Solidity type ${typeParam.type}")
-                if (!NamedETHType(typeParam.type).isSupportedETHType()) throw IllegalArgumentException("Property with name ${typeParam.name} has unsupported Solidity type ${typeParam.type}")
-                val ethereumType = when {
-                    typeParam.type.startsWith(prefix = "uint") -> readNumber(rawNumber = rawValue, creator = { UIntETHType.ofNativeKotlinType(it,
-                        BitsTypeParams(typeParam.type.extractPrefixedNumber("uint", INT_BITS_CONSTRAINT))
-                    ) })
-
-                    typeParam.type.startsWith(prefix = "int") -> readNumber(rawNumber = rawValue, creator = { IntETHType.ofNativeKotlinType(it,
-                        BitsTypeParams(typeParam.type.extractPrefixedNumber("int", INT_BITS_CONSTRAINT))
-                    ) })
-
-                    typeParam.type == "bytes" -> DynamicSizedBytesETHType.ofNativeKotlinType(HexString(rawValue as String).hexToByteArray())
-                    typeParam.type == "string" ->  StringETHType.ofString(rawValue.toString())
-                    typeParam.type.startsWith(prefix = "bytes") -> BytesETHType.ofNativeKotlinType(HexString(rawValue as String).hexToByteArray(),
-                        BytesTypeParams(( typeParam.type.extractPrefixedNumber("bytes", BYTES_COUNT_CONSTRAINT))))
-                    typeParam.type == "bool" -> readBool(rawBool = rawValue)
-                    typeParam.type == "address" -> readNumber(rawNumber = rawValue, creator = { AddressETHType.ofNativeKotlinType(Address(it.toByteArray().toHexString())) })
-                    else -> throw IllegalArgumentException("Unknown literal type ${typeParam.type}")
+            val type712 = if (typeSpec.contains(typeParam.type.withoutBrackets())) {
+                if(typeParam.type.isArray()) {
+                    //Array
+                    Array712(
+                        typeName = typeParam.type,
+                        items = (values[typeParam.name] as ArrayList<Map<String, Any>>).map {
+                            buildStruct712(
+                                typeName = typeParam.type.withoutBrackets(),
+                                values =   it,
+                                typeSpec = typeSpec
+                            )
+                        }
+                    )
+                } else {
+                    // Struct
+                    buildStruct712(
+                        typeName = typeParam.type,
+                        values = values[typeParam.name] as Map<String, Any>,
+                        typeSpec = typeSpec
+                    )
                 }
-                Literal712(typeName = typeParam.type, value = ethereumType)
+            } else {
+                val rawValue = values[typeParam.name] ?: throw IllegalArgumentException("Could not get value for property ${typeParam.name}")
+                if(typeParam.type.isArray()) {
+                    // Literal Array
+                    Array712(
+                        typeName = typeParam.type,
+                        items = (rawValue as ArrayList<Any>).map {
+                            parseLiteral(typeParam.type.withoutBrackets(), it)
+                        }
+                    )
+                } else {
+                    // Literal
+                    parseLiteral(typeParam.type, rawValue)
+                }
             }
             Struct712Parameter(name = typeParam.name, type = type712)
         }
         return Struct712(typeName = typeName, parameters = innerParams)
+    }
+
+    private fun parseLiteral(type: String, rawValue: Any): Literal712 {
+        if (!NamedETHType(type).isETHType()) throw IllegalArgumentException("Property  has invalid Solidity type $type")
+        if (!NamedETHType(type).isSupportedETHType()) throw IllegalArgumentException("Property  has unsupported Solidity type $type")
+        val ethereumType = when {
+            type.startsWith(prefix = "uint") -> readNumber(rawNumber = rawValue, creator = { UIntETHType.ofNativeKotlinType(it,
+                    BitsTypeParams(type.extractPrefixedNumber("uint", INT_BITS_CONSTRAINT))
+            ) })
+
+            type.startsWith(prefix = "int") -> readNumber(rawNumber = rawValue, creator = { IntETHType.ofNativeKotlinType(it,
+                    BitsTypeParams(type.extractPrefixedNumber("int", INT_BITS_CONSTRAINT))
+            ) })
+
+            type == "bytes" -> DynamicSizedBytesETHType.ofNativeKotlinType(HexString(rawValue as String).hexToByteArray())
+            type == "string" ->  StringETHType.ofString(rawValue.toString())
+            type.startsWith(prefix = "bytes") -> BytesETHType.ofNativeKotlinType(HexString(rawValue as String).hexToByteArray(),
+                    BytesTypeParams(( type.extractPrefixedNumber("bytes", BYTES_COUNT_CONSTRAINT))))
+            type == "bool" -> readBool(rawBool = rawValue)
+            type == "address" -> readNumber(rawNumber = rawValue, creator = { AddressETHType.ofNativeKotlinType(Address(it.toByteArray().toHexString())) })
+            else -> throw IllegalArgumentException("Unknown literal type $type")
+        }
+        return Literal712(typeName = type, value = ethereumType)
     }
 
     private fun <T> readNumber(rawNumber: Any, creator: (BigInteger) -> T): T =
@@ -97,4 +125,8 @@ class EIP712JsonParser(private val jsonAdapter: EIP712JsonAdapter) {
 
     private fun BigDecimal.exactNumber() =
         try { toBigIntegerExact() } catch (e:Exception) { throw IllegalArgumentException("Value ${toString()} is a decimal (not supported)") }
+
+    private fun String.isArray() = endsWith("[]")
+
+    private fun String.withoutBrackets() = replace("[]", "")
 }

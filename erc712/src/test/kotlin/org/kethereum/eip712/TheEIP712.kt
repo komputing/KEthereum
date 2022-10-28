@@ -67,6 +67,12 @@ private val PAYLOAD =
         value = DynamicSizedBytesETHType.ofNativeKotlinType(HexString("0x25192142931f380985072cdd991e37f65cf8253ba7a0e675b54163a1d133b8ca").hexToByteArray())
     )
 
+private val PERSONS_ARRAY =
+    Array712(
+        typeName = "Person[]",
+        items = listOf(TO_PERSON, TO_PERSON)
+    )
+
 class TheEIP712 {
 
     @Test
@@ -129,6 +135,28 @@ class TheEIP712 {
         )
     }
 
+    @Test
+    fun eip712Arrays() {
+        val mail = Struct712(
+            typeName = "Mail",
+            parameters = listOf(
+                "from" asParameterNameFor FROM_PERSON,
+                "to" asParameterNameFor PERSONS_ARRAY,
+                "contents" asParameterNameFor CONTENTS,
+                "payload" asParameterNameFor PAYLOAD
+            )
+        )
+
+        assertEquals(
+            "3dddc94d13b9ebab8e68f1428610e81839fcd751bdee402b12d2b3de3aace1fd",
+            mail.typeHash.toNoPrefixHexString()
+        )
+
+        assertEquals(
+            "4148811799cb2d2aa038a824a7b9eb958497a7dfaf6cc87de2218f71dc26a7d5",
+            mail.hashStruct().toNoPrefixHexString()
+        )
+    }
 
     @Test
     fun testSignature() {
