@@ -171,6 +171,28 @@ class MoshiAdapterTest {
     }
 
     @Test
+    fun payloadWithArrays() {
+        val inputSource = javaClass.classLoader.getResourceAsStream("payload_with_arrays.json")
+            ?: throw IllegalStateException("Could not read file")
+
+        val domainWithMessage = EIP712JsonParser(MoshiAdapter()).parseMessage(inputSource)
+        assertEquals(
+            "8b73c3c69bb8fe3d512ecc4cf759cc79239f7b179b0ffacaa9a75d522b39400f",
+            domainWithMessage.domain.typeHash.toNoPrefixHexString()
+        )
+
+        assertEquals(
+            "6fa0fa0b3d6720bb5f2c406bfc24ab2eb459b35e446bfa95d5d4d6d4212360fc",
+            domainWithMessage.message.typeHash.toNoPrefixHexString()
+        )
+
+        assertEquals(
+            "e0005ea800dd5014ae8511bd4cf81824d021f20af255acfc5b38be1e8ee98a43",
+            typedDataHash(domainWithMessage.message, domainWithMessage.domain).toNoPrefixHexString()
+        )
+    }
+
+    @Test
     fun shouldFailForInvalidType() {
         val inputSource = javaClass.classLoader.getResourceAsStream("invalid_type.json")
             ?: throw IllegalStateException("Could not read file")

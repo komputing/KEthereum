@@ -61,6 +61,7 @@ Projects that use KEthereum
  * [KHardwareWallet](https://github.com/walleth/KHardWareWallet)
  * multiple scripts in [ethereum-lists](https://github.com/ethereum-lists)
  * [mobidex](https://github.com/sigillabs/mobidex)
+ * [Minerva Wallet](https://minerva.digital)
  * add yours
 
 Links

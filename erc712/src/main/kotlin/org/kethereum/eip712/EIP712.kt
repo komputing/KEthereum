@@ -1,8 +1,6 @@
 package pm.gnosis.eip712
 
-import org.kethereum.contract.abi.types.allETHTypes
 import org.kethereum.contract.abi.types.model.ETHType
-import org.kethereum.contract.abi.types.model.types.AddressETHType
 import org.kethereum.contract.abi.types.model.types.BytesETHType
 import org.kethereum.contract.abi.types.model.types.DynamicSizedBytesETHType
 import org.kethereum.contract.abi.types.model.types.StringETHType
@@ -17,29 +15,35 @@ internal infix fun String.asParameterNameFor(type: Type712) = Struct712Parameter
 
 sealed class Type712 {
     abstract val typeName: String
+
+    abstract fun encode(): ByteArray
 }
 
-class Literal712(override val typeName: String, val value: ETHType<out Any>) : Type712()
+class Literal712(override val typeName: String, val value: ETHType<out Any>) : Type712() {
+
+    override fun encode(): ByteArray {
+        return when (value) {
+            is StringETHType -> value.toKotlinType().toByteArray().keccak()
+            is BytesETHType -> value.toKotlinType().keccak()
+            is DynamicSizedBytesETHType -> value.toKotlinType().keccak()
+            else -> value.paddedValue
+        }
+    }
+}
 
 class Struct712(override val typeName: String, val parameters: List<Struct712Parameter>) : Type712() {
+
     fun hashStruct(): ByteArray {
-        val encodeParameters = encodeParameters()
-        val myTypeHash = typeHash
-        return (myTypeHash + encodeParameters).keccak()
+        return (typeHash + encode()).keccak()
     }
 
     val typeHash by lazy {
         (encodeType().joinToString(separator = "").toByteArray(charset = Charsets.UTF_8)).keccak()
     }
 
-    private fun encodeParameters(): ByteArray =
+    override fun encode(): ByteArray =
         parameters.map { (_, type) ->
-            when (type) {
-                is Struct712 -> type.hashStruct()
-                is Literal712 -> {
-                    encodeSolidityType(type.value)
-                }
-            }
+            encodeItem(type)
         }.reduce { acc, bytes -> acc + bytes }
 
     private fun encodeType(): List<String> {
@@ -52,11 +56,20 @@ class Struct712(override val typeName: String, val parameters: List<Struct712Par
     }
 }
 
-private fun encodeSolidityType(value: ETHType<out Any>): ByteArray = when (value) {
-    is StringETHType -> value.toKotlinType().toByteArray().keccak()
-    is BytesETHType -> value.toKotlinType().keccak()
-    is DynamicSizedBytesETHType -> value.toKotlinType().keccak()
-    else -> value.paddedValue
+class Array712(override val typeName: String, val items: List<Type712>) : Type712() {
+
+    override fun encode(): ByteArray =
+        items.map {
+            encodeItem(it)
+        }.reduce { acc, bytes -> acc + bytes }.keccak()
+}
+
+private fun encodeItem(item : Type712): ByteArray {
+    return when (item) {
+        is Struct712 -> item.hashStruct()
+        is Literal712 -> item.encode()
+        is Array712 -> item.encode()
+    }
 }
 
 fun typedDataHash(message: Struct712, domain: Struct712): ByteArray =
