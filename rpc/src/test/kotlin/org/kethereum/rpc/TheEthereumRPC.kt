@@ -8,6 +8,7 @@ import org.junit.Before
 import org.junit.jupiter.api.Test
 import org.kethereum.extensions.hexToBigInteger
 import org.kethereum.model.Address
+import org.kethereum.model.SignatureData
 import org.kethereum.model.SignedTransaction
 import org.kethereum.rpc.model.BlockInformation
 import org.komputing.khex.extensions.hexToByteArray
@@ -16,6 +17,7 @@ import java.math.BigInteger
 import java.math.BigInteger.TEN
 import java.math.BigInteger.ZERO
 import kotlin.test.assertFails
+import kotlin.test.assertNotEquals
 
 class TheEthereumRPC {
 
@@ -252,5 +254,28 @@ class TheEthereumRPC {
             .isEqualTo(HexString("0x76d4be3d62b9e6e6bb8c494c3228f4df31b5c20d8f892fe1d9d35f07afab3d73").hexToBigInteger())
     }
 
+    @Test
+    fun accountsWorks() {
+        //language=JSON
+        val response = "{\"jsonrpc\":\"2.0\",\"id\":83,\"result\":[\"0x694b63b2e053a0c93074795a1025869576389b70\"]}\n"
+        server.enqueue(MockResponse().setBody(response))
 
+        val expected = listOf(Address("0x694b63b2e053a0c93074795a1025869576389b70"))
+        assertThat(tested.accounts()).isEqualTo(expected)
+    }
+
+    @Test
+    fun signWorks() {
+        //language=JSON
+        val response = "{\"jsonrpc\":\"2.0\",\"id\":83,\"result\":\"0xa4708243bf782c6769ed04d83e7192dbcf4fc131aa54fde9d889d8633ae39dab03d7babd2392982dff6bc20177f7d887e27e50848c851320ee89c6c63d18ca761c\"}\n"
+        server.enqueue(MockResponse().setBody(response))
+
+        val result: SignatureData = tested.sign(
+            address = Address("0x694b63b2e053a0c93074795a1025869576389b70"),
+            message = "Hello World".encodeToByteArray()
+        )
+        assertNotEquals(ZERO, result.r)
+        assertNotEquals(ZERO, result.s)
+        assertNotEquals(ZERO, result.v)
+    }
 }
