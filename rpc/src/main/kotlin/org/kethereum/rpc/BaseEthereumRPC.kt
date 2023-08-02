@@ -34,7 +34,7 @@ open class BaseEthereumRPC(private val transport: RPCTransport) : EthereumRPC {
 
     private val feeHistoryAdapter: JsonAdapter<FeeHistoryResponse> = moshi.adapter(FeeHistoryResponse::class.java)
 
-    private fun stringCall(function: String, params: String = ""): StringResultResponse? {
+    override fun stringCall(function: String, params: String): StringResultResponse? {
         return transport.call(function, params)?.let { string -> stringResultAdapter.fromJsonNoThrow(string) }
     }
 
