@@ -12,7 +12,6 @@ interface EthereumRPC {
 
     fun getBlockByNumber(number: BigInteger): BlockInformation?
     fun getTransactionByHash(hash: String): SignedTransaction?
-
     fun stringCall(function: String, params: String = ""): StringResultResponse?
     fun sendRawTransaction(data: String): String?
     fun blockNumber(): BigInteger?
