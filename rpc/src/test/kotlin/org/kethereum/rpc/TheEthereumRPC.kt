@@ -270,12 +270,12 @@ class TheEthereumRPC {
         val response = "{\"jsonrpc\":\"2.0\",\"id\":83,\"result\":\"0xa4708243bf782c6769ed04d83e7192dbcf4fc131aa54fde9d889d8633ae39dab03d7babd2392982dff6bc20177f7d887e27e50848c851320ee89c6c63d18ca761c\"}\n"
         server.enqueue(MockResponse().setBody(response))
 
-        val result: SignatureData = tested.sign(
+        val result: SignatureData? = tested.sign(
             address = Address("0x694b63b2e053a0c93074795a1025869576389b70"),
             message = "Hello World".encodeToByteArray()
         )
-        assertNotEquals(ZERO, result.r)
-        assertNotEquals(ZERO, result.s)
-        assertNotEquals(ZERO, result.v)
+        assertNotEquals(ZERO, result?.r)
+        assertNotEquals(ZERO, result?.s)
+        assertNotEquals(ZERO, result?.v)
     }
 }
