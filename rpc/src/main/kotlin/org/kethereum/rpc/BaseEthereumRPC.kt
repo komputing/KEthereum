@@ -62,9 +62,12 @@ open class BaseEthereumRPC(private val transport: RPCTransport) : EthereumRPC {
     override fun chainId() = stringCall("eth_chainId")?.getBigIntegerFromStringResult()?.let { ChainId(it) }
 
     @Throws(EthereumRPCException::class)
-    override fun accounts() = transport.call("eth_accounts")?.let { string ->
-        stringArrayAdapter.fromJsonNoThrow(string)
-    }?.result?.map { Address(it) }
+    override fun accounts(): List<Address>? {
+        val call = transport.call("eth_accounts", "")?.let { string ->
+            stringArrayAdapter.fromJson(string)
+        }
+       return call?.result?.map { Address(it) }
+    }
 
     @Throws(EthereumRPCException::class)
     override fun sign(address: Address, message: ByteArray) =
