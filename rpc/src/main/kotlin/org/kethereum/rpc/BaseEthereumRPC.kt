@@ -70,8 +70,11 @@ open class BaseEthereumRPC(private val transport: RPCTransport) : EthereumRPC {
     }
 
     @Throws(EthereumRPCException::class)
-    override fun sign(address: Address, message: ByteArray) =
-        stringCall("eth_sign", "\"${address.hex}\",\"${message.toHexString()}\"")?.throwOrString()?.let { SignatureData.fromHex(it) }
+    override fun sign(address: Address, message: ByteArray): SignatureData? =
+        stringCall("eth_sign", "\"${address.hex}\",\"${message.toHexString()}\"")
+            ?.throwOrString()
+            ?.let { SignatureData.fromHex(it) }
+            ?.let { SignatureData(r = it.r, s = it.s, v = it.v.plus(27.toBigInteger())) }
 
     @Throws(EthereumRPCException::class)
     override fun getStorageAt(address: Address, position: String, block: String) =
