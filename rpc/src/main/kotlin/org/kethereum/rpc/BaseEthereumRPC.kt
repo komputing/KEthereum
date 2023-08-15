@@ -5,10 +5,7 @@ import com.squareup.moshi.Moshi
 import org.kethereum.extensions.BigIntegerAdapter
 import org.kethereum.extensions.hexToBigInteger
 import org.kethereum.extensions.toHexString
-import org.kethereum.model.Address
-import org.kethereum.model.ByteCode
-import org.kethereum.model.ChainId
-import org.kethereum.model.Transaction
+import org.kethereum.model.*
 import org.kethereum.rpc.model.*
 import org.kethereum.rpc.model.BaseResponse
 import org.kethereum.rpc.model.BlockInformationResponse
@@ -16,6 +13,7 @@ import org.kethereum.rpc.model.FeeHistoryResponse
 import org.kethereum.rpc.model.StringResultResponse
 import org.kethereum.rpc.model.TransactionResponse
 import org.komputing.khex.extensions.hexToByteArray
+import org.komputing.khex.extensions.toHexString
 import org.komputing.khex.model.HexString
 import java.io.IOException
 import java.math.BigInteger
@@ -33,6 +31,8 @@ open class BaseEthereumRPC(private val transport: RPCTransport) : EthereumRPC {
     private val transactionAdapter: JsonAdapter<TransactionResponse> = moshi.adapter(TransactionResponse::class.java)
 
     private val feeHistoryAdapter: JsonAdapter<FeeHistoryResponse> = moshi.adapter(FeeHistoryResponse::class.java)
+
+    private val stringArrayAdapter: JsonAdapter<StringArrayResponse> = moshi.adapter(StringArrayResponse::class.java)
 
     override fun stringCall(function: String, params: String): StringResultResponse? {
         return transport.call(function, params)?.let { string -> stringResultAdapter.fromJsonNoThrow(string) }
@@ -60,6 +60,21 @@ open class BaseEthereumRPC(private val transport: RPCTransport) : EthereumRPC {
 
     @Throws(EthereumRPCException::class)
     override fun chainId() = stringCall("eth_chainId")?.getBigIntegerFromStringResult()?.let { ChainId(it) }
+
+    @Throws(EthereumRPCException::class)
+    override fun accounts(): List<Address>? {
+        val call = transport.call("eth_accounts", "")?.let { string ->
+            stringArrayAdapter.fromJson(string)
+        }
+       return call?.result?.map { Address(it) }
+    }
+
+    @Throws(EthereumRPCException::class)
+    override fun sign(address: Address, message: ByteArray): SignatureData? =
+        stringCall("eth_sign", "\"${address.hex}\",\"${message.toHexString()}\"")
+            ?.throwOrString()
+            ?.let { SignatureData.fromHex(it) }
+            ?.let { SignatureData(r = it.r, s = it.s, v = it.v.plus(27.toBigInteger())) }
 
     @Throws(EthereumRPCException::class)
     override fun getStorageAt(address: Address, position: String, block: String) =
@@ -97,7 +112,6 @@ private fun StringResultResponse.throwOrString() = throwOnError().result!!
 
 @Throws(EthereumRPCException::class)
 private fun <T : BaseResponse> T.throwOnError() = error?.let { throw EthereumRPCException(it.message, it.code) } ?: this
-
 
 @Throws(EthereumRPCException::class)
 private fun StringResultResponse.getBigIntegerFromStringResult() = HexString(throwOrString()).hexToBigInteger()

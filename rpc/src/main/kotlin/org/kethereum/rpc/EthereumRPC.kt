@@ -12,7 +12,6 @@ interface EthereumRPC {
 
     fun getBlockByNumber(number: BigInteger): BlockInformation?
     fun getTransactionByHash(hash: String): SignedTransaction?
-
     fun stringCall(function: String, params: String = ""): StringResultResponse?
     fun sendRawTransaction(data: String): String?
     fun blockNumber(): BigInteger?
@@ -20,6 +19,8 @@ interface EthereumRPC {
     fun gasPrice(): BigInteger?
     fun clientVersion(): String?
     fun chainId(): ChainId?
+    fun accounts(): List<Address>?
+    fun sign(address: Address, message: ByteArray): SignatureData?
     fun getStorageAt(address: Address, position: String, block: String = "latest"): HexString?
     fun getTransactionCount(address: Address, block: String = "latest"): BigInteger?
     fun getCode(address: Address, block: String = "latest"): ByteCode?
