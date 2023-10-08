@@ -3,7 +3,7 @@ This module contains classes that are used for working with KEthereum
 ### Installation
 [![](https://jitpack.io/v/komputing/kethereum.svg)](https://jitpack.io/#komputing/kethereum)
 ```groovy
-implementation("com.github.walleth.kethereum:model:$KETHEREUM_VERSION")
+implementation("com.github.komputing.kethereum:model:$KETHEREUM_VERSION")
 ```
 
 
