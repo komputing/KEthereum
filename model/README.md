@@ -1,4 +1,4 @@
-This module contains base classes that are used for working with KEthereum
+This module contains classes that are used for working with KEthereum
 
 ### Installation
 [![](https://jitpack.io/v/komputing/kethereum.svg)](https://jitpack.io/#komputing/kethereum)
