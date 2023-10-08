@@ -10,36 +10,42 @@ class WalletTest {
 
     @Test
     fun testCreateStandard() {
-        assertThat(KEY_PAIR.createWallet(PASSWORD, STANDARD_SCRYPT_CONFIG).address).isEqualTo(ADDRESS_NO_PREFIX)
+        val validWallet = KEY_PAIR.createWallet(PASSWORD, STANDARD_SCRYPT_CONFIG)
+        assertThat(validWallet.address).isEqualTo(ADDRESS_NO_PREFIX)
     }
 
     @Test
     fun testCreateLight() {
-        assertThat(KEY_PAIR.createWallet(PASSWORD, LIGHT_SCRYPT_CONFIG).address).isEqualTo(ADDRESS_NO_PREFIX)
+        val validWallet = KEY_PAIR.createWallet(PASSWORD, LIGHT_SCRYPT_CONFIG)
+        assertThat(validWallet.address).isEqualTo(ADDRESS_NO_PREFIX)
     }
 
     @Test
     fun testEncryptDecryptStandard() {
-        assertThat(KEY_PAIR.createWallet(PASSWORD, STANDARD_SCRYPT_CONFIG).decrypt(PASSWORD)).isEqualTo(KEY_PAIR)
+        val validWallet = KEY_PAIR.createWallet(PASSWORD, STANDARD_SCRYPT_CONFIG)
+        val walletKeyPair = validWallet.decrypt(PASSWORD)
+        assertThat(walletKeyPair).isEqualTo(KEY_PAIR)
     }
 
     @Test
     fun testEncryptDecryptLight() {
-        assertThat(KEY_PAIR.createWallet(PASSWORD, LIGHT_SCRYPT_CONFIG).decrypt(PASSWORD)).isEqualTo(KEY_PAIR)
+        val validWallet = KEY_PAIR.createWallet(PASSWORD, LIGHT_SCRYPT_CONFIG)
+        val walletKeyPair = validWallet.decrypt(PASSWORD)
+        assertThat(walletKeyPair).isEqualTo(KEY_PAIR)
     }
 
     @Test
     fun testDecryptAes128Ctr() {
-        val walletFile = load(AES_128_CTR_TEST_JSON)
-        val (privateKey) = walletFile.toTypedWallet().decrypt(PASSWORD)
-        assertThat(privateKey.key.toHexStringNoPrefix()).isEqualTo(PRIVATE_KEY_STRING)
+        val walletFile = loadWalletFile(AES_128_CTR_TEST_JSON)
+        val (keyPairFromFile) = walletFile.toTypedWallet().decrypt(PASSWORD)
+        assertThat(keyPairFromFile.key.toHexStringNoPrefix()).isEqualTo(PRIVATE_KEY_STRING)
     }
 
     @Test
     fun testDecryptScrypt() {
-        val walletFile = load(SCRYPT_TEST_JSON)
-        val (privateKey) = walletFile.toTypedWallet().decrypt(PASSWORD)
-        assertThat(privateKey.key.toHexStringNoPrefix()).isEqualTo(PRIVATE_KEY_STRING)
+        val walletFile = loadWalletFile(SCRYPT_TEST_JSON)
+        val (keyPairFromFile) = walletFile.toTypedWallet().decrypt(PASSWORD)
+        assertThat(keyPairFromFile.key.toHexStringNoPrefix()).isEqualTo(PRIVATE_KEY_STRING)
     }
 
     @Test
@@ -48,5 +54,6 @@ class WalletTest {
         assertThat(generateRandomBytes(10).size).isEqualTo(10)
     }
 
-    private fun load(source: String): WalletForImport = moshi.adapter(WalletForImport::class.java).fromJson(source)!!
+    private fun loadWalletFile(source: String): WalletForImport =
+        moshi.adapter(WalletForImport::class.java).fromJson(source)!!
 }
