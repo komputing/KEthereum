@@ -11,13 +11,14 @@ import org.komputing.khex.model.HexString
 import java.io.File
 import java.nio.file.Files
 
-private fun loadFile(name: String) = File(WalletUtilsTest::class.java.getResource("/keyfiles/$name").file)
+private fun loadFile(name: String): File =
+    File(WalletUtilsTest::class.java.getResource("/keyfiles/$name")!!.file)
 
 class WalletUtilsTest {
 
     companion object {
 
-        private val tempDir by lazy {
+        private val tempDir: File by lazy {
             Files.createTempDirectory(WalletUtilsTest::class.java.simpleName + "-testkeys").toFile()
         }
 
@@ -30,21 +31,20 @@ class WalletUtilsTest {
 
     @Test
     fun testGenerateFullWalletFile() {
-        val tested = KEY_PAIR.generateWalletFile(PASSWORD, tempDir, STANDARD_SCRYPT_CONFIG)
+        val filedWallet = KEY_PAIR.generateWalletFile(PASSWORD, tempDir, STANDARD_SCRYPT_CONFIG)
 
-        assertThat(tested.file.loadKeysFromWalletFile(PASSWORD)).isEqualTo(KEY_PAIR)
+        assertThat(filedWallet.file.loadKeysFromWalletFile(PASSWORD)).isEqualTo(KEY_PAIR)
 
-        assertThat(tested.wallet.decrypt(PASSWORD)).isEqualTo(KEY_PAIR)
+        assertThat(filedWallet.wallet.decrypt(PASSWORD)).isEqualTo(KEY_PAIR)
     }
 
     @Test
     fun testGenerateLightWalletFile() {
+        val filedWallet = KEY_PAIR.generateWalletFile(PASSWORD, tempDir, LIGHT_SCRYPT_CONFIG)
 
-        val tested = KEY_PAIR.generateWalletFile(PASSWORD, tempDir, LIGHT_SCRYPT_CONFIG)
+        assertThat(filedWallet.file.loadKeysFromWalletFile(PASSWORD)).isEqualTo(KEY_PAIR)
 
-        assertThat(tested.file.loadKeysFromWalletFile(PASSWORD)).isEqualTo(KEY_PAIR)
-
-        assertThat(tested.wallet.decrypt(PASSWORD)).isEqualTo(KEY_PAIR)
+        assertThat(filedWallet.wallet.decrypt(PASSWORD)).isEqualTo(KEY_PAIR)
     }
 
 
