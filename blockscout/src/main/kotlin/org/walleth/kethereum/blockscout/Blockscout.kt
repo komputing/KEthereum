@@ -12,7 +12,9 @@ private val BLOCKSCOUT_URLS = mapOf(
         99L.toBigInteger() to "$BLOCKSCOUTCOM_BASE_URL/poa/core",
         100L.toBigInteger() to "$BLOCKSCOUTCOM_BASE_URL/poa/xdai",
 
-        43110L.toBigInteger() to "http://athexplorer.ava.network"
+        43110L.toBigInteger() to "http://athexplorer.ava.network",
+        33333L.toBigInteger() to "https://avescan.io"
+
 )
 
 val ALL_BLOCKSCOUT_SUPPORTED_NETWORKS = BLOCKSCOUT_URLS.map { it.key }.toSet()
