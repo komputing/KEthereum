@@ -25,7 +25,6 @@ val CURVE: Curve = CryptoAPI.curve
  *
  * @return [SignatureData] containing the (r,s,v) components
  */
-
 fun ECKeyPair.signMessage(message: ByteArray) = signMessageHash(message.keccak(), this, true)
 
 

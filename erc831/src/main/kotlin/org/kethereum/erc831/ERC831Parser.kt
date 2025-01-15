@@ -11,7 +11,7 @@ private enum class ParseState {
     PAYLOAD
 }
 
-fun EthereumURI.toERC831() = ERC831().apply {
+fun EthereumURI.toERC831(): ERC831 = ERC831().apply {
 
     var currentSegment = ""
 
@@ -39,12 +39,13 @@ fun EthereumURI.toERC831() = ERC831().apply {
         }
     }
 
-    if (!currentSegment.isBlank()) {
+    if (currentSegment.isNotBlank()) {
         stateTransition(PAYLOAD)
     }
 
 }
 
-private fun String.hasPrefix() = contains('-') && (!contains("0x") || indexOf('-') < indexOf("0x"))
+private fun String.hasPrefix(): Boolean =
+    contains('-') && (!contains("0x") || indexOf('-') < indexOf("0x"))
 
-fun parseERC831(url: String) = EthereumURI(url).toERC831()
+fun parseERC831(url: String): ERC831 = EthereumURI(url).toERC831()
